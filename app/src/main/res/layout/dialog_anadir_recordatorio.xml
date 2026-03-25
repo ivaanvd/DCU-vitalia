@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="480dp"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_dialog">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="28dp"
+        android:paddingEnd="28dp"
+        android:paddingTop="28dp"
+        android:paddingBottom="28dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="AÑADIR RECORDATORIO"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#1C1C1E"
+            android:gravity="center"
+            android:layout_marginBottom="24dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Título"
+            android:textSize="13sp"
+            android:textColor="#6E6E73"
+            android:layout_marginBottom="6dp"/>
+
+        <EditText
+            android:id="@+id/etTituloRecordatorio"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:textSize="15sp"
+            android:textColor="#1C1C1E"
+            android:background="@drawable/bg_campo_descripcion"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp"
+            android:singleLine="true"
+            android:inputType="text"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Descripción"
+            android:textSize="13sp"
+            android:textColor="#6E6E73"
+            android:layout_marginBottom="6dp"/>
+
+        <EditText
+            android:id="@+id/etDescripcionRecordatorio"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:textSize="15sp"
+            android:textColor="#1C1C1E"
+            android:background="@drawable/bg_campo_descripcion"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp"
+            android:singleLine="true"
+            android:inputType="text"
+            android:layout_marginBottom="20dp"/>
+
+        <!-- Hora + Fecha en misma fila -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="24dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginEnd="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Hora"
+                    android:textSize="13sp"
+                    android:textColor="#6E6E73"
+                    android:layout_marginBottom="6dp"/>
+
+                <TextView
+                    android:id="@+id/tvHoraDialogRec"
+                    android:layout_width="match_parent"
+                    android:layout_height="72dp"
+                    android:text="00:00"
+                    android:textSize="38sp"
+                    android:textStyle="bold"
+                    android:textColor="#1C1C1E"
+                    android:gravity="center"
+                    android:background="@drawable/bg_campo_descripcion"
+                    android:clickable="true"
+                    android:focusable="true"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Fecha"
+                    android:textSize="13sp"
+                    android:textColor="#6E6E73"
+                    android:layout_marginBottom="6dp"/>
+
+                <LinearLayout
+                    android:id="@+id/tvFechaDialogRec"
+                    android:layout_width="match_parent"
+                    android:layout_height="72dp"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp"
+                    android:background="@drawable/bg_campo_descripcion"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <TextView
+                        android:id="@+id/tvFechaTexto"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="dd/mm/aaaa"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="#1C1C1E"
+                        android:gravity="center_vertical"/>
+
+                    <ImageView
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:src="@drawable/ic_calendario"
+                        android:contentDescription=""/>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnCancelarDialogRec"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:text="CANCELAR"
+                android:textColor="#FFFFFF"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:background="@drawable/bg_btn_cancelar"
+                android:layout_marginEnd="12dp"/>
+
+            <Button
+                android:id="@+id/btnGuardarDialogRec"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:text="AÑADIR"
+                android:textColor="#FFFFFF"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:background="@drawable/bg_btn_guardar"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- X dentro de la tarjeta -->
+    <TextView
+        android:id="@+id/btnCerrarDialogRec"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="top|end"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:text="✕"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="#1C1C1E"
+        android:gravity="center"
+        android:background="@drawable/bg_tipo_normal"
+        android:clickable="true"
+        android:focusable="true"/>
+
+</FrameLayout>

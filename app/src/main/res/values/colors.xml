@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Fondo general -->
+    <color name="fondo_app">#F2F2F7</color>
+
+    <!-- Colores de las tarjetas -->
+    <color name="azul_rutinas">#7EB8D4</color>
+    <color name="verde_juegos">#7EC8A4</color>
+    <color name="naranja_perfil">#D4A96A</color>
+    <color name="morado_ajustes">#A990C8</color>
+
+    <!-- Tema de la app -->
+    <color name="colorPurple">#A990C8</color>
+    <color name="colorBlack">#000000</color>
+
+    <!-- Texto -->
+    <color name="texto_principal">#1C1C1E</color>
+    <color name="texto_secundario">#6E6E73</color>
+    <color name="texto_blanco">#FFFFFF</color>
+
+    <!-- Avatar fondo -->
+    <color name="avatar_borde">#DEDEDE</color>
+</resources>

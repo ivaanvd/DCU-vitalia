@@ -1,0 +1,86 @@
+package com.example.sanbotapp;
+
+import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
+
+/**
+ * BaseActivity para el flavor TABLET.
+ * Extiende AppCompatActivity normal (sin SDK de Sanbot).
+ * Todas las funciones del robot se simulan con logs,
+ * para que MainActivity compile y funcione sin el hardware.
+ */
+public abstract class BaseActivity extends AppCompatActivity {
+
+    // ── VOZ ──────────────────────────────────────────────────────────────────
+
+    /**
+     * Simula el habla del robot imprimiendo la frase en el log.
+     * En tablet no hay TTS real, pero el código de MainActivity
+     * funciona exactamente igual sin cambiar nada.
+     */
+    protected void hablarOSimular(String frase) {
+        Log.d("BaseActivity[Tablet]", "ROBOT DIRÍA: " + frase);
+    }
+
+    /**
+     * En tablet el servicio del robot no existe,
+     * así que onRobotServiceReady() se llama desde onCreate()
+     * para que MainActivity reciba el arranque igualmente.
+     */
+    protected void onRobotServiceReady() {
+        // Gancho opcional para subclases
+    }
+
+    // ── RUEDAS (sin efecto en tablet) ────────────────────────────────────────
+    public void moverRuedasBasico(String accion, Integer angulo) {
+        Log.d("BaseActivity[Tablet]", "moverRuedasBasico: " + accion); }
+    public void moverRuedasBasicoLento(String accion, Integer angulo) {
+        Log.d("BaseActivity[Tablet]", "moverRuedasBasicoLento: " + accion); }
+    public void avanzarRobot(Integer distancia, Integer velocidad) {
+        Log.d("BaseActivity[Tablet]", "avanzarRobot"); }
+    public void retrocederRobot(Integer distancia, Integer velocidad) {
+        Log.d("BaseActivity[Tablet]", "retrocederRobot"); }
+    public void avanzarIzquierdaRobot(Integer distancia, Integer velocidad) {
+        Log.d("BaseActivity[Tablet]", "avanzarIzquierdaRobot"); }
+    public void avanzarDerechaRobot(Integer distancia, Integer velocidad) {
+        Log.d("BaseActivity[Tablet]", "avanzarDerechaRobot"); }
+
+    // ── CABEZA (sin efecto en tablet) ────────────────────────────────────────
+    public void moverCabezaBasico(String accion) {
+        Log.d("BaseActivity[Tablet]", "moverCabezaBasico: " + accion); }
+    public void girarCabeza(int angulo) {
+        Log.d("BaseActivity[Tablet]", "girarCabeza: " + angulo); }
+    public void reiniciarCabeza() {
+        Log.d("BaseActivity[Tablet]", "reiniciarCabeza"); }
+
+    // ── BRAZOS (sin efecto en tablet) ────────────────────────────────────────
+    public void moverBrazos(String accion, String brazo) {
+        Log.d("BaseActivity[Tablet]", "moverBrazos: " + accion + " " + brazo); }
+    public void reiniciarBrazos() {
+        Log.d("BaseActivity[Tablet]", "reiniciarBrazos"); }
+
+    // ── EMOCIONES (sin efecto en tablet) ─────────────────────────────────────
+    protected void mostrarEmocion(String emocion) {
+        Log.d("BaseActivity[Tablet]", "mostrarEmocion: " + emocion); }
+
+    // ── LEDS (sin efecto en tablet) ──────────────────────────────────────────
+    public void encenderLed(byte parte, byte modo) {
+        Log.d("BaseActivity[Tablet]", "encenderLed"); }
+    public void apagarLed(byte parte) {
+        Log.d("BaseActivity[Tablet]", "apagarLed"); }
+
+    // ── AUDIO (sin efecto en tablet) ─────────────────────────────────────────
+    public void setVolumenRobot(int volumen) {
+        Log.d("BaseActivity[Tablet]", "setVolumen: " + volumen); }
+    public int getVolumenRobot() { return 5; }
+
+    // ── MOVIMIENTO COMPUESTO (sin efecto en tablet) ──────────────────────────
+    public void activarMovimientoAleatorio() {
+        Log.d("BaseActivity[Tablet]", "activarMovimientoAleatorio"); }
+    public void desactivarMovimientoAleatorio() {
+        Log.d("BaseActivity[Tablet]", "desactivarMovimientoAleatorio"); }
+    public void activarSeguimiento() {
+        Log.d("BaseActivity[Tablet]", "activarSeguimiento"); }
+    public void desactivarSeguimiento() {
+        Log.d("BaseActivity[Tablet]", "desactivarSeguimiento"); }
+}

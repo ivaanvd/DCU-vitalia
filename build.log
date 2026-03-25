@@ -1,0 +1,965 @@
+﻿Initialized native services in: C:\Users\USUARIO\.gradle\native
+Initialized jansi services in: C:\Users\USUARIO\.gradle\native
+The client will now receive all logging from the daemon (pid: 24260). The daemon log file: C:\Users\USUARIO\.gradle\daemon\7.4\daemon-24260.out.log
+Starting 8th build in daemon [uptime: 14 mins 52.652 secs, performance: 99%]
+Using 8 worker leases.
+Now considering [C:\Users\USUARIO\Desktop\DCU\proyecto-base-main] as hierarchies to watch
+Watching the file system is configured to be enabled if available
+File system watching is active
+Starting Build
+Settings evaluated using settings file 'C:\Users\USUARIO\Desktop\DCU\proyecto-base-main\settings.gradle'.
+Projects loaded. Root project using build file 'C:\Users\USUARIO\Desktop\DCU\proyecto-base-main\build.gradle'.
+Included projects: [root project 'proyecto-base-main', project ':app']
+
+> Configure project :
+Evaluating root project 'proyecto-base-main' using build file 'C:\Users\USUARIO\Desktop\DCU\proyecto-base-main\build.gradle'.
+
+> Configure project :app
+Evaluating project ':app' using build file 'C:\Users\USUARIO\Desktop\DCU\proyecto-base-main\app\build.gradle'.
+WARNING:The option 'android.useDeprecatedNdk' is deprecated.
+The current default is 'false'.
+It has been removed from the current version of the Android Gradle plugin.
+NdkCompile is no longer supported
+WARNING:Using flatDir should be avoided because it doesn't support any meta-data formats.
+All projects evaluated.
+Selected primary task 'assembleDebug' from project :
+WARNING:We recommend using a newer Android Gradle plugin to use compileSdk = 34
+
+This Android Gradle plugin (7.3.1) was tested up to compileSdk = 33
+
+This warning can be suppressed by adding
+    android.suppressUnsupportedCompileSdk=34
+to this project's gradle.properties
+
+The build will continue, but you are strongly encouraged to update your project to
+use a newer Android Gradle Plugin that has been tested with compileSdk = 34
+Tasks to be executed: [task ':app:preBuild', task ':app:preRobotDebugBuild', task ':app:mergeRobotDebugNativeDebugMetadata', task ':app:compileRobotDebugAidl', task ':app:compileRobotDebugRenderscript', task ':app:generateRobotDebugBuildConfig', task ':app:javaPreCompileRobotDebug', task ':app:checkRobotDebugAarMetadata', task ':app:generateRobotDebugResValues', task ':app:mapRobotDebugSourceSetPaths', task ':app:generateRobotDebugResources', task ':app:mergeRobotDebugResources', task ':app:packageRobotDebugResources', task ':app:parseRobotDebugLocalResources', task ':app:createRobotDebugCompatibleScreenManifests', task ':app:extractDeepLinksRobotDebug', task ':app:processRobotDebugMainManifest', task ':app:processRobotDebugManifest', task ':app:processRobotDebugManifestForPackage', task ':app:processRobotDebugResources', task ':app:compileRobotDebugJavaWithJavac', task ':app:mergeRobotDebugShaders', task ':app:compileRobotDebugShaders', task ':app:generateRobotDebugAssets', task ':app:mergeRobotDebugAssets', task ':app:compressRobotDebugAssets', task ':app:checkRobotDebugDuplicateClasses', task ':app:desugarRobotDebugFileDependencies', task ':app:mergeExtDexRobotDebug', task ':app:mergeLibDexRobotDebug', task ':app:dexBuilderRobotDebug', task ':app:mergeProjectDexRobotDebug', task ':app:processRobotDebugJavaRes', task ':app:mergeRobotDebugJavaResource', task ':app:mergeRobotDebugJniLibFolders', task ':app:mergeRobotDebugNativeLibs', task ':app:stripRobotDebugDebugSymbols', task ':app:validateSigningRobotDebug', task ':app:writeRobotDebugAppMetadata', task ':app:writeRobotDebugSigningConfigVersions', task ':app:packageRobotDebug', task ':app:createRobotDebugApkListingFileRedirect', task ':app:assembleRobotDebug', task ':app:preTabletDebugBuild', task ':app:mergeTabletDebugNativeDebugMetadata', task ':app:compileTabletDebugAidl', task ':app:compileTabletDebugRenderscript', task ':app:generateTabletDebugBuildConfig', task ':app:javaPreCompileTabletDebug', task ':app:checkTabletDebugAarMetadata', task ':app:generateTabletDebugResValues', task ':app:mapTabletDebugSourceSetPaths', task ':app:generateTabletDebugResources', task ':app:mergeTabletDebugResources', task ':app:packageTabletDebugResources', task ':app:parseTabletDebugLocalResources', task ':app:createTabletDebugCompatibleScreenManifests', task ':app:extractDeepLinksTabletDebug', task ':app:processTabletDebugMainManifest', task ':app:processTabletDebugManifest', task ':app:processTabletDebugManifestForPackage', task ':app:processTabletDebugResources', task ':app:compileTabletDebugJavaWithJavac', task ':app:mergeTabletDebugShaders', task ':app:compileTabletDebugShaders', task ':app:generateTabletDebugAssets', task ':app:mergeTabletDebugAssets', task ':app:compressTabletDebugAssets', task ':app:checkTabletDebugDuplicateClasses', task ':app:desugarTabletDebugFileDependencies', task ':app:mergeExtDexTabletDebug', task ':app:mergeLibDexTabletDebug', task ':app:dexBuilderTabletDebug', task ':app:mergeProjectDexTabletDebug', task ':app:processTabletDebugJavaRes', task ':app:mergeTabletDebugJavaResource', task ':app:mergeTabletDebugJniLibFolders', task ':app:mergeTabletDebugNativeLibs', task ':app:stripTabletDebugDebugSymbols', task ':app:validateSigningTabletDebug', task ':app:writeTabletDebugAppMetadata', task ':app:writeTabletDebugSigningConfigVersions', task ':app:packageTabletDebug', task ':app:createTabletDebugApkListingFileRedirect', task ':app:assembleTabletDebug', task ':app:assembleDebug']
+Tasks that were excluded: []
+:app:preBuild (Thread[#699,Execution worker for ':',5,main]) started.
+
+> Task :app:preBuild UP-TO-DATE
+Skipping task ':app:preBuild' as it has no actions.
+:app:preBuild (Thread[#699,Execution worker for ':',5,main]) completed. Took 0.002 secs.
+:app:preRobotDebugBuild (Thread[#699,Execution worker for ':',5,main]) started.
+
+> Task :app:preRobotDebugBuild UP-TO-DATE
+Skipping task ':app:preRobotDebugBuild' as it has no actions.
+:app:preRobotDebugBuild (Thread[#699,Execution worker for ':',5,main]) completed. Took 0.0 secs.
+:app:mergeRobotDebugNativeDebugMetadata (Thread[#699,Execution worker for ':',5,main]) started.
+
+> Task :app:mergeRobotDebugNativeDebugMetadata NO-SOURCE
+Skipping task ':app:mergeRobotDebugNativeDebugMetadata' as it has no source files and no previous output files.
+:app:mergeRobotDebugNativeDebugMetadata (Thread[#699,Execution worker for ':',5,main]) completed. Took 0.0 secs.
+:app:compileRobotDebugAidl (Thread[#699,Execution worker for ':',5,main]) started.
+
+> Task :app:compileRobotDebugAidl NO-SOURCE
+Skipping task ':app:compileRobotDebugAidl' as it has no source files and no previous output files.
+:app:compileRobotDebugAidl (Thread[#699,Execution worker for ':',5,main]) completed. Took 0.0 secs.
+:app:compileRobotDebugRenderscript (Thread[#699,Execution worker for ':',5,main]) started.
+
+> Task :app:compileRobotDebugRenderscript NO-SOURCE
+Skipping task ':app:compileRobotDebugRenderscript' as it has no source files and no previous output files.
+:app:compileRobotDebugRenderscript (Thread[#699,Execution worker for ':',5,main]) completed. Took 0.0 secs.
+:app:generateRobotDebugBuildConfig (Thread[#699,Execution worker for ':',5,main]) started.
+
+> Task :app:generateRobotDebugBuildConfig UP-TO-DATE
+Caching disabled for task ':app:generateRobotDebugBuildConfig' because:
+  Build cache is disabled
+Skipping task ':app:generateRobotDebugBuildConfig' as it is up-to-date.
+:app:generateRobotDebugBuildConfig (Thread[#699,Execution worker for ':',5,main]) completed. Took 0.002 secs.
+:app:javaPreCompileRobotDebug (Thread[#699,Execution worker for ':',5,main]) started.
+
+> Task :app:javaPreCompileRobotDebug UP-TO-DATE
+Caching disabled for task ':app:javaPreCompileRobotDebug' because:
+  Build cache is disabled
+Skipping task ':app:javaPreCompileRobotDebug' as it is up-to-date.
+:app:javaPreCompileRobotDebug (Thread[#699,Execution worker for ':',5,main]) completed. Took 0.001 secs.
+:app:checkRobotDebugAarMetadata (Thread[#699,Execution worker for ':',5,main]) started.
+
+> Task :app:checkRobotDebugAarMetadata UP-TO-DATE
+WARNING:Your project has set `android.useAndroidX=true`, but configuration `:app:robotDebugRuntimeClasspath` still contains legacy support libraries, which may cause runtime issues.
+This behavior will not be allowed in Android Gradle plugin 8.0.
+Please use only AndroidX dependencies or set `android.enableJetifier=true` in the `gradle.properties` file to migrate your project to AndroidX (see https://developer.android.com/jetpack/androidx/migrate for more info).
+The following legacy support libraries are detected:
+:app:robotDebugRuntimeClasspath -> com.android.support:appcompat-v7:28.0.0-rc02
+:app:robotDebugRuntimeClasspath -> com.android.support:design:28.0.0-rc02 -> com.android.support:support-annotations:28.0.0-rc02
+:app:robotDebugRuntimeClasspath -> com.android.support:design:28.0.0-rc02 -> com.android.support:support-compat:28.0.0-rc02
+:app:robotDebugRuntimeClasspath -> com.android.support:appcompat-v7:28.0.0-rc02 -> com.android.support:collections:28.0.0-rc02
+:app:robotDebugRuntimeClasspath -> com.android.support:design:28.0.0-rc02 -> com.android.support:support-compat:28.0.0-rc02 -> android.arch.lifecycle:runtime:1.1.1
+:app:robotDebugRuntimeClasspath -> com.android.support:design:28.0.0-rc02 -> com.android.support:support-compat:28.0.0-rc02 -> android.arch.lifecycle:runtime:1.1.1 -> android.arch.lifecycle:common:1.1.1
+:app:robotDebugRuntimeClasspath -> com.android.support:design:28.0.0-rc02 -> com.android.support:support-compat:28.0.0-rc02 -> android.arch.lifecycle:runtime:1.1.1 -> android.arch.core:common:1.1.1
+:app:robotDebugRuntimeClasspath -> com.android.support:design:28.0.0-rc02 -> com.android.support:support-compat:28.0.0-rc02 -> com.android.support:versionedparcelable:28.0.0-rc02
+:app:robotDebugRuntimeClasspath -> com.android.support:appcompat-v7:28.0.0-rc02 -> com.android.support:cursoradapter:28.0.0-rc02
+:app:robotDebugRuntimeClasspath -> com.android.support:design:28.0.0-rc02 -> com.android.support:support-core-utils:28.0.0-rc02
+:app:robotDebugRuntimeClasspath -> com.android.support:design:28.0.0-rc02 -> com.android.support:support-core-utils:28.0.0-rc02 -> com.android.support:documentfile:28.0.0-rc02
+:app:robotDebugRuntimeClasspath -> com.android.support:design:28.0.0-rc02 -> com.android.support:support-fragment:28.0.0-rc02 -> com.android.support:loader:28.0.0-rc02
+:app:robotDebugRuntimeClasspath -> com.android.support:design:28.0.0-rc02 -> com.android.support:support-fragment:28.0.0-rc02 -> com.android.support:loader:28.0.0-rc02 -> android.arch.lifecycle:livedata-core:1.1.1
+:app:robotDebugRuntimeClasspath -> com.android.support:design:28.0.0-rc02 -> com.android.support:support-fragment:28.0.0-rc02 -> com.android.support:loader:28.0.0-rc02 -> android.arch.lifecycle:livedata-core:1.1.1 -> android.arch.core:runtime:1.1.1
+:app:robotDebugRuntimeClasspath -> com.android.support:design:28.0.0-rc02 -> com.android.support:support-fragment:28.0.0-rc02 -> android.arch.lifecycle:viewmodel:1.1.1
+:app:robotDebugRuntimeClasspath -> com.android.support:design:28.0.0-rc02 -> com.android.support:support-core-utils:28.0.0-rc02 -> com.android.support:localbroadcastmanager:28.0.0-rc02
+:app:robotDebugRuntimeClasspath -> com.android.support:design:28.0.0-rc02 -> com.android.support:support-core-utils:28.0.0-rc02 -> com.android.support:print:28.0.0-rc02
+:app:robotDebugRuntimeClasspath -> com.android.support:design:28.0.0-rc02 -> com.android.support:support-fragment:28.0.0-rc02
+:app:robotDebugRuntimeClasspath -> com.android.support:design:28.0.0-rc02 -> com.android.support:support-core-ui:28.0.0-rc02
+:app:robotDebugRuntimeClasspath -> com.android.support:design:28.0.0-rc02 -> com.android.support:support-core-ui:28.0.0-rc02 -> com.android.support:customview:28.0.0-rc02
+:app:robotDebugRuntimeClasspath -> com.android.support:design:28.0.0-rc02 -> com.android.support:support-core-ui:28.0.0-rc02 -> com.android.support:viewpager:28.0.0-rc02
+:app:robotDebugRuntimeClasspath -> com.android.support:design:28.0.0-rc02 -> com.android.support:support-core-ui:28.0.0-rc02 -> com.android.support:coordinatorlayout:28.0.0-rc02
+:app:robotDebugRuntimeClasspath -> com.android.support:design:28.0.0-rc02 -> com.android.support:support-core-ui:28.0.0-rc02 -> com.android.support:drawerlayout:28.0.0-rc02
+:app:robotDebugRuntimeClasspath -> com.android.support:design:28.0.0-rc02 -> com.android.support:support-core-ui:28.0.0-rc02 -> com.android.support:slidingpanelayout:28.0.0-rc02
+:app:robotDebugRuntimeClasspath -> com.android.support:design:28.0.0-rc02 -> com.android.support:support-core-ui:28.0.0-rc02 -> com.android.support:interpolator:28.0.0-rc02
+:app:robotDebugRuntimeClasspath -> com.android.support:design:28.0.0-rc02 -> com.android.support:support-core-ui:28.0.0-rc02 -> com.android.support:swiperefreshlayout:28.0.0-rc02
+:app:robotDebugRuntimeClasspath -> com.android.support:design:28.0.0-rc02 -> com.android.support:support-core-ui:28.0.0-rc02 -> com.android.support:asynclayoutinflater:28.0.0-rc02
+:app:robotDebugRuntimeClasspath -> com.android.support:appcompat-v7:28.0.0-rc02 -> com.android.support:support-vector-drawable:28.0.0-rc02
+:app:robotDebugRuntimeClasspath -> com.android.support:appcompat-v7:28.0.0-rc02 -> com.android.support:animated-vector-drawable:28.0.0-rc02
+:app:robotDebugRuntimeClasspath -> com.android.support.constraint:constraint-layout:1.1.3
+:app:robotDebugRuntimeClasspath -> com.android.support.constraint:constraint-layout:1.1.3 -> com.android.support.constraint:constraint-layout-solver:1.1.3
+:app:robotDebugRuntimeClasspath -> com.android.support:design:28.0.0-rc02
+:app:robotDebugRuntimeClasspath -> com.android.support:design:28.0.0-rc02 -> com.android.support:transition:28.0.0-rc02
+:app:robotDebugRuntimeClasspath -> com.android.support:design:28.0.0-rc02 -> com.android.support:cardview-v7:28.0.0-rc02
+:app:robotDebugRuntimeClasspath -> com.android.support:design:28.0.0-rc02 -> com.android.support:recyclerview-v7:28.0.0-rc02
+Transforming appcompat-v7-28.0.0-rc02.aar (com.android.support:appcompat-v7:28.0.0-rc02) with IdentityTransform
+Transforming QihanOpenSdk_1.1.8.0-.aar (:QihanOpenSdk_1.1.8.0:) with IdentityTransform
+Transforming constraint-layout-1.1.3.aar (com.android.support.constraint:constraint-layout:1.1.3) with IdentityTransform
+Transforming appcompat-v7-28.0.0-rc02.aar (com.android.support:appcompat-v7:28.0.0-rc02) with ExtractAarTransform
+Transforming jna-5.13.0.aar (net.java.dev.jna:jna:5.13.0) with IdentityTransform
+Transforming appcompat-v7-28.0.0-rc02.aar (com.android.support:appcompat-v7:28.0.0-rc02) with AarTransform
+Transforming jna-5.13.0.aar (net.java.dev.jna:jna:5.13.0) with ExtractAarTransform
+Transforming QihanOpenSdk_1.1.8.0-.aar (:QihanOpenSdk_1.1.8.0:) with ExtractAarTransform
+Transforming QihanOpenSdk_1.1.8.0-.aar (:QihanOpenSdk_1.1.8.0:) with AarTransform
+Transforming appcompat-v7-28.0.0-rc02.aar (com.android.support:appcompat-v7:28.0.0-rc02) with IdentityTransform
+Transforming appcompat-v7-28.0.0-rc02.aar (com.android.support:appcompat-v7:28.0.0-rc02) with ExtractAarTransform
+Transforming jna-5.13.0.aar (net.java.dev.jna:jna:5.13.0) with AarTransform
+Transforming appcompat-v7-28.0.0-rc02.aar (com.android.support:appcompat-v7:28.0.0-rc02) with AarTransform
+Transforming customview-28.0.0-rc02.aar (com.android.support:customview:28.0.0-rc02) with IdentityTransform
+Transforming customview-28.0.0-rc02.aar (com.android.support:customview:28.0.0-rc02) with ExtractAarTransform
+Transforming customview-28.0.0-rc02.aar (com.android.support:customview:28.0.0-rc02) with AarTransform
+Transforming support-compat-28.0.0-rc02.aar (com.android.support:support-compat:28.0.0-rc02) with IdentityTransform
+Transforming support-compat-28.0.0-rc02.aar (com.android.support:support-compat:28.0.0-rc02) with IdentityTransform
+Transforming constraint-layout-1.1.3.aar (com.android.support.constraint:constraint-layout:1.1.3) with ExtractAarTransform
+Transforming support-fragment-28.0.0-rc02.aar (com.android.support:support-fragment:28.0.0-rc02) with IdentityTransform
+Transforming support-compat-28.0.0-rc02.aar (com.android.support:support-compat:28.0.0-rc02) with ExtractAarTransform
+Transforming support-fragment-28.0.0-rc02.aar (com.android.support:support-fragment:28.0.0-rc02) with ExtractAarTransform
+Transforming support-fragment-28.0.0-rc02.aar (com.android.support:support-fragment:28.0.0-rc02) with AarTransform
+Transforming support-compat-28.0.0-rc02.aar (com.android.support:support-compat:28.0.0-rc02) with ExtractAarTransform
+Transforming vosk-android-0.3.47.aar (com.alphacephei:vosk-android:0.3.47) with IdentityTransform
+Transforming support-compat-28.0.0-rc02.aar (com.android.support:support-compat:28.0.0-rc02) with AarTransform
+Transforming vosk-android-0.3.47.aar (com.alphacephei:vosk-android:0.3.47) with ExtractAarTransform
+Transforming vosk-android-0.3.47.aar (com.alphacephei:vosk-android:0.3.47) with AarTransform
+Transforming support-compat-28.0.0-rc02.aar (com.android.support:support-compat:28.0.0-rc02) with IdentityTransform
+Transforming support-compat-28.0.0-rc02.aar (com.android.support:support-compat:28.0.0-rc02) with IdentityTransform
+Transforming support-compat-28.0.0-rc02.aar (com.android.support:support-compat:28.0.0-rc02) with ExtractAarTransform
+Transforming support-compat-28.0.0-rc02.aar (com.android.support:support-compat:28.0.0-rc02) with ExtractAarTransform
+Transforming support-compat-28.0.0-rc02.aar (com.android.support:support-compat:28.0.0-rc02) with AarTransform
+Transforming support-compat-28.0.0-rc02.aar (com.android.support:support-compat:28.0.0-rc02) with AarTransform
+Transforming design-28.0.0-rc02.aar (com.android.support:design:28.0.0-rc02) with IdentityTransform
+Transforming support-compat-28.0.0-rc02.aar (com.android.support:support-compat:28.0.0-rc02) with AarTransform
+Transforming design-28.0.0-rc02.aar (com.android.support:design:28.0.0-rc02) with ExtractAarTransform
+Transforming constraint-layout-1.1.3.aar (com.android.support.constraint:constraint-layout:1.1.3) with AarTransform
+Transforming design-28.0.0-rc02.aar (com.android.support:design:28.0.0-rc02) with AarTransform
+Transforming runtime-1.1.1.aar (android.arch.lifecycle:runtime:1.1.1) with IdentityTransform
+Transforming runtime-1.1.1.aar (android.arch.lifecycle:runtime:1.1.1) with ExtractAarTransform
+Transforming runtime-1.1.1.aar (android.arch.lifecycle:runtime:1.1.1) with AarTransform
+Transforming animated-vector-drawable-28.0.0-rc02.aar (com.android.support:animated-vector-drawable:28.0.0-rc02) with IdentityTransform
+Transforming animated-vector-drawable-28.0.0-rc02.aar (com.android.support:animated-vector-drawable:28.0.0-rc02) with ExtractAarTransform
+Transforming animated-vector-drawable-28.0.0-rc02.aar (com.android.support:animated-vector-drawable:28.0.0-rc02) with AarTransform
+Transforming documentfile-28.0.0-rc02.aar (com.android.support:documentfile:28.0.0-rc02) with IdentityTransform
+Transforming documentfile-28.0.0-rc02.aar (com.android.support:documentfile:28.0.0-rc02) with ExtractAarTransform
+Transforming documentfile-28.0.0-rc02.aar (com.android.support:documentfile:28.0.0-rc02) with AarTransform
+Transforming support-core-ui-28.0.0-rc02.aar (com.android.support:support-core-ui:28.0.0-rc02) with IdentityTransform
+Transforming support-core-ui-28.0.0-rc02.aar (com.android.support:support-core-ui:28.0.0-rc02) with IdentityTransform
+Transforming support-core-ui-28.0.0-rc02.aar (com.android.support:support-core-ui:28.0.0-rc02) with ExtractAarTransform
+Transforming support-core-ui-28.0.0-rc02.aar (com.android.support:support-core-ui:28.0.0-rc02) with ExtractAarTransform
+Transforming support-core-ui-28.0.0-rc02.aar (com.android.support:support-core-ui:28.0.0-rc02) with AarTransform
+Transforming support-core-ui-28.0.0-rc02.aar (com.android.support:support-core-ui:28.0.0-rc02) with AarTransform
+Transforming support-core-utils-28.0.0-rc02.aar (com.android.support:support-core-utils:28.0.0-rc02) with IdentityTransform
+Transforming support-core-utils-28.0.0-rc02.aar (com.android.support:support-core-utils:28.0.0-rc02) with ExtractAarTransform
+Transforming interpolator-28.0.0-rc02.aar (com.android.support:interpolator:28.0.0-rc02) with IdentityTransform
+Transforming interpolator-28.0.0-rc02.aar (com.android.support:interpolator:28.0.0-rc02) with ExtractAarTransform
+Transforming support-core-utils-28.0.0-rc02.aar (com.android.support:support-core-utils:28.0.0-rc02) with AarTransform
+Transforming swiperefreshlayout-28.0.0-rc02.aar (com.android.support:swiperefreshlayout:28.0.0-rc02) with IdentityTransform
+Transforming interpolator-28.0.0-rc02.aar (com.android.support:interpolator:28.0.0-rc02) with AarTransform
+Transforming swiperefreshlayout-28.0.0-rc02.aar (com.android.support:swiperefreshlayout:28.0.0-rc02) with ExtractAarTransform
+Transforming swiperefreshlayout-28.0.0-rc02.aar (com.android.support:swiperefreshlayout:28.0.0-rc02) with AarTransform
+Transforming runtime-1.1.1.aar (android.arch.core:runtime:1.1.1) with IdentityTransform
+Transforming runtime-1.1.1.aar (android.arch.core:runtime:1.1.1) with ExtractAarTransform
+Transforming runtime-1.1.1.aar (android.arch.core:runtime:1.1.1) with AarTransform
+Transforming livedata-core-1.1.1.aar (android.arch.lifecycle:livedata-core:1.1.1) with IdentityTransform
+Transforming coordinatorlayout-28.0.0-rc02.aar (com.android.support:coordinatorlayout:28.0.0-rc02) with IdentityTransform
+Transforming livedata-core-1.1.1.aar (android.arch.lifecycle:livedata-core:1.1.1) with ExtractAarTransform
+Transforming coordinatorlayout-28.0.0-rc02.aar (com.android.support:coordinatorlayout:28.0.0-rc02) with ExtractAarTransform
+Transforming livedata-core-1.1.1.aar (android.arch.lifecycle:livedata-core:1.1.1) with AarTransform
+Transforming coordinatorlayout-28.0.0-rc02.aar (com.android.support:coordinatorlayout:28.0.0-rc02) with AarTransform
+Transforming viewmodel-1.1.1.aar (android.arch.lifecycle:viewmodel:1.1.1) with IdentityTransform
+Transforming loader-28.0.0-rc02.aar (com.android.support:loader:28.0.0-rc02) with IdentityTransform
+Transforming viewmodel-1.1.1.aar (android.arch.lifecycle:viewmodel:1.1.1) with ExtractAarTransform
+Transforming viewmodel-1.1.1.aar (android.arch.lifecycle:viewmodel:1.1.1) with IdentityTransform
+Transforming cursoradapter-28.0.0-rc02.aar (com.android.support:cursoradapter:28.0.0-rc02) with IdentityTransform
+Transforming recyclerview-v7-28.0.0-rc02.aar (com.android.support:recyclerview-v7:28.0.0-rc02) with IdentityTransform
+Transforming cursoradapter-28.0.0-rc02.aar (com.android.support:cursoradapter:28.0.0-rc02) with ExtractAarTransform
+Transforming loader-28.0.0-rc02.aar (com.android.support:loader:28.0.0-rc02) with ExtractAarTransform
+Transforming cursoradapter-28.0.0-rc02.aar (com.android.support:cursoradapter:28.0.0-rc02) with AarTransform
+Transforming loader-28.0.0-rc02.aar (com.android.support:loader:28.0.0-rc02) with AarTransform
+Transforming transition-28.0.0-rc02.aar (com.android.support:transition:28.0.0-rc02) with IdentityTransform
+Transforming recyclerview-v7-28.0.0-rc02.aar (com.android.support:recyclerview-v7:28.0.0-rc02) with ExtractAarTransform
+Transforming transition-28.0.0-rc02.aar (com.android.support:transition:28.0.0-rc02) with ExtractAarTransform
+Transforming viewmodel-1.1.1.aar (android.arch.lifecycle:viewmodel:1.1.1) with ExtractAarTransform
+Transforming viewmodel-1.1.1.aar (android.arch.lifecycle:viewmodel:1.1.1) with AarTransform
+Transforming viewmodel-1.1.1.aar (android.arch.lifecycle:viewmodel:1.1.1) with AarTransform
+Transforming asynclayoutinflater-28.0.0-rc02.aar (com.android.support:asynclayoutinflater:28.0.0-rc02) with IdentityTransform
+Transforming transition-28.0.0-rc02.aar (com.android.support:transition:28.0.0-rc02) with AarTransform
+Transforming support-vector-drawable-28.0.0-rc02.aar (com.android.support:support-vector-drawable:28.0.0-rc02) with IdentityTransform
+Transforming recyclerview-v7-28.0.0-rc02.aar (com.android.support:recyclerview-v7:28.0.0-rc02) with AarTransform
+Transforming support-vector-drawable-28.0.0-rc02.aar (com.android.support:support-vector-drawable:28.0.0-rc02) with ExtractAarTransform
+Transforming support-vector-drawable-28.0.0-rc02.aar (com.android.support:support-vector-drawable:28.0.0-rc02) with AarTransform
+Transforming viewpager-28.0.0-rc02.aar (com.android.support:viewpager:28.0.0-rc02) with IdentityTransform
+Transforming viewpager-28.0.0-rc02.aar (com.android.support:viewpager:28.0.0-rc02) with ExtractAarTransform
+Transforming viewpager-28.0.0-rc02.aar (com.android.support:viewpager:28.0.0-rc02) with AarTransform
+Transforming versionedparcelable-28.0.0-rc02.aar (com.android.support:versionedparcelable:28.0.0-rc02) with IdentityTransform
+Transforming asynclayoutinflater-28.0.0-rc02.aar (com.android.support:asynclayoutinflater:28.0.0-rc02) with ExtractAarTransform
+Transforming asynclayoutinflater-28.0.0-rc02.aar (com.android.support:asynclayoutinflater:28.0.0-rc02) with AarTransform
+Transforming versionedparcelable-28.0.0-rc02.aar (com.android.support:versionedparcelable:28.0.0-rc02) with ExtractAarTransform
+Transforming versionedparcelable-28.0.0-rc02.aar (com.android.support:versionedparcelable:28.0.0-rc02) with AarTransform
+Transforming slidingpanelayout-28.0.0-rc02.aar (com.android.support:slidingpanelayout:28.0.0-rc02) with IdentityTransform
+Transforming slidingpanelayout-28.0.0-rc02.aar (com.android.support:slidingpanelayout:28.0.0-rc02) with ExtractAarTransform
+Transforming slidingpanelayout-28.0.0-rc02.aar (com.android.support:slidingpanelayout:28.0.0-rc02) with AarTransform
+Transforming drawerlayout-28.0.0-rc02.aar (com.android.support:drawerlayout:28.0.0-rc02) with IdentityTransform
+Transforming drawerlayout-28.0.0-rc02.aar (com.android.support:drawerlayout:28.0.0-rc02) with ExtractAarTransform
+Transforming drawerlayout-28.0.0-rc02.aar (com.android.support:drawerlayout:28.0.0-rc02) with AarTransform
+Transforming print-28.0.0-rc02.aar (com.android.support:print:28.0.0-rc02) with IdentityTransform
+Transforming print-28.0.0-rc02.aar (com.android.support:print:28.0.0-rc02) with ExtractAarTransform
+Transforming print-28.0.0-rc02.aar (com.android.support:print:28.0.0-rc02) with AarTransform
+Transforming cardview-v7-28.0.0-rc02.aar (com.android.support:cardview-v7:28.0.0-rc02) with IdentityTransform
+Transforming cardview-v7-28.0.0-rc02.aar (com.android.support:cardview-v7:28.0.0-rc02) with ExtractAarTransform
+Transforming cardview-v7-28.0.0-rc02.aar (com.android.support:cardview-v7:28.0.0-rc02) with AarTransform
+Transforming localbroadcastmanager-28.0.0-rc02.aar (com.android.support:localbroadcastmanager:28.0.0-rc02) with IdentityTransform
+Transforming localbroadcastmanager-28.0.0-rc02.aar (com.android.support:localbroadcastmanager:28.0.0-rc02) with ExtractAarTransform
+Transforming localbroadcastmanager-28.0.0-rc02.aar (com.android.support:localbroadcastmanager:28.0.0-rc02) with AarTransform
+Caching disabled for task ':app:checkRobotDebugAarMetadata' because:
+  Build cache is disabled
+Skipping task ':app:checkRobotDebugAarMetadata' as it is up-to-date.
+:app:checkRobotDebugAarMetadata (Thread[#699,Execution worker for ':',5,main]) completed. Took 0.026 secs.
+:app:generateRobotDebugResValues (Thread[#699,Execution worker for ':',5,main]) started.
+
+> Task :app:generateRobotDebugResValues UP-TO-DATE
+Caching disabled for task ':app:generateRobotDebugResValues' because:
+  Build cache is disabled
+Skipping task ':app:generateRobotDebugResValues' as it is up-to-date.
+:app:generateRobotDebugResValues (Thread[#699,Execution worker for ':',5,main]) completed. Took 0.0 secs.
+:app:mapRobotDebugSourceSetPaths (Thread[#699,Execution worker for ':',5,main]) started.
+
+> Task :app:mapRobotDebugSourceSetPaths UP-TO-DATE
+Transforming design-28.0.0-rc02.aar (com.android.support:design:28.0.0-rc02) with IdentityTransform
+Transforming design-28.0.0-rc02.aar (com.android.support:design:28.0.0-rc02) with ExtractAarTransform
+Transforming design-28.0.0-rc02.aar (com.android.support:design:28.0.0-rc02) with AarTransform
+Transforming appcompat-v7-28.0.0-rc02.aar (com.android.support:appcompat-v7:28.0.0-rc02) with IdentityTransform
+Transforming appcompat-v7-28.0.0-rc02.aar (com.android.support:appcompat-v7:28.0.0-rc02) with ExtractAarTransform
+Transforming appcompat-v7-28.0.0-rc02.aar (com.android.support:appcompat-v7:28.0.0-rc02) with AarTransform
+Transforming appcompat-v7-28.0.0-rc02.aar (com.android.support:appcompat-v7:28.0.0-rc02) with IdentityTransform
+Transforming appcompat-v7-28.0.0-rc02.aar (com.android.support:appcompat-v7:28.0.0-rc02) with ExtractAarTransform
+Transforming appcompat-v7-28.0.0-rc02.aar (com.android.support:appcompat-v7:28.0.0-rc02) with AarTransform
+Transforming constraint-layout-1.1.3.aar (com.android.support.constraint:constraint-layout:1.1.3) with IdentityTransform
+Transforming constraint-layout-1.1.3.aar (com.android.support.constraint:constraint-layout:1.1.3) with ExtractAarTransform
+Transforming constraint-layout-1.1.3.aar (com.android.support.constraint:constraint-layout:1.1.3) with AarTransform
+Transforming jna-5.13.0.aar (net.java.dev.jna:jna:5.13.0) with IdentityTransform
+Transforming jna-5.13.0.aar (net.java.dev.jna:jna:5.13.0) with ExtractAarTransform
+Transforming jna-5.13.0.aar (net.java.dev.jna:jna:5.13.0) with AarTransform
+Transforming vosk-android-0.3.47.aar (com.alphacephei:vosk-android:0.3.47) with IdentityTransform
+Transforming vosk-android-0.3.47.aar (com.alphacephei:vosk-android:0.3.47) with ExtractAarTransform
+Transforming vosk-android-0.3.47.aar (com.alphacephei:vosk-android:0.3.47) with AarTransform
+Transforming QihanOpenSdk_1.1.8.0-.aar (:QihanOpenSdk_1.1.8.0:) with IdentityTransform
+Transforming QihanOpenSdk_1.1.8.0-.aar (:QihanOpenSdk_1.1.8.0:) with ExtractAarTransform
+Transforming QihanOpenSdk_1.1.8.0-.aar (:QihanOpenSdk_1.1.8.0:) with AarTransform
+Transforming support-fragment-28.0.0-rc02.aar (com.android.support:support-fragment:28.0.0-rc02) with IdentityTransform
+Transforming support-fragment-28.0.0-rc02.aar (com.android.support:support-fragment:28.0.0-rc02) with ExtractAarTransform
+Transforming support-fragment-28.0.0-rc02.aar (com.android.support:support-fragment:28.0.0-rc02) with AarTransform
+Transforming animated-vector-drawable-28.0.0-rc02.aar (com.android.support:animated-vector-drawable:28.0.0-rc02) with IdentityTransform
+Transforming animated-vector-drawable-28.0.0-rc02.aar (com.android.support:animated-vector-drawable:28.0.0-rc02) with ExtractAarTransform
+Transforming animated-vector-drawable-28.0.0-rc02.aar (com.android.support:animated-vector-drawable:28.0.0-rc02) with AarTransform
+Transforming recyclerview-v7-28.0.0-rc02.aar (com.android.support:recyclerview-v7:28.0.0-rc02) with IdentityTransform
+Transforming recyclerview-v7-28.0.0-rc02.aar (com.android.support:recyclerview-v7:28.0.0-rc02) with ExtractAarTransform
+Transforming recyclerview-v7-28.0.0-rc02.aar (com.android.support:recyclerview-v7:28.0.0-rc02) with AarTransform
+Transforming support-core-ui-28.0.0-rc02.aar (com.android.support:support-core-ui:28.0.0-rc02) with IdentityTransform
+Transforming support-core-ui-28.0.0-rc02.aar (com.android.support:support-core-ui:28.0.0-rc02) with ExtractAarTransform
+Transforming support-core-ui-28.0.0-rc02.aar (com.android.support:support-core-ui:28.0.0-rc02) with AarTransform
+Transforming support-core-utils-28.0.0-rc02.aar (com.android.support:support-core-utils:28.0.0-rc02) with IdentityTransform
+Transforming support-core-utils-28.0.0-rc02.aar (com.android.support:support-core-utils:28.0.0-rc02) with ExtractAarTransform
+Transforming support-core-utils-28.0.0-rc02.aar (com.android.support:support-core-utils:28.0.0-rc02) with AarTransform
+Transforming support-vector-drawable-28.0.0-rc02.aar (com.android.support:support-vector-drawable:28.0.0-rc02) with IdentityTransform
+Transforming support-vector-drawable-28.0.0-rc02.aar (com.android.support:support-vector-drawable:28.0.0-rc02) with ExtractAarTransform
+Transforming support-vector-drawable-28.0.0-rc02.aar (com.android.support:support-vector-drawable:28.0.0-rc02) with AarTransform
+Transforming transition-28.0.0-rc02.aar (com.android.support:transition:28.0.0-rc02) with IdentityTransform
+Transforming transition-28.0.0-rc02.aar (com.android.support:transition:28.0.0-rc02) with ExtractAarTransform
+Transforming transition-28.0.0-rc02.aar (com.android.support:transition:28.0.0-rc02) with AarTransform
+Transforming loader-28.0.0-rc02.aar (com.android.support:loader:28.0.0-rc02) with IdentityTransform
+Transforming loader-28.0.0-rc02.aar (com.android.support:loader:28.0.0-rc02) with ExtractAarTransform
+Transforming loader-28.0.0-rc02.aar (com.android.support:loader:28.0.0-rc02) with AarTransform
+Transforming viewpager-28.0.0-rc02.aar (com.android.support:viewpager:28.0.0-rc02) with IdentityTransform
+Transforming viewpager-28.0.0-rc02.aar (com.android.support:viewpager:28.0.0-rc02) with ExtractAarTransform
+Transforming viewpager-28.0.0-rc02.aar (com.android.support:viewpager:28.0.0-rc02) with AarTransform
+Transforming coordinatorlayout-28.0.0-rc02.aar (com.android.support:coordinatorlayout:28.0.0-rc02) with IdentityTransform
+Transforming coordinatorlayout-28.0.0-rc02.aar (com.android.support:coordinatorlayout:28.0.0-rc02) with ExtractAarTransform
+Transforming coordinatorlayout-28.0.0-rc02.aar (com.android.support:coordinatorlayout:28.0.0-rc02) with AarTransform
+Transforming drawerlayout-28.0.0-rc02.aar (com.android.support:drawerlayout:28.0.0-rc02) with IdentityTransform
+Transforming drawerlayout-28.0.0-rc02.aar (com.android.support:drawerlayout:28.0.0-rc02) with ExtractAarTransform
+Transforming drawerlayout-28.0.0-rc02.aar (com.android.support:drawerlayout:28.0.0-rc02) with AarTransform
+Transforming slidingpanelayout-28.0.0-rc02.aar (com.android.support:slidingpanelayout:28.0.0-rc02) with IdentityTransform
+Transforming slidingpanelayout-28.0.0-rc02.aar (com.android.support:slidingpanelayout:28.0.0-rc02) with ExtractAarTransform
+Transforming slidingpanelayout-28.0.0-rc02.aar (com.android.support:slidingpanelayout:28.0.0-rc02) with AarTransform
+Transforming customview-28.0.0-rc02.aar (com.android.support:customview:28.0.0-rc02) with IdentityTransform
+Transforming customview-28.0.0-rc02.aar (com.android.support:customview:28.0.0-rc02) with ExtractAarTransform
+Transforming customview-28.0.0-rc02.aar (com.android.support:customview:28.0.0-rc02) with AarTransform
+Transforming swiperefreshlayout-28.0.0-rc02.aar (com.android.support:swiperefreshlayout:28.0.0-rc02) with IdentityTransform
+Transforming swiperefreshlayout-28.0.0-rc02.aar (com.android.support:swiperefreshlayout:28.0.0-rc02) with ExtractAarTransform
+Transforming swiperefreshlayout-28.0.0-rc02.aar (com.android.support:swiperefreshlayout:28.0.0-rc02) with AarTransform
+Transforming asynclayoutinflater-28.0.0-rc02.aar (com.android.support:asynclayoutinflater:28.0.0-rc02) with IdentityTransform
+Transforming asynclayoutinflater-28.0.0-rc02.aar (com.android.support:asynclayoutinflater:28.0.0-rc02) with ExtractAarTransform
+Transforming asynclayoutinflater-28.0.0-rc02.aar (com.android.support:asynclayoutinflater:28.0.0-rc02) with AarTransform
+Transforming support-compat-28.0.0-rc02.aar (com.android.support:support-compat:28.0.0-rc02) with IdentityTransform
+Transforming support-compat-28.0.0-rc02.aar (com.android.support:support-compat:28.0.0-rc02) with ExtractAarTransform
+Transforming support-compat-28.0.0-rc02.aar (com.android.support:support-compat:28.0.0-rc02) with AarTransform
+Transforming versionedparcelable-28.0.0-rc02.aar (com.android.support:versionedparcelable:28.0.0-rc02) with IdentityTransform
+Transforming versionedparcelable-28.0.0-rc02.aar (com.android.support:versionedparcelable:28.0.0-rc02) with ExtractAarTransform
+Transforming versionedparcelable-28.0.0-rc02.aar (com.android.support:versionedparcelable:28.0.0-rc02) with AarTransform
+Transforming cursoradapter-28.0.0-rc02.aar (com.android.support:cursoradapter:28.0.0-rc02) with IdentityTransform
+Transforming cursoradapter-28.0.0-rc02.aar (com.android.support:cursoradapter:28.0.0-rc02) with ExtractAarTransform
+Transforming cursoradapter-28.0.0-rc02.aar (com.android.support:cursoradapter:28.0.0-rc02) with AarTransform
+Transforming cardview-v7-28.0.0-rc02.aar (com.android.support:cardview-v7:28.0.0-rc02) with IdentityTransform
+Transforming cardview-v7-28.0.0-rc02.aar (com.android.support:cardview-v7:28.0.0-rc02) with ExtractAarTransform
+Transforming cardview-v7-28.0.0-rc02.aar (com.android.support:cardview-v7:28.0.0-rc02) with AarTransform
+Transforming runtime-1.1.1.aar (android.arch.lifecycle:runtime:1.1.1) with IdentityTransform
+Transforming runtime-1.1.1.aar (android.arch.lifecycle:runtime:1.1.1) with ExtractAarTransform
+Transforming runtime-1.1.1.aar (android.arch.lifecycle:runtime:1.1.1) with AarTransform
+Transforming documentfile-28.0.0-rc02.aar (com.android.support:documentfile:28.0.0-rc02) with IdentityTransform
+Transforming documentfile-28.0.0-rc02.aar (com.android.support:documentfile:28.0.0-rc02) with ExtractAarTransform
+Transforming documentfile-28.0.0-rc02.aar (com.android.support:documentfile:28.0.0-rc02) with AarTransform
+Transforming localbroadcastmanager-28.0.0-rc02.aar (com.android.support:localbroadcastmanager:28.0.0-rc02) with IdentityTransform
+Transforming localbroadcastmanager-28.0.0-rc02.aar (com.android.support:localbroadcastmanager:28.0.0-rc02) with ExtractAarTransform
+Transforming localbroadcastmanager-28.0.0-rc02.aar (com.android.support:localbroadcastmanager:28.0.0-rc02) with AarTransform
+Transforming print-28.0.0-rc02.aar (com.android.support:print:28.0.0-rc02) with IdentityTransform
+Transforming print-28.0.0-rc02.aar (com.android.support:print:28.0.0-rc02) with ExtractAarTransform
+Transforming print-28.0.0-rc02.aar (com.android.support:print:28.0.0-rc02) with AarTransform
+Transforming viewmodel-1.1.1.aar (android.arch.lifecycle:viewmodel:1.1.1) with IdentityTransform
+Transforming viewmodel-1.1.1.aar (android.arch.lifecycle:viewmodel:1.1.1) with ExtractAarTransform
+Transforming viewmodel-1.1.1.aar (android.arch.lifecycle:viewmodel:1.1.1) with AarTransform
+Transforming interpolator-28.0.0-rc02.aar (com.android.support:interpolator:28.0.0-rc02) with IdentityTransform
+Transforming interpolator-28.0.0-rc02.aar (com.android.support:interpolator:28.0.0-rc02) with ExtractAarTransform
+Transforming interpolator-28.0.0-rc02.aar (com.android.support:interpolator:28.0.0-rc02) with AarTransform
+Transforming livedata-core-1.1.1.aar (android.arch.lifecycle:livedata-core:1.1.1) with IdentityTransform
+Transforming livedata-core-1.1.1.aar (android.arch.lifecycle:livedata-core:1.1.1) with ExtractAarTransform
+Transforming livedata-core-1.1.1.aar (android.arch.lifecycle:livedata-core:1.1.1) with AarTransform
+Transforming runtime-1.1.1.aar (android.arch.core:runtime:1.1.1) with IdentityTransform
+Transforming runtime-1.1.1.aar (android.arch.core:runtime:1.1.1) with ExtractAarTransform
+Transforming runtime-1.1.1.aar (android.arch.core:runtime:1.1.1) with AarTransform
+Caching disabled for task ':app:mapRobotDebugSourceSetPaths' because:
+  Build cache is disabled
+Skipping task ':app:mapRobotDebugSourceSetPaths' as it is up-to-date.
+:app:mapRobotDebugSourceSetPaths (Thread[#699,Execution worker for ':',5,main]) completed. Took 0.022 secs.
+:app:generateRobotDebugResources (Thread[#699,Execution worker for ':',5,main]) started.
+
+> Task :app:generateRobotDebugResources UP-TO-DATE
+Skipping task ':app:generateRobotDebugResources' as it has no actions.
+:app:generateRobotDebugResources (Thread[#699,Execution worker for ':',5,main]) completed. Took 0.0 secs.
+:app:mergeRobotDebugResources (Thread[#699,Execution worker for ':',5,main]) started.
+
+> Task :app:mergeRobotDebugResources UP-TO-DATE
+Caching disabled for task ':app:mergeRobotDebugResources' because:
+  Build cache is disabled
+Skipping task ':app:mergeRobotDebugResources' as it is up-to-date.
+:app:mergeRobotDebugResources (Thread[#699,Execution worker for ':',5,main]) completed. Took 0.002 secs.
+:app:packageRobotDebugResources (Thread[#699,Execution worker for ':',5,main]) started.
+
+> Task :app:packageRobotDebugResources UP-TO-DATE
+Caching disabled for task ':app:packageRobotDebugResources' because:
+  Build cache is disabled
+Skipping task ':app:packageRobotDebugResources' as it is up-to-date.
+:app:packageRobotDebugResources (Thread[#699,Execution worker for ':',5,main]) completed. Took 0.001 secs.
+:app:parseRobotDebugLocalResources (Thread[#699,Execution worker for ':',5,main]) started.
+
+> Task :app:parseRobotDebugLocalResources UP-TO-DATE
+Transforming android.jar with PlatformAttrTransform
+Transforming android.jar with PlatformAttrTransform
+Caching disabled for task ':app:parseRobotDebugLocalResources' because:
+  Build cache is disabled
+Skipping task ':app:parseRobotDebugLocalResources' as it is up-to-date.
+:app:parseRobotDebugLocalResources (Thread[#699,Execution worker for ':',5,main]) completed. Took 0.002 secs.
+:app:createRobotDebugCompatibleScreenManifests (Thread[#699,Execution worker for ':',5,main]) started.
+
+> Task :app:createRobotDebugCompatibleScreenManifests UP-TO-DATE
+Caching disabled for task ':app:createRobotDebugCompatibleScreenManifests' because:
+  Build cache is disabled
+Skipping task ':app:createRobotDebugCompatibleScreenManifests' as it is up-to-date.
+:app:createRobotDebugCompatibleScreenManifests (Thread[#699,Execution worker for ':',5,main]) completed. Took 0.0 secs.
+:app:extractDeepLinksRobotDebug (Thread[#699,Execution worker for ':',5,main]) started.
+
+> Task :app:extractDeepLinksRobotDebug UP-TO-DATE
+Caching disabled for task ':app:extractDeepLinksRobotDebug' because:
+  Build cache is disabled
+Skipping task ':app:extractDeepLinksRobotDebug' as it is up-to-date.
+:app:extractDeepLinksRobotDebug (Thread[#699,Execution worker for ':',5,main]) completed. Took 0.001 secs.
+:app:processRobotDebugMainManifest (Thread[#699,Execution worker for ':',5,main]) started.
+
+> Task :app:processRobotDebugMainManifest UP-TO-DATE
+Transforming design-28.0.0-rc02.aar (com.android.support:design:28.0.0-rc02) with IdentityTransform
+Transforming design-28.0.0-rc02.aar (com.android.support:design:28.0.0-rc02) with ExtractAarTransform
+Transforming design-28.0.0-rc02.aar (com.android.support:design:28.0.0-rc02) with AarTransform
+Transforming appcompat-v7-28.0.0-rc02.aar (com.android.support:appcompat-v7:28.0.0-rc02) with IdentityTransform
+Transforming appcompat-v7-28.0.0-rc02.aar (com.android.support:appcompat-v7:28.0.0-rc02) with ExtractAarTransform
+Transforming appcompat-v7-28.0.0-rc02.aar (com.android.support:appcompat-v7:28.0.0-rc02) with AarTransform
+Transforming appcompat-v7-28.0.0-rc02.aar (com.android.support:appcompat-v7:28.0.0-rc02) with IdentityTransform
+Transforming appcompat-v7-28.0.0-rc02.aar (com.android.support:appcompat-v7:28.0.0-rc02) with ExtractAarTransform
+Transforming appcompat-v7-28.0.0-rc02.aar (com.android.support:appcompat-v7:28.0.0-rc02) with AarTransform
+Transforming constraint-layout-1.1.3.aar (com.android.support.constraint:constraint-layout:1.1.3) with IdentityTransform
+Transforming constraint-layout-1.1.3.aar (com.android.support.constraint:constraint-layout:1.1.3) with ExtractAarTransform
+Transforming constraint-layout-1.1.3.aar (com.android.support.constraint:constraint-layout:1.1.3) with AarTransform
+Transforming jna-5.13.0.aar (net.java.dev.jna:jna:5.13.0) with IdentityTransform
+Transforming jna-5.13.0.aar (net.java.dev.jna:jna:5.13.0) with ExtractAarTransform
+Transforming jna-5.13.0.aar (net.java.dev.jna:jna:5.13.0) with AarTransform
+Transforming vosk-android-0.3.47.aar (com.alphacephei:vosk-android:0.3.47) with IdentityTransform
+Transforming vosk-android-0.3.47.aar (com.alphacephei:vosk-android:0.3.47) with ExtractAarTransform
+Transforming vosk-android-0.3.47.aar (com.alphacephei:vosk-android:0.3.47) with AarTransform
+Transforming QihanOpenSdk_1.1.8.0-.aar (:QihanOpenSdk_1.1.8.0:) with IdentityTransform
+Transforming QihanOpenSdk_1.1.8.0-.aar (:QihanOpenSdk_1.1.8.0:) with ExtractAarTransform
+Transforming QihanOpenSdk_1.1.8.0-.aar (:QihanOpenSdk_1.1.8.0:) with AarTransform
+Transforming support-fragment-28.0.0-rc02.aar (com.android.support:support-fragment:28.0.0-rc02) with IdentityTransform
+Transforming support-fragment-28.0.0-rc02.aar (com.android.support:support-fragment:28.0.0-rc02) with ExtractAarTransform
+Transforming support-fragment-28.0.0-rc02.aar (com.android.support:support-fragment:28.0.0-rc02) with AarTransform
+Transforming animated-vector-drawable-28.0.0-rc02.aar (com.android.support:animated-vector-drawable:28.0.0-rc02) with IdentityTransform
+Transforming animated-vector-drawable-28.0.0-rc02.aar (com.android.support:animated-vector-drawable:28.0.0-rc02) with ExtractAarTransform
+Transforming animated-vector-drawable-28.0.0-rc02.aar (com.android.support:animated-vector-drawable:28.0.0-rc02) with AarTransform
+Transforming recyclerview-v7-28.0.0-rc02.aar (com.android.support:recyclerview-v7:28.0.0-rc02) with IdentityTransform
+Transforming recyclerview-v7-28.0.0-rc02.aar (com.android.support:recyclerview-v7:28.0.0-rc02) with ExtractAarTransform
+Transforming recyclerview-v7-28.0.0-rc02.aar (com.android.support:recyclerview-v7:28.0.0-rc02) with AarTransform
+Transforming support-core-ui-28.0.0-rc02.aar (com.android.support:support-core-ui:28.0.0-rc02) with IdentityTransform
+Transforming support-core-ui-28.0.0-rc02.aar (com.android.support:support-core-ui:28.0.0-rc02) with ExtractAarTransform
+Transforming support-core-ui-28.0.0-rc02.aar (com.android.support:support-core-ui:28.0.0-rc02) with AarTransform
+Transforming support-core-utils-28.0.0-rc02.aar (com.android.support:support-core-utils:28.0.0-rc02) with IdentityTransform
+Transforming support-core-utils-28.0.0-rc02.aar (com.android.support:support-core-utils:28.0.0-rc02) with ExtractAarTransform
+Transforming support-core-utils-28.0.0-rc02.aar (com.android.support:support-core-utils:28.0.0-rc02) with AarTransform
+Transforming support-vector-drawable-28.0.0-rc02.aar (com.android.support:support-vector-drawable:28.0.0-rc02) with IdentityTransform
+Transforming support-vector-drawable-28.0.0-rc02.aar (com.android.support:support-vector-drawable:28.0.0-rc02) with ExtractAarTransform
+Transforming support-vector-drawable-28.0.0-rc02.aar (com.android.support:support-vector-drawable:28.0.0-rc02) with AarTransform
+Transforming transition-28.0.0-rc02.aar (com.android.support:transition:28.0.0-rc02) with IdentityTransform
+Transforming transition-28.0.0-rc02.aar (com.android.support:transition:28.0.0-rc02) with ExtractAarTransform
+Transforming transition-28.0.0-rc02.aar (com.android.support:transition:28.0.0-rc02) with AarTransform
+Transforming loader-28.0.0-rc02.aar (com.android.support:loader:28.0.0-rc02) with IdentityTransform
+Transforming loader-28.0.0-rc02.aar (com.android.support:loader:28.0.0-rc02) with ExtractAarTransform
+Transforming loader-28.0.0-rc02.aar (com.android.support:loader:28.0.0-rc02) with AarTransform
+Transforming viewpager-28.0.0-rc02.aar (com.android.support:viewpager:28.0.0-rc02) with IdentityTransform
+Transforming viewpager-28.0.0-rc02.aar (com.android.support:viewpager:28.0.0-rc02) with ExtractAarTransform
+Transforming viewpager-28.0.0-rc02.aar (com.android.support:viewpager:28.0.0-rc02) with AarTransform
+Transforming coordinatorlayout-28.0.0-rc02.aar (com.android.support:coordinatorlayout:28.0.0-rc02) with IdentityTransform
+Transforming coordinatorlayout-28.0.0-rc02.aar (com.android.support:coordinatorlayout:28.0.0-rc02) with ExtractAarTransform
+Transforming coordinatorlayout-28.0.0-rc02.aar (com.android.support:coordinatorlayout:28.0.0-rc02) with AarTransform
+Transforming drawerlayout-28.0.0-rc02.aar (com.android.support:drawerlayout:28.0.0-rc02) with IdentityTransform
+Transforming drawerlayout-28.0.0-rc02.aar (com.android.support:drawerlayout:28.0.0-rc02) with ExtractAarTransform
+Transforming drawerlayout-28.0.0-rc02.aar (com.android.support:drawerlayout:28.0.0-rc02) with AarTransform
+Transforming slidingpanelayout-28.0.0-rc02.aar (com.android.support:slidingpanelayout:28.0.0-rc02) with IdentityTransform
+Transforming slidingpanelayout-28.0.0-rc02.aar (com.android.support:slidingpanelayout:28.0.0-rc02) with ExtractAarTransform
+Transforming slidingpanelayout-28.0.0-rc02.aar (com.android.support:slidingpanelayout:28.0.0-rc02) with AarTransform
+Transforming customview-28.0.0-rc02.aar (com.android.support:customview:28.0.0-rc02) with IdentityTransform
+Transforming customview-28.0.0-rc02.aar (com.android.support:customview:28.0.0-rc02) with ExtractAarTransform
+Transforming customview-28.0.0-rc02.aar (com.android.support:customview:28.0.0-rc02) with AarTransform
+Transforming swiperefreshlayout-28.0.0-rc02.aar (com.android.support:swiperefreshlayout:28.0.0-rc02) with IdentityTransform
+Transforming swiperefreshlayout-28.0.0-rc02.aar (com.android.support:swiperefreshlayout:28.0.0-rc02) with ExtractAarTransform
+Transforming swiperefreshlayout-28.0.0-rc02.aar (com.android.support:swiperefreshlayout:28.0.0-rc02) with AarTransform
+Transforming asynclayoutinflater-28.0.0-rc02.aar (com.android.support:asynclayoutinflater:28.0.0-rc02) with IdentityTransform
+Transforming asynclayoutinflater-28.0.0-rc02.aar (com.android.support:asynclayoutinflater:28.0.0-rc02) with ExtractAarTransform
+Transforming asynclayoutinflater-28.0.0-rc02.aar (com.android.support:asynclayoutinflater:28.0.0-rc02) with AarTransform
+Transforming support-compat-28.0.0-rc02.aar (com.android.support:support-compat:28.0.0-rc02) with IdentityTransform
+Transforming support-compat-28.0.0-rc02.aar (com.android.support:support-compat:28.0.0-rc02) with ExtractAarTransform
+Transforming support-compat-28.0.0-rc02.aar (com.android.support:support-compat:28.0.0-rc02) with AarTransform
+Transforming versionedparcelable-28.0.0-rc02.aar (com.android.support:versionedparcelable:28.0.0-rc02) with IdentityTransform
+Transforming versionedparcelable-28.0.0-rc02.aar (com.android.support:versionedparcelable:28.0.0-rc02) with ExtractAarTransform
+Transforming versionedparcelable-28.0.0-rc02.aar (com.android.support:versionedparcelable:28.0.0-rc02) with AarTransform
+Transforming cursoradapter-28.0.0-rc02.aar (com.android.support:cursoradapter:28.0.0-rc02) with IdentityTransform
+Transforming cursoradapter-28.0.0-rc02.aar (com.android.support:cursoradapter:28.0.0-rc02) with ExtractAarTransform
+Transforming cursoradapter-28.0.0-rc02.aar (com.android.support:cursoradapter:28.0.0-rc02) with AarTransform
+Transforming cardview-v7-28.0.0-rc02.aar (com.android.support:cardview-v7:28.0.0-rc02) with IdentityTransform
+Transforming cardview-v7-28.0.0-rc02.aar (com.android.support:cardview-v7:28.0.0-rc02) with ExtractAarTransform
+Transforming cardview-v7-28.0.0-rc02.aar (com.android.support:cardview-v7:28.0.0-rc02) with AarTransform
+Transforming runtime-1.1.1.aar (android.arch.lifecycle:runtime:1.1.1) with IdentityTransform
+Transforming runtime-1.1.1.aar (android.arch.lifecycle:runtime:1.1.1) with ExtractAarTransform
+Transforming runtime-1.1.1.aar (android.arch.lifecycle:runtime:1.1.1) with AarTransform
+Transforming documentfile-28.0.0-rc02.aar (com.android.support:documentfile:28.0.0-rc02) with IdentityTransform
+Transforming documentfile-28.0.0-rc02.aar (com.android.support:documentfile:28.0.0-rc02) with ExtractAarTransform
+Transforming documentfile-28.0.0-rc02.aar (com.android.support:documentfile:28.0.0-rc02) with AarTransform
+Transforming localbroadcastmanager-28.0.0-rc02.aar (com.android.support:localbroadcastmanager:28.0.0-rc02) with IdentityTransform
+Transforming localbroadcastmanager-28.0.0-rc02.aar (com.android.support:localbroadcastmanager:28.0.0-rc02) with ExtractAarTransform
+Transforming localbroadcastmanager-28.0.0-rc02.aar (com.android.support:localbroadcastmanager:28.0.0-rc02) with AarTransform
+Transforming print-28.0.0-rc02.aar (com.android.support:print:28.0.0-rc02) with IdentityTransform
+Transforming print-28.0.0-rc02.aar (com.android.support:print:28.0.0-rc02) with ExtractAarTransform
+Transforming print-28.0.0-rc02.aar (com.android.support:print:28.0.0-rc02) with AarTransform
+Transforming viewmodel-1.1.1.aar (android.arch.lifecycle:viewmodel:1.1.1) with IdentityTransform
+Transforming viewmodel-1.1.1.aar (android.arch.lifecycle:viewmodel:1.1.1) with ExtractAarTransform
+Transforming viewmodel-1.1.1.aar (android.arch.lifecycle:viewmodel:1.1.1) with AarTransform
+Transforming interpolator-28.0.0-rc02.aar (com.android.support:interpolator:28.0.0-rc02) with IdentityTransform
+Transforming interpolator-28.0.0-rc02.aar (com.android.support:interpolator:28.0.0-rc02) with ExtractAarTransform
+Transforming interpolator-28.0.0-rc02.aar (com.android.support:interpolator:28.0.0-rc02) with AarTransform
+Transforming livedata-core-1.1.1.aar (android.arch.lifecycle:livedata-core:1.1.1) with IdentityTransform
+Transforming livedata-core-1.1.1.aar (android.arch.lifecycle:livedata-core:1.1.1) with ExtractAarTransform
+Transforming livedata-core-1.1.1.aar (android.arch.lifecycle:livedata-core:1.1.1) with AarTransform
+Transforming runtime-1.1.1.aar (android.arch.core:runtime:1.1.1) with IdentityTransform
+Transforming runtime-1.1.1.aar (android.arch.core:runtime:1.1.1) with ExtractAarTransform
+Transforming runtime-1.1.1.aar (android.arch.core:runtime:1.1.1) with AarTransform
+Transforming design-28.0.0-rc02.aar (com.android.support:design:28.0.0-rc02) with IdentityTransform
+Transforming design-28.0.0-rc02.aar (com.android.support:design:28.0.0-rc02) with ExtractAarTransform
+Transforming design-28.0.0-rc02.aar (com.android.support:design:28.0.0-rc02) with AarTransform
+Transforming appcompat-v7-28.0.0-rc02.aar (com.android.support:appcompat-v7:28.0.0-rc02) with IdentityTransform
+Transforming appcompat-v7-28.0.0-rc02.aar (com.android.support:appcompat-v7:28.0.0-rc02) with ExtractAarTransform
+Transforming appcompat-v7-28.0.0-rc02.aar (com.android.support:appcompat-v7:28.0.0-rc02) with AarTransform
+Transforming appcompat-v7-28.0.0-rc02.aar (com.android.support:appcompat-v7:28.0.0-rc02) with IdentityTransform
+Transforming appcompat-v7-28.0.0-rc02.aar (com.android.support:appcompat-v7:28.0.0-rc02) with ExtractAarTransform
+Transforming appcompat-v7-28.0.0-rc02.aar (com.android.support:appcompat-v7:28.0.0-rc02) with AarTransform
+Transforming constraint-layout-1.1.3.aar (com.android.support.constraint:constraint-layout:1.1.3) with IdentityTransform
+Transforming constraint-layout-1.1.3.aar (com.android.support.constraint:constraint-layout:1.1.3) with ExtractAarTransform
+Transforming constraint-layout-1.1.3.aar (com.android.support.constraint:constraint-layout:1.1.3) with AarTransform
+Transforming jna-5.13.0.aar (net.java.dev.jna:jna:5.13.0) with IdentityTransform
+Transforming jna-5.13.0.aar (net.java.dev.jna:jna:5.13.0) with ExtractAarTransform
+Transforming jna-5.13.0.aar (net.java.dev.jna:jna:5.13.0) with AarTransform
+Transforming vosk-android-0.3.47.aar (com.alphacephei:vosk-android:0.3.47) with IdentityTransform
+Transforming vosk-android-0.3.47.aar (com.alphacephei:vosk-android:0.3.47) with ExtractAarTransform
+Transforming vosk-android-0.3.47.aar (com.alphacephei:vosk-android:0.3.47) with AarTransform
+Transforming QihanOpenSdk_1.1.8.0-.aar (:QihanOpenSdk_1.1.8.0:) with IdentityTransform
+Transforming QihanOpenSdk_1.1.8.0-.aar (:QihanOpenSdk_1.1.8.0:) with ExtractAarTransform
+Transforming QihanOpenSdk_1.1.8.0-.aar (:QihanOpenSdk_1.1.8.0:) with AarTransform
+Transforming support-fragment-28.0.0-rc02.aar (com.android.support:support-fragment:28.0.0-rc02) with IdentityTransform
+Transforming support-fragment-28.0.0-rc02.aar (com.android.support:support-fragment:28.0.0-rc02) with ExtractAarTransform
+Transforming support-fragment-28.0.0-rc02.aar (com.android.support:support-fragment:28.0.0-rc02) with AarTransform
+Transforming animated-vector-drawable-28.0.0-rc02.aar (com.android.support:animated-vector-drawable:28.0.0-rc02) with IdentityTransform
+Transforming animated-vector-drawable-28.0.0-rc02.aar (com.android.support:animated-vector-drawable:28.0.0-rc02) with ExtractAarTransform
+Transforming animated-vector-drawable-28.0.0-rc02.aar (com.android.support:animated-vector-drawable:28.0.0-rc02) with AarTransform
+Transforming recyclerview-v7-28.0.0-rc02.aar (com.android.support:recyclerview-v7:28.0.0-rc02) with IdentityTransform
+Transforming recyclerview-v7-28.0.0-rc02.aar (com.android.support:recyclerview-v7:28.0.0-rc02) with ExtractAarTransform
+Transforming recyclerview-v7-28.0.0-rc02.aar (com.android.support:recyclerview-v7:28.0.0-rc02) with AarTransform
+Transforming support-core-ui-28.0.0-rc02.aar (com.android.support:support-core-ui:28.0.0-rc02) with IdentityTransform
+Transforming support-core-ui-28.0.0-rc02.aar (com.android.support:support-core-ui:28.0.0-rc02) with ExtractAarTransform
+Transforming support-core-ui-28.0.0-rc02.aar (com.android.support:support-core-ui:28.0.0-rc02) with AarTransform
+Transforming support-core-utils-28.0.0-rc02.aar (com.android.support:support-core-utils:28.0.0-rc02) with IdentityTransform
+Transforming support-core-utils-28.0.0-rc02.aar (com.android.support:support-core-utils:28.0.0-rc02) with ExtractAarTransform
+Transforming support-core-utils-28.0.0-rc02.aar (com.android.support:support-core-utils:28.0.0-rc02) with AarTransform
+Transforming support-vector-drawable-28.0.0-rc02.aar (com.android.support:support-vector-drawable:28.0.0-rc02) with IdentityTransform
+Transforming support-vector-drawable-28.0.0-rc02.aar (com.android.support:support-vector-drawable:28.0.0-rc02) with ExtractAarTransform
+Transforming support-vector-drawable-28.0.0-rc02.aar (com.android.support:support-vector-drawable:28.0.0-rc02) with AarTransform
+Transforming transition-28.0.0-rc02.aar (com.android.support:transition:28.0.0-rc02) with IdentityTransform
+Transforming transition-28.0.0-rc02.aar (com.android.support:transition:28.0.0-rc02) with ExtractAarTransform
+Transforming transition-28.0.0-rc02.aar (com.android.support:transition:28.0.0-rc02) with AarTransform
+Transforming loader-28.0.0-rc02.aar (com.android.support:loader:28.0.0-rc02) with IdentityTransform
+Transforming loader-28.0.0-rc02.aar (com.android.support:loader:28.0.0-rc02) with ExtractAarTransform
+Transforming loader-28.0.0-rc02.aar (com.android.support:loader:28.0.0-rc02) with AarTransform
+Transforming viewpager-28.0.0-rc02.aar (com.android.support:viewpager:28.0.0-rc02) with IdentityTransform
+Transforming viewpager-28.0.0-rc02.aar (com.android.support:viewpager:28.0.0-rc02) with ExtractAarTransform
+Transforming viewpager-28.0.0-rc02.aar (com.android.support:viewpager:28.0.0-rc02) with AarTransform
+Transforming coordinatorlayout-28.0.0-rc02.aar (com.android.support:coordinatorlayout:28.0.0-rc02) with IdentityTransform
+Transforming coordinatorlayout-28.0.0-rc02.aar (com.android.support:coordinatorlayout:28.0.0-rc02) with ExtractAarTransform
+Transforming coordinatorlayout-28.0.0-rc02.aar (com.android.support:coordinatorlayout:28.0.0-rc02) with AarTransform
+Transforming drawerlayout-28.0.0-rc02.aar (com.android.support:drawerlayout:28.0.0-rc02) with IdentityTransform
+Transforming drawerlayout-28.0.0-rc02.aar (com.android.support:drawerlayout:28.0.0-rc02) with ExtractAarTransform
+Transforming drawerlayout-28.0.0-rc02.aar (com.android.support:drawerlayout:28.0.0-rc02) with AarTransform
+Transforming slidingpanelayout-28.0.0-rc02.aar (com.android.support:slidingpanelayout:28.0.0-rc02) with IdentityTransform
+Transforming slidingpanelayout-28.0.0-rc02.aar (com.android.support:slidingpanelayout:28.0.0-rc02) with ExtractAarTransform
+Transforming slidingpanelayout-28.0.0-rc02.aar (com.android.support:slidingpanelayout:28.0.0-rc02) with AarTransform
+Transforming customview-28.0.0-rc02.aar (com.android.support:customview:28.0.0-rc02) with IdentityTransform
+Transforming customview-28.0.0-rc02.aar (com.android.support:customview:28.0.0-rc02) with ExtractAarTransform
+Transforming customview-28.0.0-rc02.aar (com.android.support:customview:28.0.0-rc02) with AarTransform
+Transforming swiperefreshlayout-28.0.0-rc02.aar (com.android.support:swiperefreshlayout:28.0.0-rc02) with IdentityTransform
+Transforming swiperefreshlayout-28.0.0-rc02.aar (com.android.support:swiperefreshlayout:28.0.0-rc02) with ExtractAarTransform
+Transforming swiperefreshlayout-28.0.0-rc02.aar (com.android.support:swiperefreshlayout:28.0.0-rc02) with AarTransform
+Transforming asynclayoutinflater-28.0.0-rc02.aar (com.android.support:asynclayoutinflater:28.0.0-rc02) with IdentityTransform
+Transforming asynclayoutinflater-28.0.0-rc02.aar (com.android.support:asynclayoutinflater:28.0.0-rc02) with ExtractAarTransform
+Transforming asynclayoutinflater-28.0.0-rc02.aar (com.android.support:asynclayoutinflater:28.0.0-rc02) with AarTransform
+Transforming support-compat-28.0.0-rc02.aar (com.android.support:support-compat:28.0.0-rc02) with IdentityTransform
+Transforming support-compat-28.0.0-rc02.aar (com.android.support:support-compat:28.0.0-rc02) with ExtractAarTransform
+Transforming support-compat-28.0.0-rc02.aar (com.android.support:support-compat:28.0.0-rc02) with AarTransform
+Transforming versionedparcelable-28.0.0-rc02.aar (com.android.support:versionedparcelable:28.0.0-rc02) with IdentityTransform
+Transforming versionedparcelable-28.0.0-rc02.aar (com.android.support:versionedparcelable:28.0.0-rc02) with ExtractAarTransform
+Transforming versionedparcelable-28.0.0-rc02.aar (com.android.support:versionedparcelable:28.0.0-rc02) with AarTransform
+Transforming cursoradapter-28.0.0-rc02.aar (com.android.support:cursoradapter:28.0.0-rc02) with IdentityTransform
+Transforming cursoradapter-28.0.0-rc02.aar (com.android.support:cursoradapter:28.0.0-rc02) with ExtractAarTransform
+Transforming cursoradapter-28.0.0-rc02.aar (com.android.support:cursoradapter:28.0.0-rc02) with AarTransform
+Transforming cardview-v7-28.0.0-rc02.aar (com.android.support:cardview-v7:28.0.0-rc02) with IdentityTransform
+Transforming cardview-v7-28.0.0-rc02.aar (com.android.support:cardview-v7:28.0.0-rc02) with ExtractAarTransform
+Transforming cardview-v7-28.0.0-rc02.aar (com.android.support:cardview-v7:28.0.0-rc02) with AarTransform
+Transforming runtime-1.1.1.aar (android.arch.lifecycle:runtime:1.1.1) with IdentityTransform
+Transforming runtime-1.1.1.aar (android.arch.lifecycle:runtime:1.1.1) with ExtractAarTransform
+Transforming runtime-1.1.1.aar (android.arch.lifecycle:runtime:1.1.1) with AarTransform
+Transforming documentfile-28.0.0-rc02.aar (com.android.support:documentfile:28.0.0-rc02) with IdentityTransform
+Transforming documentfile-28.0.0-rc02.aar (com.android.support:documentfile:28.0.0-rc02) with ExtractAarTransform
+Transforming documentfile-28.0.0-rc02.aar (com.android.support:documentfile:28.0.0-rc02) with AarTransform
+Transforming localbroadcastmanager-28.0.0-rc02.aar (com.android.support:localbroadcastmanager:28.0.0-rc02) with IdentityTransform
+Transforming localbroadcastmanager-28.0.0-rc02.aar (com.android.support:localbroadcastmanager:28.0.0-rc02) with ExtractAarTransform
+Transforming localbroadcastmanager-28.0.0-rc02.aar (com.android.support:localbroadcastmanager:28.0.0-rc02) with AarTransform
+Transforming print-28.0.0-rc02.aar (com.android.support:print:28.0.0-rc02) with IdentityTransform
+Transforming print-28.0.0-rc02.aar (com.android.support:print:28.0.0-rc02) with ExtractAarTransform
+Transforming print-28.0.0-rc02.aar (com.android.support:print:28.0.0-rc02) with AarTransform
+Transforming viewmodel-1.1.1.aar (android.arch.lifecycle:viewmodel:1.1.1) with IdentityTransform
+Transforming viewmodel-1.1.1.aar (android.arch.lifecycle:viewmodel:1.1.1) with ExtractAarTransform
+Transforming viewmodel-1.1.1.aar (android.arch.lifecycle:viewmodel:1.1.1) with AarTransform
+Transforming interpolator-28.0.0-rc02.aar (com.android.support:interpolator:28.0.0-rc02) with IdentityTransform
+Transforming interpolator-28.0.0-rc02.aar (com.android.support:interpolator:28.0.0-rc02) with ExtractAarTransform
+Transforming interpolator-28.0.0-rc02.aar (com.android.support:interpolator:28.0.0-rc02) with AarTransform
+Transforming livedata-core-1.1.1.aar (android.arch.lifecycle:livedata-core:1.1.1) with IdentityTransform
+Transforming livedata-core-1.1.1.aar (android.arch.lifecycle:livedata-core:1.1.1) with ExtractAarTransform
+Transforming livedata-core-1.1.1.aar (android.arch.lifecycle:livedata-core:1.1.1) with AarTransform
+Transforming runtime-1.1.1.aar (android.arch.core:runtime:1.1.1) with IdentityTransform
+Transforming runtime-1.1.1.aar (android.arch.core:runtime:1.1.1) with ExtractAarTransform
+Transforming runtime-1.1.1.aar (android.arch.core:runtime:1.1.1) with AarTransform
+Caching disabled for task ':app:processRobotDebugMainManifest' because:
+  Build cache is disabled
+Skipping task ':app:processRobotDebugMainManifest' as it is up-to-date.
+:app:processRobotDebugMainManifest (Thread[#699,Execution worker for ':',5,main]) completed. Took 0.025 secs.
+:app:processRobotDebugManifest (Thread[#699,Execution worker for ':',5,main]) started.
+
+> Task :app:processRobotDebugManifest UP-TO-DATE
+Caching disabled for task ':app:processRobotDebugManifest' because:
+  Build cache is disabled
+Skipping task ':app:processRobotDebugManifest' as it is up-to-date.
+:app:processRobotDebugManifest (Thread[#699,Execution worker for ':',5,main]) completed. Took 0.001 secs.
+:app:processRobotDebugManifestForPackage (Thread[#699,Execution worker for ':',5,main]) started.
+
+> Task :app:processRobotDebugManifestForPackage UP-TO-DATE
+Caching disabled for task ':app:processRobotDebugManifestForPackage' because:
+  Build cache is disabled
+Skipping task ':app:processRobotDebugManifestForPackage' as it is up-to-date.
+:app:processRobotDebugManifestForPackage (Thread[#699,Execution worker for ':',5,main]) completed. Took 0.0 secs.
+:app:processRobotDebugResources (Thread[#699,Execution worker for ':',5,main]) started.
+
+> Task :app:processRobotDebugResources UP-TO-DATE
+Transforming aapt2-7.3.1-8691043-windows.jar (com.android.tools.build:aapt2:7.3.1-8691043) with Aapt2Extractor
+Transforming design-28.0.0-rc02.aar (com.android.support:design:28.0.0-rc02) with IdentityTransform
+Transforming design-28.0.0-rc02.aar (com.android.support:design:28.0.0-rc02) with ExtractAarTransform
+Transforming design-28.0.0-rc02.aar (com.android.support:design:28.0.0-rc02) with AarResourcesCompilerTransform
+Transforming appcompat-v7-28.0.0-rc02.aar (com.android.support:appcompat-v7:28.0.0-rc02) with IdentityTransform
+Transforming appcompat-v7-28.0.0-rc02.aar (com.android.support:appcompat-v7:28.0.0-rc02) with ExtractAarTransform
+Transforming appcompat-v7-28.0.0-rc02.aar (com.android.support:appcompat-v7:28.0.0-rc02) with AarResourcesCompilerTransform
+Transforming appcompat-v7-28.0.0-rc02.aar (com.android.support:appcompat-v7:28.0.0-rc02) with IdentityTransform
+Transforming appcompat-v7-28.0.0-rc02.aar (com.android.support:appcompat-v7:28.0.0-rc02) with ExtractAarTransform
+Transforming appcompat-v7-28.0.0-rc02.aar (com.android.support:appcompat-v7:28.0.0-rc02) with AarResourcesCompilerTransform
+Transforming constraint-layout-1.1.3.aar (com.android.support.constraint:constraint-layout:1.1.3) with IdentityTransform
+Transforming constraint-layout-1.1.3.aar (com.android.support.constraint:constraint-layout:1.1.3) with ExtractAarTransform
+Transforming constraint-layout-1.1.3.aar (com.android.support.constraint:constraint-layout:1.1.3) with AarResourcesCompilerTransform
+Transforming jna-5.13.0.aar (net.java.dev.jna:jna:5.13.0) with IdentityTransform
+Transforming jna-5.13.0.aar (net.java.dev.jna:jna:5.13.0) with ExtractAarTransform
+Transforming jna-5.13.0.aar (net.java.dev.jna:jna:5.13.0) with AarResourcesCompilerTransform
+Transforming vosk-android-0.3.47.aar (com.alphacephei:vosk-android:0.3.47) with IdentityTransform
+Transforming vosk-android-0.3.47.aar (com.alphacephei:vosk-android:0.3.47) with ExtractAarTransform
+Transforming vosk-android-0.3.47.aar (com.alphacephei:vosk-android:0.3.47) with AarResourcesCompilerTransform
+Transforming QihanOpenSdk_1.1.8.0-.aar (:QihanOpenSdk_1.1.8.0:) with IdentityTransform
+Transforming QihanOpenSdk_1.1.8.0-.aar (:QihanOpenSdk_1.1.8.0:) with ExtractAarTransform
+Transforming QihanOpenSdk_1.1.8.0-.aar (:QihanOpenSdk_1.1.8.0:) with AarResourcesCompilerTransform
+Transforming support-fragment-28.0.0-rc02.aar (com.android.support:support-fragment:28.0.0-rc02) with IdentityTransform
+Transforming support-fragment-28.0.0-rc02.aar (com.android.support:support-fragment:28.0.0-rc02) with ExtractAarTransform
+Transforming support-fragment-28.0.0-rc02.aar (com.android.support:support-fragment:28.0.0-rc02) with AarResourcesCompilerTransform
+Transforming animated-vector-drawable-28.0.0-rc02.aar (com.android.support:animated-vector-drawable:28.0.0-rc02) with IdentityTransform
+Transforming animated-vector-drawable-28.0.0-rc02.aar (com.android.support:animated-vector-drawable:28.0.0-rc02) with ExtractAarTransform
+Transforming animated-vector-drawable-28.0.0-rc02.aar (com.android.support:animated-vector-drawable:28.0.0-rc02) with AarResourcesCompilerTransform
+Transforming recyclerview-v7-28.0.0-rc02.aar (com.android.support:recyclerview-v7:28.0.0-rc02) with IdentityTransform
+Transforming recyclerview-v7-28.0.0-rc02.aar (com.android.support:recyclerview-v7:28.0.0-rc02) with ExtractAarTransform
+Transforming recyclerview-v7-28.0.0-rc02.aar (com.android.support:recyclerview-v7:28.0.0-rc02) with AarResourcesCompilerTransform
+Transforming support-core-ui-28.0.0-rc02.aar (com.android.support:support-core-ui:28.0.0-rc02) with IdentityTransform
+Transforming support-core-ui-28.0.0-rc02.aar (com.android.support:support-core-ui:28.0.0-rc02) with ExtractAarTransform
+Transforming support-core-ui-28.0.0-rc02.aar (com.android.support:support-core-ui:28.0.0-rc02) with AarResourcesCompilerTransform
+Transforming support-core-utils-28.0.0-rc02.aar (com.android.support:support-core-utils:28.0.0-rc02) with IdentityTransform
+Transforming support-core-utils-28.0.0-rc02.aar (com.android.support:support-core-utils:28.0.0-rc02) with ExtractAarTransform
+Transforming support-core-utils-28.0.0-rc02.aar (com.android.support:support-core-utils:28.0.0-rc02) with AarResourcesCompilerTransform
+Transforming support-vector-drawable-28.0.0-rc02.aar (com.android.support:support-vector-drawable:28.0.0-rc02) with IdentityTransform
+Transforming support-vector-drawable-28.0.0-rc02.aar (com.android.support:support-vector-drawable:28.0.0-rc02) with ExtractAarTransform
+Transforming support-vector-drawable-28.0.0-rc02.aar (com.android.support:support-vector-drawable:28.0.0-rc02) with AarResourcesCompilerTransform
+Transforming transition-28.0.0-rc02.aar (com.android.support:transition:28.0.0-rc02) with IdentityTransform
+Transforming transition-28.0.0-rc02.aar (com.android.support:transition:28.0.0-rc02) with ExtractAarTransform
+Transforming transition-28.0.0-rc02.aar (com.android.support:transition:28.0.0-rc02) with AarResourcesCompilerTransform
+Transforming loader-28.0.0-rc02.aar (com.android.support:loader:28.0.0-rc02) with IdentityTransform
+Transforming loader-28.0.0-rc02.aar (com.android.support:loader:28.0.0-rc02) with ExtractAarTransform
+Transforming loader-28.0.0-rc02.aar (com.android.support:loader:28.0.0-rc02) with AarResourcesCompilerTransform
+Transforming viewpager-28.0.0-rc02.aar (com.android.support:viewpager:28.0.0-rc02) with IdentityTransform
+Transforming viewpager-28.0.0-rc02.aar (com.android.support:viewpager:28.0.0-rc02) with ExtractAarTransform
+Transforming viewpager-28.0.0-rc02.aar (com.android.support:viewpager:28.0.0-rc02) with AarResourcesCompilerTransform
+Transforming coordinatorlayout-28.0.0-rc02.aar (com.android.support:coordinatorlayout:28.0.0-rc02) with IdentityTransform
+Transforming coordinatorlayout-28.0.0-rc02.aar (com.android.support:coordinatorlayout:28.0.0-rc02) with ExtractAarTransform
+Transforming coordinatorlayout-28.0.0-rc02.aar (com.android.support:coordinatorlayout:28.0.0-rc02) with AarResourcesCompilerTransform
+Transforming drawerlayout-28.0.0-rc02.aar (com.android.support:drawerlayout:28.0.0-rc02) with IdentityTransform
+Transforming drawerlayout-28.0.0-rc02.aar (com.android.support:drawerlayout:28.0.0-rc02) with ExtractAarTransform
+Transforming drawerlayout-28.0.0-rc02.aar (com.android.support:drawerlayout:28.0.0-rc02) with AarResourcesCompilerTransform
+Transforming slidingpanelayout-28.0.0-rc02.aar (com.android.support:slidingpanelayout:28.0.0-rc02) with IdentityTransform
+Transforming slidingpanelayout-28.0.0-rc02.aar (com.android.support:slidingpanelayout:28.0.0-rc02) with ExtractAarTransform
+Transforming slidingpanelayout-28.0.0-rc02.aar (com.android.support:slidingpanelayout:28.0.0-rc02) with AarResourcesCompilerTransform
+Transforming customview-28.0.0-rc02.aar (com.android.support:customview:28.0.0-rc02) with IdentityTransform
+Transforming customview-28.0.0-rc02.aar (com.android.support:customview:28.0.0-rc02) with ExtractAarTransform
+Transforming customview-28.0.0-rc02.aar (com.android.support:customview:28.0.0-rc02) with AarResourcesCompilerTransform
+Transforming swiperefreshlayout-28.0.0-rc02.aar (com.android.support:swiperefreshlayout:28.0.0-rc02) with IdentityTransform
+Transforming swiperefreshlayout-28.0.0-rc02.aar (com.android.support:swiperefreshlayout:28.0.0-rc02) with ExtractAarTransform
+Transforming swiperefreshlayout-28.0.0-rc02.aar (com.android.support:swiperefreshlayout:28.0.0-rc02) with AarResourcesCompilerTransform
+Transforming asynclayoutinflater-28.0.0-rc02.aar (com.android.support:asynclayoutinflater:28.0.0-rc02) with IdentityTransform
+Transforming asynclayoutinflater-28.0.0-rc02.aar (com.android.support:asynclayoutinflater:28.0.0-rc02) with ExtractAarTransform
+Transforming asynclayoutinflater-28.0.0-rc02.aar (com.android.support:asynclayoutinflater:28.0.0-rc02) with AarResourcesCompilerTransform
+Transforming support-compat-28.0.0-rc02.aar (com.android.support:support-compat:28.0.0-rc02) with IdentityTransform
+Transforming support-compat-28.0.0-rc02.aar (com.android.support:support-compat:28.0.0-rc02) with ExtractAarTransform
+Transforming support-compat-28.0.0-rc02.aar (com.android.support:support-compat:28.0.0-rc02) with AarResourcesCompilerTransform
+Transforming versionedparcelable-28.0.0-rc02.aar (com.android.support:versionedparcelable:28.0.0-rc02) with IdentityTransform
+Transforming versionedparcelable-28.0.0-rc02.aar (com.android.support:versionedparcelable:28.0.0-rc02) with ExtractAarTransform
+Transforming versionedparcelable-28.0.0-rc02.aar (com.android.support:versionedparcelable:28.0.0-rc02) with AarResourcesCompilerTransform
+Transforming cursoradapter-28.0.0-rc02.aar (com.android.support:cursoradapter:28.0.0-rc02) with IdentityTransform
+Transforming cursoradapter-28.0.0-rc02.aar (com.android.support:cursoradapter:28.0.0-rc02) with ExtractAarTransform
+Transforming cursoradapter-28.0.0-rc02.aar (com.android.support:cursoradapter:28.0.0-rc02) with AarResourcesCompilerTransform
+Transforming cardview-v7-28.0.0-rc02.aar (com.android.support:cardview-v7:28.0.0-rc02) with IdentityTransform
+Transforming cardview-v7-28.0.0-rc02.aar (com.android.support:cardview-v7:28.0.0-rc02) with ExtractAarTransform
+Transforming cardview-v7-28.0.0-rc02.aar (com.android.support:cardview-v7:28.0.0-rc02) with AarResourcesCompilerTransform
+Transforming runtime-1.1.1.aar (android.arch.lifecycle:runtime:1.1.1) with IdentityTransform
+Transforming runtime-1.1.1.aar (android.arch.lifecycle:runtime:1.1.1) with ExtractAarTransform
+Transforming runtime-1.1.1.aar (android.arch.lifecycle:runtime:1.1.1) with AarResourcesCompilerTransform
+Transforming documentfile-28.0.0-rc02.aar (com.android.support:documentfile:28.0.0-rc02) with IdentityTransform
+Transforming documentfile-28.0.0-rc02.aar (com.android.support:documentfile:28.0.0-rc02) with ExtractAarTransform
+Transforming documentfile-28.0.0-rc02.aar (com.android.support:documentfile:28.0.0-rc02) with AarResourcesCompilerTransform
+Transforming localbroadcastmanager-28.0.0-rc02.aar (com.android.support:localbroadcastmanager:28.0.0-rc02) with IdentityTransform
+Transforming localbroadcastmanager-28.0.0-rc02.aar (com.android.support:localbroadcastmanager:28.0.0-rc02) with ExtractAarTransform
+Transforming localbroadcastmanager-28.0.0-rc02.aar (com.android.support:localbroadcastmanager:28.0.0-rc02) with AarResourcesCompilerTransform
+Transforming print-28.0.0-rc02.aar (com.android.support:print:28.0.0-rc02) with IdentityTransform
+Transforming print-28.0.0-rc02.aar (com.android.support:print:28.0.0-rc02) with ExtractAarTransform
+Transforming print-28.0.0-rc02.aar (com.android.support:print:28.0.0-rc02) with AarResourcesCompilerTransform
+Transforming viewmodel-1.1.1.aar (android.arch.lifecycle:viewmodel:1.1.1) with IdentityTransform
+Transforming viewmodel-1.1.1.aar (android.arch.lifecycle:viewmodel:1.1.1) with ExtractAarTransform
+Transforming viewmodel-1.1.1.aar (android.arch.lifecycle:viewmodel:1.1.1) with AarResourcesCompilerTransform
+Transforming interpolator-28.0.0-rc02.aar (com.android.support:interpolator:28.0.0-rc02) with IdentityTransform
+Transforming interpolator-28.0.0-rc02.aar (com.android.support:interpolator:28.0.0-rc02) with ExtractAarTransform
+Transforming interpolator-28.0.0-rc02.aar (com.android.support:interpolator:28.0.0-rc02) with AarResourcesCompilerTransform
+Transforming livedata-core-1.1.1.aar (android.arch.lifecycle:livedata-core:1.1.1) with IdentityTransform
+Transforming livedata-core-1.1.1.aar (android.arch.lifecycle:livedata-core:1.1.1) with ExtractAarTransform
+Transforming livedata-core-1.1.1.aar (android.arch.lifecycle:livedata-core:1.1.1) with AarResourcesCompilerTransform
+Transforming runtime-1.1.1.aar (android.arch.core:runtime:1.1.1) with IdentityTransform
+Transforming runtime-1.1.1.aar (android.arch.core:runtime:1.1.1) with ExtractAarTransform
+Transforming runtime-1.1.1.aar (android.arch.core:runtime:1.1.1) with AarResourcesCompilerTransform
+Transforming design-28.0.0-rc02.aar (com.android.support:design:28.0.0-rc02) with IdentityTransform
+Transforming design-28.0.0-rc02.aar (com.android.support:design:28.0.0-rc02) with ExtractAarTransform
+Transforming design-28.0.0-rc02.aar (com.android.support:design:28.0.0-rc02) with LibrarySymbolTableTransform
+Transforming appcompat-v7-28.0.0-rc02.aar (com.android.support:appcompat-v7:28.0.0-rc02) with IdentityTransform
+Transforming appcompat-v7-28.0.0-rc02.aar (com.android.support:appcompat-v7:28.0.0-rc02) with ExtractAarTransform
+Transforming appcompat-v7-28.0.0-rc02.aar (com.android.support:appcompat-v7:28.0.0-rc02) with LibrarySymbolTableTransform
+Transforming appcompat-v7-28.0.0-rc02.aar (com.android.support:appcompat-v7:28.0.0-rc02) with IdentityTransform
+Transforming appcompat-v7-28.0.0-rc02.aar (com.android.support:appcompat-v7:28.0.0-rc02) with ExtractAarTransform
+Transforming appcompat-v7-28.0.0-rc02.aar (com.android.support:appcompat-v7:28.0.0-rc02) with LibrarySymbolTableTransform
+Transforming constraint-layout-1.1.3.aar (com.android.support.constraint:constraint-layout:1.1.3) with IdentityTransform
+Transforming constraint-layout-1.1.3.aar (com.android.support.constraint:constraint-layout:1.1.3) with ExtractAarTransform
+Transforming constraint-layout-1.1.3.aar (com.android.support.constraint:constraint-layout:1.1.3) with LibrarySymbolTableTransform
+Transforming jna-5.13.0.aar (net.java.dev.jna:jna:5.13.0) with IdentityTransform
+Transforming jna-5.13.0.aar (net.java.dev.jna:jna:5.13.0) with ExtractAarTransform
+Transforming jna-5.13.0.aar (net.java.dev.jna:jna:5.13.0) with LibrarySymbolTableTransform
+Transforming vosk-android-0.3.47.aar (com.alphacephei:vosk-android:0.3.47) with IdentityTransform
+Transforming vosk-android-0.3.47.aar (com.alphacephei:vosk-android:0.3.47) with ExtractAarTransform
+Transforming vosk-android-0.3.47.aar (com.alphacephei:vosk-android:0.3.47) with LibrarySymbolTableTransform
+Transforming QihanOpenSdk_1.1.8.0-.aar (:QihanOpenSdk_1.1.8.0:) with IdentityTransform
+Transforming QihanOpenSdk_1.1.8.0-.aar (:QihanOpenSdk_1.1.8.0:) with ExtractAarTransform
+Transforming QihanOpenSdk_1.1.8.0-.aar (:QihanOpenSdk_1.1.8.0:) with LibrarySymbolTableTransform
+Transforming support-fragment-28.0.0-rc02.aar (com.android.support:support-fragment:28.0.0-rc02) with IdentityTransform
+Transforming support-fragment-28.0.0-rc02.aar (com.android.support:support-fragment:28.0.0-rc02) with ExtractAarTransform
+Transforming support-fragment-28.0.0-rc02.aar (com.android.support:support-fragment:28.0.0-rc02) with LibrarySymbolTableTransform
+Transforming animated-vector-drawable-28.0.0-rc02.aar (com.android.support:animated-vector-drawable:28.0.0-rc02) with IdentityTransform
+Transforming animated-vector-drawable-28.0.0-rc02.aar (com.android.support:animated-vector-drawable:28.0.0-rc02) with ExtractAarTransform
+Transforming animated-vector-drawable-28.0.0-rc02.aar (com.android.support:animated-vector-drawable:28.0.0-rc02) with LibrarySymbolTableTransform
+Transforming recyclerview-v7-28.0.0-rc02.aar (com.android.support:recyclerview-v7:28.0.0-rc02) with IdentityTransform
+Transforming recyclerview-v7-28.0.0-rc02.aar (com.android.support:recyclerview-v7:28.0.0-rc02) with ExtractAarTransform
+Transforming recyclerview-v7-28.0.0-rc02.aar (com.android.support:recyclerview-v7:28.0.0-rc02) with LibrarySymbolTableTransform
+Transforming support-core-ui-28.0.0-rc02.aar (com.android.support:support-core-ui:28.0.0-rc02) with IdentityTransform
+Transforming support-core-ui-28.0.0-rc02.aar (com.android.support:support-core-ui:28.0.0-rc02) with ExtractAarTransform
+Transforming support-core-ui-28.0.0-rc02.aar (com.android.support:support-core-ui:28.0.0-rc02) with LibrarySymbolTableTransform
+Transforming support-core-utils-28.0.0-rc02.aar (com.android.support:support-core-utils:28.0.0-rc02) with IdentityTransform
+Transforming support-core-utils-28.0.0-rc02.aar (com.android.support:support-core-utils:28.0.0-rc02) with ExtractAarTransform
+Transforming support-core-utils-28.0.0-rc02.aar (com.android.support:support-core-utils:28.0.0-rc02) with LibrarySymbolTableTransform
+Transforming support-vector-drawable-28.0.0-rc02.aar (com.android.support:support-vector-drawable:28.0.0-rc02) with IdentityTransform
+Transforming support-vector-drawable-28.0.0-rc02.aar (com.android.support:support-vector-drawable:28.0.0-rc02) with ExtractAarTransform
+Transforming support-vector-drawable-28.0.0-rc02.aar (com.android.support:support-vector-drawable:28.0.0-rc02) with LibrarySymbolTableTransform
+Transforming transition-28.0.0-rc02.aar (com.android.support:transition:28.0.0-rc02) with IdentityTransform
+Transforming transition-28.0.0-rc02.aar (com.android.support:transition:28.0.0-rc02) with ExtractAarTransform
+Transforming transition-28.0.0-rc02.aar (com.android.support:transition:28.0.0-rc02) with LibrarySymbolTableTransform
+Transforming loader-28.0.0-rc02.aar (com.android.support:loader:28.0.0-rc02) with IdentityTransform
+Transforming loader-28.0.0-rc02.aar (com.android.support:loader:28.0.0-rc02) with ExtractAarTransform
+Transforming loader-28.0.0-rc02.aar (com.android.support:loader:28.0.0-rc02) with LibrarySymbolTableTransform
+Transforming viewpager-28.0.0-rc02.aar (com.android.support:viewpager:28.0.0-rc02) with IdentityTransform
+Transforming viewpager-28.0.0-rc02.aar (com.android.support:viewpager:28.0.0-rc02) with ExtractAarTransform
+Transforming viewpager-28.0.0-rc02.aar (com.android.support:viewpager:28.0.0-rc02) with LibrarySymbolTableTransform
+Transforming coordinatorlayout-28.0.0-rc02.aar (com.android.support:coordinatorlayout:28.0.0-rc02) with IdentityTransform
+Transforming coordinatorlayout-28.0.0-rc02.aar (com.android.support:coordinatorlayout:28.0.0-rc02) with ExtractAarTransform
+Transforming coordinatorlayout-28.0.0-rc02.aar (com.android.support:coordinatorlayout:28.0.0-rc02) with LibrarySymbolTableTransform
+Transforming drawerlayout-28.0.0-rc02.aar (com.android.support:drawerlayout:28.0.0-rc02) with IdentityTransform
+Transforming drawerlayout-28.0.0-rc02.aar (com.android.support:drawerlayout:28.0.0-rc02) with ExtractAarTransform
+Transforming drawerlayout-28.0.0-rc02.aar (com.android.support:drawerlayout:28.0.0-rc02) with LibrarySymbolTableTransform
+Transforming slidingpanelayout-28.0.0-rc02.aar (com.android.support:slidingpanelayout:28.0.0-rc02) with IdentityTransform
+Transforming slidingpanelayout-28.0.0-rc02.aar (com.android.support:slidingpanelayout:28.0.0-rc02) with ExtractAarTransform
+Transforming slidingpanelayout-28.0.0-rc02.aar (com.android.support:slidingpanelayout:28.0.0-rc02) with LibrarySymbolTableTransform
+Transforming customview-28.0.0-rc02.aar (com.android.support:customview:28.0.0-rc02) with IdentityTransform
+Transforming customview-28.0.0-rc02.aar (com.android.support:customview:28.0.0-rc02) with ExtractAarTransform
+Transforming customview-28.0.0-rc02.aar (com.android.support:customview:28.0.0-rc02) with LibrarySymbolTableTransform
+Transforming swiperefreshlayout-28.0.0-rc02.aar (com.android.support:swiperefreshlayout:28.0.0-rc02) with IdentityTransform
+Transforming swiperefreshlayout-28.0.0-rc02.aar (com.android.support:swiperefreshlayout:28.0.0-rc02) with ExtractAarTransform
+Transforming swiperefreshlayout-28.0.0-rc02.aar (com.android.support:swiperefreshlayout:28.0.0-rc02) with LibrarySymbolTableTransform
+Transforming asynclayoutinflater-28.0.0-rc02.aar (com.android.support:asynclayoutinflater:28.0.0-rc02) with IdentityTransform
+Transforming asynclayoutinflater-28.0.0-rc02.aar (com.android.support:asynclayoutinflater:28.0.0-rc02) with ExtractAarTransform
+Transforming asynclayoutinflater-28.0.0-rc02.aar (com.android.support:asynclayoutinflater:28.0.0-rc02) with LibrarySymbolTableTransform
+Transforming support-compat-28.0.0-rc02.aar (com.android.support:support-compat:28.0.0-rc02) with IdentityTransform
+Transforming support-compat-28.0.0-rc02.aar (com.android.support:support-compat:28.0.0-rc02) with ExtractAarTransform
+Transforming support-compat-28.0.0-rc02.aar (com.android.support:support-compat:28.0.0-rc02) with LibrarySymbolTableTransform
+Transforming versionedparcelable-28.0.0-rc02.aar (com.android.support:versionedparcelable:28.0.0-rc02) with IdentityTransform
+Transforming versionedparcelable-28.0.0-rc02.aar (com.android.support:versionedparcelable:28.0.0-rc02) with ExtractAarTransform
+Transforming versionedparcelable-28.0.0-rc02.aar (com.android.support:versionedparcelable:28.0.0-rc02) with LibrarySymbolTableTransform
+Transforming cursoradapter-28.0.0-rc02.aar (com.android.support:cursoradapter:28.0.0-rc02) with IdentityTransform
+Transforming cursoradapter-28.0.0-rc02.aar (com.android.support:cursoradapter:28.0.0-rc02) with ExtractAarTransform
+Transforming cursoradapter-28.0.0-rc02.aar (com.android.support:cursoradapter:28.0.0-rc02) with LibrarySymbolTableTransform
+Transforming cardview-v7-28.0.0-rc02.aar (com.android.support:cardview-v7:28.0.0-rc02) with IdentityTransform
+Transforming cardview-v7-28.0.0-rc02.aar (com.android.support:cardview-v7:28.0.0-rc02) with ExtractAarTransform
+Transforming cardview-v7-28.0.0-rc02.aar (com.android.support:cardview-v7:28.0.0-rc02) with LibrarySymbolTableTransform
+Transforming runtime-1.1.1.aar (android.arch.lifecycle:runtime:1.1.1) with IdentityTransform
+Transforming runtime-1.1.1.aar (android.arch.lifecycle:runtime:1.1.1) with ExtractAarTransform
+Transforming runtime-1.1.1.aar (android.arch.lifecycle:runtime:1.1.1) with LibrarySymbolTableTransform
+Transforming documentfile-28.0.0-rc02.aar (com.android.support:documentfile:28.0.0-rc02) with IdentityTransform
+Transforming documentfile-28.0.0-rc02.aar (com.android.support:documentfile:28.0.0-rc02) with ExtractAarTransform
+Transforming documentfile-28.0.0-rc02.aar (com.android.support:documentfile:28.0.0-rc02) with LibrarySymbolTableTransform
+Transforming localbroadcastmanager-28.0.0-rc02.aar (com.android.support:localbroadcastmanager:28.0.0-rc02) with IdentityTransform
+Transforming localbroadcastmanager-28.0.0-rc02.aar (com.android.support:localbroadcastmanager:28.0.0-rc02) with ExtractAarTransform
+Transforming localbroadcastmanager-28.0.0-rc02.aar (com.android.support:localbroadcastmanager:28.0.0-rc02) with LibrarySymbolTableTransform
+Transforming print-28.0.0-rc02.aar (com.android.support:print:28.0.0-rc02) with IdentityTransform
+Transforming print-28.0.0-rc02.aar (com.android.support:print:28.0.0-rc02) with ExtractAarTransform
+Transforming print-28.0.0-rc02.aar (com.android.support:print:28.0.0-rc02) with LibrarySymbolTableTransform
+Transforming viewmodel-1.1.1.aar (android.arch.lifecycle:viewmodel:1.1.1) with IdentityTransform
+Transforming viewmodel-1.1.1.aar (android.arch.lifecycle:viewmodel:1.1.1) with ExtractAarTransform
+Transforming viewmodel-1.1.1.aar (android.arch.lifecycle:viewmodel:1.1.1) with LibrarySymbolTableTransform
+Transforming interpolator-28.0.0-rc02.aar (com.android.support:interpolator:28.0.0-rc02) with IdentityTransform
+Transforming interpolator-28.0.0-rc02.aar (com.android.support:interpolator:28.0.0-rc02) with ExtractAarTransform
+Transforming interpolator-28.0.0-rc02.aar (com.android.support:interpolator:28.0.0-rc02) with LibrarySymbolTableTransform
+Transforming livedata-core-1.1.1.aar (android.arch.lifecycle:livedata-core:1.1.1) with IdentityTransform
+Transforming livedata-core-1.1.1.aar (android.arch.lifecycle:livedata-core:1.1.1) with ExtractAarTransform
+Transforming livedata-core-1.1.1.aar (android.arch.lifecycle:livedata-core:1.1.1) with LibrarySymbolTableTransform
+Transforming runtime-1.1.1.aar (android.arch.core:runtime:1.1.1) with IdentityTransform
+Transforming runtime-1.1.1.aar (android.arch.core:runtime:1.1.1) with ExtractAarTransform
+Transforming runtime-1.1.1.aar (android.arch.core:runtime:1.1.1) with LibrarySymbolTableTransform
+Caching disabled for task ':app:processRobotDebugResources' because:
+  Build cache is disabled
+Skipping task ':app:processRobotDebugResources' as it is up-to-date.
+:app:processRobotDebugResources (Thread[#699,Execution worker for ':',5,main]) completed. Took 0.041 secs.
+:app:compileRobotDebugJavaWithJavac (Thread[#704,Execution worker for ':' Thread 6,5,main]) started.
+
+> Task :app:compileRobotDebugJavaWithJavac FAILED
+Transforming gson-2.2.4.jar with IdentityTransform
+Transforming gson-2.2.4.jar with IdentityTransform
+Transforming design-28.0.0-rc02.aar (com.android.support:design:28.0.0-rc02) with IdentityTransform
+Transforming design-28.0.0-rc02.aar (com.android.support:design:28.0.0-rc02) with AarToClassTransform
+Transforming appcompat-v7-28.0.0-rc02.aar (com.android.support:appcompat-v7:28.0.0-rc02) with IdentityTransform
+Transforming appcompat-v7-28.0.0-rc02.aar (com.android.support:appcompat-v7:28.0.0-rc02) with AarToClassTransform
+Transforming constraint-layout-1.1.3.aar (com.android.support.constraint:constraint-layout:1.1.3) with IdentityTransform
+Transforming constraint-layout-1.1.3.aar (com.android.support.constraint:constraint-layout:1.1.3) with AarToClassTransform
+Transforming jna-5.13.0.aar (net.java.dev.jna:jna:5.13.0) with IdentityTransform
+Transforming vosk-android-0.3.47.aar (com.alphacephei:vosk-android:0.3.47) with IdentityTransform
+Transforming animated-vector-drawable-28.0.0-rc02.aar (com.android.support:animated-vector-drawable:28.0.0-rc02) with IdentityTransform
+Transforming appcompat-v7-28.0.0-rc02.aar (com.android.support:appcompat-v7:28.0.0-rc02) with IdentityTransform
+Transforming animated-vector-drawable-28.0.0-rc02.aar (com.android.support:animated-vector-drawable:28.0.0-rc02) with AarToClassTransform
+Transforming appcompat-v7-28.0.0-rc02.aar (com.android.support:appcompat-v7:28.0.0-rc02) with AarToClassTransform
+Transforming support-core-utils-28.0.0-rc02.aar (com.android.support:support-core-utils:28.0.0-rc02) with IdentityTransform
+Transforming vosk-android-0.3.47.aar (com.alphacephei:vosk-android:0.3.47) with AarToClassTransform
+Transforming recyclerview-v7-28.0.0-rc02.aar (com.android.support:recyclerview-v7:28.0.0-rc02) with IdentityTransform
+Transforming support-fragment-28.0.0-rc02.aar (com.android.support:support-fragment:28.0.0-rc02) with IdentityTransform
+Transforming socket.io-client-2.1.0.jar (io.socket:socket.io-client:2.1.0) with IdentityTransform
+Transforming support-fragment-28.0.0-rc02.aar (com.android.support:support-fragment:28.0.0-rc02) with AarToClassTransform
+Transforming jna-5.13.0.aar (net.java.dev.jna:jna:5.13.0) with AarToClassTransform
+Transforming asynclayoutinflater-28.0.0-rc02.aar (com.android.support:asynclayoutinflater:28.0.0-rc02) with IdentityTransform
+Transforming socket.io-client-2.1.0.jar (io.socket:socket.io-client:2.1.0) with IdentityTransform
+Transforming recyclerview-v7-28.0.0-rc02.aar (com.android.support:recyclerview-v7:28.0.0-rc02) with AarToClassTransform
+Transforming support-compat-28.0.0-rc02.aar (com.android.support:support-compat:28.0.0-rc02) with IdentityTransform
+Transforming support-core-utils-28.0.0-rc02.aar (com.android.support:support-core-utils:28.0.0-rc02) with AarToClassTransform
+Transforming support-core-utils-28.0.0-rc02.aar (com.android.support:support-core-utils:28.0.0-rc02) with IdentityTransform
+Transforming support-compat-28.0.0-rc02.aar (com.android.support:support-compat:28.0.0-rc02) with AarToClassTransform
+Transforming cursoradapter-28.0.0-rc02.aar (com.android.support:cursoradapter:28.0.0-rc02) with IdentityTransform
+Transforming support-compat-28.0.0-rc02.aar (com.android.support:support-compat:28.0.0-rc02) with IdentityTransform
+Transforming asynclayoutinflater-28.0.0-rc02.aar (com.android.support:asynclayoutinflater:28.0.0-rc02) with AarToClassTransform
+Transforming support-compat-28.0.0-rc02.aar (com.android.support:support-compat:28.0.0-rc02) with AarToClassTransform
+Transforming livedata-core-1.1.1.aar (android.arch.lifecycle:livedata-core:1.1.1) with IdentityTransform
+Transforming livedata-core-1.1.1.aar (android.arch.lifecycle:livedata-core:1.1.1) with AarToClassTransform
+Transforming runtime-1.1.1.aar (android.arch.core:runtime:1.1.1) with IdentityTransform
+Transforming runtime-1.1.1.aar (android.arch.core:runtime:1.1.1) with AarToClassTransform
+Transforming support-compat-28.0.0-rc02.aar (com.android.support:support-compat:28.0.0-rc02) with IdentityTransform
+Transforming support-compat-28.0.0-rc02.aar (com.android.support:support-compat:28.0.0-rc02) with AarToClassTransform
+Transforming common-1.1.1.jar (android.arch.lifecycle:common:1.1.1) with IdentityTransform
+Transforming cursoradapter-28.0.0-rc02.aar (com.android.support:cursoradapter:28.0.0-rc02) with AarToClassTransform
+Transforming documentfile-28.0.0-rc02.aar (com.android.support:documentfile:28.0.0-rc02) with IdentityTransform
+Transforming cardview-v7-28.0.0-rc02.aar (com.android.support:cardview-v7:28.0.0-rc02) with IdentityTransform
+Transforming support-core-utils-28.0.0-rc02.aar (com.android.support:support-core-utils:28.0.0-rc02) with AarToClassTransform
+Transforming cardview-v7-28.0.0-rc02.aar (com.android.support:cardview-v7:28.0.0-rc02) with AarToClassTransform
+Transforming documentfile-28.0.0-rc02.aar (com.android.support:documentfile:28.0.0-rc02) with AarToClassTransform
+Transforming common-1.1.1.jar (android.arch.core:common:1.1.1) with IdentityTransform
+Transforming common-1.1.1.jar (android.arch.core:common:1.1.1) with IdentityTransform
+Transforming okio-1.15.0.jar (com.squareup.okio:okio:1.15.0) with IdentityTransform
+Transforming okio-1.15.0.jar (com.squareup.okio:okio:1.15.0) with IdentityTransform
+Transforming engine.io-client-2.1.0.jar (io.socket:engine.io-client:2.1.0) with IdentityTransform
+Transforming common-1.1.1.jar (android.arch.lifecycle:common:1.1.1) with IdentityTransform
+Transforming engine.io-client-2.1.0.jar (io.socket:engine.io-client:2.1.0) with IdentityTransform
+Transforming QihanOpenSdk_1.1.8.0-.aar (:QihanOpenSdk_1.1.8.0:) with IdentityTransform
+Transforming QihanOpenSdk_1.1.8.0-.aar (:QihanOpenSdk_1.1.8.0:) with AarToClassTransform
+Transforming constraint-layout-solver-1.1.3.jar (com.android.support.constraint:constraint-layout-solver:1.1.3) with IdentityTransform
+Transforming constraint-layout-solver-1.1.3.jar (com.android.support.constraint:constraint-layout-solver:1.1.3) with IdentityTransform
+Transforming viewmodel-1.1.1.aar (android.arch.lifecycle:viewmodel:1.1.1) with IdentityTransform
+Transforming print-28.0.0-rc02.aar (com.android.support:print:28.0.0-rc02) with IdentityTransform
+Transforming okhttp-3.12.12.jar (com.squareup.okhttp3:okhttp:3.12.12) with IdentityTransform
+Transforming support-annotations-28.0.0-rc02.jar (com.android.support:support-annotations:28.0.0-rc02) with IdentityTransform
+Transforming okhttp-3.12.12.jar (com.squareup.okhttp3:okhttp:3.12.12) with IdentityTransform
+Transforming print-28.0.0-rc02.aar (com.android.support:print:28.0.0-rc02) with AarToClassTransform
+Transforming viewmodel-1.1.1.aar (android.arch.lifecycle:viewmodel:1.1.1) with AarToClassTransform
+Transforming interpolator-28.0.0-rc02.aar (com.android.support:interpolator:28.0.0-rc02) with IdentityTransform
+Transforming interpolator-28.0.0-rc02.aar (com.android.support:interpolator:28.0.0-rc02) with IdentityTransform
+Transforming interpolator-28.0.0-rc02.aar (com.android.support:interpolator:28.0.0-rc02) with AarToClassTransform
+Transforming swiperefreshlayout-28.0.0-rc02.aar (com.android.support:swiperefreshlayout:28.0.0-rc02) with IdentityTransform
+Transforming swiperefreshlayout-28.0.0-rc02.aar (com.android.support:swiperefreshlayout:28.0.0-rc02) with AarToClassTransform
+Transforming customview-28.0.0-rc02.aar (com.android.support:customview:28.0.0-rc02) with IdentityTransform
+Transforming customview-28.0.0-rc02.aar (com.android.support:customview:28.0.0-rc02) with AarToClassTransform
+Transforming slidingpanelayout-28.0.0-rc02.aar (com.android.support:slidingpanelayout:28.0.0-rc02) with IdentityTransform
+Transforming coordinatorlayout-28.0.0-rc02.aar (com.android.support:coordinatorlayout:28.0.0-rc02) with IdentityTransform
+Transforming coordinatorlayout-28.0.0-rc02.aar (com.android.support:coordinatorlayout:28.0.0-rc02) with AarToClassTransform
+Transforming support-annotations-28.0.0-rc02.jar (com.android.support:support-annotations:28.0.0-rc02) with IdentityTransform
+Transforming slidingpanelayout-28.0.0-rc02.aar (com.android.support:slidingpanelayout:28.0.0-rc02) with AarToClassTransform
+Transforming viewpager-28.0.0-rc02.aar (com.android.support:viewpager:28.0.0-rc02) with IdentityTransform
+Transforming viewpager-28.0.0-rc02.aar (com.android.support:viewpager:28.0.0-rc02) with AarToClassTransform
+Transforming loader-28.0.0-rc02.aar (com.android.support:loader:28.0.0-rc02) with IdentityTransform
+Transforming loader-28.0.0-rc02.aar (com.android.support:loader:28.0.0-rc02) with AarToClassTransform
+Transforming drawerlayout-28.0.0-rc02.aar (com.android.support:drawerlayout:28.0.0-rc02) with IdentityTransform
+Transforming drawerlayout-28.0.0-rc02.aar (com.android.support:drawerlayout:28.0.0-rc02) with AarToClassTransform
+Transforming customview-28.0.0-rc02.aar (com.android.support:customview:28.0.0-rc02) with IdentityTransform
+Transforming customview-28.0.0-rc02.aar (com.android.support:customview:28.0.0-rc02) with AarToClassTransform
+Transforming interpolator-28.0.0-rc02.aar (com.android.support:interpolator:28.0.0-rc02) with AarToClassTransform
+Transforming support-vector-drawable-28.0.0-rc02.aar (com.android.support:support-vector-drawable:28.0.0-rc02) with IdentityTransform
+Transforming support-core-ui-28.0.0-rc02.aar (com.android.support:support-core-ui:28.0.0-rc02) with IdentityTransform
+Transforming support-core-ui-28.0.0-rc02.aar (com.android.support:support-core-ui:28.0.0-rc02) with AarToClassTransform
+Transforming transition-28.0.0-rc02.aar (com.android.support:transition:28.0.0-rc02) with IdentityTransform
+Transforming support-core-ui-28.0.0-rc02.aar (com.android.support:support-core-ui:28.0.0-rc02) with IdentityTransform
+Transforming transition-28.0.0-rc02.aar (com.android.support:transition:28.0.0-rc02) with AarToClassTransform
+Transforming support-vector-drawable-28.0.0-rc02.aar (com.android.support:support-vector-drawable:28.0.0-rc02) with AarToClassTransform
+Transforming support-vector-drawable-28.0.0-rc02.aar (com.android.support:support-vector-drawable:28.0.0-rc02) with IdentityTransform
+Transforming support-vector-drawable-28.0.0-rc02.aar (com.android.support:support-vector-drawable:28.0.0-rc02) with AarToClassTransform
+Transforming support-core-ui-28.0.0-rc02.aar (com.android.support:support-core-ui:28.0.0-rc02) with AarToClassTransform
+Transforming versionedparcelable-28.0.0-rc02.aar (com.android.support:versionedparcelable:28.0.0-rc02) with IdentityTransform
+Transforming versionedparcelable-28.0.0-rc02.aar (com.android.support:versionedparcelable:28.0.0-rc02) with AarToClassTransform
+Transforming runtime-1.1.1.aar (android.arch.lifecycle:runtime:1.1.1) with IdentityTransform
+Transforming collections-28.0.0-rc02.jar (com.android.support:collections:28.0.0-rc02) with IdentityTransform
+Transforming localbroadcastmanager-28.0.0-rc02.aar (com.android.support:localbroadcastmanager:28.0.0-rc02) with IdentityTransform
+Transforming collections-28.0.0-rc02.jar (com.android.support:collections:28.0.0-rc02) with IdentityTransform
+Transforming localbroadcastmanager-28.0.0-rc02.aar (com.android.support:localbroadcastmanager:28.0.0-rc02) with AarToClassTransform
+Transforming runtime-1.1.1.aar (android.arch.lifecycle:runtime:1.1.1) with AarToClassTransform
+Transforming gson-2.2.4.jar with IdentityTransform
+Transforming gson-2.2.4.jar with IdentityTransform
+Caching disabled for task ':app:compileRobotDebugJavaWithJavac' because:
+  Build cache is disabled
+Task ':app:compileRobotDebugJavaWithJavac' is not up-to-date because:
+  Task has failed previously.
+The input changes require a full rebuild for incremental task ':app:compileRobotDebugJavaWithJavac'.
+Transforming gson-2.2.4.jar with IdentityTransform
+Transforming gson-2.2.4.jar with IdentityTransform
+Full recompilation is required because no incremental change information is available. This is usually caused by clean builds or changing compiler arguments.
+Compiling with toolchain 'C:\Program Files\Java\jdk-21'.
+file or directory 'C:\Users\USUARIO\Desktop\DCU\proyecto-base-main\app\src\debug\java', not found
+file or directory 'C:\Users\USUARIO\Desktop\DCU\proyecto-base-main\app\src\robotDebug\java', not found
+file or directory 'C:\Users\USUARIO\Desktop\DCU\proyecto-base-main\app\build\generated\aidl_source_output_dir\robotDebug\out', not found
+file or directory 'C:\Users\USUARIO\Desktop\DCU\proyecto-base-main\app\src\robotDebug\java', not found
+file or directory 'C:\Users\USUARIO\Desktop\DCU\proyecto-base-main\app\build\generated\renderscript_source_output_dir\robotDebug\out', not found
+Compiling with JDK Java compiler API.
+:app:compileRobotDebugJavaWithJavac (Thread[#704,Execution worker for ':' Thread 6,5,main]) completed. Took 0.392 secs.
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 8.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+See https://docs.gradle.org/7.4/userguide/command_line_interface.html#sec:command_line_warnings
+15 actionable tasks: 1 executed, 14 up-to-date
+Watched directory hierarchies: [C:\Users\USUARIO\Desktop\DCU\proyecto-base-main]

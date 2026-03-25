@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Detalle recordatorio — X dentro de la tarjeta -->
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="400dp"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_dialog">
+
+    <!-- Contenido centrado -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:paddingStart="36dp"
+        android:paddingEnd="36dp"
+        android:paddingTop="48dp"
+        android:paddingBottom="36dp">
+
+        <!-- Círculo rojo grande con icono -->
+        <FrameLayout
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/bg_circle_red">
+            <ImageView
+                android:layout_width="66dp"
+                android:layout_height="66dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_cita"
+                android:contentDescription=""/>
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/tvTituloDetRec"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CITA MEDICA"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="#1C1C1E"
+            android:gravity="center"
+            android:layout_marginBottom="6dp"/>
+
+        <TextView
+            android:id="@+id/tvHoraDetRec"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="11:35"
+            android:textSize="36sp"
+            android:textStyle="bold"
+            android:textColor="#1C1C1E"
+            android:layout_marginBottom="4dp"/>
+
+        <TextView
+            android:id="@+id/tvFechaDetRec"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="17/02/2026"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:textColor="#1C1C1E"
+            android:layout_marginBottom="12dp"/>
+
+        <TextView
+            android:id="@+id/tvDescDetRec"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="—"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:textColor="#3C3C43"
+            android:gravity="center"/>
+
+    </LinearLayout>
+
+    <!-- X dentro de la tarjeta, esquina superior derecha -->
+    <TextView
+        android:id="@+id/btnCerrarDetRec"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="top|end"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:text="✕"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="#1C1C1E"
+        android:gravity="center"
+        android:background="@drawable/bg_tipo_normal"
+        android:clickable="true"
+        android:focusable="true"/>
+
+</FrameLayout>

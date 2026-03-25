@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="#F2F2F7"
+    android:padding="32dp">
+
+    <TextView
+        android:id="@+id/tvEnCursoTitulo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ACTIVIDAD EN CURSO"
+        android:textSize="36sp"
+        android:textStyle="bold"
+        android:textColor="#1C1C1E"
+        android:layout_marginBottom="16dp"/>
+
+    <TextView
+        android:id="@+id/tvEnCursoDesc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Descripción de la actividad"
+        android:textSize="22sp"
+        android:textColor="#6E6E73"
+        android:layout_marginBottom="24dp"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/tvEnCursoTemporizador"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00:00"
+        android:textSize="64sp"
+        android:textStyle="bold"
+        android:textColor="#1C1C1E"
+        android:layout_marginBottom="48dp"
+        android:gravity="center"/>
+
+    <!-- Elemento decorativo visual / emoción -->
+    <FrameLayout
+        android:id="@+id/frameEnCursoIcon"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:background="@drawable/bg_icon_circle_blue"
+        android:layout_marginBottom="64dp">
+        
+        <ImageView
+            android:id="@+id/ivEnCursoIcon"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_calendario"/>
+    </FrameLayout>
+
+    <Button
+        android:id="@+id/btnEnCursoCompletar"
+        android:layout_width="340dp"
+        android:layout_height="80dp"
+        android:text="COMPLETAR ACTIVIDAD"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:background="@drawable/bg_btn_guardar"/>
+
+</LinearLayout>

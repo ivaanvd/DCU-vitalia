@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="480dp"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_dialog">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="28dp"
+        android:paddingEnd="28dp"
+        android:paddingTop="28dp"
+        android:paddingBottom="28dp">
+
+        <TextView
+            android:id="@+id/tvTituloDialogActividad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="AÑADIR ACTIVIDAD"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#1C1C1E"
+            android:gravity="center"
+            android:layout_marginBottom="24dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Descripción"
+            android:textSize="13sp"
+            android:textColor="#6E6E73"
+            android:layout_marginBottom="6dp"/>
+
+        <EditText
+            android:id="@+id/etDescripcionActividad"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:textSize="15sp"
+            android:textColor="#1C1C1E"
+            android:background="@drawable/bg_campo_descripcion"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp"
+            android:singleLine="true"
+            android:inputType="text"
+            android:layout_marginBottom="20dp"/>
+
+        <!-- Hora + Tipo en misma fila -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="24dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginEnd="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Hora"
+                    android:textSize="13sp"
+                    android:textColor="#6E6E73"
+                    android:layout_marginBottom="6dp"/>
+
+                <TextView
+                    android:id="@+id/tvHoraDialogActividad"
+                    android:layout_width="match_parent"
+                    android:layout_height="72dp"
+                    android:text="00:00"
+                    android:textSize="38sp"
+                    android:textStyle="bold"
+                    android:textColor="#1C1C1E"
+                    android:gravity="center"
+                    android:background="@drawable/bg_campo_descripcion"
+                    android:clickable="true"
+                    android:focusable="true"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tipo de actividad"
+                    android:textSize="13sp"
+                    android:textColor="#6E6E73"
+                    android:layout_marginBottom="6dp"/>
+
+                <Spinner
+                    android:id="@+id/spinnerTipoActividad"
+                    android:layout_width="match_parent"
+                    android:layout_height="72dp"
+                    android:background="@drawable/bg_campo_descripcion"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Días de la semana -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Días de la semana"
+            android:textSize="13sp"
+            android:textColor="#6E6E73"
+            android:layout_marginBottom="8dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="24dp">
+            <TextView android:id="@+id/btnDiaLun" android:layout_width="0dp" android:layout_height="36dp" android:layout_weight="1" android:text="L" android:gravity="center" android:textSize="13sp" android:textStyle="bold" android:textColor="#1C1C1E" android:background="@drawable/bg_tipo_normal" android:layout_marginEnd="4dp" android:clickable="true" android:focusable="true"/>
+            <TextView android:id="@+id/btnDiaMar" android:layout_width="0dp" android:layout_height="36dp" android:layout_weight="1" android:text="M" android:gravity="center" android:textSize="13sp" android:textStyle="bold" android:textColor="#1C1C1E" android:background="@drawable/bg_tipo_normal" android:layout_marginEnd="4dp" android:clickable="true" android:focusable="true"/>
+            <TextView android:id="@+id/btnDiaMie" android:layout_width="0dp" android:layout_height="36dp" android:layout_weight="1" android:text="X" android:gravity="center" android:textSize="13sp" android:textStyle="bold" android:textColor="#1C1C1E" android:background="@drawable/bg_tipo_normal" android:layout_marginEnd="4dp" android:clickable="true" android:focusable="true"/>
+            <TextView android:id="@+id/btnDiaJue" android:layout_width="0dp" android:layout_height="36dp" android:layout_weight="1" android:text="J" android:gravity="center" android:textSize="13sp" android:textStyle="bold" android:textColor="#1C1C1E" android:background="@drawable/bg_tipo_normal" android:layout_marginEnd="4dp" android:clickable="true" android:focusable="true"/>
+            <TextView android:id="@+id/btnDiaVie" android:layout_width="0dp" android:layout_height="36dp" android:layout_weight="1" android:text="V" android:gravity="center" android:textSize="13sp" android:textStyle="bold" android:textColor="#1C1C1E" android:background="@drawable/bg_tipo_normal" android:layout_marginEnd="4dp" android:clickable="true" android:focusable="true"/>
+            <TextView android:id="@+id/btnDiaSab" android:layout_width="0dp" android:layout_height="36dp" android:layout_weight="1" android:text="S" android:gravity="center" android:textSize="13sp" android:textStyle="bold" android:textColor="#1C1C1E" android:background="@drawable/bg_tipo_normal" android:layout_marginEnd="4dp" android:clickable="true" android:focusable="true"/>
+            <TextView android:id="@+id/btnDiaDom" android:layout_width="0dp" android:layout_height="36dp" android:layout_weight="1" android:text="D" android:gravity="center" android:textSize="13sp" android:textStyle="bold" android:textColor="#1C1C1E" android:background="@drawable/bg_tipo_normal" android:clickable="true" android:focusable="true"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnCancelarDialogActividad"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:text="CANCELAR"
+                android:textColor="#FFFFFF"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:background="@drawable/bg_btn_cancelar"
+                android:layout_marginEnd="12dp"/>
+
+            <Button
+                android:id="@+id/btnGuardarDialogActividad"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:text="AÑADIR"
+                android:textColor="#FFFFFF"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:background="@drawable/bg_btn_guardar"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- X dentro de la tarjeta -->
+    <TextView
+        android:id="@+id/btnCancelarDialogActividad2"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="top|end"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:text="✕"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="#1C1C1E"
+        android:gravity="center"
+        android:background="@drawable/bg_tipo_normal"
+        android:clickable="true"
+        android:focusable="true"/>
+
+</FrameLayout>

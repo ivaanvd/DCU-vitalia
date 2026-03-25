@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Detalle actividad — X dentro de la tarjeta -->
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="400dp"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_dialog">
+
+    <!-- Contenido centrado -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:paddingStart="36dp"
+        android:paddingEnd="36dp"
+        android:paddingTop="48dp"
+        android:paddingBottom="36dp">
+
+        <!-- Círculo grande con icono (color asignado por código) -->
+        <FrameLayout
+            android:id="@+id/frameEmojiDetAct"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="20dp">
+            <ImageView
+                android:id="@+id/tvEmojiDetAct"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_puzzle"
+                android:contentDescription=""/>
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/tvHoraDetAct"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="11:35"
+            android:textSize="52sp"
+            android:textStyle="bold"
+            android:textColor="#1C1C1E"
+            android:layout_marginBottom="4dp"/>
+
+        <TextView
+            android:id="@+id/tvTipoDetAct"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="JUEGOS"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="#1C1C1E"
+            android:layout_marginBottom="6dp"/>
+
+        <TextView
+            android:id="@+id/tvDescDetAct"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="—"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:textColor="#3C3C43"
+            android:gravity="center"
+            android:layout_marginBottom="24dp"/>
+
+        <!-- Días de la semana -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <TextView android:id="@+id/detDiaLun" android:layout_width="42dp" android:layout_height="42dp" android:text="L" android:gravity="center" android:textSize="14sp" android:textStyle="bold" android:textColor="#1C1C1E" android:background="@drawable/bg_tipo_normal" android:layout_marginEnd="6dp"/>
+            <TextView android:id="@+id/detDiaMar" android:layout_width="42dp" android:layout_height="42dp" android:text="M" android:gravity="center" android:textSize="14sp" android:textStyle="bold" android:textColor="#1C1C1E" android:background="@drawable/bg_tipo_normal" android:layout_marginEnd="6dp"/>
+            <TextView android:id="@+id/detDiaMie" android:layout_width="42dp" android:layout_height="42dp" android:text="X" android:gravity="center" android:textSize="14sp" android:textStyle="bold" android:textColor="#1C1C1E" android:background="@drawable/bg_tipo_normal" android:layout_marginEnd="6dp"/>
+            <TextView android:id="@+id/detDiaJue" android:layout_width="42dp" android:layout_height="42dp" android:text="J" android:gravity="center" android:textSize="14sp" android:textStyle="bold" android:textColor="#1C1C1E" android:background="@drawable/bg_tipo_normal" android:layout_marginEnd="6dp"/>
+            <TextView android:id="@+id/detDiaVie" android:layout_width="42dp" android:layout_height="42dp" android:text="V" android:gravity="center" android:textSize="14sp" android:textStyle="bold" android:textColor="#1C1C1E" android:background="@drawable/bg_tipo_normal" android:layout_marginEnd="6dp"/>
+            <TextView android:id="@+id/detDiaSab" android:layout_width="42dp" android:layout_height="42dp" android:text="S" android:gravity="center" android:textSize="14sp" android:textStyle="bold" android:textColor="#1C1C1E" android:background="@drawable/bg_tipo_normal" android:layout_marginEnd="6dp"/>
+            <TextView android:id="@+id/detDiaDom" android:layout_width="42dp" android:layout_height="42dp" android:text="D" android:gravity="center" android:textSize="14sp" android:textStyle="bold" android:textColor="#1C1C1E" android:background="@drawable/bg_tipo_normal"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- X dentro de la tarjeta, esquina superior derecha -->
+    <TextView
+        android:id="@+id/btnCerrarDetAct"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="top|end"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:text="✕"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="#1C1C1E"
+        android:gravity="center"
+        android:background="@drawable/bg_tipo_normal"
+        android:clickable="true"
+        android:focusable="true"/>
+
+</FrameLayout>

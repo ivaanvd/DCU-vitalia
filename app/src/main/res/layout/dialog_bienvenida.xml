@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- res/layout/dialog_bienvenida.xml -->
+<!-- Diálogo que aparece SOLO la primera vez -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <!-- Campo nombre -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tu nombre:"
+        android:textSize="18sp"
+        android:textColor="#1C1C1E"
+        android:layout_marginBottom="8dp"/>
+
+    <EditText
+        android:id="@+id/etNombre"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Escribe tu nombre"
+        android:textSize="20sp"
+        android:inputType="textPersonName|textCapWords"
+        android:padding="12dp"
+        android:background="@drawable/bg_input"
+        android:layout_marginBottom="24dp"/>
+
+    <!-- Foto de perfil -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Foto de perfil (opcional):"
+        android:textSize="18sp"
+        android:textColor="#1C1C1E"
+        android:layout_marginBottom="12dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <!-- Preview de la foto -->
+        <ImageView
+            android:id="@+id/ivPreviewFoto"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:src="@drawable/ic_persona"
+            android:background="@drawable/bg_avatar_circle"
+            android:padding="10dp"
+            android:layout_marginEnd="16dp"
+            android:contentDescription="Vista previa foto"/>
+
+        <!-- Botón elegir foto -->
+        <TextView
+            android:id="@+id/btnElegirFoto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Elegir foto"
+            android:textSize="17sp"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/bg_card_blue"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:clickable="true"
+            android:focusable="true"/>
+    </LinearLayout>
+
+</LinearLayout>
