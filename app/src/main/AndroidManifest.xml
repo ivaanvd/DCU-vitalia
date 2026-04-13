@@ -47,6 +47,18 @@
 
         <activity android:name=".actividad.ActividadEnCursoActivity" />
 
+        <activity android:name=".juegos.JuegosActivity" android:exported="false" android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".juegos.JuegoRefranesActivity" android:exported="false" android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".juegos.FinRefranesActivity" android:exported="false" android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".juegos.JuegoBuscaEncuentraActivity" android:exported="false" android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".juegos.FinBuscaEncuentraActivity" android:exported="false" android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".juegos.ElegirTematicaRoscoActivity" android:exported="false" android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".juegos.JuegoMiniRoscoActivity" android:exported="false" android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".juegos.FinMiniRoscoActivity" android:exported="false" android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".juegos.JuegoBingoActivity" android:exported="false" android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".juegos.FinBingoActivity" android:exported="false" android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ajustes.AjustesActivity" android:exported="false" android:theme="@style/AppTheme.NoActionBar"/>
+
     </application>
 
 </manifest>

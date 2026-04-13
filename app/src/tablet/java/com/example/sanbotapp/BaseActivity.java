@@ -1,7 +1,11 @@
 package com.example.sanbotapp;
 
 import android.util.Log;
-import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import android.view.View;
+import android.widget.TextView;
 
 /**
  * BaseActivity para el flavor TABLET.
@@ -10,6 +14,30 @@ import android.support.v7.app.AppCompatActivity;
  * para que MainActivity compile y funcione sin el hardware.
  */
 public abstract class BaseActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // En tablet, simulamos que el "servicio" está listo después de que la Activity se haya creado
+        onRobotServiceReady();
+    }
+
+    protected void setupTopBackBanner(String titulo) {
+        TextView tvBannerTitulo = findViewById(R.id.tvBannerTitulo);
+        if (tvBannerTitulo != null) {
+            tvBannerTitulo.setText(titulo);
+        }
+
+        View btnBannerBack = findViewById(R.id.btnBannerBack);
+        if (btnBannerBack != null) {
+            btnBannerBack.setOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
+        }
+    }
 
     // ── VOZ ──────────────────────────────────────────────────────────────────
 

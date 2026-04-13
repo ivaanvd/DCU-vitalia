@@ -70,6 +70,7 @@ public class ActividadesActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_actividades);
+        setupTopBackBanner("Actividades");
 
         containerActividades = findViewById(R.id.containerActividades);
         tvVacio              = findViewById(R.id.tvVacioActividades);

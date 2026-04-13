@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp">
+
+    <ImageView
+        android:id="@+id/ivBocadilloAvatar"
+        android:layout_width="84dp"
+        android:layout_height="84dp"
+        android:src="@mipmap/ic_launcher_round"
+        android:background="@drawable/bg_avatar_circle"
+        android:padding="6dp" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginStart="18dp"
+        android:background="@drawable/bg_bocadillo"
+        android:minHeight="96dp"
+        android:gravity="center_vertical"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="18dp"
+        android:paddingBottom="18dp">
+
+        <TextView
+            android:id="@+id/tvBocadilloTexto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="¡Hola!"
+            android:textColor="#111111"
+            android:textSize="40sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+</LinearLayout>
