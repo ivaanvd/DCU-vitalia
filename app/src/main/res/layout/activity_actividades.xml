@@ -6,22 +6,13 @@
     android:orientation="vertical"
     android:background="#F2F2F7">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TODAS LAS ACTIVIDADES:"
-        android:textSize="26sp"
-        android:textStyle="bold"
-        android:textColor="#1C1C1E"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
-        android:paddingTop="20dp"
-        android:paddingBottom="16dp"/>
+    <include layout="@layout/include_top_back_banner" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:layout_marginTop="18dp"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:clipToPadding="false"
@@ -32,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingTop="4dp"
+            android:paddingTop="6dp"
             android:paddingBottom="16dp"/>
     </ScrollView>
 
@@ -47,7 +38,6 @@
         android:gravity="center"
         android:visibility="gone"/>
 
-    <!-- Botón AÑADIR: más largo y más alto -->
     <LinearLayout
         android:id="@+id/btnAnadirActividad"
         android:layout_width="340dp"
@@ -61,7 +51,6 @@
         android:clickable="true"
         android:focusable="true">
 
-        <!-- Círculo blanco con + azul bien centrado -->
         <FrameLayout
             android:layout_width="42dp"
             android:layout_height="42dp"

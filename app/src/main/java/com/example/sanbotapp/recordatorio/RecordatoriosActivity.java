@@ -37,6 +37,7 @@ public class RecordatoriosActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recordatorios);
+        setupTopBackBanner("Recordatorios");
 
         containerRecordatorios = findViewById(R.id.containerRecordatorios);
         tvVacio                = findViewById(R.id.tvVacioRecordatorios);

@@ -1,6 +1,8 @@
 package com.example.sanbotapp;
 
 import android.util.Log;
+import android.widget.TextView;
+import android.view.View;
 
 import com.example.sanbotapp.robotControl.SpeechControl;
 import com.example.sanbotapp.robotControl.WheelControl;
@@ -35,6 +37,18 @@ import android.content.Context;
  * MainActivity llama a sus métodos sin conocer los detalles del flavor.
  */
 public abstract class BaseActivity extends TopBaseActivity {
+
+    protected void setupTopBackBanner(String titulo) {
+        TextView tvBannerTitulo = findViewById(R.id.tvBannerTitulo);
+        if (tvBannerTitulo != null) {
+            tvBannerTitulo.setText(titulo);
+        }
+
+        View btnBannerBack = findViewById(R.id.btnBannerBack);
+        if (btnBannerBack != null) {
+            btnBannerBack.setOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
+        }
+    }
 
     // ── Controladores de cada subsistema del robot ──────────────────────────
 
@@ -223,7 +237,7 @@ public abstract class BaseActivity extends TopBaseActivity {
     /**
      * Mueve el robot hacia adelante una distancia determinada a una velocidad dada.
      *
-     * @param distancia Distancia a recorrer en centímetros.
+     * @param distancia Distancia a recorrer in centímetros.
      * @param velocidad Velocidad de desplazamiento (unidades definidas por el SDK).
      */
     public void avanzarRobot(Integer distancia, Integer velocidad) {

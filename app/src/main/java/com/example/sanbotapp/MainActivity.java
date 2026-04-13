@@ -349,12 +349,14 @@ public class MainActivity extends BaseActivity {
 
         btnJuegos.setOnClickListener(v -> {
             hablarOSimular("¡Hora de jugar!");
-            // Sin retardo hasta que haya pantalla de juegos real
+            v.postDelayed(() ->
+                    startActivity(new Intent(this, com.example.sanbotapp.juegos.JuegosActivity.class)), 1200);
         });
 
         btnAjustes.setOnClickListener(v -> {
             hablarOSimular("Abriendo ajustes.");
-            // Sin retardo hasta que haya pantalla de ajustes real
+            v.postDelayed(() ->
+                    startActivity(new Intent(this, com.example.sanbotapp.ajustes.AjustesActivity.class)), 1200);
         });
     }
 

@@ -28,6 +28,7 @@ public class ActividadEnCursoActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_actividad_en_curso);
+        setupTopBackBanner("Actividad en curso");
 
         int actividadId = getIntent().getIntExtra(EXTRA_ACTIVIDAD_ID, -1);
         repo = new ActividadRepository(this);

@@ -6,24 +6,13 @@
     android:orientation="vertical"
     android:background="#F2F2F7">
 
-    <!-- Título -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TODOS LOS RECORDATORIOS:"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:textColor="#1C1C1E"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
-        android:paddingTop="20dp"
-        android:paddingBottom="16dp"/>
+    <include layout="@layout/include_top_back_banner" />
 
-    <!-- Lista scrollable -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:layout_marginTop="18dp"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:clipToPadding="false"
@@ -34,11 +23,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingTop="4dp"
+            android:paddingTop="6dp"
             android:paddingBottom="16dp"/>
     </ScrollView>
 
-    <!-- Mensaje vacío -->
     <TextView
         android:id="@+id/tvVacioRecordatorios"
         android:layout_width="match_parent"
@@ -50,11 +38,10 @@
         android:gravity="center"
         android:visibility="gone"/>
 
-    <!-- Botón AÑADIR centrado abajo, igual que en Actividades -->
     <LinearLayout
         android:id="@+id/btnAnadirRecordatorio"
-        android:layout_width="260dp"
-        android:layout_height="60dp"
+        android:layout_width="340dp"
+        android:layout_height="70dp"
         android:layout_gravity="center_horizontal"
         android:orientation="horizontal"
         android:gravity="center"
@@ -66,16 +53,16 @@
         android:contentDescription="Añadir recordatorio">
 
         <FrameLayout
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
             android:background="@drawable/bg_icon_circle_white"
-            android:layout_marginEnd="12dp">
+            android:layout_marginEnd="14dp">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="+"
-                android:textSize="22sp"
+                android:textSize="26sp"
                 android:textStyle="bold"
                 android:textColor="#1F3D7A"/>
         </FrameLayout>
@@ -84,7 +71,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="AÑADIR"
-            android:textSize="18sp"
+            android:textSize="22sp"
             android:textStyle="bold"
             android:textColor="#FFFFFF"
             android:letterSpacing="0.05"/>
