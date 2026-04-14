@@ -11,9 +11,15 @@ public class JuegosActivity extends BaseActivity {
         setContentView(R.layout.activity_juegos);
         setupTopBackBanner("Juegos");
         
-        findViewById(R.id.btnRefranes).setOnClickListener(v -> startActivity(new Intent(this, JuegoRefranesActivity.class)));
-        findViewById(R.id.btnBuscaEncuentra).setOnClickListener(v -> startActivity(new Intent(this, JuegoBuscaEncuentraActivity.class)));
-        findViewById(R.id.btnMiniRosco).setOnClickListener(v -> startActivity(new Intent(this, ElegirTematicaRoscoActivity.class)));
-        findViewById(R.id.btnBingo).setOnClickListener(v -> startActivity(new Intent(this, JuegoBingoActivity.class)));
+        findViewById(R.id.btnRefranes).setOnClickListener(v -> lanzarExplicacion("REFRANES"));
+        findViewById(R.id.btnBuscaEncuentra).setOnClickListener(v -> lanzarExplicacion("BUSCA_ENCUENTRA"));
+        findViewById(R.id.btnMiniRosco).setOnClickListener(v -> lanzarExplicacion("ROSCO"));
+        findViewById(R.id.btnBingo).setOnClickListener(v -> lanzarExplicacion("BINGO"));
+    }
+
+    private void lanzarExplicacion(String tipoJuego) {
+        Intent intent = new Intent(this, ExplicacionJuegoActivity.class);
+        intent.putExtra("TIPO_JUEGO", tipoJuego);
+        startActivity(intent);
     }
 }

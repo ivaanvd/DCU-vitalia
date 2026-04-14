@@ -48,6 +48,7 @@
         <activity android:name=".actividad.ActividadEnCursoActivity" />
 
         <activity android:name=".juegos.JuegosActivity" android:exported="false" android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".juegos.ExplicacionJuegoActivity" android:exported="false" android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".juegos.JuegoRefranesActivity" android:exported="false" android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".juegos.FinRefranesActivity" android:exported="false" android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".juegos.JuegoBuscaEncuentraActivity" android:exported="false" android:theme="@style/AppTheme.NoActionBar"/>

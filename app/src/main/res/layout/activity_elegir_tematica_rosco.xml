@@ -30,43 +30,13 @@
             android:layout_width="match_parent"
             android:layout_height="40dp" />
 
-        <!-- Botón temática 1 -->
-        <Button
-            android:id="@+id/btnTema1"
+        <!-- Contenedor dinámico para los botones de categorías -->
+        <LinearLayout
+            android:id="@+id/llContenedorBotones"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_marginBottom="40dp"
-            android:text="Flora y Plantas"
-            android:background="@drawable/bg_tipo_normal"
-            android:textColor="#111111"
-            android:textSize="40sp"
-            android:textStyle="bold"
-            android:textAllCaps="false" />
-
-        <!-- Botón temática 2 -->
-        <Button
-            android:id="@+id/btnTema2"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_marginBottom="40dp"
-            android:text="Frutas"
-            android:background="@drawable/bg_tipo_normal"
-            android:textColor="#111111"
-            android:textSize="40sp"
-            android:textStyle="bold"
-            android:textAllCaps="false" />
-
-        <!-- Botón temática 3 -->
-        <Button
-            android:id="@+id/btnTema3"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:text="Animales"
-            android:background="@drawable/bg_tipo_normal"
-            android:textColor="#111111"
-            android:textSize="40sp"
-            android:textStyle="bold"
-            android:textAllCaps="false" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center" />
 
         <!-- Aire abajo -->
         <Space

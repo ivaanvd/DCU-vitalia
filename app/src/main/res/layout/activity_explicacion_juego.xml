@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F8F9FA">
+
+    <!-- Banner superior con botón atrás -->
+    <include layout="@layout/include_top_back_banner" />
+
+    <!-- Contenido principal con scroll -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:paddingTop="40dp"
+            android:paddingBottom="40dp">
+
+            <!-- Título del juego -->
+            <TextView
+                android:id="@+id/tvTituloJuego"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Título del Juego"
+                android:textColor="#1C1C1E"
+                android:textSize="48sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_marginBottom="48dp" />
+
+            <!-- Separación -->
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="32dp" />
+
+            <!-- Texto con la explicación del juego -->
+            <TextView
+                android:id="@+id/tvExplicacion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Explicación del juego"
+                android:textColor="#1C1C1E"
+                android:textSize="28sp"
+                android:lineSpacingMultiplier="1.6"
+                android:gravity="center"
+                android:layout_marginBottom="32dp" />
+
+            <!-- Contenedor de categorías (solo para Mini-Rosco) -->
+            <LinearLayout
+                android:id="@+id/llCategorias"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:layout_marginTop="32dp" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <!-- Botones en la parte inferior -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="28dp">
+
+        <!-- Botón "Empezar a jugar" en naranja -->
+        <Button
+            android:id="@+id/btnEmpezarJuego"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginBottom="16dp"
+            android:text="Empezar a jugar"
+            android:background="@drawable/bg_btn_jugar"
+            android:textColor="#FFFFFF"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            android:textAllCaps="false" />
+
+        <!-- Botón "Volver a explicar" estilo normal -->
+        <Button
+            android:id="@+id/btnVolverExplicar"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:text="Volver a explicar"
+            android:background="@drawable/bg_tipo_normal"
+            android:textColor="#111111"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:textAllCaps="false" />
+
+    </LinearLayout>
+
+</LinearLayout>

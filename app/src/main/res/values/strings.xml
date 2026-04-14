@@ -281,4 +281,11 @@
     <string name="open">open</string>
     <string name="close">close</string>
 
+    <!-- Categorías para Mini-Rosco -->
+    <string-array name="rosco_categorias">
+        <item>Flora y Plantas</item>
+        <item>Frutas</item>
+        <item>Animales</item>
+    </string-array>
+
 </resources>
