@@ -70,7 +70,7 @@ public class ActividadesActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_actividades);
-        setupTopBackBanner("Actividades");
+        setupTopBackBanner("Actividades rutinarias");
 
         containerActividades = findViewById(R.id.containerActividades);
         tvVacio              = findViewById(R.id.tvVacioActividades);
@@ -212,7 +212,7 @@ public class ActividadesActivity extends BaseActivity {
         tvTitulo.setText(existente != null ? "EDITAR ACTIVIDAD" : "AÑADIR ACTIVIDAD");
 
         Button btnGuardar = dv.findViewById(R.id.btnGuardarDialogActividad);
-        btnGuardar.setText(existente != null ? "✓  GUARDAR" : "✓  AÑADIR");
+        btnGuardar.setText(existente != null ? "GUARDAR" : "AÑADIR");
 
         // Spinner de tipos
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
@@ -359,7 +359,7 @@ public class ActividadesActivity extends BaseActivity {
         ((TextView) dv.findViewById(R.id.tvTipoDetAct)).setText(a.getTipoLabel());
 
         String desc = (a.getDescripcion() != null && !a.getDescripcion().isEmpty())
-                ? a.getDescripcion().toUpperCase() : "—";
+                ? a.getDescripcion() : "—";
         ((TextView) dv.findViewById(R.id.tvDescDetAct)).setText(desc);
 
         int[] idsDias = {
@@ -371,11 +371,8 @@ public class ActividadesActivity extends BaseActivity {
             TextView tv = dv.findViewById(idsDias[i]);
             boolean activo = dias != null && dias.contains(VALORES_DIA[i]);
             if (activo) {
-                GradientDrawable bgDia = new GradientDrawable();
-                bgDia.setShape(GradientDrawable.OVAL);
-                bgDia.setColor(Color.parseColor("#1C1C1E"));
-                tv.setBackground(bgDia);
-                tv.setTextColor(Color.WHITE);
+                tv.setBackgroundResource(R.drawable.bg_tipo_selected);
+                tv.setTextColor(Color.parseColor("#1C1C1E"));
             } else {
                 tv.setBackgroundResource(R.drawable.bg_tipo_normal);
                 tv.setTextColor(Color.parseColor("#1C1C1E"));

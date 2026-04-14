@@ -16,12 +16,11 @@
         android:paddingEnd="24dp"
         android:paddingBottom="28dp">
 
-        <!-- Cabecera de contenido -->
         <TextView
             android:id="@+id/tvTemaRosco"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="MINI-ROSCO: FLORA Y PLANTAS"
+            android:text="TEMÁTICA: FLORA Y PLANTAS"
             android:textSize="28sp"
             android:textStyle="bold"
             android:textColor="#5A5A5A"
@@ -35,39 +34,31 @@
             android:background="#E0E0E0"
             android:layout_marginBottom="20dp" />
 
-        <!-- Fila de letras -->
         <LinearLayout
             android:id="@+id/llContenedorLetras"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center"
-            android:layout_marginBottom="24dp" />
+            android:layout_marginBottom="32dp" />
 
-        <!-- Letra actual -->
         <TextView
             android:id="@+id/tvProgresoLetra"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Con la A:"
-            android:textSize="42sp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:textColor="#198754"
-            android:layout_marginBottom="24dp" />
+            android:text=""
+            android:visibility="gone"
+            android:layout_marginBottom="8dp" />
 
-        <!-- Robot + bocadillo -->
         <include
             android:id="@+id/bocadillo_robot_rosco"
             layout="@layout/include_robot_bocadillo" />
 
-        <!-- Aire para que no quede todo pegado -->
         <Space
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1" />
 
-        <!-- Opciones -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -10,15 +10,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JuegoRefranesActivity extends BaseActivity {
-    
+
     private List<PreguntaRefran> listaPreguntas;
     private int indiceActual = 0;
     private int aciertos = 0;
-    
+
     private TextView tvRefran;
+    private TextView tvEstadoPregunta;
     private Button btnOpcion1;
     private Button btnOpcion2;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,20 +27,21 @@ public class JuegoRefranesActivity extends BaseActivity {
         setupTopBackBanner("Juego de Refranes");
 
         tvRefran = findViewById(R.id.tvBocadilloTexto);
+        tvEstadoPregunta = findViewById(R.id.tvEstadoPregunta);
         btnOpcion1 = findViewById(R.id.btnOpcion1);
         btnOpcion2 = findViewById(R.id.btnOpcion2);
-        
+
         cargarPreguntas();
         mostrarPregunta();
-        
-        if(btnOpcion1 != null) {
+
+        if (btnOpcion1 != null) {
             btnOpcion1.setOnClickListener(v -> procesarRespuesta(1));
         }
-        if(btnOpcion2 != null) {
+        if (btnOpcion2 != null) {
             btnOpcion2.setOnClickListener(v -> procesarRespuesta(2));
         }
     }
-    
+
     private void cargarPreguntas() {
         listaPreguntas = new ArrayList<>();
         listaPreguntas.add(new PreguntaRefran("A quien madruga, Dios le...", "Ayuda", "Mira", 1));
@@ -47,13 +49,19 @@ public class JuegoRefranesActivity extends BaseActivity {
         listaPreguntas.add(new PreguntaRefran("En boca cerrada no entran...", "Sombras", "Moscas", 2));
         listaPreguntas.add(new PreguntaRefran("A caballo regalado no le mires el...", "Diente", "Pelo", 1));
     }
-    
+
     private void mostrarPregunta() {
         if (indiceActual < listaPreguntas.size()) {
             PreguntaRefran actual = listaPreguntas.get(indiceActual);
+
+            if (tvEstadoPregunta != null) {
+                tvEstadoPregunta.setText("PREGUNTA " + (indiceActual + 1) + " DE " + listaPreguntas.size());
+            }
+
             if (tvRefran != null) {
                 tvRefran.setText(actual.getTextoCuestion());
             }
+
             if (btnOpcion1 != null && btnOpcion2 != null) {
                 btnOpcion1.setText(actual.getOpcion1());
                 btnOpcion2.setText(actual.getOpcion2());
@@ -62,7 +70,7 @@ public class JuegoRefranesActivity extends BaseActivity {
             irAResultado();
         }
     }
-    
+
     private void procesarRespuesta(int seleccion) {
         PreguntaRefran actual = listaPreguntas.get(indiceActual);
         if (seleccion == actual.getIndiceCorrecto()) {
@@ -76,7 +84,7 @@ public class JuegoRefranesActivity extends BaseActivity {
         Intent intent = new Intent(this, FinRefranesActivity.class);
         intent.putExtra("ACIERTOS", aciertos);
         intent.putExtra("TOTAL", listaPreguntas.size());
-        
+
         String mensaje;
         if (aciertos == listaPreguntas.size()) {
             mensaje = "¡Excelente! Te sabes todos los refranes perfectamente.";
@@ -86,7 +94,7 @@ public class JuegoRefranesActivity extends BaseActivity {
             mensaje = "Buen intento, seguro que en la próxima aciertas más.";
         }
         intent.putExtra("MENSAJE", mensaje);
-        
+
         startActivity(intent);
         finish();
     }

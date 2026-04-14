@@ -14,13 +14,35 @@
         android:orientation="vertical"
         android:paddingStart="24dp"
         android:paddingEnd="24dp"
+        android:paddingTop="24dp"
         android:paddingBottom="28dp">
 
-        <!-- Empuja el contenido hacia abajo -->
-        <Space
+        <!-- Fila superior: nombre de la tarea + estado -->
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.8" />
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="32dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="COMPLETAR REFRANES"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="#4A4A4A" />
+
+            <TextView
+                android:id="@+id/tvEstadoPregunta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PREGUNTA 1 DE 4"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="#7A7A7A" />
+        </LinearLayout>
 
         <!-- Robot + bocadillo -->
         <include
@@ -29,7 +51,7 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="80dp" />
+            android:layout_height="62dp" />
 
         <!-- Instrucción -->
         <TextView
@@ -68,11 +90,10 @@
             android:textStyle="bold"
             android:textAllCaps="false" />
 
-        <!-- Un pequeño aire abajo -->
         <Space
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.5" />
+            android:layout_weight="1" />
 
     </LinearLayout>
 

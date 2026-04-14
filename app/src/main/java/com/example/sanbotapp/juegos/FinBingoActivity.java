@@ -12,12 +12,12 @@ public class FinBingoActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fin_bingo);
-        setupTopBackBanner("Resultado de Bingo");
+        setupTopBackBanner("Juego de Bingo");
 
         int aciertos = getIntent().getIntExtra("ACIERTOS", 0);
         int total = getIntent().getIntExtra("TOTAL", 0);
         String mensaje = getIntent().getStringExtra("MENSAJE");
-        if (mensaje == null) mensaje = "¡Felicidades, ganaste la partida!";
+        if (mensaje == null) mensaje = "¡Línea y bingo! ¡Es usted un hacha!";
 
         TextView tvRefran = findViewById(R.id.tvBocadilloTexto);
         if (tvRefran != null) tvRefran.setText(mensaje);

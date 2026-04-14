@@ -193,6 +193,15 @@ public class RecordatoriosActivity extends BaseActivity {
                 final String finalTitulo = titulo;
                 final String finalDesc = desc;
 
+                if (!esRecordatorioFuturo(fechaSeleccionadaMs, horaSeleccionada)) {
+                    new AlertDialog.Builder(RecordatoriosActivity.this)
+                            .setTitle("Fecha no válida")
+                            .setMessage("No puedes guardar un recordatorio en una fecha u hora anterior a la actual.")
+                            .setPositiveButton("Aceptar", null)
+                            .show();
+                    return;
+                }
+
                 if (haySolapamiento(fechaSeleccionadaMs, horaSeleccionada, idExistente)) {
                     new AlertDialog.Builder(RecordatoriosActivity.this)
                             .setTitle("Solapamiento")
@@ -249,7 +258,7 @@ public class RecordatoriosActivity extends BaseActivity {
         ((TextView) dv.findViewById(R.id.tvHoraDetRec)).setText(r.getHoraFormateada());
         ((TextView) dv.findViewById(R.id.tvFechaDetRec)).setText(r.getFechaFormateada());
         String desc = (r.getDescripcion() != null && !r.getDescripcion().isEmpty())
-                ? r.getDescripcion().toUpperCase() : "—";
+                ? r.getDescripcion() : "—";
         ((TextView) dv.findViewById(R.id.tvDescDetRec)).setText(desc);
 
         final AlertDialog dialog = new AlertDialog.Builder(this)
@@ -334,5 +343,20 @@ public class RecordatoriosActivity extends BaseActivity {
         c.set(Calendar.SECOND, 0);
         c.set(Calendar.MILLISECOND, 0);
         return c.getTimeInMillis();
+    }
+
+    private long construirTimestampRecordatorio(long fechaMs, int horaMinutos) {
+        Calendar c = Calendar.getInstance();
+        c.setTimeInMillis(fechaMs);
+        c.set(Calendar.HOUR_OF_DAY, horaMinutos / 60);
+        c.set(Calendar.MINUTE, horaMinutos % 60);
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MILLISECOND, 0);
+        return c.getTimeInMillis();
+    }
+
+    private boolean esRecordatorioFuturo(long fechaMs, int horaMinutos) {
+        long instanteRecordatorio = construirTimestampRecordatorio(fechaMs, horaMinutos);
+        return instanteRecordatorio > System.currentTimeMillis();
     }
 }

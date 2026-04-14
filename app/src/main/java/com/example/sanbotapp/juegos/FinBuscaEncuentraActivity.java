@@ -7,23 +7,23 @@ import com.example.sanbotapp.BaseActivity;
 import com.example.sanbotapp.R;
 
 public class FinBuscaEncuentraActivity extends BaseActivity {
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fin_busca_encuentra);
-        setupTopBackBanner("Búsqueda Finalizada");
+        setupTopBackBanner("Busca y Encuentra");
 
         TextView tvRefran = findViewById(R.id.tvBocadilloTexto);
         if (tvRefran != null) {
-            tvRefran.setText("¡Has encontrado todo lo que buscábamos de forma impecable. Un trabajo veloz!");
+            tvRefran.setText("¡Con tu ayuda lo he encontrado! ¡Eres increíble!");
         }
 
         findViewById(R.id.btnJugarOtraVez).setOnClickListener(v -> {
             startActivity(new Intent(this, JuegoBuscaEncuentraActivity.class));
             finish();
         });
-        
+
         findViewById(R.id.btnVolverMenu).setOnClickListener(v -> {
             startActivity(new Intent(this, JuegosActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
             finish();

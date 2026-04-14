@@ -12,12 +12,12 @@ public class FinMiniRoscoActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fin_mini_rosco);
-        setupTopBackBanner("Rosco Completado");
+        setupTopBackBanner("Mini-Rosco");
 
         int aciertos = getIntent().getIntExtra("ACIERTOS", 0);
         int total = getIntent().getIntExtra("TOTAL", 0);
         String mensaje = getIntent().getStringExtra("MENSAJE");
-        if (mensaje == null) mensaje = "¡Fin del rosco!";
+        if (mensaje == null) mensaje = "¡Misión cumplida! ¡Qué bien se te da esto!";
 
         TextView tvContador = findViewById(R.id.tvAciertosRosco);
         if (tvContador != null) tvContador.setText(aciertos + "/" + total + " palabras");

@@ -38,7 +38,7 @@ public class JuegoMiniRoscoActivity extends BaseActivity {
 
         TextView tvCabecera = findViewById(R.id.tvTemaRosco);
         if (tvCabecera != null) {
-            tvCabecera.setText("MINI-ROSCO: " + temaSeleccionado.toUpperCase());
+            tvCabecera.setText("TEMÁTICA: " + temaSeleccionado.toUpperCase());
         }
 
         tvLetra = findViewById(R.id.tvProgresoLetra);
@@ -69,19 +69,20 @@ public class JuegoMiniRoscoActivity extends BaseActivity {
     private void inicializarFilaLetras() {
         vistasLetras = new ArrayList<>();
         float scale = getResources().getDisplayMetrics().density;
-        int sizePx = (int) (68 * scale + 0.5f);
-        int marginPx = (int) (8 * scale + 0.5f);
+        int sizePx = (int) (82 * scale + 0.5f);
+        int marginHorizontalPx = (int) (12 * scale + 0.5f);
+        int marginVerticalPx = (int) (6 * scale + 0.5f);
 
         for (PreguntaRosco p : preguntasDelTema) {
             TextView tv = new TextView(this);
             tv.setText(p.getLetra());
             tv.setTextColor(Color.WHITE);
-            tv.setTextSize(26);
+            tv.setTextSize(30);
             tv.setGravity(Gravity.CENTER);
             tv.setBackgroundResource(R.drawable.bg_rosco_letra_pendiente);
 
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(sizePx, sizePx);
-            params.setMargins(marginPx, marginPx, marginPx, marginPx);
+            params.setMargins(marginHorizontalPx, marginVerticalPx, marginHorizontalPx, marginVerticalPx);
             tv.setLayoutParams(params);
 
             if (llContenedorLetras != null) {
@@ -113,8 +114,10 @@ public class JuegoMiniRoscoActivity extends BaseActivity {
             vistasLetras.get(indiceActual).setBackgroundResource(R.drawable.bg_rosco_letra_actual);
 
             PreguntaRosco p = preguntasDelTema.get(indiceActual);
-            if (tvLetra != null) tvLetra.setText("Con la " + p.getLetra() + ":");
-            if (tvPistaRobot != null) tvPistaRobot.setText(p.getPista());
+            if (tvLetra != null) tvLetra.setVisibility(TextView.GONE);
+            if (tvPistaRobot != null) {
+                tvPistaRobot.setText("CON LA " + p.getLetra() + ": \"" + p.getPista() + "\"");
+            }
             if (btnOpcion1 != null) btnOpcion1.setText(p.getOpcion1());
             if (btnOpcion2 != null) btnOpcion2.setText(p.getOpcion2());
         } else {

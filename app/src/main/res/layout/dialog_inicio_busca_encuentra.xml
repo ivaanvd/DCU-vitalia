@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="520dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="28dp"
+    android:background="@drawable/bg_dialog">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="BUSCA Y ENCUENTRA"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:textColor="#1C1C1E"
+        android:gravity="center"
+        android:layout_marginBottom="24dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Primero verás los iconos durante unos segundos. Después se darán la vuelta y tendrás que recordar dónde estaba el icono correcto."
+        android:textSize="22sp"
+        android:textColor="#3C3C43"
+        android:gravity="center"
+        android:lineSpacingExtra="4dp"
+        android:layout_marginBottom="28dp" />
+
+    <Button
+        android:id="@+id/btnEntendidoBusca"
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:text="ENTENDIDO"
+        android:textAllCaps="false"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
+        android:background="@drawable/bg_btn_anadir" />
+
+</LinearLayout>

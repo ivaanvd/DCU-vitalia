@@ -12,13 +12,13 @@ public class FinRefranesActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fin_refranes);
-        setupTopBackBanner("Resultado Refranes");
+        setupTopBackBanner("Juego de Refranes");
 
         // Recuperar envíos
         int aciertos = getIntent().getIntExtra("ACIERTOS", 0);
         int total = getIntent().getIntExtra("TOTAL", 0);
         String mensaje = getIntent().getStringExtra("MENSAJE");
-        if (mensaje == null) mensaje = "¡Buen trabajo completando los refranes!";
+        if (mensaje == null) mensaje = "¡Muy bien! ¡Tú sí que sabes de refranes!";
 
         // Actualizar UI
         TextView tvContador = findViewById(R.id.tvContadorAciertos);

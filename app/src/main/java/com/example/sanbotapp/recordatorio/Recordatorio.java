@@ -73,13 +73,13 @@ public class Recordatorio {
      * Post: Devuelve True si la fecha del recordatorio es hoy o en el futuro (comparando solo por día, ignorando la hora).
      */
     public boolean esFuturoOHoy() {
-        // Inicio del día actual en ms
-        long hoyInicio = new java.util.GregorianCalendar() {{
-            set(java.util.Calendar.HOUR_OF_DAY, 0);
-            set(java.util.Calendar.MINUTE, 0);
-            set(java.util.Calendar.SECOND, 0);
-            set(java.util.Calendar.MILLISECOND, 0);
-        }}.getTimeInMillis();
-        return fechaMs >= hoyInicio;
+        java.util.Calendar c = java.util.Calendar.getInstance();
+        c.setTimeInMillis(fechaMs);
+        c.set(java.util.Calendar.HOUR_OF_DAY, horaMinutos / 60);
+        c.set(java.util.Calendar.MINUTE, horaMinutos % 60);
+        c.set(java.util.Calendar.SECOND, 0);
+        c.set(java.util.Calendar.MILLISECOND, 0);
+
+        return c.getTimeInMillis() > System.currentTimeMillis();
     }
 }

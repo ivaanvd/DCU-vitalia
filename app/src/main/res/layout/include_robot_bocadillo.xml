@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:text="¡Hola!"
             android:textColor="#111111"
-            android:textSize="40sp"
+            android:textSize="30sp"
             android:textStyle="bold" />
     </LinearLayout>
 </LinearLayout>

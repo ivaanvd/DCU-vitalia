@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/itemRecordatorioRoot"
     android:layout_width="match_parent"
-    android:layout_height="80dp"
+    android:layout_height="88dp"
     android:orientation="horizontal"
     android:gravity="center_vertical"
     android:paddingStart="16dp"
@@ -15,35 +15,37 @@
     android:clickable="true"
     android:focusable="true">
 
-    <!-- Píldora oscura: hora + fecha -->
-    <LinearLayout
+    <!-- Fecha -->
+    <TextView
+        android:id="@+id/tvFechaItemRec"
         android:layout_width="wrap_content"
-        android:layout_height="56dp"
-        android:orientation="vertical"
+        android:layout_height="52dp"
+        android:minWidth="130dp"
+        android:text="17/02/2026"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
         android:gravity="center"
-        android:paddingStart="14dp"
-        android:paddingEnd="14dp"
+        android:paddingStart="18dp"
+        android:paddingEnd="18dp"
         android:background="@drawable/bg_hora_pill_dark"
-        android:layout_marginEnd="18dp">
+        android:layout_marginEnd="18dp"/>
 
-        <TextView
-            android:id="@+id/tvHoraItemRec"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="09:00"
-            android:textSize="17sp"
-            android:textStyle="bold"
-            android:textColor="#FFFFFF"/>
-
-        <TextView
-            android:id="@+id/tvFechaItemRec"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="17/02/2026"
-            android:textSize="13sp"
-            android:textStyle="bold"
-            android:textColor="#CCCCCC"/>
-    </LinearLayout>
+    <!-- Hora -->
+    <TextView
+        android:id="@+id/tvHoraItemRec"
+        android:layout_width="wrap_content"
+        android:layout_height="52dp"
+        android:minWidth="92dp"
+        android:text="09:00"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:gravity="center"
+        android:paddingStart="18dp"
+        android:paddingEnd="18dp"
+        android:background="@drawable/bg_hora_pill_dark"
+        android:layout_marginEnd="28dp"/>
 
     <!-- Título -->
     <TextView
@@ -52,7 +54,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="CITA MÉDICA"
-        android:textSize="19sp"
+        android:textSize="20sp"
         android:textStyle="bold"
         android:textColor="#FFFFFF"
         android:maxLines="1"
@@ -68,6 +70,7 @@
         android:clickable="true"
         android:focusable="true"
         android:contentDescription="Editar">
+
         <ImageView
             android:layout_width="28dp"
             android:layout_height="28dp"
@@ -85,6 +88,7 @@
         android:clickable="true"
         android:focusable="true"
         android:contentDescription="Eliminar">
+
         <ImageView
             android:layout_width="28dp"
             android:layout_height="28dp"
