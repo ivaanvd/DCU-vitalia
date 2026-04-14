@@ -9,7 +9,7 @@ public class JuegosActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_juegos);
-        setupTopBackBanner("Menú de Juegos");
+        setupTopBackBanner("Juegos");
         
         findViewById(R.id.btnRefranes).setOnClickListener(v -> startActivity(new Intent(this, JuegoRefranesActivity.class)));
         findViewById(R.id.btnBuscaEncuentra).setOnClickListener(v -> startActivity(new Intent(this, JuegoBuscaEncuentraActivity.class)));
