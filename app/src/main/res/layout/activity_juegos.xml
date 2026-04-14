@@ -36,14 +36,14 @@
                 android:focusable="true">
 
                 <LinearLayout
-                    android:layout_width="200dp"
-                    android:layout_height="200dp"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
                     android:background="@drawable/bg_icon_circle_orange"
                     android:gravity="center">
 
                     <ImageView
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
                         android:src="@drawable/ic_escribiendo"
                         android:contentDescription="Refranes" />
                 </LinearLayout>
@@ -52,8 +52,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:text="REFRANES"
-                    android:textColor="@android:color/white"
+                    android:text="COMPLETAR&#10;REFRANES"
+                    android:textColor="@android:color/black"
                     android:textSize="40sp"
                     android:textStyle="bold"
                     android:gravity="center" />
@@ -73,14 +73,14 @@
                 android:focusable="true">
 
                 <LinearLayout
-                    android:layout_width="200dp"
-                    android:layout_height="200dp"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
                     android:background="@drawable/bg_icon_circle_orange"
                     android:gravity="center">
 
                     <ImageView
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
                         android:src="@drawable/ic_lupa"
                         android:contentDescription="Busca y Encuentra" />
                 </LinearLayout>
@@ -90,7 +90,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     android:text="BUSCA Y&#10;ENCUENTRA"
-                    android:textColor="@android:color/white"
+                    android:textColor="@android:color/black"
                     android:textSize="40sp"
                     android:textStyle="bold"
                     android:gravity="center" />
@@ -119,14 +119,14 @@
                 android:focusable="true">
 
                 <LinearLayout
-                    android:layout_width="200dp"
-                    android:layout_height="200dp"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
                     android:background="@drawable/bg_icon_circle_orange"
                     android:gravity="center">
 
                     <ImageView
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
                         android:src="@drawable/ic_letras"
                         android:contentDescription="Mini Rosco" />
                 </LinearLayout>
@@ -136,7 +136,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     android:text="MINI-ROSCO&#10;DE LETRAS"
-                    android:textColor="@android:color/white"
+                    android:textColor="@android:color/black"
                     android:textSize="40sp"
                     android:textStyle="bold"
                     android:gravity="center" />
@@ -156,15 +156,14 @@
                 android:focusable="true">
 
                 <LinearLayout
-                    android:layout_width="200dp"
-                    android:layout_height="200dp"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
                     android:background="@drawable/bg_icon_circle_orange"
                     android:gravity="center">
 
                     <ImageView
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:layout_marginLeft="20dp"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
                         android:src="@drawable/ic_bingo"
                         android:contentDescription="Bingo" />
                 </LinearLayout>
@@ -174,7 +173,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     android:text="BINGO"
-                    android:textColor="@android:color/white"
+                    android:textColor="@android:color/black"
                     android:textSize="40sp"
                     android:textStyle="bold"
                     android:gravity="center" />
