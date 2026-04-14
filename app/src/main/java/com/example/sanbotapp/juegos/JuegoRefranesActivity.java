@@ -1,7 +1,10 @@
 package com.example.sanbotapp.juegos;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.widget.Button;
 import android.widget.TextView;
 import com.example.sanbotapp.BaseActivity;
@@ -14,11 +17,18 @@ public class JuegoRefranesActivity extends BaseActivity {
     private List<PreguntaRefran> listaPreguntas;
     private int indiceActual = 0;
     private int aciertos = 0;
+    private boolean juegoBloqueado = false;
+    private Handler handler = new Handler(Looper.getMainLooper());
 
     private TextView tvRefran;
     private TextView tvEstadoPregunta;
     private Button btnOpcion1;
     private Button btnOpcion2;
+    
+    // Colores para el feedback visual
+    private static final String COLOR_CORRECTO = "#00CC00";  // Verde
+    private static final String COLOR_INCORRECTO = "#FF0000"; // Rojo
+    private static final String COLOR_NORMAL = "#FFFFFF";     // Azul original
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,12 +82,65 @@ public class JuegoRefranesActivity extends BaseActivity {
     }
 
     private void procesarRespuesta(int seleccion) {
+        if (juegoBloqueado) return; // Evitar clicks mientras se muestra el feedback
+        
+        juegoBloqueado = true;
         PreguntaRefran actual = listaPreguntas.get(indiceActual);
+        
         if (seleccion == actual.getIndiceCorrecto()) {
+            // ¡ACERTÓ!
             aciertos++;
+            mostrarFeedbackCorrecto(seleccion);
+        } else {
+            // FALLÓ
+            mostrarFeedbackIncorrecto(seleccion, actual.getIndiceCorrecto());
         }
-        indiceActual++;
-        mostrarPregunta();
+    }
+    
+    private void mostrarFeedbackCorrecto(int seleccion) {
+        // Cambiar color del botón a verde
+        Button boton = (seleccion == 1) ? btnOpcion1 : btnOpcion2;
+        boton.setBackgroundResource(R.drawable.bg_tipo_correcto);
+        boton.setTextColor(Color.WHITE);
+        
+        // El robot habla felicidad
+        hablarOSimular("¡Excelente! ¡Acertaste!");
+        
+        // Después de 2 segundos, mostrar siguiente pregunta
+        handler.postDelayed(() -> {
+            restaurarBotones();
+            indiceActual++;
+            mostrarPregunta();
+            juegoBloqueado = false;
+        }, 2000);
+    }
+
+    private void mostrarFeedbackIncorrecto(int seleccionIncorrecta, int correcta) {
+        Button botonIncorrecto = (seleccionIncorrecta == 1) ? btnOpcion1 : btnOpcion2;
+        botonIncorrecto.setBackgroundResource(R.drawable.bg_tipo_incorrecto);
+        botonIncorrecto.setTextColor(Color.WHITE);
+
+        Button botonCorrecto = (correcta == 1) ? btnOpcion1 : btnOpcion2;
+        botonCorrecto.setBackgroundResource(R.drawable.bg_tipo_correcto);
+        botonCorrecto.setTextColor(Color.WHITE);
+
+        hablarOSimular("¡No! Esa no era la respuesta. La correcta es la otra.");
+
+        handler.postDelayed(() -> {
+            restaurarBotones();
+            indiceActual++;
+            mostrarPregunta();
+            juegoBloqueado = false;
+        }, 2500);
+    }
+
+
+    private void restaurarBotones() {
+        btnOpcion1.setBackgroundResource(R.drawable.bg_tipo_normal);
+        btnOpcion1.setTextColor(Color.parseColor("#111111"));
+
+        btnOpcion2.setBackgroundResource(R.drawable.bg_tipo_normal);
+        btnOpcion2.setTextColor(Color.parseColor("#111111"));
     }
 
     private void irAResultado() {

@@ -49,7 +49,7 @@
             android:layout_height="100dp"
             android:layout_marginBottom="40dp"
             android:text="Jugar otra vez"
-            android:background="@drawable/bg_btn_anadir"
+            android:background="@drawable/bg_btn_jugar_otra"
             android:textColor="@android:color/white"
             android:textSize="28sp"
             android:textStyle="bold"
