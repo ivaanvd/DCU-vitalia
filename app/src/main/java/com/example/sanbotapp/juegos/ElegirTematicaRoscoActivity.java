@@ -11,7 +11,7 @@ import com.example.sanbotapp.R;
 public class ElegirTematicaRoscoActivity extends BaseActivity {
     
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_elegir_tematica_rosco);
         setupTopBackBanner("Elegir Temática");
@@ -50,10 +50,10 @@ public class ElegirTematicaRoscoActivity extends BaseActivity {
         btn.setOnClickListener(v -> lanzarJuego(nombre));
         return btn;
     }
-    
+
     private void lanzarJuego(String tema) {
-        Intent i = new Intent(this, ExplicacionJuegoActivity.class);
-        i.putExtra("TIPO_JUEGO", "ROSCO");
+        // Va directo al juego, ya explicamos antes
+        Intent i = new Intent(this, JuegoMiniRoscoActivity.class);
         i.putExtra("TEMA", tema);
         startActivity(i);
         finish();

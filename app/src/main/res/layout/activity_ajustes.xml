@@ -165,5 +165,24 @@
                 android:focusable="true" />
         </LinearLayout>
 
+        <!-- Separador visual -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#E0E0E0"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="30dp" />
+
+        <!-- Botón Borrar Cuenta -->
+        <Button
+            android:id="@+id/btnBorrarCuenta"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="Borrar Cuenta y Datos"
+            android:textSize="18sp"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/bg_tipo_incorrecto"
+            android:textAllCaps="false" />
+
     </LinearLayout>
 </LinearLayout>

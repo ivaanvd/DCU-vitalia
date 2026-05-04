@@ -1,5 +1,7 @@
 package com.example.sanbotapp.juegos;
 
+import static java.lang.Thread.sleep;
+
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -24,14 +26,14 @@ public class JuegoRefranesActivity extends BaseActivity {
     private TextView tvEstadoPregunta;
     private Button btnOpcion1;
     private Button btnOpcion2;
-    
+
     // Colores para el feedback visual
     private static final String COLOR_CORRECTO = "#00CC00";  // Verde
     private static final String COLOR_INCORRECTO = "#FF0000"; // Rojo
     private static final String COLOR_NORMAL = "#FFFFFF";     // Azul original
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_juego_refranes);
         setupTopBackBanner("Juego de Refranes");
@@ -83,10 +85,10 @@ public class JuegoRefranesActivity extends BaseActivity {
 
     private void procesarRespuesta(int seleccion) {
         if (juegoBloqueado) return; // Evitar clicks mientras se muestra el feedback
-        
+
         juegoBloqueado = true;
         PreguntaRefran actual = listaPreguntas.get(indiceActual);
-        
+
         if (seleccion == actual.getIndiceCorrecto()) {
             // ¡ACERTÓ!
             aciertos++;
@@ -96,16 +98,17 @@ public class JuegoRefranesActivity extends BaseActivity {
             mostrarFeedbackIncorrecto(seleccion, actual.getIndiceCorrecto());
         }
     }
-    
+
     private void mostrarFeedbackCorrecto(int seleccion) {
         // Cambiar color del botón a verde
         Button boton = (seleccion == 1) ? btnOpcion1 : btnOpcion2;
         boton.setBackgroundResource(R.drawable.bg_tipo_correcto);
         boton.setTextColor(Color.WHITE);
-        
-        // El robot habla felicidad
-        hablarOSimular("¡Excelente! ¡Acertaste!");
-        
+
+        mostrarEmocion("PRISE"); // Emoción "orgulloso/feliz"
+        hablarOSimular("¡Correcto! Excelente respuesta");
+        moverBrazos("LEVANTAR_BRAZO", "AMBOS"); // Celebración: brazos arriba
+        moverBrazos("BAJAR_BRAZO", "AMBOS");
         // Después de 2 segundos, mostrar siguiente pregunta
         handler.postDelayed(() -> {
             restaurarBotones();
@@ -124,7 +127,10 @@ public class JuegoRefranesActivity extends BaseActivity {
         botonCorrecto.setBackgroundResource(R.drawable.bg_tipo_correcto);
         botonCorrecto.setTextColor(Color.WHITE);
 
-        hablarOSimular("¡No! Esa no era la respuesta. La correcta es la otra.");
+        mostrarEmocion("CRY"); // Emoción "triste"
+        hablarOSimular("Lástima, te acercabas");
+        moverCabezaBasico("ABAJO");
+        reiniciarCabeza();
 
         handler.postDelayed(() -> {
             restaurarBotones();

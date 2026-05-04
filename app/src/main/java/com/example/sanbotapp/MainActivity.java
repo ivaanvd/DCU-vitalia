@@ -19,6 +19,7 @@ import com.example.sanbotapp.actividad.ActividadesActivity;
 import com.example.sanbotapp.actividad.ActivitySchedulerHelper;
 import com.example.sanbotapp.recordatorio.RecordatoriosActivity;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -33,7 +34,8 @@ public class MainActivity extends BaseActivity {
     // Constantes para guardar datos en SharedPreferences (nombre y foto del usuario)
     private static final String PREFS_NAME   = "AppPrefs";
     private static final String KEY_NOMBRE   = "nombre_usuario";
-    private static final String KEY_FOTO_URI = "foto_uri";
+    private static final String KEY_FOTO_PATH = "foto_path";
+    private static final String KEY_FIRST_RUN = "first_run";
     
     // Botones Principales
     private LinearLayout btnActividades, btnRecordatorios, btnJuegos, btnAjustes;
@@ -63,11 +65,21 @@ public class MainActivity extends BaseActivity {
         // Se inicializan las preferencias compartidas para leer datos como el nombre de usuario
         prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
+        // Verificar si es la primera vez que se abre la app
+//        if (prefs.getBoolean(KEY_FIRST_RUN, false)) { //Cambiar a true
+//            // Es la primera vez: abrir WelcomeActivity
+//            Intent intent = new Intent(this, WelcomeActivity.class);
+//            startActivity(intent);
+//            finish();
+//            return;
+//        }
+
         // Se preparan las vistas y componentes de la pantalla principal
         inicializarVistas();
         cargarDatosGuardados();
         mostrarFechaActual();
         configurarBotones();
+        reiniciarBrazos();
         
         // Se inicializa el vigilante que comprobará si es hora de ejecutar una actividad programada
         scheduler = new ActivitySchedulerHelper(this, new ActivitySchedulerHelper.RobotActionCallback() {
@@ -137,12 +149,13 @@ public class MainActivity extends BaseActivity {
      * Se combina con mostrarEmocion() si quieres acompañar el saludo visualmente.
      *
      * @return Nombre de la emoción compatible con EmotionsType del SDK.
+     * No van las emociones
      */
     private String getEmocionPorHora() {
         int hora = java.util.Calendar.getInstance().get(java.util.Calendar.HOUR_OF_DAY);
 
         if (hora >= 6 && hora < 12) {
-            return "HAPPY";     // Mañana → cara alegre
+            return "SLEEPY";     // Mañana → cara alegre
         } else if (hora >= 12 && hora < 20) {
             return "NEUTRAL";   // Tarde → cara tranquila
         } else {
@@ -169,19 +182,22 @@ public class MainActivity extends BaseActivity {
      * Post: Se cargan los datos guardados (nombre y foto del usuario)
      */
     private void cargarDatosGuardados() {
-        nombreUsuario = prefs.getString(KEY_NOMBRE, "amigo/a");
-        tvSaludo.setText("¡Hola, " + nombreUsuario + "!");
-
-        String fotoUri = prefs.getString(KEY_FOTO_URI, null);
-        if (fotoUri != null) {
-            try {
-                Uri uri = Uri.parse(fotoUri);
-                getContentResolver().openInputStream(uri).close();
-                ((ImageView) findViewById(R.id.ivAvatar)).setImageURI(uri);
-            } catch (Exception e) {
-                prefs.edit().remove(KEY_FOTO_URI).apply();
-            }
-        }
+//        nombreUsuario = prefs.getString(KEY_NOMBRE, "amigo/a");
+//        tvSaludo.setText("¡Hola, " + nombreUsuario + "!");
+//
+//        String fotoPa = prefs.getString(KEY_FOTO_PATH, null);
+//        if (fotoPa != null) {
+//            try {
+//                File fotoFile = new File(fotoPa);
+//                if (fotoFile.exists()) {
+//                    android.graphics.Bitmap bitmap = android.graphics.BitmapFactory.decodeFile(fotoPa);
+//                    ((ImageView) findViewById(R.id.ivAvatar)).setImageBitmap(bitmap);
+//                }
+//            } catch (Exception e) {
+//                // Si hay error, eliminar la ruta guardada
+//                prefs.edit().remove(KEY_FOTO_PATH).apply();
+//            }
+//        }
     }
 
     /*

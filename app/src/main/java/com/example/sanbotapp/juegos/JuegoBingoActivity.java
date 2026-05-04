@@ -21,20 +21,14 @@ public class JuegoBingoActivity extends BaseActivity {
     private List<RondaBingo> rondasFuturas;
     private int indiceRonda = 0;
     private int aciertos = 0;
+    private int fallos = 0;
 
     private TextView tvRobot;
     private TextView tvFeedback;
-
-    private LinearLayout panelAvisoError;
-    private TextView tvMensajeErrorBingo;
-    private Button btnEntendidoBingo;
-
-    private View overlayAvisoBingo;
-
     private boolean juegoBloqueado = false;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_juego_bingo);
         setupTopBackBanner("Bingo");
@@ -42,18 +36,9 @@ public class JuegoBingoActivity extends BaseActivity {
         tvRobot = findViewById(R.id.tvBocadilloTexto);
         tvFeedback = findViewById(R.id.tvFeedbackBingo);
 
-        panelAvisoError = findViewById(R.id.panelAvisoErrorBingo);
-        tvMensajeErrorBingo = findViewById(R.id.tvMensajeErrorBingo);
-        btnEntendidoBingo = findViewById(R.id.btnEntendidoBingo);
-        overlayAvisoBingo = findViewById(R.id.overlayAvisoBingo);
-
         cargarBolasDeBingo();
         mostrarRonda();
         configurarBotoneraCartones();
-
-        if (btnEntendidoBingo != null) {
-            btnEntendidoBingo.setOnClickListener(v -> ocultarAvisoError());
-        }
     }
 
     private void cargarBolasDeBingo() {
@@ -112,7 +97,7 @@ public class JuegoBingoActivity extends BaseActivity {
                     new Handler(Looper.getMainLooper()).postDelayed(this::finalizarJuego, 1800);
                 }
             } else {
-                mostrarAvisoError("Esa no es la tarjeta correcta.\nLee de nuevo la indicación y vuelve a intentarlo.");
+                mostrarFeedbackError();
             }
         };
 
@@ -124,38 +109,27 @@ public class JuegoBingoActivity extends BaseActivity {
 
     private void marcarTarjetaCorrecta(View tarjeta) {
         tarjeta.setEnabled(false);
-        tarjeta.setAlpha(0.45f);
-        tarjeta.setForeground(getDrawable(R.drawable.ic_sello_correcto));
+        tarjeta.setAlpha(0.85f);
+        tarjeta.setBackgroundResource(R.drawable.bg_tipo_correcto);
     }
 
-    private void mostrarAvisoError(String mensaje) {
+    private void mostrarFeedbackError() {
         juegoBloqueado = true;
+        fallos++;
+        mostrarEmocion("CRY");
+        hablarOSimular("Oh no, esa no era. Léelo bien e inténtalo de nuevo.");
+        moverCabezaBasico("ABAJO");
+        reiniciarCabeza();
 
-        if (overlayAvisoBingo != null) {
-            overlayAvisoBingo.setVisibility(View.VISIBLE);
-        }
-        if (panelAvisoError != null) {
-            panelAvisoError.setVisibility(View.VISIBLE);
-        }
-        if (tvMensajeErrorBingo != null) {
-            tvMensajeErrorBingo.setText(mensaje);
-        }
-    }
-
-    private void ocultarAvisoError() {
-        if (overlayAvisoBingo != null) {
-            overlayAvisoBingo.setVisibility(View.GONE);
-        }
-        if (panelAvisoError != null) {
-            panelAvisoError.setVisibility(View.GONE);
-        }
-
-        juegoBloqueado = false;
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            juegoBloqueado = false;
+        }, 2500);
     }
 
     private void finalizarJuego() {
         Intent intent = new Intent(this, FinBingoActivity.class);
         intent.putExtra("ACIERTOS", aciertos);
+        intent.putExtra("FALLOS", fallos);
         intent.putExtra("TOTAL", rondasFuturas.size());
         intent.putExtra("MENSAJE", "¡Espectacular Bingo! Has completado toda la tarjeta.");
         startActivity(intent);

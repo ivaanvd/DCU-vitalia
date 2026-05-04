@@ -50,6 +50,12 @@ public abstract class BaseActivity extends AppCompatActivity {
         Log.d("BaseActivity[Tablet]", "ROBOT DIRÍA: " + frase);
     }
 
+    public void escuchar() {
+        Log.d("BaseActivity[Tablet]", "escuchar() sin efecto");
+    }
+
+    protected void onTextoEscuchado(String texto) {}
+
     /**
      * En tablet el servicio del robot no existe,
      * así que onRobotServiceReady() se llama desde onCreate()
@@ -80,7 +86,14 @@ public abstract class BaseActivity extends AppCompatActivity {
         Log.d("BaseActivity[Tablet]", "girarCabeza: " + angulo); }
     public void reiniciarCabeza() {
         Log.d("BaseActivity[Tablet]", "reiniciarCabeza"); }
-
+    /**
+     * Gancho llamado cuando el usuario toca la cabeza del robot (sensores 11, 12 o 13).
+     * Las subclases lo sobreescriben para reaccionar.
+     * Puede llamarse desde un hilo secundario — usar runOnUiThread() si se toca la UI.
+     */
+    protected void onCabezaTocada() {
+        // Gancho opcional para subclases
+    }
     // ── BRAZOS (sin efecto en tablet) ────────────────────────────────────────
     public void moverBrazos(String accion, String brazo) {
         Log.d("BaseActivity[Tablet]", "moverBrazos: " + accion + " " + brazo); }

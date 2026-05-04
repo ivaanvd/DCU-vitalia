@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F2F2F7">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <!-- Título de bienvenida -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="¡Bienvenido!"
+            android:textSize="42sp"
+            android:textStyle="bold"
+            android:textColor="#1C1C1E"
+            android:textAlignment="center"
+            android:layout_marginBottom="12dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cuéntame tu nombre y completa tu perfil"
+            android:textSize="18sp"
+            android:textColor="#6E6E73"
+            android:textAlignment="center"
+            android:layout_marginBottom="32dp"/>
+
+        <!-- Separador visual -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#E5E5EA"
+            android:layout_marginBottom="24dp"/>
+
+        <!-- SECCIÓN: NOMBRE -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tu nombre"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#1C1C1E"
+            android:layout_marginBottom="12dp"/>
+
+        <EditText
+            android:id="@+id/etNombre"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:hint="Escribe tu nombre"
+            android:textSize="18sp"
+            android:textColor="#1C1C1E"
+            android:textColorHint="#A0A0A0"
+            android:inputType="textPersonName|textCapWords"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:background="@drawable/bg_input_welcome"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Botón capturar voz -->
+        <Button
+            android:id="@+id/btnCapturarVoz"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="Decir mi nombre"
+            android:textSize="16sp"
+            android:textColor="#111111"
+            android:background="@drawable/bg_tipo_normal"
+            android:textAllCaps="false"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- TextView de estado -->
+        <TextView
+            android:id="@+id/tvEstado"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Esperando entrada..."
+            android:textSize="14sp"
+            android:textColor="#666666"
+            android:textAlignment="center"
+            android:layout_marginBottom="24dp"/>
+
+        <!-- Separador visual -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#E5E5EA"
+            android:layout_marginBottom="24dp"/>
+
+        <!-- SECCIÓN: FOTO -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tu fotos de perfil"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#1C1C1E"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Preview de la foto -->
+        <ImageView
+            android:id="@+id/ivFoto"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:src="@drawable/ic_persona"
+            android:scaleType="centerInside"
+            android:background="@drawable/bg_avatar_circle"
+            android:layout_gravity="center_horizontal"
+            android:contentDescription="Vista previa de foto de perfil"
+            android:layout_marginBottom="20dp"/>
+
+        <!-- Botones para foto -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:layout_marginBottom="32dp">
+
+            <!-- Botón capturar foto -->
+            <Button
+                android:id="@+id/btnCapturarFoto"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:text="Capturar foto"
+                android:textSize="16sp"
+                android:textColor="#111111"
+                android:background="@drawable/bg_tipo_normal"
+                android:textAllCaps="false"
+                android:layout_marginBottom="12dp"/>
+
+            <!-- Botón seleccionar de galería -->
+            <Button
+                android:id="@+id/btnSeleccionarGaleria"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:text="Elegir de galería"
+                android:textSize="16sp"
+                android:textColor="#111111"
+                android:background="@drawable/bg_tipo_normal"
+                android:textAllCaps="false"/>
+
+        </LinearLayout>
+
+        <!-- Separador visual -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#E5E5EA"
+            android:layout_marginBottom="24dp"/>
+
+        <!-- Botón guardar -->
+        <Button
+            android:id="@+id/btnGuardar"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="Comenzar"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/bg_tipo_correcto"
+            android:textAllCaps="false"
+            android:layout_marginTop="8dp"/>
+
+    </LinearLayout>
+
+</ScrollView>

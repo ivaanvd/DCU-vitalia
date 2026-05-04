@@ -9,14 +9,27 @@ import com.example.sanbotapp.R;
 public class FinBuscaEncuentraActivity extends BaseActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fin_busca_encuentra);
         setupTopBackBanner("Busca y Encuentra");
 
-        TextView tvRefran = findViewById(R.id.tvBocadilloTexto);
-        if (tvRefran != null) {
-            tvRefran.setText("¡Con tu ayuda lo he encontrado! ¡Eres increíble!");
+        long segundos = getIntent().getLongExtra("SEGUNDOS", 0);
+
+        TextView tvRobot = findViewById(R.id.tvBocadilloTexto);
+        if (tvRobot != null) {
+            if (segundos < 10) {
+                tvRobot.setText("¡Increíble! Lo has encontrado en un abrir y cerrar de ojos.");
+            } else if (segundos < 25) {
+                tvRobot.setText("¡Con tu ayuda lo he encontrado! ¡Eres increíble!");
+            } else {
+                tvRobot.setText("¡Lo has conseguido! La memoria es como un músculo, ¡a seguir entrenando!");
+            }
+        }
+
+        TextView tvTiempo = findViewById(R.id.tvTiempoBusca);
+        if (tvTiempo != null) {
+            tvTiempo.setText(segundos + " s");
         }
 
         findViewById(R.id.btnJugarOtraVez).setOnClickListener(v -> {

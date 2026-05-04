@@ -24,11 +24,13 @@ public class JuegoBuscaEncuentraActivity extends BaseActivity {
 
     private TextView tvIndicacionRobot;
     private TextView tvMensajeAuxiliar;
+    private TextView tvEstadoBusca; // opcional, ya existe en el XML
 
     private final Handler handler = new Handler(Looper.getMainLooper());
 
     private boolean juegoActivo = false;
     private int botonCorrectoId;
+    private long tiempoInicioMs; // ← NUEVO: marca cuándo empieza a buscar
 
     private ImageButton btnBuscaMedicacion;
     private ImageButton btnBuscaComida;
@@ -37,11 +39,10 @@ public class JuegoBuscaEncuentraActivity extends BaseActivity {
     private ImageButton btnBuscaDormir;
     private ImageButton btnBuscaOtros;
 
-    // Guarda qué icono real tiene cada botón
     private final Map<Integer, Integer> mapaIconos = new HashMap<>();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_juego_busca_encuentra);
         setupTopBackBanner("Busca y Encuentra");
@@ -50,40 +51,21 @@ public class JuegoBuscaEncuentraActivity extends BaseActivity {
         tvMensajeAuxiliar = findViewById(R.id.tvMensajeAuxiliarBusca);
 
         btnBuscaMedicacion = findViewById(R.id.btnBuscaMedicacion);
-        btnBuscaComida = findViewById(R.id.btnBuscaComida);
-        btnBuscaAjustes = findViewById(R.id.btnBuscaAjustes);
+        btnBuscaComida    = findViewById(R.id.btnBuscaComida);
+        btnBuscaAjustes   = findViewById(R.id.btnBuscaAjustes);
         btnBuscaCalendario = findViewById(R.id.btnBuscaCalendario);
-        btnBuscaDormir = findViewById(R.id.btnBuscaDormir);
-        btnBuscaOtros = findViewById(R.id.btnBuscaOtros);
+        btnBuscaDormir    = findViewById(R.id.btnBuscaDormir);
+        btnBuscaOtros     = findViewById(R.id.btnBuscaOtros);
 
-        prepararTablero();
         configurarBotonesCentrales();
-        mostrarDialogoInicio();
-    }
-
-    private void mostrarDialogoInicio() {
-        View dv = LayoutInflater.from(this).inflate(R.layout.dialog_inicio_busca_encuentra, null);
-
-        AlertDialog dialog = new AlertDialog.Builder(this)
-                .setView(dv)
-                .setCancelable(false)
-                .create();
-
-        if (dialog.getWindow() != null) {
-            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        }
-
-        dv.findViewById(R.id.btnEntendidoBusca).setOnClickListener(v -> {
-            dialog.dismiss();
-            iniciarMemorizacion();
-        });
-
-        dialog.show();
+        prepararTablero();          // ← arranca directo, sin modal
+        iniciarMemorizacion();
     }
 
     private void prepararTablero() {
-        tvIndicacionRobot.setText("Uy, qué cabeza de hojalata... ¡He perdido la rueda de configuración! Fíjate bien dónde la he dejado...");
-        tvMensajeAuxiliar.setText("MEMORIZA LA POSICIÓN DEL ICONO");
+        // Fase 1: memorización → el robot NO desvela qué buscar todavía
+        tvIndicacionRobot.setText("¡Atento a los iconos! Fíjate bien dónde están...");
+        tvMensajeAuxiliar.setText("MEMORIZA LA POSICIÓN DE LOS ICONOS");
         tvMensajeAuxiliar.setTextColor(Color.parseColor("#5A5A5A"));
 
         List<Integer> iconos = new ArrayList<>();
@@ -104,7 +86,6 @@ public class JuegoBuscaEncuentraActivity extends BaseActivity {
             botones[i].setEnabled(false);
             botones[i].setAlpha(1f);
             botones[i].setForeground(null);
-
             mapaIconos.put(botones[i].getId(), iconos.get(i));
 
             if (iconos.get(i) == R.drawable.ic_ajustes) {
@@ -116,11 +97,17 @@ public class JuegoBuscaEncuentraActivity extends BaseActivity {
     private void iniciarMemorizacion() {
         juegoActivo = false;
 
+        // Tras 5 segundos: ocultar iconos, revelar qué buscar y arrancar el cronómetro
         handler.postDelayed(() -> {
             ocultarIconos();
+
+            // Fase 2: ahora sí se dice qué buscar
+            tvIndicacionRobot.setText("Uy, qué cabeza de hojalata... ¡He perdido la rueda de configuración! ¿La encuentras?");
             tvMensajeAuxiliar.setText("AHORA RECUERDA DÓNDE ESTABA EL ICONO");
             tvMensajeAuxiliar.setTextColor(Color.parseColor("#5A5A5A"));
+
             habilitarBotonesNoFallados();
+            tiempoInicioMs = System.currentTimeMillis(); // ← empieza a contar
             juegoActivo = true;
         }, 5000);
     }
@@ -149,9 +136,7 @@ public class JuegoBuscaEncuentraActivity extends BaseActivity {
     private void mostrarTodosLosIconosReales() {
         for (ImageButton boton : obtenerBotones()) {
             Integer icono = mapaIconos.get(boton.getId());
-            if (icono != null) {
-                boton.setImageResource(icono);
-            }
+            if (icono != null) boton.setImageResource(icono);
         }
     }
 
@@ -163,27 +148,37 @@ public class JuegoBuscaEncuentraActivity extends BaseActivity {
 
             if (v.getId() == botonCorrectoId) {
                 juegoActivo = false;
+                long tiempoMs = System.currentTimeMillis() - tiempoInicioMs;
+                long segundos = tiempoMs / 1000;
+
                 deshabilitarTodosLosBotones();
 
+                // ← Verde inmediato
+                botonPulsado.setBackgroundResource(R.drawable.bg_tipo_correcto);
+                botonPulsado.setAlpha(1f);
+                botonPulsado.setForeground(null);
+
+                mostrarEmocion("PRISE"); // Emoción "orgulloso/feliz"
+                hablarOSimular("¡¡MUY BIEN! ESTE ERA EL ICONO CORRECTO");
+                moverBrazos("LEVANTAR_BRAZO", "AMBOS"); // Celebración: brazos arriba
+                moverBrazos("BAJAR_BRAZO", "AMBOS");
                 tvMensajeAuxiliar.setText("¡MUY BIEN! ESTE ERA EL ICONO CORRECTO");
                 tvMensajeAuxiliar.setTextColor(Color.parseColor("#198754"));
-
-                // Mostrar todas las cartas reales antes de terminar
                 mostrarTodosLosIconosReales();
 
                 handler.postDelayed(() -> {
-                    startActivity(new Intent(this, FinBuscaEncuentraActivity.class));
+                    Intent intent = new Intent(this, FinBuscaEncuentraActivity.class);
+                    intent.putExtra("SEGUNDOS", segundos);
+                    startActivity(intent);
                     finish();
                 }, 4000);
 
             } else {
                 botonPulsado.setEnabled(false);
-                botonPulsado.setAlpha(0.55f);
+                botonPulsado.setAlpha(1f);
                 botonPulsado.setImageResource(mapaIconos.get(botonPulsado.getId()));
-                botonPulsado.setForeground(getDrawable(R.drawable.fg_card_error_x));
-
-                tvMensajeAuxiliar.setText("ESA NO ES. SIGUE PROBANDO");
-                tvMensajeAuxiliar.setTextColor(Color.parseColor("#C0392B"));
+                botonPulsado.setBackgroundResource(R.drawable.bg_tipo_incorrecto);
+                botonPulsado.setForeground(null);
             }
         };
 
@@ -194,12 +189,8 @@ public class JuegoBuscaEncuentraActivity extends BaseActivity {
 
     private ImageButton[] obtenerBotones() {
         return new ImageButton[]{
-                btnBuscaMedicacion,
-                btnBuscaComida,
-                btnBuscaAjustes,
-                btnBuscaCalendario,
-                btnBuscaDormir,
-                btnBuscaOtros
+                btnBuscaMedicacion, btnBuscaComida, btnBuscaAjustes,
+                btnBuscaCalendario, btnBuscaDormir, btnBuscaOtros
         };
     }
 }

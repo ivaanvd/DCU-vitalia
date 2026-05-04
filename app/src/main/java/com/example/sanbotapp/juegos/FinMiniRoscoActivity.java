@@ -9,7 +9,7 @@ import com.example.sanbotapp.R;
 public class FinMiniRoscoActivity extends BaseActivity {
     
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fin_mini_rosco);
         setupTopBackBanner("Mini-Rosco");

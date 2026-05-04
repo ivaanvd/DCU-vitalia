@@ -24,19 +24,59 @@
             android:textColor="#5A5A5A"
             android:textSize="28sp"
             android:textStyle="bold"
-            android:layout_marginBottom="36dp" />
+            android:layout_marginBottom="24dp" />
 
-        <TextView
-            android:id="@+id/tvAciertosBingo"
+        <!-- Fila aciertos -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="¡Has encontrado todo lo que buscaba!"
-            android:textColor="#198754"
-            android:textSize="54sp"
-            android:textStyle="bold"
+            android:orientation="horizontal"
             android:gravity="center"
-            android:layout_marginBottom="28dp" />
+            android:layout_marginBottom="16dp">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Aciertos: "
+                android:textSize="36sp"
+                android:textStyle="bold"
+                android:textColor="#198754" />
+
+            <TextView
+                android:id="@+id/tvAciertosBingo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textSize="36sp"
+                android:textStyle="bold"
+                android:textColor="#198754" />
+        </LinearLayout>
+
+        <!-- Fila fallos -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="28dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fallos: "
+                android:textSize="36sp"
+                android:textStyle="bold"
+                android:textColor="#DC3545" />
+
+            <TextView
+                android:id="@+id/tvFallosBingo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textSize="36sp"
+                android:textStyle="bold"
+                android:textColor="#DC3545" />
+        </LinearLayout>
         <include
             android:id="@+id/bocadillo_robot_fin_bingo"
             layout="@layout/include_robot_bocadillo" />

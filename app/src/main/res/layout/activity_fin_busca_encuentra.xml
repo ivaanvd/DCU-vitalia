@@ -35,7 +35,30 @@
             android:textStyle="bold"
             android:gravity="center"
             android:layout_marginBottom="28dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="28dp">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="⏱ Tiempo: "
+                android:textSize="34sp"
+                android:textStyle="bold"
+                android:textColor="#555555" />
+
+            <TextView
+                android:id="@+id/tvTiempoBusca"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0 s"
+                android:textSize="34sp"
+                android:textStyle="bold"
+                android:textColor="#000000" />
+        </LinearLayout>
         <include
             android:id="@+id/bocadillo_robot_busca_fin"
             layout="@layout/include_robot_bocadillo" />
