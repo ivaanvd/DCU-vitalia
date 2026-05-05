@@ -151,7 +151,22 @@ public abstract class BaseActivity extends TopBaseActivity {
      * Las subclases pueden sobreescribirlo para ejecutar acciones de bienvenida.
      */
     protected void onRobotServiceReady() {
-        // Gancho opcional para subclases
+         SharedPreferences prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE);
+
+            int volumen = prefs.getInt("ajuste_volumen", 70);
+            setVolumenRobot(volumen);
+
+            int brillo = prefs.getInt("ajuste_brillo", 60);
+            int brillo255 = Math.round(brillo * 255f / 100f);
+            try {
+                android.provider.Settings.System.putInt(
+                        getContentResolver(),
+                        android.provider.Settings.System.SCREEN_BRIGHTNESS,
+                        brillo255
+                );
+            } catch (Exception e) {
+                android.util.Log.e("BaseActivity", "No se pudo aplicar brillo: " + e.getMessage());
+            }
     }
 
     protected void setupTopBackBanner(String titulo) {

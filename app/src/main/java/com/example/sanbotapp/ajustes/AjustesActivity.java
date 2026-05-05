@@ -4,12 +4,12 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.sanbotapp.BaseActivity;
-import com.example.sanbotapp.MainActivity;
 import com.example.sanbotapp.R;
 import com.example.sanbotapp.WelcomeActivity;
 
@@ -24,7 +24,6 @@ public class AjustesActivity extends BaseActivity {
 
     private EditText etVolumen;
     private EditText etBrillo;
-
     private SharedPreferences prefs;
 
     @Override
@@ -36,64 +35,101 @@ public class AjustesActivity extends BaseActivity {
         prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
         etVolumen = findViewById(R.id.etVolumen);
-        etBrillo = findViewById(R.id.etBrillo);
+        etBrillo  = findViewById(R.id.etBrillo);
 
         TextView btnMenosVolumen = findViewById(R.id.btnMenosVolumen);
-        TextView btnMasVolumen = findViewById(R.id.btnMasVolumen);
-        TextView btnMenosBrillo = findViewById(R.id.btnMenosBrillo);
-        TextView btnMasBrillo = findViewById(R.id.btnMasBrillo);
+        TextView btnMasVolumen   = findViewById(R.id.btnMasVolumen);
+        TextView btnMenosBrillo  = findViewById(R.id.btnMenosBrillo);
+        TextView btnMasBrillo    = findViewById(R.id.btnMasBrillo);
 
+        // Cargar valores guardados y aplicarlos al arrancar la pantalla
         int volumenInicial = prefs.getInt(KEY_VOLUMEN, 70);
-        int brilloInicial = prefs.getInt(KEY_BRILLO, 60);
+        int brilloInicial  = prefs.getInt(KEY_BRILLO, 60);
 
         setValorVolumen(volumenInicial);
         setValorBrillo(brilloInicial);
 
+        // Aplicar en el robot/pantalla inmediatamente al entrar en Ajustes
+        aplicarVolumenReal(volumenInicial);
+        aplicarBrilloReal(brilloInicial);
+
         btnMenosVolumen.setOnClickListener(v -> cambiarVolumen(-1));
-        btnMasVolumen.setOnClickListener(v -> cambiarVolumen(1));
-        btnMenosBrillo.setOnClickListener(v -> cambiarBrillo(-1));
-        btnMasBrillo.setOnClickListener(v -> cambiarBrillo(1));
+        btnMasVolumen  .setOnClickListener(v -> cambiarVolumen(+1));
+        btnMenosBrillo .setOnClickListener(v -> cambiarBrillo(-1));
+        btnMasBrillo   .setOnClickListener(v -> cambiarBrillo(+1));
 
         etVolumen.setOnFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus) aplicarTextoVolumen();
         });
-
         etBrillo.setOnFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus) aplicarTextoBrillo();
         });
 
-        // Botón para borrar cuenta
         Button btnBorrarCuenta = findViewById(R.id.btnBorrarCuenta);
         btnBorrarCuenta.setOnClickListener(v -> mostrarDialogoConfirmacion());
     }
 
+    // ── Volumen ───────────────────────────────────────────────────────────────
+
     private void cambiarVolumen(int delta) {
-        int actual = leerEditTextSeguro(etVolumen, 70);
-        int nuevo = limitar(actual + delta);
+        int nuevo = limitar(leerEditTextSeguro(etVolumen, 70) + delta);
         setValorVolumen(nuevo);
         guardarVolumen(nuevo);
-    }
-
-    private void cambiarBrillo(int delta) {
-        int actual = leerEditTextSeguro(etBrillo, 60);
-        int nuevo = limitar(actual + delta);
-        setValorBrillo(nuevo);
-        guardarBrillo(nuevo);
+        aplicarVolumenReal(nuevo);          // ← NUEVO: aplica al robot
     }
 
     private void aplicarTextoVolumen() {
-        int valor = leerEditTextSeguro(etVolumen, 70);
-        valor = limitar(valor);
+        int valor = limitar(leerEditTextSeguro(etVolumen, 70));
         setValorVolumen(valor);
         guardarVolumen(valor);
+        aplicarVolumenReal(valor);          // ← NUEVO: aplica al robot
+    }
+
+    /**
+     * Convierte el porcentaje (0-100) al rango del AudioManager y lo aplica.
+     * setVolumenRobot() vive en BaseActivity y usa AudioControl.
+     */
+    private void aplicarVolumenReal(int porcentaje) {
+        setVolumenRobot(porcentaje);
+    }
+
+    // ── Brillo ────────────────────────────────────────────────────────────────
+
+    private void cambiarBrillo(int delta) {
+        int nuevo = limitar(leerEditTextSeguro(etBrillo, 60) + delta);
+        setValorBrillo(nuevo);
+        guardarBrillo(nuevo);
+        aplicarBrilloReal(nuevo);           // ← NUEVO: aplica a la pantalla
     }
 
     private void aplicarTextoBrillo() {
-        int valor = leerEditTextSeguro(etBrillo, 60);
-        valor = limitar(valor);
+        int valor = limitar(leerEditTextSeguro(etBrillo, 60));
         setValorBrillo(valor);
         guardarBrillo(valor);
+        aplicarBrilloReal(valor);           // ← NUEVO: aplica a la pantalla
     }
+
+    /**
+     * Convierte el porcentaje (0-100) a la escala de brillo del sistema (0-255)
+     * y lo aplica mediante Settings.System.
+     *
+     * Requiere permiso WRITE_SETTINGS en el Manifest y que el usuario lo haya
+     * concedido (Settings.System.canWrite(context)).
+     */
+    private void aplicarBrilloReal(int porcentaje) {
+        int brillo255 = Math.round(porcentaje * 255f / 100f);
+        try {
+            Settings.System.putInt(
+                    getContentResolver(),
+                    Settings.System.SCREEN_BRIGHTNESS,
+                    brillo255
+            );
+        } catch (Exception e) {
+            android.util.Log.e("AjustesActivity", "No se pudo cambiar el brillo: " + e.getMessage());
+        }
+    }
+
+    // ── Helpers ───────────────────────────────────────────────────────────────
 
     private void setValorVolumen(int valor) {
         etVolumen.setText(String.valueOf(valor));
@@ -124,40 +160,30 @@ public class AjustesActivity extends BaseActivity {
     }
 
     private int limitar(int valor) {
-        if (valor < 0) return 0;
-        if (valor > 100) return 100;
-        return valor;
+        return Math.max(0, Math.min(100, valor));
     }
 
-    /**
-     * Muestra un diálogo de confirmación antes de borrar la cuenta
-     */
+    // ── Borrar cuenta ─────────────────────────────────────────────────────────
+
     private void mostrarDialogoConfirmacion() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("⚠️ Borrar Cuenta");
-        builder.setMessage("¿Estás seguro de que quieres borrar tu cuenta y todos tus datos?\n\nEsta acción no se puede deshacer.");
-        
-        builder.setPositiveButton("Borrar", (dialog, which) -> borrarCuenta());
-        builder.setNegativeButton("Cancelar", (dialog, which) -> dialog.dismiss());
-        
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        new AlertDialog.Builder(this)
+                .setTitle("⚠️ Borrar Cuenta")
+                .setMessage("¿Estás seguro de que quieres borrar tu cuenta y todos tus datos?\n\nEsta acción no se puede deshacer.")
+                .setPositiveButton("Borrar",   (d, w) -> borrarCuenta())
+                .setNegativeButton("Cancelar", (d, w) -> d.dismiss())
+                .create()
+                .show();
     }
 
-    /**
-     * Borra todos los datos del usuario y vuelve a WelcomeActivity
-     */
     private void borrarCuenta() {
-        // Borrar todos los datos de SharedPreferences
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.remove(KEY_NOMBRE);
-        editor.remove(KEY_FOTO_URI);
-        editor.remove(KEY_VOLUMEN);
-        editor.remove(KEY_BRILLO);
-        editor.putBoolean(KEY_FIRST_RUN, true); // Marcar como primera vez de nuevo
-        editor.apply();
+        prefs.edit()
+                .remove(KEY_NOMBRE)
+                .remove(KEY_FOTO_URI)
+                .remove(KEY_VOLUMEN)
+                .remove(KEY_BRILLO)
+                .putBoolean(KEY_FIRST_RUN, true)
+                .apply();
 
-        // Volver a WelcomeActivity
         Intent intent = new Intent(this, WelcomeActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
