@@ -61,6 +61,7 @@
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity android:name=".actividad.ActividadEnCursoActivity" />
+        <activity android:name=".actividad.ActividadPasosActivity" />
 
         <activity android:name=".juegos.JuegosActivity" android:exported="false" android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".juegos.ExplicacionJuegoActivity" android:exported="false" android:theme="@style/AppTheme.NoActionBar"/>

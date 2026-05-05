@@ -2,6 +2,7 @@ package com.example.sanbotapp.actividad;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.media.Ringtone;
@@ -152,14 +153,12 @@ public class ActivitySchedulerHelper {
             currentDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         }
 
-        btnHacerAhora.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                // Navegar a la pantalla de completado en el futuro, por ahora la marcamos completada y cerramos
-                android.content.Intent intent = new android.content.Intent(context, ActividadEnCursoActivity.class);
-                intent.putExtra(ActividadEnCursoActivity.EXTRA_ACTIVIDAD_ID, a.getId());
-                context.startActivity(intent);
-                cerrarDialogoYDetenerAlarma();
-            }
+        btnHacerAhora.setOnClickListener(v -> {
+            Intent intent = new Intent(context, ActividadPasosActivity.class);
+            intent.putExtra(ActividadPasosActivity.EXTRA_TIPO_ACTIVIDAD, a.getTipo());
+            intent.putExtra(ActividadPasosActivity.EXTRA_ACTIVIDAD_ID, a.getId());
+            context.startActivity(intent);
+            cerrarDialogoYDetenerAlarma();
         });
 
         btnPosponer.setOnClickListener(new View.OnClickListener() {

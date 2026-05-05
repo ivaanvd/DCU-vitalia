@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F8F9FA">
+
+    <include layout="@layout/include_top_back_banner" />
+
+    <!-- Contador de paso arriba a la izquierda -->
+    <TextView
+        android:id="@+id/tvPasoContador"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="8dp"
+        android:text="PASO 1 DE 3"
+        android:textColor="#1C1C1E"
+        android:textSize="22sp"
+        android:textStyle="bold" />
+
+    <!-- Espacio flexible para centrar la tarjeta -->
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <!-- Tarjeta central con icono y texto -->
+    <LinearLayout
+        android:id="@+id/cardPaso"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginEnd="28dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:paddingTop="48dp"
+        android:paddingBottom="48dp"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp">
+
+        <!-- Icono del paso -->
+        <ImageView
+            android:id="@+id/ivPasoIcono"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:scaleType="fitCenter"
+            android:layout_marginBottom="32dp" />
+
+        <!-- Texto del paso -->
+        <TextView
+            android:id="@+id/tvPasoTexto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="#1C1C1E"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            android:lineSpacingMultiplier="1.3" />
+
+    </LinearLayout>
+
+    <!-- Espacio flexible -->
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <!-- Botón de acción fijo abajo -->
+    <Button
+        android:id="@+id/btnPasoAccion"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginEnd="28dp"
+        android:layout_marginBottom="32dp"
+        android:text="SIGUIENTE PASO"
+        android:background="@drawable/bg_btn_jugar"
+        android:textColor="#000000"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:textAllCaps="false" />
+
+</LinearLayout>
