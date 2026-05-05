@@ -72,10 +72,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="64dp"
                 android:text="HACER AHORA"
-                android:textColor="#FFFFFF"
+                android:textColor="#000000"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:background="@drawable/bg_btn_guardar"
+                android:background="@drawable/bg_tipo_correcto"
                 android:layout_marginBottom="12dp"/>
 
             <Button
@@ -86,8 +86,7 @@
                 android:textColor="#1C1C1E"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:background="@drawable/bg_btn_cancelar"
-                android:backgroundTint="#FFF59D"/>
+                android:background="@drawable/bg_tipo_normal"/>
 
         </LinearLayout>
     </LinearLayout>
