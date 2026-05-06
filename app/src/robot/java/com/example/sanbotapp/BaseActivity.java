@@ -197,12 +197,14 @@ public abstract class BaseActivity extends TopBaseActivity {
     }
 
     /**
-     * Activa el reconocimiento de voz del robot.
-     * Cuando se detecta texto, llama a onTextoEscuchado() en la subclase.
-     *
-     * CORRECCIÓN: usa SpeechManager.RecognizeListener (clase interna del SDK)
-     * en lugar de la ruta de paquete incorrecta que causaba el error.
+     * Detiene inmediatamente la síntesis de voz en curso.
      */
+    protected void pararVoz() {
+        if (speechControl != null) {
+            new Thread(() -> speechControl.pararHabla()).start();
+        }
+    }
+
     public void escuchar() {
         if (speechManager != null) {
             speechManager.setOnSpeechListener(new RecognizeListener() {

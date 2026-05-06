@@ -49,7 +49,9 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void hablarOSimular(String frase) {
         Log.d("BaseActivity[Tablet]", "ROBOT DIRÍA: " + frase);
     }
-
+    protected void pararVoz()  {
+        Log.d("BaseActivity[Tablet]", "pararVoz() sin efecto");
+    }
     public void escuchar() {
         Log.d("BaseActivity[Tablet]", "escuchar() sin efecto");
     }

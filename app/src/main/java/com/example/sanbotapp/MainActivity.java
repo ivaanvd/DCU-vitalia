@@ -27,7 +27,7 @@ import java.util.Locale;
 
 /*
  * MainActivity extiende BaseActivity para obtener los métodos que usa el robot.
- * 
+ *
  */
 public class MainActivity extends BaseActivity {
 
@@ -36,7 +36,7 @@ public class MainActivity extends BaseActivity {
     private static final String KEY_NOMBRE   = "nombre_usuario";
     private static final String KEY_FOTO_PATH = "foto_path";
     private static final String KEY_FIRST_RUN = "first_run";
-    
+
     // Botones Principales
     private LinearLayout btnActividades, btnRecordatorios, btnJuegos, btnAjustes;
     // Rutinas de hoy
@@ -50,12 +50,13 @@ public class MainActivity extends BaseActivity {
     private String nombreUsuario = "amigo/a";
     // Comprobador de si hay actividades para activar   
     private ActivitySchedulerHelper scheduler;
-    
+    private boolean yaHeSaludado = false;
+
     /*
      * Pre: Se ejecuta al crear la pantalla principal
-     * Post: Se inicializan las vistas y componentes de la pantalla principal, 
-     *       se cargan los datos guardados, se muestra la fecha actual 
-     *       y se configuran los botones   
+     * Post: Se inicializan las vistas y componentes de la pantalla principal,
+     *       se cargan los datos guardados, se muestra la fecha actual
+     *       y se configuran los botones
      */
     public void onCreate(Bundle savedInstanceState) {
         // Constructor para crear la pantalla principal
@@ -80,7 +81,7 @@ public class MainActivity extends BaseActivity {
         mostrarFechaActual();
         configurarBotones();
         reiniciarBrazos();
-        
+
         // Se inicializa el vigilante que comprobará si es hora de ejecutar una actividad programada
         scheduler = new ActivitySchedulerHelper(this, new ActivitySchedulerHelper.RobotActionCallback() {
             @Override
@@ -97,7 +98,7 @@ public class MainActivity extends BaseActivity {
     /*
      * Pre: Se ejecuta al volver a visualizar la pantalla (ej. tras cerrar la pantalla de rutinas)
      * Post: Se recarga la lista de rutinas de hoy para reflejar cambios (ej. si una tarea desaparece o pospone) y se reinicia el reloj vigilante
-     */ 
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -117,13 +118,16 @@ public class MainActivity extends BaseActivity {
 
     /*
      * Pre: Se ejecuta al crear la pantalla principal
-     * Post: Cuando el robot está listo, se ejecuta este método y saluda al usuario   
-     */ 
+     * Post: Cuando el robot está listo, se ejecuta este método y saluda al usuario
+     */
     @Override
     protected void onRobotServiceReady() { // Obligatorio por extender BaseActivity porque es una clase abstracta: Se ejecuta cuando el hardware del robot despierta y está listo
         nombreUsuario = prefs.getString(KEY_NOMBRE, "amigo/a");
-        hablarOSimular(generarSaludoContextual(nombreUsuario));
-        mostrarEmocion(getEmocionPorHora()); // opcional, ver abajo
+        if (!yaHeSaludado) {
+            hablarOSimular(generarSaludoContextual(nombreUsuario));
+            mostrarEmocion(getEmocionPorHora());
+            yaHeSaludado = true;
+        }
     }
 
     /**
@@ -164,7 +168,7 @@ public class MainActivity extends BaseActivity {
     }
     /*
      * Pre: Se ejecuta al crear la pantalla principal
-     * Post: Se inicializan las vistas y componentes de la pantalla principal   
+     * Post: Se inicializan las vistas y componentes de la pantalla principal
      */
     private void inicializarVistas() {
         tvSaludo            = findViewById(R.id.tvSaludo);
@@ -325,7 +329,7 @@ public class MainActivity extends BaseActivity {
         dialog.show();
     }
 
-    
+
     private int getIconoParaTipo(String tipo) {
         switch (tipo) {
             case Actividad.TIPO_MEDICACION:       return R.drawable.ic_medicacion;
