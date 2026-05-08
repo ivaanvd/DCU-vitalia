@@ -1,5 +1,7 @@
 package com.example.sanbotapp.actividad;
 
+import static android.provider.SyncStateContract.Helpers.insert;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -72,11 +74,12 @@ public class ActividadRepository {
 
     // ── Añadir ────────────────────────────────────────────────────────────────
 
-    /*
-     * Pre: Recibe una actividad nueva sin ID
-     * Post: Asigna ID incremental, guarda en JSON y devuelve la actividad resultante
-     */
     public Actividad add(Actividad a) {
+        insert(a);
+        return a;
+    }
+
+    public int insert(Actividad a) {
         int nextId = prefs.getInt(KEY_NEXT_ID, 1);
         a.setId(nextId);
         List<Actividad> lista = getAll();
@@ -85,7 +88,7 @@ public class ActividadRepository {
                 .putString(KEY_LISTA, toJsonArray(lista))
                 .putInt(KEY_NEXT_ID, nextId + 1)
                 .apply();
-        return a;
+        return nextId;
     }
 
     // ── Actualizar ────────────────────────────────────────────────────────────
@@ -107,25 +110,33 @@ public class ActividadRepository {
 
     // ── Lógica de posponer ───────────────────────────────────────────────────
 
-    /*
-     * Pre: El usuario decide posponer la alerta minutos después
-     * Post: Cambia el estado del original a pospuesta y crea una nueva tarea programada por el sistema
+    /**
+     * Pospone una actividad: elimina la original y crea una nueva pendiente
+     * con la hora indicada y marcada como creada por el sistema.
+     *
+     * @param actividadId        ID de la actividad a posponer
+     * @param nuevaHoraMinutos   Nueva hora en minutos desde medianoche
+     * @return                   La nueva actividad creada, o null si no se encontró la original
      */
-    public Actividad addCopiaPostpuesta(Actividad original, int minutosDelay) {
-        // Marcamos la original como POSPUESTA
-        original.setEstado(Actividad.ESTADO_POSPUESTA);
-        update(original);
+    public Actividad posponerActividad(int actividadId, int nuevaHoraMinutos) {
+        Actividad original = null;
+        for (Actividad a : getAll()) {
+            if (a.getId() == actividadId) { original = a; break; }
+        }
+        if (original == null) return null;
 
-        // Creamos la nueva
-        Actividad copia = new Actividad(0, original.getTipo(), original.getHoraMinutos() + minutosDelay, original.getDescripcion());
-        copia.setEstado(Actividad.ESTADO_PENDIENTE);
-        copia.setDiasSemana(new ArrayList<>(original.getDiasSemana()));
-        copia.setIdActividadOriginal(original.getId());
-        copia.setCreadaPorSistema(true);
-        
-        return add(copia);
+        delete(actividadId);  // borra la original
+
+        Actividad nueva = new Actividad(0, original.getTipo(), nuevaHoraMinutos, original.getDescripcion());
+        nueva.setDiasSemana(new ArrayList<>(original.getDiasSemana()));
+        nueva.setIdActividadOriginal(actividadId);
+        nueva.setCreadaPorSistema(true);
+        nueva.setEstado(Actividad.ESTADO_PENDIENTE);
+
+        int nuevoId = insert(nueva);  // ← corregido
+        nueva.setId(nuevoId);
+        return nueva;
     }
-
     /*
      * Pre: El usuario presiona el botón completar en una actividad clonada como 'pospuesta'
      * Post: Elimina la actividad temporal y marca el registro original subyacente como completado

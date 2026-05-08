@@ -121,7 +121,7 @@ public class ActividadEnCursoActivity extends BaseActivity {
         frameIcon.setBackground(bgCirculo);
 
         ImageView ivIcon = findViewById(R.id.ivEnCursoIcon);
-        ivIcon.setImageResource(getIconoParaTipo(actividadActual.getTipo()));
+        ivIcon.setImageResource(actividadActual.getIconoRes());
     }
 
     /*
@@ -137,19 +137,5 @@ public class ActividadEnCursoActivity extends BaseActivity {
         }
         hablarOSimular("¡Muy bien hecho!");
         finish();
-    }
-
-    private int getIconoParaTipo(String tipo) {
-        switch (tipo) {
-            case Actividad.TIPO_MEDICACION:       return R.drawable.ic_medicacion;
-            case Actividad.TIPO_BEBER_AGUA:       return R.drawable.ic_agua;
-            case Actividad.TIPO_COMER:            return R.drawable.ic_comida;
-            case Actividad.TIPO_PASEO_EJERCICIO:  return R.drawable.ic_ejercicio;
-            case Actividad.TIPO_JUEGOS:           return R.drawable.ic_puzzle;
-            case Actividad.TIPO_ASEO:             return R.drawable.ic_aseo;
-            case Actividad.TIPO_LLAMADA_FAMILIAR: return R.drawable.ic_llamada;
-            case Actividad.TIPO_IR_DORMIR:        return R.drawable.ic_dormir;
-            default:                              return R.drawable.ic_calendario;
-        }
     }
 }

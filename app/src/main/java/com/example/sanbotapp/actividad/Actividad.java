@@ -1,5 +1,7 @@
 package com.example.sanbotapp.actividad;
 
+import com.example.sanbotapp.R;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -22,70 +24,64 @@ public class Actividad {
     public static final String ESTADO_POSPUESTA  = "POSPUESTA";
 
     // ── Campos ────────────────────────────────────────────────────────────────
-    private int          id;
-    private String       tipo;
-    private String       estado;
-    private int          horaMinutos;          // minutos desde medianoche
+    private int           id;
+    private String        tipo;
+    private String        estado;
+    private int           horaMinutos;         // minutos desde medianoche
     private List<Integer> diasSemana;          // Calendar.MONDAY=2 … SUNDAY=1
-    private String       descripcion;
-    private int          idActividadOriginal;  // >0 si fue creada por sistema al posponer
-    private boolean      creadaPorSistema;     // true = generada al posponer, no se puede volver a posponer
+    private String        descripcion;
+    private int           idActividadOriginal; // >0 si fue creada al posponer
+    private boolean       creadaPorSistema;    // true = no se puede volver a posponer
 
     // ── Constructores ─────────────────────────────────────────────────────────
-    
-    /*
-     * Pre: Se instancia sin datos por defecto (normalmente desde JSON)
-     * Post: Retorna el espacio base del objeto vacío
-     */
+
+    /** Constructor vacío para deserialización (JSON, Room, etc.). */
     public Actividad() {}
 
-    /*
-     * Pre: Instanciación manual con parámetros conocidos requeridos
-     * Post: Prepara todos los campos, asumiendo estado inicial 'pendiente' y no proveniente del sistema
+    /**
+     * Constructor principal para creación manual.
+     * Estado inicial: PENDIENTE. No creada por sistema.
      */
     public Actividad(int id, String tipo, int horaMinutos, String descripcion) {
-        this.id           = id;
-        this.tipo         = tipo;
-        this.horaMinutos  = horaMinutos;
-        this.descripcion  = descripcion;
-        this.estado       = ESTADO_PENDIENTE;
-        this.diasSemana   = new ArrayList<>();
+        this.id                  = id;
+        this.tipo                = tipo;
+        this.horaMinutos         = horaMinutos;
+        this.descripcion         = descripcion;
+        this.estado              = ESTADO_PENDIENTE;
+        this.diasSemana          = new ArrayList<>();
         this.idActividadOriginal = 0;
         this.creadaPorSistema    = false;
     }
 
     // ── Getters / Setters ─────────────────────────────────────────────────────
-    public int           getId()                    { return id; }
-    public String        getTipo()                  { return tipo; }
-    public String        getEstado()                { return estado; }
-    public int           getHoraMinutos()           { return horaMinutos; }
-    public List<Integer> getDiasSemana()            { return diasSemana; }
-    public String        getDescripcion()           { return descripcion; }
-    public int           getIdActividadOriginal()   { return idActividadOriginal; }
-    public boolean       isCreadaPorSistema()       { return creadaPorSistema; }
+    public int           getId()                  { return id; }
+    public String        getTipo()                { return tipo; }
+    public String        getEstado()              { return estado; }
+    public int           getHoraMinutos()         { return horaMinutos; }
+    public List<Integer> getDiasSemana()          { return diasSemana; }
+    public String        getDescripcion()         { return descripcion; }
+    public int           getIdActividadOriginal() { return idActividadOriginal; }
+    public boolean       isCreadaPorSistema()     { return creadaPorSistema; }
 
-    public void setId(int id)                                    { this.id = id; }
-    public void setTipo(String tipo)                             { this.tipo = tipo; }
-    public void setEstado(String estado)                         { this.estado = estado; }
-    public void setHoraMinutos(int horaMinutos)                  { this.horaMinutos = horaMinutos; }
-    public void setDiasSemana(List<Integer> diasSemana)          { this.diasSemana = diasSemana; }
-    public void setDescripcion(String descripcion)               { this.descripcion = descripcion; }
-    public void setIdActividadOriginal(int id)                   { this.idActividadOriginal = id; }
-    public void setCreadaPorSistema(boolean creadaPorSistema)    { this.creadaPorSistema = creadaPorSistema; }
+    public void setId(int id)                                 { this.id = id; }
+    public void setTipo(String tipo)                          { this.tipo = tipo; }
+    public void setEstado(String estado)                      { this.estado = estado; }
+    public void setHoraMinutos(int horaMinutos)               { this.horaMinutos = horaMinutos; }
+    public void setDiasSemana(List<Integer> diasSemana)       { this.diasSemana = diasSemana; }
+    public void setDescripcion(String descripcion)            { this.descripcion = descripcion; }
+    public void setIdActividadOriginal(int id)                { this.idActividadOriginal = id; }
+    public void setCreadaPorSistema(boolean creadaPorSistema) { this.creadaPorSistema = creadaPorSistema; }
 
     // ── Helpers ───────────────────────────────────────────────────────────────
 
-    /*
-     * Pre: Horario en la clase instanciado adecuadamente con entero de minutos
-     * Post: Devuelve formato legible visual estándar HH:mm
-     */
+    /** Devuelve la hora en formato HH:mm. */
     public String getHoraFormateada() {
         return String.format("%02d:%02d", horaMinutos / 60, horaMinutos % 60);
     }
 
-    /*
-     * Pre: Instancia con listas de días asignadas
-     * Post: Devuelve true si la lista intercepta con el día del entorno de ejecución de la máquina actual
+    /**
+     * Devuelve true si la actividad está programada para hoy.
+     * Si la lista de días está vacía se asume que aplica todos los días.
      */
     public boolean coincideHoy() {
         if (diasSemana == null || diasSemana.isEmpty()) return true;
@@ -93,28 +89,22 @@ public class Actividad {
         return diasSemana.contains(hoy);
     }
 
-    /*
-     * Pre: Tipo pre-condicionado existente de la clase
-     * Post: Extrae el valor String para asignar un color de background amigable de acuerdo a la lógica material
-     */
+    /** Devuelve el color de fondo asociado al tipo, en formato #RRGGBB. */
     public String getColorHex() {
         switch (tipo) {
-            case TIPO_MEDICACION:       return "#4A90E2"; // azul  (igual que imagen)
-            case TIPO_BEBER_AGUA:       return "#29B6C8"; // cian
-            case TIPO_COMER:            return "#F07070"; // salmón/rojo (igual que imagen)
-            case TIPO_PASEO_EJERCICIO:  return "#F5A623"; // naranja
-            case TIPO_JUEGOS:           return "#6BBF59"; // verde (igual que imagen)
-            case TIPO_ASEO:             return "#4DB6AC"; // verde azulado
-            case TIPO_LLAMADA_FAMILIAR: return "#E9658B"; // rosa
-            case TIPO_IR_DORMIR:        return "#9B79D4"; // morado
+            case TIPO_MEDICACION:       return "#4A90E2";
+            case TIPO_BEBER_AGUA:       return "#29B6C8";
+            case TIPO_COMER:            return "#F07070";
+            case TIPO_PASEO_EJERCICIO:  return "#F5A623";
+            case TIPO_JUEGOS:           return "#6BBF59";
+            case TIPO_ASEO:             return "#4DB6AC";
+            case TIPO_LLAMADA_FAMILIAR: return "#E9658B";
+            case TIPO_IR_DORMIR:        return "#9B79D4";
             default:                    return "#9E9E9E";
         }
     }
 
-    /*
-     * Pre: Tipo guardado en backend interno técnico
-     * Post: Lo evalúa y entrega String con descripción legible al usuario formal en panel principal
-     */
+    /** Devuelve la etiqueta visible para el usuario correspondiente al tipo. */
     public String getTipoLabel() {
         switch (tipo) {
             case TIPO_MEDICACION:       return "MEDICACIÓN";
@@ -129,9 +119,27 @@ public class Actividad {
         }
     }
 
-    /*
-     * Pre: Tipo de actividad asignado abstractamente
-     * Post: Retorna valor aproximado estándar recomendado (hardcoded) de uso para esa labor temporalmente
+    /**
+     * Devuelve el drawable resource id del icono asociado al tipo.
+     * Centralizado aquí para que las Activities no necesiten su propio switch.
+     */
+    public int getIconoRes() {
+        switch (tipo) {
+            case TIPO_MEDICACION:       return R.drawable.ic_medicacion;
+            case TIPO_BEBER_AGUA:       return R.drawable.ic_agua;
+            case TIPO_COMER:            return R.drawable.ic_comida;
+            case TIPO_PASEO_EJERCICIO:  return R.drawable.ic_ejercicio;
+            case TIPO_JUEGOS:           return R.drawable.ic_puzzle;
+            case TIPO_ASEO:             return R.drawable.ic_aseo;
+            case TIPO_LLAMADA_FAMILIAR: return R.drawable.ic_llamada;
+            case TIPO_IR_DORMIR:        return R.drawable.ic_dormir;
+            default:                    return R.drawable.ic_calendario;
+        }
+    }
+
+    /**
+     * Devuelve la duración estimada en minutos según el tipo.
+     * Valor hardcoded como referencia estándar para detección de solapamientos.
      */
     public int getDuracionMinutos() {
         switch (tipo) {

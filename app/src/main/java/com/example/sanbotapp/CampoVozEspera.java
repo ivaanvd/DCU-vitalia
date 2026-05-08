@@ -9,5 +9,8 @@ public enum CampoVozEspera {
     DESCRIPCION,   // campo texto libre (actividades y recordatorios)
     TITULO,        // campo título (solo recordatorios)
     HORA,          // "nueve y media", "las diez", etc.
-    DIA_SEMANA     // "lunes y miércoles", etc.
-}
+    DIA_SEMANA,
+    FECHA,
+    TIPO,// "lunes y miércoles", etc.
+    CAMPO_EDITAR
+    }

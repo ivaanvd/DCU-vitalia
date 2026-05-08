@@ -67,7 +67,14 @@ public class ActividadPasosActivity extends BaseActivity {
         pasos = getPasosParaTipo(tipoActividad);
 
         aplicarColorFondo();
-        mostrarPaso();
+        mostrarPasoSinVoz(); // pinta la UI inmediatamente
+
+        // Espera a que la Activity esté visible antes de hablar
+        handler.postDelayed(() -> {
+            if (!isFinishing() && !isDestroyed()) {
+                hablarOSimular(pasos.get(0).texto);
+            }
+        }, 800);
 
         btnAccion.setOnClickListener(v -> avanzarPaso());
     }
@@ -84,9 +91,15 @@ public class ActividadPasosActivity extends BaseActivity {
             finalizarActividad();
             return;
         }
+        mostrarPasoSinVoz();
+        hablarOSimular(pasos.get(indicePasoActual).texto);
+    }
 
-        PasoActividad paso = pasos.get(indicePasoActual);
-        int total = pasos.size();
+    private void mostrarPasoSinVoz() {
+        if (indicePasoActual >= pasos.size()) return;
+
+        PasoActividad paso  = pasos.get(indicePasoActual);
+        int           total = pasos.size();
 
         tvContador.setText("PASO " + (indicePasoActual + 1) + " DE " + total);
         tvTextoPaso.setText((indicePasoActual + 1) + ". " + paso.texto.toUpperCase());
@@ -94,14 +107,9 @@ public class ActividadPasosActivity extends BaseActivity {
 
         boolean esUltimo = (indicePasoActual == total - 1);
         btnAccion.setText(esUltimo ? "FIN ACTIVIDAD" : "SIGUIENTE PASO");
-
-        hablarOSimular(paso.texto);
     }
 
-    /*
-     * Pre: El usuario pulsa el botón de acción
-     * Post: Bloquea brevemente el botón, avanza al siguiente paso o finaliza
-     */
+    // avanzarPaso() ya usa mostrarPaso() que incluye voz, sin cambios
     private void avanzarPaso() {
         if (bloqueado) return;
         bloqueado = true;
@@ -113,6 +121,12 @@ public class ActividadPasosActivity extends BaseActivity {
         }, 1000);
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        handler.removeCallbacksAndMessages(null);
+    }
+
     /*
      * Pre: Se ha llegado al último paso y el usuario pulsa "FIN ACTIVIDAD"
      * Post: Marca la actividad como completada en BD (si viene con ID),
@@ -121,16 +135,11 @@ public class ActividadPasosActivity extends BaseActivity {
     private void finalizarActividad() {
         if (actividadId >= 0) {
             ActividadRepository repo = new ActividadRepository(this);
-            Actividad a = null;
             for (Actividad act : repo.getAll()) {
-                if (act.getId() == actividadId) { a = act; break; }
-            }
-            if (a != null) {
-                if (a.isCreadaPorSistema()) {
-                    repo.completarPospuesta(actividadId);
-                } else {
-                    a.setEstado(Actividad.ESTADO_COMPLETADA);
-                    repo.update(a);
+                if (act.getId() == actividadId) {
+                    act.setEstado(Actividad.ESTADO_COMPLETADA);
+                    repo.update(act);
+                    break;
                 }
             }
         }

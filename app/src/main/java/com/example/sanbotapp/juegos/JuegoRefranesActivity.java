@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import com.example.sanbotapp.BaseActivity;
 import com.example.sanbotapp.R;
+import com.qihancloud.opensdk.function.beans.LED;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -100,25 +102,29 @@ public class JuegoRefranesActivity extends BaseActivity {
     }
 
     private void mostrarFeedbackCorrecto(int seleccion) {
-        // Cambiar color del botón a verde
+        encenderLed(LED.PART_ALL, LED.MODE_GREEN);
         Button boton = (seleccion == 1) ? btnOpcion1 : btnOpcion2;
         boton.setBackgroundResource(R.drawable.bg_tipo_correcto);
         boton.setTextColor(Color.WHITE);
 
-        mostrarEmocion("PRISE"); // Emoción "orgulloso/feliz"
+        mostrarEmocion("PRISE");
         hablarOSimular("¡Correcto! Excelente respuesta");
-        moverBrazos("LEVANTAR_BRAZO", "AMBOS"); // Celebración: brazos arriba
-        moverBrazos("BAJAR_BRAZO", "AMBOS");
-        // Después de 2 segundos, mostrar siguiente pregunta
+
         handler.postDelayed(() -> {
-            restaurarBotones();
-            indiceActual++;
-            mostrarPregunta();
-            juegoBloqueado = false;
-        }, 2000);
+            apagarLed(LED.PART_ALL);
+
+            handler.postDelayed(() -> {
+                restaurarBotones();
+                indiceActual++;
+                mostrarPregunta();
+                juegoBloqueado = false;
+            }, 1500);
+        }, 1800);
     }
 
     private void mostrarFeedbackIncorrecto(int seleccionIncorrecta, int correcta) {
+        encenderLed(LED.PART_ALL, LED.MODE_RED);
+
         Button botonIncorrecto = (seleccionIncorrecta == 1) ? btnOpcion1 : btnOpcion2;
         botonIncorrecto.setBackgroundResource(R.drawable.bg_tipo_incorrecto);
         botonIncorrecto.setTextColor(Color.WHITE);
@@ -127,17 +133,22 @@ public class JuegoRefranesActivity extends BaseActivity {
         botonCorrecto.setBackgroundResource(R.drawable.bg_tipo_correcto);
         botonCorrecto.setTextColor(Color.WHITE);
 
-        mostrarEmocion("CRY"); // Emoción "triste"
+        mostrarEmocion("CRY");
         hablarOSimular("Lástima, te acercabas");
-        moverCabezaBasico("ABAJO");
-        reiniciarCabeza();
+//        moverCabezaBasico("ABAJO");
+//        reiniciarCabeza();
 
+        // Esperar a que termine la emoción y el TTS antes de mostrar feedback visual
         handler.postDelayed(() -> {
-            restaurarBotones();
-            indiceActual++;
-            mostrarPregunta();
-            juegoBloqueado = false;
-        }, 2500);
+            apagarLed(LED.PART_ALL);
+
+            handler.postDelayed(() -> {
+                restaurarBotones();
+                indiceActual++;
+                mostrarPregunta();
+                juegoBloqueado = false;
+            }, 1500);
+        }, 2200); // tiempo estimado emoción CRY + TTS "Lástima, te acercabas"
     }
 
 

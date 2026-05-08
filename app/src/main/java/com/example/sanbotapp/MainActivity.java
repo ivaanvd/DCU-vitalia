@@ -67,13 +67,13 @@ public class MainActivity extends BaseActivity {
         prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
         // Verificar si es la primera vez que se abre la app
-//        if (prefs.getBoolean(KEY_FIRST_RUN, false)) { //Cambiar a true
-//            // Es la primera vez: abrir WelcomeActivity
-//            Intent intent = new Intent(this, WelcomeActivity.class);
-//            startActivity(intent);
-//            finish();
-//            return;
-//        }
+        if (prefs.getBoolean(KEY_FIRST_RUN, true)) { //Cambiar a true
+            // Es la primera vez: abrir WelcomeActivity
+            Intent intent = new Intent(this, WelcomeActivity.class);
+            startActivity(intent);
+            finish();
+            return;
+        }
 
         // Se preparan las vistas y componentes de la pantalla principal
         inicializarVistas();
@@ -186,22 +186,22 @@ public class MainActivity extends BaseActivity {
      * Post: Se cargan los datos guardados (nombre y foto del usuario)
      */
     private void cargarDatosGuardados() {
-//        nombreUsuario = prefs.getString(KEY_NOMBRE, "amigo/a");
-//        tvSaludo.setText("¡Hola, " + nombreUsuario + "!");
-//
-//        String fotoPa = prefs.getString(KEY_FOTO_PATH, null);
-//        if (fotoPa != null) {
-//            try {
-//                File fotoFile = new File(fotoPa);
-//                if (fotoFile.exists()) {
-//                    android.graphics.Bitmap bitmap = android.graphics.BitmapFactory.decodeFile(fotoPa);
-//                    ((ImageView) findViewById(R.id.ivAvatar)).setImageBitmap(bitmap);
-//                }
-//            } catch (Exception e) {
-//                // Si hay error, eliminar la ruta guardada
-//                prefs.edit().remove(KEY_FOTO_PATH).apply();
-//            }
-//        }
+        nombreUsuario = prefs.getString(KEY_NOMBRE, "amigo/a");
+        tvSaludo.setText("¡Hola, " + nombreUsuario + "!");
+
+        String fotoPa = prefs.getString(KEY_FOTO_PATH, null);
+        if (fotoPa != null) {
+            try {
+                File fotoFile = new File(fotoPa);
+                if (fotoFile.exists()) {
+                    android.graphics.Bitmap bitmap = android.graphics.BitmapFactory.decodeFile(fotoPa);
+                    ((ImageView) findViewById(R.id.ivAvatar)).setImageBitmap(bitmap);
+                }
+            } catch (Exception e) {
+                // Si hay error, eliminar la ruta guardada
+                prefs.edit().remove(KEY_FOTO_PATH).apply();
+            }
+        }
     }
 
     /*
@@ -253,10 +253,25 @@ public class MainActivity extends BaseActivity {
 
         GradientDrawable bg = new GradientDrawable();
         bg.setShape(GradientDrawable.RECTANGLE);
-        bg.setColor(Color.parseColor(a.getColorHex()));
         bg.setCornerRadius(dpToPx(22));
-        card.setBackground(bg);
 
+        if (Actividad.ESTADO_COMPLETADA.equals(a.getEstado())) {
+            // Completada → fondo transparente con borde del color del tipo
+            int colorBase = Color.parseColor(a.getColorHex());
+            bg.setColor(Color.TRANSPARENT);
+            bg.setStroke((int) dpToPx(2), colorBase);
+
+            // Texto e icono en el color del tipo (no blanco)
+            TextView tvLabel = card.findViewById(R.id.tvLabelCard);
+            tvLabel.setTextColor(colorBase);
+            TextView tvHora = card.findViewById(R.id.tvHoraCard);
+            tvHora.setTextColor(colorBase);
+        } else {
+            // Pendiente / pospuesta → fondo sólido con color del tipo
+            bg.setColor(Color.parseColor(a.getColorHex()));
+        }
+
+        card.setBackground(bg);
         card.setClickable(true);
         card.setFocusable(true);
         card.setOnClickListener(v -> mostrarDetalleActividad(a));

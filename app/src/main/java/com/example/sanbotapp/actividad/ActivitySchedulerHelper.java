@@ -163,7 +163,7 @@ public class ActivitySchedulerHelper {
 
         btnPosponer.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                repo.addCopiaPostpuesta(a, 30);
+                repo.posponerActividad(a.getId(), 30);
                 Toast.makeText(context, "Actividad pospuesta 30 minutos", Toast.LENGTH_SHORT).show();
                 cerrarDialogoYDetenerAlarma();
             }
@@ -173,7 +173,7 @@ public class ActivitySchedulerHelper {
             @Override public void onClick(View v) {
                 // Asumimos que pospone si lo cierra
                 if (!a.isCreadaPorSistema()) {
-                    repo.addCopiaPostpuesta(a, 30);
+                    repo.posponerActividad(a.getId(), 30);
                 }
                 cerrarDialogoYDetenerAlarma();
             }
