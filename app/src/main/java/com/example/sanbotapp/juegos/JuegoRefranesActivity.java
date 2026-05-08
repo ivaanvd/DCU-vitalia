@@ -74,6 +74,7 @@ public class JuegoRefranesActivity extends BaseActivity {
 
             if (tvRefran != null) {
                 tvRefran.setText(actual.getTextoCuestion());
+                hablarOSimular(actual.getTextoCuestion());
             }
 
             if (btnOpcion1 != null && btnOpcion2 != null) {

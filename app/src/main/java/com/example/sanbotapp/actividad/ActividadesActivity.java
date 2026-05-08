@@ -775,7 +775,17 @@ public class ActividadesActivity extends BaseActivity {
         // 1. Normalizar 12 a 0 (para que 12:30 sea tratado como 0:30 inicialmente)
         int h = (hora == 12) ? 0 : hora;
 
-        
+        // Si el usuario dijo explícitamente noche/tarde
+        if (esTarde) {
+            // "12 de la noche" -> 0, "3 de la tarde" -> 15
+            return (hora == 12) ? 0 : h + 12;
+        }
+
+        // Si el usuario dijo explícitamente mañana/madrugada
+        if (esMañana) {
+            return h; // "12 de la mañana" -> 0, "9 am" -> 9
+        }
+
         // 3. Heurística sin indicador (1-6 -> tarde)
         if (h >= 1 && h <= 6) return h + 12;
 

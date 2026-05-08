@@ -20,6 +20,7 @@ public class FinRefranesActivity extends BaseActivity {
         String mensaje = getIntent().getStringExtra("MENSAJE");
         if (mensaje == null) mensaje = "¡Muy bien! ¡Tú sí que sabes de refranes!";
 
+
         // Actualizar UI
         TextView tvContador = findViewById(R.id.tvContadorAciertos);
         if (tvContador != null) {
@@ -29,6 +30,7 @@ public class FinRefranesActivity extends BaseActivity {
         TextView tvRefran = findViewById(R.id.tvBocadilloTexto);
         if (tvRefran != null) {
             tvRefran.setText(mensaje);
+            hablarOSimular(mensaje);
         }
 
         // Eventos

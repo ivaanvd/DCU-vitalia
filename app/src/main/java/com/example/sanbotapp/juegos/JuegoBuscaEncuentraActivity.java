@@ -27,6 +27,9 @@ public class JuegoBuscaEncuentraActivity extends BaseActivity {
     private TextView tvEstadoBusca; // opcional, ya existe en el XML
 
     private final Handler handler = new Handler(Looper.getMainLooper());
+    private TextView tvCronometro; // Nuevo
+    private final Handler cronoHandler = new Handler(Looper.getMainLooper());
+    private Runnable cronoRunnable;
 
     private boolean juegoActivo = false;
     private int botonCorrectoId;
@@ -45,8 +48,8 @@ public class JuegoBuscaEncuentraActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_juego_busca_encuentra);
-        setupTopBackBanner("Busca y Encuentra");
 
+        tvCronometro = findViewById(R.id.tvCronometro); // Inicializar
         tvIndicacionRobot = findViewById(R.id.tvBocadilloTexto);
         tvMensajeAuxiliar = findViewById(R.id.tvMensajeAuxiliarBusca);
 
@@ -96,20 +99,33 @@ public class JuegoBuscaEncuentraActivity extends BaseActivity {
 
     private void iniciarMemorizacion() {
         juegoActivo = false;
-
-        // Tras 5 segundos: ocultar iconos, revelar qué buscar y arrancar el cronómetro
         handler.postDelayed(() -> {
             ocultarIconos();
-
-            // Fase 2: ahora sí se dice qué buscar
             tvIndicacionRobot.setText("Uy, qué cabeza de hojalata... ¡He perdido la rueda de configuración! ¿La encuentras?");
-            tvMensajeAuxiliar.setText("AHORA RECUERDA DÓNDE ESTABA EL ICONO");
-            tvMensajeAuxiliar.setTextColor(Color.parseColor("#5A5A5A"));
+            hablarOSimular("Uy, qué cabeza de hojalata... ¡He perdido la rueda de configuración! ¿La encuentras?");
 
             habilitarBotonesNoFallados();
-            tiempoInicioMs = System.currentTimeMillis(); // ← empieza a contar
+
+            // INICIAR CRONÓMETRO
+            tiempoInicioMs = System.currentTimeMillis();
+            iniciarActualizacionCrono();
+
             juegoActivo = true;
         }, 5000);
+    }
+
+    private void iniciarActualizacionCrono() {
+        cronoRunnable = new Runnable() {
+            @Override
+            public void run() {
+                if (juegoActivo) {
+                    long segundos = (System.currentTimeMillis() - tiempoInicioMs) / 1000;
+                    tvCronometro.setText("Tiempo: " + segundos + "s");
+                    cronoHandler.postDelayed(this, 1000); // Se ejecuta cada segundo
+                }
+            }
+        };
+        cronoHandler.post(cronoRunnable);
     }
 
     private void ocultarIconos() {
@@ -148,6 +164,7 @@ public class JuegoBuscaEncuentraActivity extends BaseActivity {
 
             if (v.getId() == botonCorrectoId) {
                 juegoActivo = false;
+                cronoHandler.removeCallbacks(cronoRunnable);
                 long tiempoMs = System.currentTimeMillis() - tiempoInicioMs;
                 long segundos = tiempoMs / 1000;
 
@@ -192,5 +209,10 @@ public class JuegoBuscaEncuentraActivity extends BaseActivity {
                 btnBuscaMedicacion, btnBuscaComida, btnBuscaAjustes,
                 btnBuscaCalendario, btnBuscaDormir, btnBuscaOtros
         };
+    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        cronoHandler.removeCallbacks(cronoRunnable); // Evitar fugas de memoria
     }
 }

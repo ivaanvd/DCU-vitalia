@@ -22,6 +22,7 @@ public class FinBingoActivity extends BaseActivity {
 
         TextView tvRobot = findViewById(R.id.tvBocadilloTexto);
         if (tvRobot != null) tvRobot.setText(mensaje);
+        hablarOSimular(mensaje);
 
 
         TextView tvAciertos = findViewById(R.id.tvAciertosBingo);

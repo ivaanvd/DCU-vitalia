@@ -123,6 +123,7 @@ public class JuegoMiniRoscoActivity extends BaseActivity {
             if (tvPistaRobot != null) {
                 String textoCompleto = "CON LA " + p.getLetra() + ": \"" + p.getPista() + "\"";
                 tvPistaRobot.setText(textoCompleto);
+                hablarOSimular(textoCompleto);
                 hablarOSimular("Pista: " + p.getPista());
             }
             if (btnOpcion1 != null) btnOpcion1.setText(p.getOpcion1());

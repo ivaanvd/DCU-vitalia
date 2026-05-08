@@ -19,6 +19,7 @@ public class ElegirTematicaRoscoActivity extends BaseActivity {
         TextView tvRefran = findViewById(R.id.tvBocadilloTexto);
         if (tvRefran != null) {
             tvRefran.setText("¿De qué hablamos hoy? Selecciona algo que te guste.");
+            hablarOSimular("¿De qué hablamos hoy? Selecciona algo que te guste.");
         }
         
         // Obtener las categorías desde strings.xml

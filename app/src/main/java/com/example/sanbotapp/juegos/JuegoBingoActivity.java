@@ -66,6 +66,7 @@ public class JuegoBingoActivity extends BaseActivity {
             RondaBingo r = rondasFuturas.get(indiceRonda);
             if (tvRobot != null) {
                 tvRobot.setText(r.getConsigna());
+                hablarOSimular(r.getConsigna());
             }
             if (tvFeedback != null) {
                 tvFeedback.setText("MARCA LA TARJETA CORRECTA");

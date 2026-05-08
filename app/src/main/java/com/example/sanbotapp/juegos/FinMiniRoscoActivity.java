@@ -18,6 +18,7 @@ public class FinMiniRoscoActivity extends BaseActivity {
         int total = getIntent().getIntExtra("TOTAL", 0);
         String mensaje = getIntent().getStringExtra("MENSAJE");
         if (mensaje == null) mensaje = "¡Misión cumplida! ¡Qué bien se te da esto!";
+        hablarOSimular("¡Misión cumplida! ¡Qué bien se te da esto!");
 
         TextView tvContador = findViewById(R.id.tvAciertosRosco);
         if (tvContador != null) tvContador.setText(aciertos + "/" + total + " palabras");

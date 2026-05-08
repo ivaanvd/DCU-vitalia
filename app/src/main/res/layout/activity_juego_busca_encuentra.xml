@@ -32,6 +32,15 @@
                 android:textSize="28sp"
                 android:textStyle="bold"
                 android:textColor="#555555" />
+            <TextView
+                android:id="@+id/tvCronometro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tiempo: 0s"
+                android:textSize="36sp"
+                android:paddingRight="48dp"
+                android:textStyle="bold"
+                android:textColor="#A86100" />
 
             <TextView
                 android:id="@+id/tvEstadoBusca"
@@ -41,6 +50,7 @@
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:textColor="#777777" />
+
         </LinearLayout>
 
         <include
@@ -70,70 +80,70 @@
 
             <ImageButton
                 android:id="@+id/btnBuscaMedicacion"
-                android:layout_width="170dp"
-                android:layout_height="120dp"
+                android:layout_width="180dp"
+                android:layout_height="140dp"
                 android:layout_row="0"
                 android:layout_column="0"
-                android:layout_margin="18dp"
+                android:layout_margin="12dp"
                 android:background="@drawable/bg_tipo_normal"
                 android:contentDescription="Tarjeta 1"
-                android:padding="24dp"
-                android:scaleType="centerInside"
+                android:padding="28dp"
+                android:scaleType="fitCenter"
                 android:src="@drawable/ic_otros" />
 
             <ImageButton
                 android:id="@+id/btnBuscaComida"
-                android:layout_width="170dp"
-                android:layout_height="120dp"
-                android:layout_margin="18dp"
+                android:layout_width="180dp"
+                android:layout_height="140dp"
+                android:layout_margin="12dp"
                 android:background="@drawable/bg_tipo_normal"
                 android:src="@drawable/ic_otros"
-                android:padding="24dp"
-                android:scaleType="centerInside"
+                android:padding="28dp"
+                android:scaleType="fitCenter"
                 android:contentDescription="Tarjeta 2" />
 
             <ImageButton
                 android:id="@+id/btnBuscaAjustes"
-                android:layout_width="170dp"
-                android:layout_height="120dp"
-                android:layout_margin="18dp"
+                android:layout_width="180dp"
+                android:layout_height="140dp"
+                android:layout_margin="12dp"
                 android:background="@drawable/bg_tipo_normal"
                 android:src="@drawable/ic_otros"
-                android:padding="24dp"
-                android:scaleType="centerInside"
+                android:padding="28dp"
+                android:scaleType="fitCenter"
                 android:contentDescription="Tarjeta 3" />
 
             <ImageButton
                 android:id="@+id/btnBuscaCalendario"
-                android:layout_width="170dp"
-                android:layout_height="120dp"
-                android:layout_margin="18dp"
+                android:layout_width="180dp"
+                android:layout_height="140dp"
+                android:layout_margin="12dp"
                 android:background="@drawable/bg_tipo_normal"
                 android:src="@drawable/ic_otros"
-                android:padding="24dp"
-                android:scaleType="centerInside"
+                android:padding="28dp"
+                android:scaleType="fitCenter"
                 android:contentDescription="Tarjeta 4" />
 
             <ImageButton
                 android:id="@+id/btnBuscaDormir"
-                android:layout_width="170dp"
-                android:layout_height="120dp"
-                android:layout_margin="18dp"
+                android:layout_width="180dp"
+                android:layout_height="140dp"
+                android:layout_margin="12dp"
                 android:background="@drawable/bg_tipo_normal"
                 android:src="@drawable/ic_otros"
-                android:padding="24dp"
-                android:scaleType="centerInside"
+                android:padding="28dp"
+                android:scaleType="fitCenter"
                 android:contentDescription="Tarjeta 5" />
 
             <ImageButton
                 android:id="@+id/btnBuscaOtros"
-                android:layout_width="170dp"
-                android:layout_height="120dp"
-                android:layout_margin="18dp"
+                android:layout_width="180dp"
+                android:layout_height="140dp"
+                android:layout_margin="12dp"
                 android:background="@drawable/bg_tipo_normal"
                 android:src="@drawable/ic_otros"
-                android:padding="24dp"
-                android:scaleType="centerInside"
+                android:padding="28dp"
+                android:scaleType="fitCenter"
                 android:contentDescription="Tarjeta 6" />
         </GridLayout>
 

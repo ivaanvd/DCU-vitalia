@@ -20,10 +20,13 @@ public class FinBuscaEncuentraActivity extends BaseActivity {
         if (tvRobot != null) {
             if (segundos < 10) {
                 tvRobot.setText("¡Increíble! Lo has encontrado en un abrir y cerrar de ojos.");
+                hablarOSimular("¡Increíble! Lo has encontrado en un abrir y cerrar de ojos.");
             } else if (segundos < 25) {
                 tvRobot.setText("¡Con tu ayuda lo he encontrado! ¡Eres increíble!");
+                hablarOSimular("¡Con tu ayuda lo he encontrado! ¡Eres increíble!");
             } else {
                 tvRobot.setText("¡Lo has conseguido! La memoria es como un músculo, ¡a seguir entrenando!");
+                hablarOSimular("¡Lo has conseguido! La memoria es como un músculo, ¡a seguir entrenando!");
             }
         }
 

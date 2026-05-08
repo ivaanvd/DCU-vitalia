@@ -45,6 +45,7 @@ public class MainActivity extends BaseActivity {
     private TextView     tvVacioHoy;
     // Saludo y fecha
     private TextView     tvSaludo, tvFechaHoy;
+    private TextView     tvNombreAvatar;
     // Nombre del usuario
     private SharedPreferences prefs;
     private String nombreUsuario = "amigo/a";
@@ -172,6 +173,7 @@ public class MainActivity extends BaseActivity {
      */
     private void inicializarVistas() {
         tvSaludo            = findViewById(R.id.tvSaludo);
+        tvNombreAvatar      = findViewById(R.id.tvNombreAvatar);
         tvFechaHoy          = findViewById(R.id.tvFechaHoy);
         containerRutinasHoy = findViewById(R.id.containerRutinasHoy);
         tvVacioHoy          = findViewById(R.id.tvVacioHoy);
@@ -188,6 +190,7 @@ public class MainActivity extends BaseActivity {
     private void cargarDatosGuardados() {
         nombreUsuario = prefs.getString(KEY_NOMBRE, "amigo/a");
         tvSaludo.setText("¡Hola, " + nombreUsuario + "!");
+        tvNombreAvatar.setText(nombreUsuario);
 
         String fotoPa = prefs.getString(KEY_FOTO_PATH, null);
         if (fotoPa != null) {
