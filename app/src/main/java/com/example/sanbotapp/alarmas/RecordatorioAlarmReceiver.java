@@ -6,6 +6,7 @@ import android.content.Intent;
 
 import com.example.sanbotapp.recordatorio.Recordatorio;
 import com.example.sanbotapp.recordatorio.RecordatorioRepository;
+import com.example.sanbotapp.alarmas.RecordatorioPopupActivity;
 
 public class RecordatorioAlarmReceiver extends BroadcastReceiver {
 
@@ -15,23 +16,17 @@ public class RecordatorioAlarmReceiver extends BroadcastReceiver {
         if (recordatorioId == -1) return;
 
         RecordatorioRepository repo = new RecordatorioRepository(context);
-        Recordatorio r = null;
-        for (Recordatorio item : repo.getAll()) {
-            if (item.getId() == recordatorioId) {
-                r = item;
-                break;
-            }
-        }
+        Recordatorio r = repo.getById(recordatorioId);
         if (r == null) return;
 
-        // Lanzar la Activity del Popup de Recordatorio
         Intent popupIntent = new Intent(context, RecordatorioPopupActivity.class);
-        popupIntent.putExtra("recordatorio_id", recordatorioId);
-        popupIntent.setFlags(
-                Intent.FLAG_ACTIVITY_NEW_TASK |
-                Intent.FLAG_ACTIVITY_CLEAR_TOP |
-                Intent.FLAG_ACTIVITY_SINGLE_TOP
-        );
-        context.startActivity(popupIntent);
+        popupIntent.putExtra(RecordatorioPopupActivity.EXTRA_RECORDATORIO_ID, recordatorioId);
+        popupIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        try {
+            context.startActivity(popupIntent);
+        } catch (Exception e) {
+            android.util.Log.e("RecordatorioReceiver", "Error lanzando popup: " + e.getMessage());
+        }
     }
 }

@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.example.sanbotapp.actividad.Actividad;
 import com.example.sanbotapp.actividad.ActividadRepository;
 import com.example.sanbotapp.actividad.ActividadesActivity;
+import com.example.sanbotapp.alarmas.AlarmScheduler;
 import com.example.sanbotapp.recordatorio.RecordatoriosActivity;
 
 import java.io.File;
@@ -66,20 +67,22 @@ public class MainActivity extends BaseActivity {
         prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
         // Verificar si es la primera vez que se abre la app
-//        if (prefs.getBoolean(KEY_FIRST_RUN, true)) { //Cambiar a true
-//            // Es la primera vez: abrir WelcomeActivity
-//            Intent intent = new Intent(this, WelcomeActivity.class);
-//            startActivity(intent);
-//            finish();
-//            return;
-//        }
+        if (prefs.getBoolean(KEY_FIRST_RUN, true)) { //Cambiar a true
+            // Es la primera vez: abrir WelcomeActivity
+            Intent intent = new Intent(this, WelcomeActivity.class);
+            startActivity(intent);
+            finish();
+            return;
+        }
 
         // Se preparan las vistas y componentes de la pantalla principal
         inicializarVistas();
-        cargarDatosGuardados();
         mostrarFechaActual();
         configurarBotones();
         reiniciarBrazos();
+        
+        // Inicializar canal de notificaciones para alarmas
+        AlarmScheduler.createNotificationChannel(this);
     }
 
     // Se ejecuta al volver a visualizar la pantalla (ej. tras cerrar la pantalla de rutinas)
@@ -90,6 +93,7 @@ public class MainActivity extends BaseActivity {
     @Override
     public void onResume() {
         super.onResume();
+        cargarDatosGuardados(); // Recargar nombre y foto por si cambiaron en Ajustes
         cargarRutinaHoy(); // Recargamos por si se añadió alguna actividad en otra ventana
     }
 

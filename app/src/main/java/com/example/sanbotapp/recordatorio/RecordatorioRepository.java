@@ -3,6 +3,7 @@ package com.example.sanbotapp.recordatorio;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.example.sanbotapp.actividad.Actividad;
 import com.example.sanbotapp.alarmas.AlarmScheduler;
 
 import org.json.JSONArray;
@@ -48,6 +49,12 @@ public class RecordatorioRepository {
         return lista;
     }
 
+    public Recordatorio getById(int id) {
+        for (Recordatorio r : getAll()) {
+            if (r.getId() == id) return r;
+        }
+        return null;
+    }
     /** Devuelve solo recordatorios cuya fecha es hoy o en el futuro, ordenados por fecha+hora. */
     public List<Recordatorio> getFuturos() {
         List<Recordatorio> todos    = getAll();
@@ -118,6 +125,7 @@ public class RecordatorioRepository {
         r.setHoraMinutos(obj.getInt("horaMinutos"));
         r.setFechaMs(obj.getLong("fechaMs"));
         r.setDescripcion(obj.optString("descripcion", ""));
+        r.setAnticipacionMinutos(obj.optInt("anticipacionMinutos", 10));
         return r;
     }
 
@@ -129,6 +137,7 @@ public class RecordatorioRepository {
             obj.put("horaMinutos", r.getHoraMinutos());
             obj.put("fechaMs",     r.getFechaMs());
             obj.put("descripcion", r.getDescripcion());
+            obj.put("anticipacionMinutos", r.getAnticipacionMinutos());
         } catch (JSONException e) {
             e.printStackTrace();
         }

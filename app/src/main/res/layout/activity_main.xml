@@ -48,14 +48,20 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true">
 
-            <ImageView
-                android:id="@+id/ivAvatar"
+            <androidx.cardview.widget.CardView
                 android:layout_width="88dp"
                 android:layout_height="88dp"
-                android:src="@drawable/ic_persona"
-                android:background="@drawable/bg_avatar_circle"
-                android:padding="12dp"
-                android:contentDescription="Foto de perfil"/>
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                app:cardCornerRadius="44dp"
+                app:cardElevation="0dp">
+                <ImageView
+                    android:id="@+id/ivAvatar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_persona"
+                    android:contentDescription="Foto de perfil"/>
+            </androidx.cardview.widget.CardView>
 
             <TextView
                 android:id="@+id/tvNombreAvatar"

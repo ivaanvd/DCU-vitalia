@@ -1,3 +1,5 @@
+package com.example.sanbotapp.alarmas;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -15,12 +17,10 @@ public class BootReceiver extends BroadcastReceiver {
         if (!Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) return;
 
         ActividadRepository repo = new ActividadRepository(context);
-        List<Actividad> pendientes = repo.getDeHoy(); // o getTodasPendientes()
+        List<Actividad> todas = repo.getAll();
 
-        for (Actividad a : pendientes) {
-            if (a.getEstado().equals(Actividad.ESTADO_PENDIENTE)) {
-                AlarmScheduler.programarActividad(context, a);
-            }
+        for (Actividad a : todas) {
+            AlarmScheduler.programarActividad(context, a);
         }
     }
 }

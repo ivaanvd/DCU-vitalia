@@ -34,8 +34,9 @@ public class RecordatoriosActivity extends BaseActivity {
     private com.example.sanbotapp.actividad.ActividadRepository actividadRepo;
 
     // ── Estado del diálogo ────────────────────────────────────────────────────
-    private int  horaSeleccionada   = 9 * 60;
+    private int  horaSeleccionada         = 9 * 60;
     private long fechaSeleccionadaMs;
+    private int  anticipacionSeleccionada = 10;
 
     // ── Estado de voz ─────────────────────────────────────────────────────────
     private CampoVozEspera campoEspera = CampoVozEspera.NINGUNO;
@@ -46,6 +47,7 @@ public class RecordatoriosActivity extends BaseActivity {
     private java.lang.ref.WeakReference<EditText>    etDescRef;
     private java.lang.ref.WeakReference<TextView>    tvHoraRef;
     private java.lang.ref.WeakReference<TextView>    tvFechaRef;
+    private java.lang.ref.WeakReference<TextView>    tvAnticipacionRef;
 
     // Handler en hilo principal (sustituye new Thread + sleep)
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
@@ -123,7 +125,11 @@ public class RecordatoriosActivity extends BaseActivity {
                         + "Toca mi cabeza cuando estés listo.";
                 break;
             case CAMPO_EDITAR:
-                instruccion = "¿Qué campo quieres cambiar? Título, descripción, hora, o fecha. "
+                instruccion = "¿Qué quieres cambiar? Título, descripción, hora, fecha, o antelación. "
+                        + "También puedes decir 'confirmar' o 'cancelar'. Toca mi cabeza cuando estés listo.";
+                break;
+            case ANTICIPACION:
+                instruccion = "¿Con cuántos minutos de antelación quieres que te avise? Por ejemplo: cinco, diez o treinta. "
                         + "Toca mi cabeza cuando estés listo.";
                 break;
             default:
@@ -142,6 +148,29 @@ public class RecordatoriosActivity extends BaseActivity {
         AlertDialog dlg = dialogRef != null ? dialogRef.get() : null;
         if (dlg == null || !dlg.isShowing()) return;
 
+        String tGlobal = texto.toLowerCase().trim();
+
+        // ── Comandos globales ────────────────────────────────────────────────
+        String btnText = "";
+        if (dlg.findViewById(R.id.btnGuardarDialogRec) instanceof android.widget.Button) {
+            btnText = ((android.widget.Button) dlg.findViewById(R.id.btnGuardarDialogRec)).getText().toString().toLowerCase();
+        }
+
+        if (tGlobal.equalsIgnoreCase("confirmar") || tGlobal.equalsIgnoreCase("aceptar") || tGlobal.contains("guardar") || (btnText.contains("añadir") && tGlobal.contains("añadir"))) {
+            hablarEnMain("Entendido.");
+            runOnUiThread(() -> {
+                if (dlg.findViewById(R.id.btnGuardarDialogRec) != null) {
+                    dlg.findViewById(R.id.btnGuardarDialogRec).performClick();
+                }
+            });
+            return;
+        }
+        if (tGlobal.equalsIgnoreCase("cancelar") || tGlobal.equalsIgnoreCase("salir") || tGlobal.equalsIgnoreCase("cerrar")) {
+            hablarEnMain("Cancelado.");
+            runOnUiThread(dlg::dismiss);
+            return;
+        }
+
         switch (campoEspera) {
 
             // ── El usuario dice qué campo quiere editar ───────────────────────
@@ -159,8 +188,11 @@ public class RecordatoriosActivity extends BaseActivity {
                 } else if (t.contains("fecha") || t.contains("día") || t.contains("dia")) {
                     hablarEnMain("Perfecto.");
                     mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.FECHA), 1000);
+                } else if (t.contains("antelación") || t.contains("antelacion") || t.contains("aviso") || t.contains("antes")) {
+                    hablarEnMain("Entendido.");
+                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.ANTICIPACION), 1000);
                 } else {
-                    hablarEnMain("No entendí qué campo. Di: título, descripción, hora, o fecha.");
+                    hablarEnMain("No entendí. Di: título, descripción, hora, fecha, antelación, o confirmar.");
                     mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.CAMPO_EDITAR), 2500);
                 }
                 break;
@@ -222,6 +254,24 @@ public class RecordatoriosActivity extends BaseActivity {
                 } else {
                     hablarEnMain("No entendí la fecha. Inténtalo de nuevo.");
                     mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.FECHA), 2000);
+                }
+                break;
+            }
+
+            // ── Anticipación ──────────────────────────────────────────────────
+            case ANTICIPACION: {
+                Integer minutos = parsearNumeroVoz(texto);
+                if (minutos != null) {
+                    anticipacionSeleccionada = minutos;
+                    runOnUiThread(() -> {
+                        TextView tv = tvAnticipacionRef != null ? tvAnticipacionRef.get() : null;
+                        if (tv != null) actualizarDisplayAnticipacion(tv, anticipacionSeleccionada);
+                    });
+                    hablarEnMain("Antelación guardada: " + minutos + " minutos.");
+                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.CAMPO_EDITAR), 1500);
+                } else {
+                    hablarEnMain("No entendí el número. Di por ejemplo: cinco, diez o quince.");
+                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.ANTICIPACION), 2500);
                 }
                 break;
             }
@@ -311,6 +361,7 @@ public class RecordatoriosActivity extends BaseActivity {
         esDialogoEdicion    = (existente != null);
         horaSeleccionada    = esDialogoEdicion ? existente.getHoraMinutos() : 9 * 60;
         fechaSeleccionadaMs = esDialogoEdicion ? existente.getFechaMs() : fechaHoyInicio();
+        anticipacionSeleccionada = esDialogoEdicion ? existente.getAnticipacionMinutos() : 10;
         campoEspera         = CampoVozEspera.NINGUNO;
 
         final View dv = LayoutInflater.from(this)
@@ -321,28 +372,51 @@ public class RecordatoriosActivity extends BaseActivity {
         final TextView tvHora       = dv.findViewById(R.id.tvHoraDialogRec);
         final View     tvFechaCont  = dv.findViewById(R.id.tvFechaDialogRec);
         final TextView tvFechaTexto = dv.findViewById(R.id.tvFechaTexto);
+        final TextView tvAnticValor = dv.findViewById(R.id.tvAnticipacionValor);
+        final View     btnAnticMenos = dv.findViewById(R.id.btnAnticipacionMenos);
+        final View     btnAnticMas   = dv.findViewById(R.id.btnAnticipacionMas);
+        final android.widget.Button btnGuardar = dv.findViewById(R.id.btnGuardarDialogRec);
 
         if (existente != null) {
             etTitulo.setText(existente.getTitulo());
             etDesc.setText(existente.getDescripcion());
+            btnGuardar.setText("GUARDAR");
         }
 
         actualizarDisplayHora(tvHora, horaSeleccionada);
         actualizarDisplayFecha(tvFechaTexto, fechaSeleccionadaMs);
+        actualizarDisplayAnticipacion(tvAnticValor, anticipacionSeleccionada);
 
         tvHora.setOnClickListener(v -> abrirTimePicker(tvHora));
         tvFechaCont.setOnClickListener(v -> abrirDatePicker(tvFechaTexto));
+
+        btnAnticMenos.setOnClickListener(v -> {
+            if (anticipacionSeleccionada >= 5) {
+                anticipacionSeleccionada -= 5;
+                actualizarDisplayAnticipacion(tvAnticValor, anticipacionSeleccionada);
+            }
+        });
+        btnAnticMas.setOnClickListener(v -> {
+            if (anticipacionSeleccionada < 60) {
+                anticipacionSeleccionada += 5;
+                actualizarDisplayAnticipacion(tvAnticValor, anticipacionSeleccionada);
+            }
+        });
 
         // Referencias débiles para acceso desde callbacks de voz
         etTituloRef = new java.lang.ref.WeakReference<>(etTitulo);
         etDescRef   = new java.lang.ref.WeakReference<>(etDesc);
         tvHoraRef   = new java.lang.ref.WeakReference<>(tvHora);
         tvFechaRef  = new java.lang.ref.WeakReference<>(tvFechaTexto);
+        tvAnticipacionRef = new java.lang.ref.WeakReference<>(tvAnticValor);
 
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setView(dv).setCancelable(true).create();
-        if (dialog.getWindow() != null)
+        if (dialog.getWindow() != null) {
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            // Evitar que el teclado salga solo
+            dialog.getWindow().setSoftInputMode(android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        }
 
         dialogRef = new java.lang.ref.WeakReference<>(dialog);
 
@@ -353,7 +427,9 @@ public class RecordatoriosActivity extends BaseActivity {
             etDescRef   = null;
             tvHoraRef   = null;
             tvFechaRef  = null;
+            tvAnticipacionRef = null;
             mainHandler.removeCallbacksAndMessages(null);
+            pararVoz(); // Se calla al cerrar
         });
 
         dv.findViewById(R.id.btnCancelarDialogRec).setOnClickListener(v -> dialog.dismiss());
@@ -408,12 +484,13 @@ public class RecordatoriosActivity extends BaseActivity {
 
     private void guardarRecordatorio(Recordatorio existente, String titulo, String desc) {
         if (existente == null) {
-            repo.add(new Recordatorio(0, titulo, horaSeleccionada, fechaSeleccionadaMs, desc));
+            repo.add(new Recordatorio(0, titulo, horaSeleccionada, fechaSeleccionadaMs, desc, anticipacionSeleccionada));
         } else {
             existente.setTitulo(titulo);
             existente.setHoraMinutos(horaSeleccionada);
             existente.setFechaMs(fechaSeleccionadaMs);
             existente.setDescripcion(desc);
+            existente.setAnticipacionMinutos(anticipacionSeleccionada);
             repo.update(existente);
         }
         renderizarLista();
@@ -473,45 +550,64 @@ public class RecordatoriosActivity extends BaseActivity {
      */
     private Integer parsearHoraVoz(String texto) {
         texto = texto.toLowerCase().trim();
+        boolean esTarde = texto.contains("tarde") || texto.contains("noche") || texto.contains("pm");
+        boolean esMañana = texto.contains("mañana") || texto.contains("am");
 
-        // Dígitos directos: "9:30", "10 00"
-        java.util.regex.Matcher m = java.util.regex.Pattern
-                .compile("(\\d{1,2})[:\\s](\\d{2})").matcher(texto);
-        if (m.find()) {
-            int h = Integer.parseInt(m.group(1));
-            int min = Integer.parseInt(m.group(2));
-            if (h >= 0 && h <= 23 && min >= 0 && min <= 59) return h * 60 + min;
+        // 1. Reemplazo de palabras comunes por números
+        texto = texto.replace("media", "30").replace("cuarto", "15");
+        
+        // Mapa de palabras a números
+        String[] palabras = {"cero","una","dos","tres","cuatro","cinco","seis","siete","ocho","nueve","diez",
+                            "once","doce","trece","catorce","quince","dieciséis","diecisiete","dieciocho","diecinueve","veinte",
+                            "veintiuno","veintidós","veintitrés","veinticuatro","veinticinco","veintiséis","veintisiete","veintiocho","veintinueve","treinta",
+                            "cuarenta","cincuenta"};
+        int[] valores = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,40,50};
+
+        // Reemplazar palabras por números en el texto para facilitar regex
+        for (int i = palabras.length - 1; i >= 0; i--) {
+            texto = texto.replace(palabras[i], String.valueOf(valores[i]));
         }
 
-        // "a las 9", "las 10"
-        m = java.util.regex.Pattern
-                .compile("(?:las?|a las?)\\s*(\\d{1,2})").matcher(texto);
-        if (m.find()) return Integer.parseInt(m.group(1)) * 60;
+        int h = -1, m = -1;
 
-        // Dígito suelto: "9", "10"
-        m = java.util.regex.Pattern.compile("^(\\d{1,2})$").matcher(texto.trim());
-        if (m.find()) {
-            int h = Integer.parseInt(m.group(1));
-            if (h >= 0 && h <= 23) return h * 60;
+        // Regex para "H menos M"
+        java.util.regex.Matcher matMenos = java.util.regex.Pattern.compile("(\\d{1,2})\\s*menos\\s*(\\d{1,2})").matcher(texto);
+        if (matMenos.find()) {
+            h = Integer.parseInt(matMenos.group(1));
+            m = Integer.parseInt(matMenos.group(2));
+            h--; if (h < 0) h = 23;
+            m = 60 - m;
+            return ajustarTarde(h, esTarde, esMañana) * 60 + m;
         }
 
-        // Palabras
-        final String[] nombresHora = {
-                "una","dos","tres","cuatro","cinco","seis",
-                "siete","ocho","nueve","diez","once","doce"
-        };
-        int horaBase = -1;
-        for (int i = 0; i < nombresHora.length; i++) {
-            if (texto.contains(nombresHora[i])) { horaBase = i + 1; break; }
+        // Regex para "H y M" o "H M" o "H:M"
+        java.util.regex.Matcher matY = java.util.regex.Pattern.compile("(\\d{1,2})\\s*(?:y|:|\\s)\\s*(\\d{1,2})").matcher(texto);
+        if (matY.find()) {
+            h = Integer.parseInt(matY.group(1));
+            m = Integer.parseInt(matY.group(2));
+        } else {
+            // Solo hora
+            java.util.regex.Matcher matH = java.util.regex.Pattern.compile("(\\d{1,2})").matcher(texto);
+            if (matH.find()) {
+                h = Integer.parseInt(matH.group(1));
+                m = 0;
+            }
         }
-        if (horaBase == -1) return null;
 
-        int minutos = 0;
-        if (texto.contains("y media"))           { minutos = 30; }
-        else if (texto.contains("y cuarto"))     { minutos = 15; }
-        else if (texto.contains("menos cuarto")) { horaBase--; if (horaBase <= 0) horaBase += 12; minutos = 45; }
+        if (h != -1 && h <= 23 && m <= 59) {
+            if (h < 13) h = ajustarTarde(h, esTarde, esMañana);
+            return h * 60 + m;
+        }
 
-        return horaBase * 60 + minutos;
+        return null;
+    }
+
+    private int ajustarTarde(int h, boolean esTarde, boolean esMañana) {
+        int res = (h == 12) ? 0 : h;
+        if (esTarde) return (h == 12) ? 12 : res + 12;
+        if (esMañana) return res;
+        if (res >= 1 && res <= 6) return res + 12; // Heurística
+        return h;
     }
 
     /**
@@ -651,6 +747,30 @@ public class RecordatoriosActivity extends BaseActivity {
         Recordatorio tmp = new Recordatorio();
         tmp.setFechaMs(ms);
         tv.setText(tmp.getFechaFormateada());
+    }
+
+    private void actualizarDisplayAnticipacion(TextView tv, int min) {
+        if (min <= 0) tv.setText("Sin aviso previo");
+        else tv.setText(min + " minutos antes");
+    }
+
+    /** Parsea un número hablado (0-60) */
+    private Integer parsearNumeroVoz(String texto) {
+        texto = texto.toLowerCase().trim();
+        if (texto.contains("cero") || texto.contains("ningun")) return 0;
+
+        String[] palabras = {"una","dos","tres","cuatro","cinco","seis","siete","ocho","nueve","diez",
+                "once","doce","trece","catorce","quince","veinte","treinta","cuarenta","cincuenta","sesenta"};
+        int[] valores = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,20,30,40,50,60};
+
+        for (int i = 0; i < palabras.length; i++) {
+            if (texto.contains(palabras[i])) return valores[i];
+        }
+
+        java.util.regex.Matcher m = java.util.regex.Pattern.compile("(\\d+)").matcher(texto);
+        if (m.find()) return Integer.parseInt(m.group(1));
+
+        return null;
     }
 
     private long fechaHoyInicio() {

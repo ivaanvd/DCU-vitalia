@@ -62,17 +62,6 @@
             android:background="@drawable/bg_input_welcome"
             android:layout_marginBottom="16dp"/>
 
-        <!-- Botón capturar voz -->
-        <Button
-            android:id="@+id/btnCapturarVoz"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:text="Decir mi nombre"
-            android:textSize="16sp"
-            android:textColor="#111111"
-            android:background="@drawable/bg_tipo_normal"
-            android:textAllCaps="false"
-            android:layout_marginBottom="16dp"/>
 
         <!-- TextView de estado -->
         <TextView

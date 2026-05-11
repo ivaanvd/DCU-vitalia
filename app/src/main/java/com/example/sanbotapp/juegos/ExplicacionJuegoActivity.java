@@ -15,6 +15,7 @@ public class ExplicacionJuegoActivity extends BaseActivity {
     private Button btnEmpezarJuego;
     private Button btnVolverExplicar;
     private TextView tvExplicacion;
+    private boolean juegoIniciado = false;
 
     // ── Explicaciones completas por juego ─────────────────────────────────────
 
@@ -78,6 +79,7 @@ public class ExplicacionJuegoActivity extends BaseActivity {
 
         if (btnEmpezarJuego != null) {
             btnEmpezarJuego.setOnClickListener(v -> {
+                juegoIniciado = true;
                 pararVoz();
                 empezarJuego();
             });
@@ -158,6 +160,8 @@ public class ExplicacionJuegoActivity extends BaseActivity {
     @Override
     protected void onRobotServiceReady() {
         super.onRobotServiceReady();
-        hablarOSimular(explicacion);
+        if (!juegoIniciado) {
+            hablarOSimular(explicacion);
+        }
     }
 }

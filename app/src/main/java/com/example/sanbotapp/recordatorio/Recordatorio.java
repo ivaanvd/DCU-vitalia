@@ -15,6 +15,7 @@ public class Recordatorio {
     private int    horaMinutos;  // minutos desde medianoche
     private long   fechaMs;      // fecha en milisegundos (solo día, sin hora)
     private String descripcion;
+    private int    anticipacionMinutos = 10; // minutos de antelación
 
     // ── Constructores ─────────────────────────────────────────────────────────
     
@@ -28,12 +29,13 @@ public class Recordatorio {
      * Pre: Se requieren los datos básicos del evento eventual programado
      * Post: Inicializa completamente la entidad Recordatorio puntual a enviar a memoria de BD
      */
-    public Recordatorio(int id, String titulo, int horaMinutos, long fechaMs, String descripcion) {
+    public Recordatorio(int id, String titulo, int horaMinutos, long fechaMs, String descripcion, int anticipacionMinutos) {
         this.id          = id;
         this.titulo      = titulo;
         this.horaMinutos = horaMinutos;
         this.fechaMs     = fechaMs;
         this.descripcion = descripcion;
+        this.anticipacionMinutos = anticipacionMinutos;
     }
 
     // ── Getters / Setters ─────────────────────────────────────────────────────
@@ -48,6 +50,9 @@ public class Recordatorio {
     public void setHoraMinutos(int h)        { this.horaMinutos = h; }
     public void setFechaMs(long fechaMs)     { this.fechaMs = fechaMs; }
     public void setDescripcion(String desc)  { this.descripcion = desc; }
+    public void setAnticipacionMinutos(int a){ this.anticipacionMinutos = a; }
+
+    public int getAnticipacionMinutos()      { return anticipacionMinutos; }
 
     // ── Helpers ───────────────────────────────────────────────────────────────
 

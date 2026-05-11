@@ -24,6 +24,7 @@ public class ActividadPopupActivity extends BaseActivity {
 
     private ActividadRepository repo;
     private Actividad actividad;
+    private android.media.Ringtone alarmSound;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,11 +52,33 @@ public class ActividadPopupActivity extends BaseActivity {
 
         renderizar();
         configurarBotones();
+        iniciarAlarma();
+    }
+
+    private void iniciarAlarma() {
+        try {
+            android.net.Uri notification = android.media.RingtoneManager.getDefaultUri(android.media.RingtoneManager.TYPE_ALARM);
+            alarmSound = android.media.RingtoneManager.getRingtone(getApplicationContext(), notification);
+            if (alarmSound != null) {
+                alarmSound.play();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (alarmSound != null && alarmSound.isPlaying()) {
+            alarmSound.stop();
+        }
     }
 
     // El robot habla cuando el SDK esté listo — igual que en tus otras Activities
     @Override
     protected void onMainServiceConnected() {
+        super.onMainServiceConnected();
         if (actividad != null) {
             hablarOSimular("¡Atención! Es hora de " + actividad.getTipoLabel().toLowerCase());
         }

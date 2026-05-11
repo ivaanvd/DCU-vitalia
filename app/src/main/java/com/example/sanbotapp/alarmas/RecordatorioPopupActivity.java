@@ -12,7 +12,10 @@ import com.example.sanbotapp.recordatorio.RecordatorioRepository;
 
 public class RecordatorioPopupActivity extends BaseActivity {
 
+    public static final String EXTRA_RECORDATORIO_ID = "recordatorio_id";
+
     private Recordatorio recordatorio;
+    private android.media.Ringtone alarmSound;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -28,14 +31,9 @@ public class RecordatorioPopupActivity extends BaseActivity {
 
         setContentView(R.layout.activity_recordatorio_popup);
 
-        int id = getIntent().getIntExtra("recordatorio_id", -1);
+        int id = getIntent().getIntExtra(EXTRA_RECORDATORIO_ID, -1);
         RecordatorioRepository repo = new RecordatorioRepository(this);
-        for (Recordatorio r : repo.getAll()) {
-            if (r.getId() == id) {
-                recordatorio = r;
-                break;
-            }
-        }
+        recordatorio = repo.getById(id);
 
         if (recordatorio == null) {
             finish();
@@ -44,10 +42,32 @@ public class RecordatorioPopupActivity extends BaseActivity {
 
         setupTopBackBanner("Recordatorio");
         renderizar();
+        iniciarAlarma();
+    }
+
+    private void iniciarAlarma() {
+        try {
+            android.net.Uri notification = android.media.RingtoneManager.getDefaultUri(android.media.RingtoneManager.TYPE_ALARM);
+            alarmSound = android.media.RingtoneManager.getRingtone(getApplicationContext(), notification);
+            if (alarmSound != null) {
+                alarmSound.play();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (alarmSound != null && alarmSound.isPlaying()) {
+            alarmSound.stop();
+        }
     }
 
     @Override
     protected void onMainServiceConnected() {
+        super.onMainServiceConnected(); // CRÍTICO: inicializa los controladores del robot
         if (recordatorio != null) {
             hablarOSimular("Tienes un recordatorio: " + recordatorio.getTitulo());
         }

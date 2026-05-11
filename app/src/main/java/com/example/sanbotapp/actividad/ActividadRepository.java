@@ -136,6 +136,7 @@ public class ActividadRepository {
             }
         }
         prefs.edit().putString(KEY_LISTA, toJsonArray(lista)).apply();
+        AlarmScheduler.programarActividad(context, updated);
     }
 
     // ── Lógica de posponer ───────────────────────────────────────────────────

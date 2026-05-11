@@ -152,22 +152,41 @@ public abstract class BaseActivity extends TopBaseActivity {
      * Las subclases pueden sobreescribirlo para ejecutar acciones de bienvenida.
      */
     protected void onRobotServiceReady() {
-         SharedPreferences prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE);
+        SharedPreferences prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE);
 
-//            int volumen = prefs.getInt("ajuste_volumen", 70);
-//            setVolumenRobot(volumen);
-//
-//            int brillo = prefs.getInt("ajuste_brillo", 60);
-//            int brillo255 = Math.round(brillo * 255f / 100f);
-//            try {
-//                android.provider.Settings.System.putInt(
-//                        getContentResolver(),
-//                        android.provider.Settings.System.SCREEN_BRIGHTNESS,
-//                        brillo255
-//                );
-//            } catch (Exception e) {
-//                android.util.Log.e("BaseActivity", "No se pudo aplicar brillo: " + e.getMessage());
-//            }
+        // Aplicar volumen guardado
+        int volumen = prefs.getInt("ajuste_volumen", 70);
+        setVolumenRobot(volumen);
+
+        // Aplicar brillo guardado (requiere permisos de sistema)
+        if (android.provider.Settings.System.canWrite(this)) {
+            int brillo = prefs.getInt("ajuste_brillo", 60);
+            int brillo255 = Math.round(brillo * 255f / 100f);
+            try {
+                android.provider.Settings.System.putInt(
+                        getContentResolver(),
+                        android.provider.Settings.System.SCREEN_BRIGHTNESS_MODE,
+                        android.provider.Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL
+                );
+                android.provider.Settings.System.putInt(
+                        getContentResolver(),
+                        android.provider.Settings.System.SCREEN_BRIGHTNESS,
+                        brillo255
+                );
+            } catch (Exception e) {
+                Log.e("BaseActivity", "No se pudo aplicar brillo: " + e.getMessage());
+            }
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        // No callar si es el Home para que no se corten frases tipo "Abriendo recordatorios..."
+        // que se lanzan justo antes de cambiar de pantalla.
+        if (!(this instanceof MainActivity)) {
+            pararVoz();
+        }
     }
 
     protected void setupTopBackBanner(String titulo) {

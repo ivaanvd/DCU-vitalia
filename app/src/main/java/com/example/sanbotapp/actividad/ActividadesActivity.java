@@ -2,7 +2,6 @@ package com.example.sanbotapp.actividad;
 
 import android.app.AlertDialog;
 import android.app.TimePickerDialog;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
@@ -25,36 +24,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/*
- * Pantalla de gestión de actividades recurrentes del robot.
- * Extiende BaseActivity para tener acceso a hablarOSimular()
- * y poder guiar al usuario mayor con voz en cada paso.
- *
- * VOTO POR VOZ: el usuario puede tocar la cabeza del robot para dictar
- * descripción, hora y días de la semana dentro del diálogo.
- *
- * FIXES aplicados:
- *  1. Estado de voz corregido: campoEspera apunta al campo ACTUAL,
- *     avanza sólo tras recibir un resultado válido.
- *  2. "menos cuarto" ahora resta 15 min correctamente.
- *  3. haySolapamiento usa ID_NUEVO como centinela explícito.
- *  4. Threads sustituidos por Handler.postDelayed (cancelables).
- *  5. DB/IO movida fuera del hilo principal (ExecutorService).
- *  6. hablarOSimular() siempre en hilo principal.
- *  7. Referencias al diálogo como WeakReference.
- *  8. TIPOS unificado en enum interno TipoActividad.
- *  9. getIconoParaTipo movido a Actividad (aquí sólo delegamos).
- * 10. HORA_DEFAULT y ID_NUEVO como constantes nombradas.
- * 11. tv.setTextColor usa ContextCompat.getColor() en lugar de R.color directo.
- */
 public class ActividadesActivity extends BaseActivity {
 
-    // ── Constantes ────────────────────────────────────────────────────────────
     private static final int  HORA_DEFAULT_MINUTOS = 9 * 60; // 09:00
     private static final int  ID_NUEVO             = Integer.MIN_VALUE;
 
-
-    /** Asocia cada tipo interno con su etiqueta visible. */
     private enum TipoActividad {
         MEDICACION      (Actividad.TIPO_MEDICACION,       "MEDICACIÓN"),
         BEBER_AGUA      (Actividad.TIPO_BEBER_AGUA,       "BEBER AGUA"),
@@ -88,44 +62,26 @@ public class ActividadesActivity extends BaseActivity {
         }
     }
 
-    // LUN(2)…DOM(1) según Calendar
     private static final int[] VALORES_DIA = { 2, 3, 4, 5, 6, 7, 1 };
 
-    // ── Vistas principales ────────────────────────────────────────────────────
     private LinearLayout containerActividades;
     private TextView     tvVacio;
     private ActividadRepository     repo;
     private com.example.sanbotapp.recordatorio.RecordatorioRepository recordatorioRepo;
 
-    // ── Estado del diálogo abierto ────────────────────────────────────────────
     private int           horaSeleccionada  = HORA_DEFAULT_MINUTOS;
     private List<Integer> diasSeleccionados = new ArrayList<>();
-
-    // ── Estado de voz ─────────────────────────────────────────────────────────
-    /**
-     * Campo que está esperando ser dictado ahora mismo.
-     * NINGUNO cuando no hay diálogo activo o el flujo terminó.
-     */
     private CampoVozEspera campoEspera = CampoVozEspera.NINGUNO;
 
-    // Referencias débiles al diálogo para que un dismiss no provoque leaks
     private java.lang.ref.WeakReference<AlertDialog> dialogRef;
     private java.lang.ref.WeakReference<TextView>    dialogTvHoraRef;
     private java.lang.ref.WeakReference<TextView[]>  dialogBtnsDiaRef;
     private java.lang.ref.WeakReference<EditText>    dialogEtDescRef;
-    // En los campos de WeakReference al principio de la clase:
     private java.lang.ref.WeakReference<Spinner> dialogSpinnerRef;
 
-    // Handler para postDelayed (sustituye new Thread + sleep)
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
-
-    // Executor para operaciones de BD
     private final java.util.concurrent.ExecutorService dbExecutor =
             java.util.concurrent.Executors.newSingleThreadExecutor();
-
-    // =========================================================================
-    // Ciclo de vida
-    // =========================================================================
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -151,60 +107,36 @@ public class ActividadesActivity extends BaseActivity {
         dbExecutor.shutdownNow();
     }
 
-    // =========================================================================
-    // Sensor táctil de cabeza → entrada por voz en el diálogo
-    // =========================================================================
-
-    /**
-     * Llamado desde BaseActivity cuando el usuario toca la cabeza del robot.
-     * Ahora campoEspera apunta al campo ACTUAL; avanza sólo tras validar
-     * el resultado en onTextoEscuchado().
-     */
     @Override
     protected void onCabezaTocada() {
         AlertDialog dlg = dialogRef != null ? dialogRef.get() : null;
         if (dlg == null || !dlg.isShowing()) return;
         if (campoEspera == CampoVozEspera.NINGUNO) return;
 
-        // Parar cualquier TTS en curso y escuchar inmediatamente
         pararVoz();
         mainHandler.removeCallbacksAndMessages(null);
-        mainHandler.postDelayed(this::escuchar, 300); // pequeño margen tras parar voz
+        mainHandler.postDelayed(this::escuchar, 300);
     }
 
-    // =========================================================================
-// Anunciar campo y pedir toque — el robot habla ANTES del toque
-// =========================================================================
-
-    /**
-     * Anuncia al usuario qué tiene que decir en el siguiente campo
-     * y le pide que toque la cabeza cuando esté listo.
-     * NO lanza escuchar() aquí — eso lo hace onCabezaTocada().
-     */
     private void anunciarCampoYEsperarToque(CampoVozEspera campo) {
         campoEspera = campo;
         String instruccion;
         switch (campo) {
             case DESCRIPCION:
-                instruccion = "Ahora dime una descripción para esta actividad. "
-                        + "Cuando estés listo, toca mi cabeza.";
+                instruccion = "Ahora dime una descripción para esta actividad. Cuando estés listo, toca mi cabeza.";
                 break;
             case TIPO:
-                instruccion = "Dime el tipo de actividad. Por ejemplo: medicación, "
-                        + "beber agua, comer, paseo, juegos, aseo, llamada familiar, o ir a dormir. "
-                        + "Toca mi cabeza cuando estés listo.";
+                instruccion = "Dime el tipo de actividad. Por ejemplo: medicación, beber agua, comer, paseo, juegos, aseo, llamada familiar, o ir a dormir. Toca mi cabeza cuando estés listo.";
                 break;
             case HORA:
-                instruccion = "Dime la hora. Por ejemplo: nueve y media, o las doce. "
-                        + "Toca mi cabeza cuando estés listo.";
+                instruccion = "Dime la hora. Por ejemplo: nueve y media, o las doce y diez. Toca mi cabeza cuando estés listo.";
                 break;
             case DIA_SEMANA:
-                instruccion = "Dime los días de la semana. Por ejemplo: lunes, miércoles y viernes. "
-                        + "Toca mi cabeza cuando estés listo.";
+                instruccion = "Dime los días de la semana. Por ejemplo: lunes, miércoles y viernes. Toca mi cabeza cuando estés listo.";
                 break;
             case CAMPO_EDITAR:
-                instruccion = "¿Qué campo quieres cambiar? Descripción, tipo, hora, o días. "
-                        + "Toca mi cabeza cuando estés listo.";
+                instruccion = "¿Qué quieres cambiar? Descripción, tipo, hora, o días. "
+                        + "También puedes decir '" + (dialogRef != null && dialogRef.get() != null && dialogRef.get().findViewById(R.id.btnGuardarDialogActividad) != null ? ((Button)dialogRef.get().findViewById(R.id.btnGuardarDialogActividad)).getText().toString() : "Añadir") + "'. Toca mi cabeza cuando estés listo.";
                 break;
             default:
                 return;
@@ -212,18 +144,36 @@ public class ActividadesActivity extends BaseActivity {
         hablarEnMain(instruccion);
     }
 
-    // =========================================================================
-// Resultado del reconocimiento de voz
-// =========================================================================
-
     @Override
     protected void onTextoEscuchado(String texto) {
         if (texto == null || texto.trim().isEmpty()) return;
         AlertDialog dlg = dialogRef != null ? dialogRef.get() : null;
         if (dlg == null || !dlg.isShowing()) return;
 
-        switch (campoEspera) {
+        String tGlobal = texto.toLowerCase().trim();
 
+        // ── Comandos globales ────────────────────────────────────────────────
+        String btnText = "";
+        if (dlg.findViewById(R.id.btnGuardarDialogActividad) instanceof Button) {
+            btnText = ((Button) dlg.findViewById(R.id.btnGuardarDialogActividad)).getText().toString().toLowerCase();
+        }
+
+        if (tGlobal.equalsIgnoreCase("confirmar") || tGlobal.equalsIgnoreCase("aceptar") || tGlobal.contains("guardar") || (btnText.contains("añadir") && tGlobal.contains("añadir"))) {
+            hablarEnMain("Entendido.");
+            runOnUiThread(() -> {
+                if (dlg.findViewById(R.id.btnGuardarDialogActividad) != null) {
+                    dlg.findViewById(R.id.btnGuardarDialogActividad).performClick();
+                }
+            });
+            return;
+        }
+        if (tGlobal.equalsIgnoreCase("cancelar") || tGlobal.equalsIgnoreCase("salir") || tGlobal.equalsIgnoreCase("cerrar")) {
+            hablarEnMain("Cancelado.");
+            runOnUiThread(dlg::dismiss);
+            return;
+        }
+
+        switch (campoEspera) {
             case DESCRIPCION: {
                 final String desc = texto.trim();
                 runOnUiThread(() -> {
@@ -231,11 +181,9 @@ public class ActividadesActivity extends BaseActivity {
                     if (et != null) et.setText(desc);
                 });
                 hablarEnMain("Descripción guardada: " + desc + ".");
-                mainHandler.postDelayed(
-                        () -> anunciarCampoYEsperarToque(CampoVozEspera.CAMPO_EDITAR), 1500);
+                mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.CAMPO_EDITAR), 1500);
                 break;
             }
-
             case TIPO: {
                 String tipoReconocido = parsearTipoVoz(texto);
                 if (tipoReconocido != null) {
@@ -251,23 +199,18 @@ public class ActividadesActivity extends BaseActivity {
                             }
                         }
                     });
-                    // Buscar etiqueta para confirmación
                     String etiqueta = tipoReconocido;
                     for (TipoActividad t : TipoActividad.values()) {
                         if (t.clave.equals(tipoReconocido)) { etiqueta = t.etiqueta; break; }
                     }
-                    final String etiquetaFinal = etiqueta;
-                    hablarEnMain("Tipo guardado: " + etiquetaFinal + ".");
-                    mainHandler.postDelayed(
-                            () -> anunciarCampoYEsperarToque(CampoVozEspera.CAMPO_EDITAR), 1500);
+                    hablarEnMain("Tipo guardado: " + etiqueta + ".");
+                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.CAMPO_EDITAR), 1500);
                 } else {
                     hablarEnMain("No reconocí el tipo. Inténtalo de nuevo.");
-                    mainHandler.postDelayed(
-                            () -> anunciarCampoYEsperarToque(CampoVozEspera.TIPO), 2000);
+                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.TIPO), 2000);
                 }
                 break;
             }
-
             case HORA: {
                 Integer minutosVoz = parsearHoraVoz(texto);
                 if (minutosVoz != null) {
@@ -277,16 +220,13 @@ public class ActividadesActivity extends BaseActivity {
                         if (tv != null) actualizarDisplayHora(tv, horaSeleccionada);
                     });
                     hablarEnMain("Hora guardada.");
-                    mainHandler.postDelayed(
-                            () -> anunciarCampoYEsperarToque(CampoVozEspera.CAMPO_EDITAR), 1500);
+                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.CAMPO_EDITAR), 1500);
                 } else {
                     hablarEnMain("No entendí la hora. Inténtalo de nuevo.");
-                    mainHandler.postDelayed(
-                            () -> anunciarCampoYEsperarToque(CampoVozEspera.HORA), 2000);
+                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.HORA), 2000);
                 }
                 break;
             }
-
             case DIA_SEMANA: {
                 List<Integer> diasVoz = parsearDiasVoz(texto);
                 if (!diasVoz.isEmpty()) {
@@ -294,67 +234,46 @@ public class ActividadesActivity extends BaseActivity {
                     diasSeleccionados.addAll(diasVoz);
                     runOnUiThread(() -> {
                         TextView[] btns = dialogBtnsDiaRef != null ? dialogBtnsDiaRef.get() : null;
-                        if (btns != null)
-                            actualizarBotonesDia(btns, VALORES_DIA, diasSeleccionados);
+                        if (btns != null) actualizarBotonesDia(btns, VALORES_DIA, diasSeleccionados);
                     });
                     hablarEnMain("Días guardados. Toca mi cabeza si quieres cambiar otro campo.");
-                    mainHandler.postDelayed(
-                            () -> anunciarCampoYEsperarToque(CampoVozEspera.CAMPO_EDITAR), 1500);
+                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.CAMPO_EDITAR), 1500);
                 } else {
                     hablarEnMain("No entendí los días. Inténtalo de nuevo.");
-                    mainHandler.postDelayed(
-                            () -> anunciarCampoYEsperarToque(CampoVozEspera.DIA_SEMANA), 2000);
+                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.DIA_SEMANA), 2000);
                 }
                 break;
             }
-
             case CAMPO_EDITAR: {
                 String t = texto.toLowerCase();
                 if (t.contains("descripción") || t.contains("descripcion") || t.contains("nombre")) {
                     hablarEnMain("De acuerdo.");
-                    mainHandler.postDelayed(
-                            () -> anunciarCampoYEsperarToque(CampoVozEspera.DESCRIPCION), 1000);
+                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.DESCRIPCION), 1000);
                 } else if (t.contains("tipo") || t.contains("categoría") || t.contains("categoria")) {
                     hablarEnMain("De acuerdo.");
-                    mainHandler.postDelayed(
-                            () -> anunciarCampoYEsperarToque(CampoVozEspera.TIPO), 1000);
+                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.TIPO), 1000);
                 } else if (t.contains("hora") || t.contains("tiempo") || t.contains("horario")) {
                     hablarEnMain("De acuerdo.");
-                    mainHandler.postDelayed(
-                            () -> anunciarCampoYEsperarToque(CampoVozEspera.HORA), 1000);
-                } else if (t.contains("día") || t.contains("dia") || t.contains("días")
-                        || t.contains("dias") || t.contains("semana")) {
+                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.HORA), 1000);
+                } else if (t.contains("día") || t.contains("dia") || t.contains("días") || t.contains("dias") || t.contains("semana")) {
                     hablarEnMain("De acuerdo.");
-                    mainHandler.postDelayed(
-                            () -> anunciarCampoYEsperarToque(CampoVozEspera.DIA_SEMANA), 1000);
+                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.DIA_SEMANA), 1000);
                 } else {
                     hablarEnMain("No entendí. Di descripción, tipo, hora, o días.");
-                    mainHandler.postDelayed(
-                            () -> anunciarCampoYEsperarToque(CampoVozEspera.CAMPO_EDITAR), 2500);
+                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.CAMPO_EDITAR), 2500);
                 }
                 break;
             }
-
-            default:
-                break;
         }
     }
 
-    // =========================================================================
-// Diálogo AÑADIR / EDITAR — arranque del flujo de voz
-// =========================================================================
-
     private void mostrarDialogoAnadir(final Actividad existente) {
-        horaSeleccionada  = (existente != null)
-                ? existente.getHoraMinutos() : HORA_DEFAULT_MINUTOS;
+        horaSeleccionada  = (existente != null) ? existente.getHoraMinutos() : HORA_DEFAULT_MINUTOS;
         diasSeleccionados = (existente != null && existente.getDiasSemana() != null)
-                ? new ArrayList<>(existente.getDiasSemana())
-                : new ArrayList<>();
-        campoEspera = CampoVozEspera.NINGUNO; // se asigna tras mostrar el diálogo
+                ? new ArrayList<>(existente.getDiasSemana()) : new ArrayList<>();
+        campoEspera = CampoVozEspera.NINGUNO;
 
-        final View dv = LayoutInflater.from(this)
-                .inflate(R.layout.dialog_anadir_actividad, null);
-
+        final View dv = LayoutInflater.from(this).inflate(R.layout.dialog_anadir_actividad, null);
         final TextView tvHora     = dv.findViewById(R.id.tvHoraDialogActividad);
         final EditText etDesc     = dv.findViewById(R.id.etDescripcionActividad);
         final Spinner  spinner    = dv.findViewById(R.id.spinnerTipoActividad);
@@ -364,8 +283,7 @@ public class ActividadesActivity extends BaseActivity {
         tvTitulo.setText(existente != null ? "EDITAR ACTIVIDAD" : "AÑADIR ACTIVIDAD");
         btnGuardar.setText(existente != null ? "GUARDAR" : "AÑADIR");
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, TipoActividad.etiquetas());
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, TipoActividad.etiquetas());
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
@@ -373,10 +291,7 @@ public class ActividadesActivity extends BaseActivity {
             etDesc.setText(existente.getDescripcion());
             String[] claves = TipoActividad.claves();
             for (int i = 0; i < claves.length; i++) {
-                if (claves[i].equals(existente.getTipo())) {
-                    spinner.setSelection(i);
-                    break;
-                }
+                if (claves[i].equals(existente.getTipo())) { spinner.setSelection(i); break; }
             }
         }
 
@@ -393,43 +308,35 @@ public class ActividadesActivity extends BaseActivity {
         for (int i = 0; i < btnsDia.length; i++) {
             final int dia = VALORES_DIA[i];
             btnsDia[i].setOnClickListener(v -> {
-                if (diasSeleccionados.contains(dia))
-                    diasSeleccionados.remove(Integer.valueOf(dia));
-                else
-                    diasSeleccionados.add(dia);
+                if (diasSeleccionados.contains(dia)) diasSeleccionados.remove(Integer.valueOf(dia));
+                else diasSeleccionados.add(dia);
                 actualizarBotonesDia(btnsDia, VALORES_DIA, diasSeleccionados);
             });
         }
 
         tvHora.setOnClickListener(v -> abrirTimePicker(tvHora));
 
-        // Referencias débiles para acceso desde callbacks de voz
         dialogTvHoraRef  = new java.lang.ref.WeakReference<>(tvHora);
         dialogBtnsDiaRef = new java.lang.ref.WeakReference<>(btnsDia);
         dialogEtDescRef  = new java.lang.ref.WeakReference<>(etDesc);
-        dialogSpinnerRef = new java.lang.ref.WeakReference<>(spinner); // nuevo
+        dialogSpinnerRef = new java.lang.ref.WeakReference<>(spinner);
 
-        AlertDialog dialog = new AlertDialog.Builder(this)
-                .setView(dv).setCancelable(true).create();
-        if (dialog.getWindow() != null)
+        AlertDialog dialog = new AlertDialog.Builder(this).setView(dv).setCancelable(true).create();
+        if (dialog.getWindow() != null) {
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-
+            // Evitar que el teclado salga solo
+            dialog.getWindow().setSoftInputMode(android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        }
         dialogRef = new java.lang.ref.WeakReference<>(dialog);
 
         dialog.setOnDismissListener(d -> {
-            campoEspera      = CampoVozEspera.NINGUNO;
-            dialogRef        = null;
-            dialogTvHoraRef  = null;
-            dialogBtnsDiaRef = null;
-            dialogEtDescRef  = null;
-            dialogSpinnerRef = null;
+            campoEspera = CampoVozEspera.NINGUNO;
             mainHandler.removeCallbacksAndMessages(null);
+            pararVoz(); // Se calla al cerrar
         });
 
-        dv.findViewById(R.id.btnCancelarDialogActividad)
-                .setOnClickListener(v -> dialog.dismiss());
-        dv.findViewById(R.id.btnCancelarDialogActividad2)
-                .setOnClickListener(v -> dialog.dismiss());
+        dv.findViewById(R.id.btnCancelarDialogActividad).setOnClickListener(v -> dialog.dismiss());
+        dv.findViewById(R.id.btnCancelarDialogActividad2).setOnClickListener(v -> dialog.dismiss());
 
         btnGuardar.setOnClickListener(v -> {
             final String desc      = etDesc.getText().toString().trim();
@@ -438,22 +345,14 @@ public class ActividadesActivity extends BaseActivity {
             final int    idExcluir = (existente != null) ? existente.getId() : ID_NUEVO;
 
             dbExecutor.execute(() -> {
-                final boolean solapa = haySolapamiento(
-                        diasSeleccionados, horaSeleccionada, duracion, idExcluir);
+                final boolean solapa = haySolapamiento(diasSeleccionados, horaSeleccionada, duracion, idExcluir);
                 runOnUiThread(() -> {
                     if (solapa) {
-                        hablarEnMain("Atención. Ya tienes algo programado a esa hora. "
-                                + "¿Quieres guardarlo igualmente?");
                         new AlertDialog.Builder(ActividadesActivity.this)
                                 .setTitle("Solapamiento")
-                                .setMessage("Ya hay una actividad que se solapa. "
-                                        + "¿Deseas guardarla de todos modos?")
-                                .setPositiveButton("Sí", (d, w) -> {
-                                    guardarActividad(existente, tipo, desc);
-                                    dialog.dismiss();
-                                })
-                                .setNegativeButton("No", null)
-                                .show();
+                                .setMessage("Ya hay una actividad que se solapa. ¿Deseas guardarla de todos modos?")
+                                .setPositiveButton("Sí", (d, w) -> { guardarActividad(existente, tipo, desc); dialog.dismiss(); })
+                                .setNegativeButton("No", null).show();
                     } else {
                         guardarActividad(existente, tipo, desc);
                         dialog.dismiss();
@@ -463,420 +362,237 @@ public class ActividadesActivity extends BaseActivity {
         });
 
         dialog.show();
-
-        // Arranque del flujo: el robot explica y anuncia el primer campo
         mainHandler.postDelayed(() -> {
             if (existente == null) {
                 hablarEnMain("Vamos a añadir una actividad.");
-                mainHandler.postDelayed(
-                        () -> anunciarCampoYEsperarToque(CampoVozEspera.CAMPO_EDITAR), 2000);
+                mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.CAMPO_EDITAR), 2000);
             } else {
                 anunciarCampoYEsperarToque(CampoVozEspera.CAMPO_EDITAR);
             }
         }, 400);
     }
 
-    /**
-     * Convierte texto hablado en la clave interna de TipoActividad.
-     * Devuelve null si no se reconoce ningún tipo.
-     */
     private String parsearTipoVoz(String texto) {
         texto = texto.toLowerCase();
-        if (texto.contains("medicación") || texto.contains("medicacion")
-                || texto.contains("medicina") || texto.contains("pastilla"))
-            return Actividad.TIPO_MEDICACION;
-        if (texto.contains("agua") || texto.contains("beber"))
-            return Actividad.TIPO_BEBER_AGUA;
-        if (texto.contains("comer") || texto.contains("comida") || texto.contains("almuerzo")
-                || texto.contains("desayuno") || texto.contains("cena"))
-            return Actividad.TIPO_COMER;
-        if (texto.contains("paseo") || texto.contains("ejercicio") || texto.contains("andar")
-                || texto.contains("caminar"))
-            return Actividad.TIPO_PASEO_EJERCICIO;
-        if (texto.contains("juego") || texto.contains("jugar") || texto.contains("juegos"))
-            return Actividad.TIPO_JUEGOS;
-        if (texto.contains("aseo") || texto.contains("ducha") || texto.contains("baño")
-                || texto.contains("higiene"))
-            return Actividad.TIPO_ASEO;
-        if (texto.contains("llamada") || texto.contains("familiar") || texto.contains("teléfono")
-                || texto.contains("telefono") || texto.contains("familia"))
-            return Actividad.TIPO_LLAMADA_FAMILIAR;
-        if (texto.contains("dormir") || texto.contains("cama") || texto.contains("descansar")
-                || texto.contains("noche"))
-            return Actividad.TIPO_IR_DORMIR;
+        if (texto.contains("medicación") || texto.contains("medicacion") || texto.contains("medicina") || texto.contains("pastilla")) return Actividad.TIPO_MEDICACION;
+        if (texto.contains("agua") || texto.contains("beber")) return Actividad.TIPO_BEBER_AGUA;
+        if (texto.contains("comer") || texto.contains("comida") || texto.contains("almuerzo") || texto.contains("desayuno") || texto.contains("cena")) return Actividad.TIPO_COMER;
+        if (texto.contains("paseo") || texto.contains("ejercicio") || texto.contains("andar") || texto.contains("caminar")) return Actividad.TIPO_PASEO_EJERCICIO;
+        if (texto.contains("juego") || texto.contains("jugar") || texto.contains("juegos")) return Actividad.TIPO_JUEGOS;
+        if (texto.contains("aseo") || texto.contains("ducha") || texto.contains("baño") || texto.contains("higiene")) return Actividad.TIPO_ASEO;
+        if (texto.contains("llamada") || texto.contains("familiar") || texto.contains("teléfono") || texto.contains("telefono") || texto.contains("familia")) return Actividad.TIPO_LLAMADA_FAMILIAR;
+        if (texto.contains("dormir") || texto.contains("cama") || texto.contains("descansar") || texto.contains("noche")) return Actividad.TIPO_IR_DORMIR;
         return null;
     }
-    // =========================================================================
-    // Resultado del reconocimiento de voz
-    // =========================================================================
-    /**
-     * Estima la duración del texto hablado y lanza escuchar() al terminar.
-     * Si BaseActivity expone un callback onTtsCompleted(), úsalo en su lugar.
-     * ~80 ms/carácter en español + 600 ms de margen.
-     */
-    private void hablarYLuegoEscuchar(String texto) {
-        hablarEnMain(texto);
-        long delayMs = texto.length() * 80L + 600L;
-        mainHandler.postDelayed(this::escuchar, delayMs);
-    }
-
-    // =========================================================================
-    // Renderizado
-    // =========================================================================
 
     private void renderizarLista() {
         dbExecutor.execute(() -> {
             final List<Actividad> lista = repo.getAll();
-            Collections.sort(lista,
-                    (a, b) -> Integer.compare(a.getHoraMinutos(), b.getHoraMinutos()));
-
+            Collections.sort(lista, (a, b) -> Integer.compare(a.getHoraMinutos(), b.getHoraMinutos()));
             runOnUiThread(() -> {
                 containerActividades.removeAllViews();
-                if (lista.isEmpty()) {
-                    tvVacio.setVisibility(View.VISIBLE);
-                } else {
+                if (lista.isEmpty()) tvVacio.setVisibility(View.VISIBLE);
+                else {
                     tvVacio.setVisibility(View.GONE);
-                    for (Actividad a : lista) {
-                        containerActividades.addView(crearItemActividad(a));
-                    }
+                    for (Actividad a : lista) containerActividades.addView(crearItemActividad(a));
                 }
             });
         });
     }
 
-    private boolean tienenDiaComun(List<Integer> dias1, List<Integer> dias2) {
-        if (dias1 == null || dias1.isEmpty()) return true;
-        if (dias2 == null || dias2.isEmpty()) return true;
-        for (Integer d : dias1) {
-            if (dias2.contains(d)) return true;
+    private boolean haySolapamiento(List<Integer> dias, int horaMinutos, int duracion, int idAExcluir) {
+        List<Actividad> lista = repo.getAll();
+        for (Actividad a : lista) {
+            if (a.getId() == idAExcluir) continue;
+            if (Actividad.ESTADO_COMPLETADA.equals(a.getEstado()) && a.coincideHoy()) continue;
+            if (tienenDiaComun(dias, a.getDiasSemana())) {
+                int s1 = horaMinutos, e1 = s1 + duracion;
+                int s2 = a.getHoraMinutos(), e2 = s2 + a.getDuracionMinutos();
+                if (s1 < e2 && s2 < e1) return true;
+            }
         }
         return false;
     }
 
-    /** Ejecutar sólo desde dbExecutor. */
-    /** Ejecutar sólo desde dbExecutor. */
-    private boolean haySolapamiento(List<Integer> dias, int horaMinutos,
-                                    int duracion, int idAExcluir) {
-        // 1. Comprobar contra otras actividades
-        List<Actividad> lista = repo.getAll();
-        for (Actividad a : lista) {
-            if (a.getId() == idAExcluir) continue;
-            
-            // Si la actividad ya está COMPLETADA hoy, no bloquea el solapamiento.
-            // Nota: Esto asume que el reset diario ya ha ocurrido.
-            if (Actividad.ESTADO_COMPLETADA.equals(a.getEstado()) && a.coincideHoy()) {
-                // Si estamos editando o añadiendo para "hoy", y ya se hizo, ignoramos su duración.
-                continue;
-            }
-
-            if (tienenDiaComun(dias, a.getDiasSemana())) {
-                int start1 = horaMinutos,       end1 = start1 + duracion;
-                int start2 = a.getHoraMinutos(), end2 = start2 + a.getDuracionMinutos();
-                if (start1 < end2 && start2 < end1) return true;
-            }
-        }
-
-        // 2. Comprobar contra recordatorios (si coinciden en día)
-        // Como las actividades son recurrentes, comprobamos si algún recordatorio futuro coincide en día de la semana.
-        List<com.example.sanbotapp.recordatorio.Recordatorio> recordatorios = recordatorioRepo.getFuturos();
-        for (com.example.sanbotapp.recordatorio.Recordatorio r : recordatorios) {
-            java.util.Calendar cal = java.util.Calendar.getInstance();
-            cal.setTimeInMillis(r.getFechaMs());
-            int diaSemanaRec = cal.get(java.util.Calendar.DAY_OF_WEEK);
-
-            if (dias.contains(diaSemanaRec)) {
-                int start1 = horaMinutos,       end1 = start1 + duracion;
-                int start2 = r.getHoraMinutos(), end2 = start2 + 30; // Recordatorios duran 30 min por defecto
-                if (start1 < end2 && start2 < end1) return true;
-            }
-        }
-
+    private boolean tienenDiaComun(List<Integer> d1, List<Integer> d2) {
+        if (d1 == null || d2 == null) return false;
+        for (Integer d : d1) if (d2.contains(d)) return true;
         return false;
     }
 
     private View crearItemActividad(final Actividad a) {
-        View item = LayoutInflater.from(this)
-                .inflate(R.layout.item_actividad, containerActividades, false);
-
+        View item = LayoutInflater.from(this).inflate(R.layout.item_actividad, containerActividades, false);
         ((TextView) item.findViewById(R.id.tvHoraItem)).setText(a.getHoraFormateada());
         ((TextView) item.findViewById(R.id.tvTipoItem)).setText(a.getTipoLabel());
-
         GradientDrawable bg = new GradientDrawable();
         bg.setShape(GradientDrawable.RECTANGLE);
         bg.setColor(Color.parseColor(a.getColorHex()));
         bg.setCornerRadius(dpToPx(14));
         item.setBackground(bg);
-
         item.setOnClickListener(v -> mostrarDialogoDetalle(a));
-        item.findViewById(R.id.btnEditarItem).setOnClickListener(v -> mostrarDialogoAnadir(a));
+        View btnEditar = item.findViewById(R.id.btnEditarItem);
+        if (Actividad.ESTADO_COMPLETADA.equals(a.getEstado())) btnEditar.setVisibility(View.GONE);
+        else btnEditar.setOnClickListener(v -> mostrarDialogoAnadir(a));
         item.findViewById(R.id.btnEliminarItem).setOnClickListener(v -> confirmarEliminar(a));
-
         return item;
     }
-
 
     private void guardarActividad(Actividad existente, String tipo, String desc) {
         dbExecutor.execute(() -> {
             if (existente == null) {
-                hablarEnMain("¡Listo! He añadido la actividad a tu agenda.");
+                hablarEnMain("¡Listo! He añadido la actividad.");
                 Actividad nueva = new Actividad(0, tipo, horaSeleccionada, desc);
                 nueva.setDiasSemana(new ArrayList<>(diasSeleccionados));
                 repo.add(nueva);
             } else {
                 hablarEnMain("Perfecto. He guardado los cambios.");
-                existente.setTipo(tipo);
-                existente.setHoraMinutos(horaSeleccionada);
-                existente.setDescripcion(desc);
-                existente.setDiasSemana(new ArrayList<>(diasSeleccionados));
+                existente.setTipo(tipo); existente.setHoraMinutos(horaSeleccionada);
+                existente.setDescripcion(desc); existente.setDiasSemana(new ArrayList<>(diasSeleccionados));
                 repo.update(existente);
             }
             runOnUiThread(this::renderizarLista);
         });
     }
 
-    // =========================================================================
-    // Diálogo DETALLE
-    // =========================================================================
-
     private void mostrarDialogoDetalle(final Actividad a) {
-        View dv = LayoutInflater.from(this)
-                .inflate(R.layout.dialog_detalle_actividad, null);
-
-        GradientDrawable bgCirculo = new GradientDrawable();
-        bgCirculo.setShape(GradientDrawable.OVAL);
-        bgCirculo.setColor(Color.parseColor(a.getColorHex()));
-        dv.findViewById(R.id.frameEmojiDetAct).setBackground(bgCirculo);
-        ((android.widget.ImageView) dv.findViewById(R.id.tvEmojiDetAct))
-                .setImageResource(a.getIconoRes()); // delegado al modelo
-
+        View dv = LayoutInflater.from(this).inflate(R.layout.dialog_detalle_actividad, null);
+        GradientDrawable bg = new GradientDrawable();
+        bg.setShape(GradientDrawable.OVAL); bg.setColor(Color.parseColor(a.getColorHex()));
+        dv.findViewById(R.id.frameEmojiDetAct).setBackground(bg);
+        ((android.widget.ImageView) dv.findViewById(R.id.tvEmojiDetAct)).setImageResource(a.getIconoRes());
         ((TextView) dv.findViewById(R.id.tvHoraDetAct)).setText(a.getHoraFormateada());
         ((TextView) dv.findViewById(R.id.tvTipoDetAct)).setText(a.getTipoLabel());
-
-        String descTexto = (a.getDescripcion() != null && !a.getDescripcion().isEmpty())
-                ? a.getDescripcion() : "—";
-        ((TextView) dv.findViewById(R.id.tvDescDetAct)).setText(descTexto);
-
-        int[] idsDias = {
-                R.id.detDiaLun, R.id.detDiaMar, R.id.detDiaMie, R.id.detDiaJue,
-                R.id.detDiaVie, R.id.detDiaSab, R.id.detDiaDom
-        };
+        ((TextView) dv.findViewById(R.id.tvDescDetAct)).setText((a.getDescripcion() != null && !a.getDescripcion().isEmpty()) ? a.getDescripcion() : "—");
+        int[] ids = { R.id.detDiaLun, R.id.detDiaMar, R.id.detDiaMie, R.id.detDiaJue, R.id.detDiaVie, R.id.detDiaSab, R.id.detDiaDom };
         List<Integer> dias = a.getDiasSemana();
-        for (int i = 0; i < idsDias.length; i++) {
-            TextView tv     = dv.findViewById(idsDias[i]);
-            boolean  activo = dias != null && dias.contains(VALORES_DIA[i]);
-            tv.setBackgroundResource(activo
-                    ? R.drawable.bg_tipo_selected
-                    : R.drawable.bg_tipo_normal);
+        for (int i = 0; i < ids.length; i++) {
+            TextView tv = dv.findViewById(ids[i]);
+            boolean activo = dias != null && dias.contains(VALORES_DIA[i]);
+            tv.setBackgroundResource(activo ? R.drawable.bg_tipo_selected : R.drawable.bg_tipo_normal);
             tv.setTextColor(activo ? Color.WHITE : Color.BLACK);
         }
-
-        AlertDialog dialog = new AlertDialog.Builder(this)
-                .setView(dv).setCancelable(true).create();
-        if (dialog.getWindow() != null)
-            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-
+        AlertDialog dialog = new AlertDialog.Builder(this).setView(dv).setCancelable(true).create();
+        if (dialog.getWindow() != null) dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         dv.findViewById(R.id.btnCerrarDetAct).setOnClickListener(v -> dialog.dismiss());
         dialog.show();
     }
 
-    // =========================================================================
-    // Eliminar con confirmación
-    // =========================================================================
-
     private void confirmarEliminar(final Actividad a) {
-        new AlertDialog.Builder(this)
-                .setTitle("Eliminar actividad")
-                .setMessage("¿Seguro que quieres eliminar \"" + a.getTipoLabel() + "\"?")
-                .setPositiveButton("Eliminar", (d, w) -> {
-                    hablarEnMain("He eliminado la actividad.");
-                    dbExecutor.execute(() -> {
-                        repo.delete(a.getId());
-                        runOnUiThread(this::renderizarLista);
-                    });
-                })
-                .setNegativeButton("Cancelar", null)
-                .show();
+        new AlertDialog.Builder(this).setTitle("Eliminar").setMessage("¿Seguro?").setPositiveButton("Sí", (d, w) -> {
+            hablarEnMain("He eliminado la actividad.");
+            dbExecutor.execute(() -> { repo.delete(a.getId()); runOnUiThread(this::renderizarLista); });
+        }).setNegativeButton("No", null).show();
     }
 
-    // =========================================================================
-    // Parsers de voz
-    // =========================================================================
-
-    /**
-     * Convierte texto hablado en minutos totales desde medianoche.
-     *
-     * Ejemplos:
-     *   "nueve y media"      → 570  (09:30)
-     *   "las diez"           → 600  (10:00)
-     *   "ocho y cuarto"      → 495  (08:15)
-     *   "nueve menos cuarto" → 525  (08:45)  ← FIX: antes daba 09:45
-     *
-     * @return minutos desde medianoche, o null si no se reconoce el patrón.
-     */
     private Integer parsearHoraVoz(String texto) {
         texto = texto.toLowerCase().trim();
+        boolean esTarde = texto.contains("tarde") || texto.contains("noche") || texto.contains("pm");
+        boolean esMañana = texto.contains("mañana") || texto.contains("am");
 
-        // ── Detectar indicador de tarde/noche ANTES de parsear ────────────────
-        boolean esTarde = texto.contains("tarde")
-                || texto.contains("noche")
-                || texto.contains("pm")
-                || texto.contains("p.m");
-        boolean esMañana = texto.contains("mañana")
-                || texto.contains("madrugada")
-                || texto.contains("am")
-                || texto.contains("a.m");
+        // 1. Reemplazo de palabras comunes por números
+        texto = texto.replace("media", "30").replace("cuarto", "15");
+        
+        // 2. Patrón "H y M" o "H : M" o "H M"
+        // Buscamos algo como "10 y 20", "10 20", "diez y veinte"
+        // Primero intentamos extraer los números (palabras o dígitos)
+        int h = -1, m = -1;
+        
+        // Mapa de palabras a números
+        String[] palabras = {"cero","una","dos","tres","cuatro","cinco","seis","siete","ocho","nueve","diez",
+                            "once","doce","trece","catorce","quince","dieciséis","diecisiete","dieciocho","diecinueve","veinte",
+                            "veintiuno","veintidós","veintitrés","veinticuatro","veinticinco","veintiséis","veintisiete","veintiocho","veintinueve","treinta",
+                            "cuarenta","cincuenta"};
+        int[] valores = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,40,50};
 
-        // ── Dígitos directos: "9:30", "10 00", "21:00" ───────────────────────
-        java.util.regex.Matcher m = java.util.regex.Pattern
-                .compile("(\\d{1,2})[:\\s](\\d{2})").matcher(texto);
-        if (m.find()) {
-            int h   = Integer.parseInt(m.group(1));
-            int min = Integer.parseInt(m.group(2));
-            if (h >= 0 && h <= 23 && min >= 0 && min <= 59) {
-                // Si ya viene en 24h (≥13) no tocamos nada
-                if (h < 13) h = ajustarTarde(h, esTarde, esMañana);
-                return h * 60 + min;
-            }
+        // Reemplazar palabras por números en el texto para facilitar regex
+        for (int i = palabras.length - 1; i >= 0; i--) {
+            texto = texto.replace(palabras[i], String.valueOf(valores[i]));
         }
 
-        // ── Hora en dígito con artículo: "a las 9", "las 10" ─────────────────
-        m = java.util.regex.Pattern
-                .compile("(?:las?|a las?)\\s*(\\d{1,2})").matcher(texto);
-        if (m.find()) {
-            int h = Integer.parseInt(m.group(1));
-            if (h < 13) h = ajustarTarde(h, esTarde, esMañana);
-            return h * 60;
+        // Regex para "H menos M"
+        java.util.regex.Matcher matMenos = java.util.regex.Pattern.compile("(\\d{1,2})\\s*menos\\s*(\\d{1,2})").matcher(texto);
+        if (matMenos.find()) {
+            h = Integer.parseInt(matMenos.group(1));
+            m = Integer.parseInt(matMenos.group(2));
+            h--; if (h < 0) h = 23;
+            m = 60 - m;
+            return ajustarTarde(h, esTarde, esMañana) * 60 + m;
         }
 
-        // ── Solo dígito suelto: "9", "10" ────────────────────────────────────
-        m = java.util.regex.Pattern.compile("^(\\d{1,2})$").matcher(texto);
-        if (m.find()) {
-            int h = Integer.parseInt(m.group(1));
-            if (h >= 0 && h <= 23) {
-                if (h < 13) h = ajustarTarde(h, esTarde, esMañana);
-                return h * 60;
-            }
-        }
-
-        // ── Palabras de hora ──────────────────────────────────────────────────
-        final String[] nombresHora = {
-                "una","dos","tres","cuatro","cinco","seis",
-                "siete","ocho","nueve","diez","once","doce"
-        };
-        int horaBase = -1;
-        for (int i = 0; i < nombresHora.length; i++) {
-            if (texto.contains(nombresHora[i])) { horaBase = i + 1; break; }
-        }
-        if (horaBase == -1) return null;
-
-        int minutos = 0;
-        if (texto.contains("y media")) {
-            minutos = 30;
-        } else if (texto.contains("y cuarto")) {
-            minutos = 15;
-        } else if (texto.contains("menos cuarto")) {
-            horaBase--;
-            if (horaBase <= 0) horaBase += 12;
-            minutos = 45;
-        }
-
-        horaBase = ajustarTarde(horaBase, esTarde, esMañana);
-        return horaBase * 60 + minutos;
-    }
-
-    /**
-     * Suma 12h para tarde/noche si la hora está en rango 12h.
-     *
-     * Reglas:
-     *  - esTarde explícito → +12h (salvo las 12 del mediodía, que ya es correcta)
-     *  - esMañana explícito → sin cambio
-     *  - Sin indicador → heurística: horas 1-6 se asumen tarde (poco probable
-     *    programar algo a la 1 AM), el resto se deja como está.
-     *
-     * Ejemplos:
-     *   ajustarTarde(9, true,  false) → 21   ("nueve de la tarde")
-     *   ajustarTarde(9, false, true)  →  9   ("nueve de la mañana")
-     *   ajustarTarde(9, false, false) →  9   (sin indicador, 9 es mañana)
-     *   ajustarTarde(3, false, false) → 15   (sin indicador, 3 → tarde heurística)
-     *   ajustarTarde(12, true, false) → 12   (mediodía, no sumamos)
-     */
-    private int ajustarTarde(int hora, boolean esTarde, boolean esMañana) {
-        // 1. Normalizar 12 a 0 (para que 12:30 sea tratado como 0:30 inicialmente)
-        int h = (hora == 12) ? 0 : hora;
-
-        // Si el usuario dijo explícitamente noche/tarde
-        if (esTarde) {
-            // "12 de la noche" -> 0, "3 de la tarde" -> 15
-            return (hora == 12) ? 0 : h + 12;
-        }
-
-        // Si el usuario dijo explícitamente mañana/madrugada
-        if (esMañana) {
-            return h; // "12 de la mañana" -> 0, "9 am" -> 9
-        }
-
-        // 3. Heurística sin indicador (1-6 -> tarde)
-        if (h >= 1 && h <= 6) return h + 12;
-
-        // Si dice "12" a secas sin indicador, devolvemos 0 o 12 según prefieras.
-        // Generalmente "las 12" sin más suele ser mediodía (12).
-        return hora;
-    }
-
-    /**
-     * Convierte texto hablado en lista de valores Calendar de días.
-     * Ejemplo: "lunes miércoles y viernes" → [2, 4, 6]
-     */
-    private List<Integer> parsearDiasVoz(String texto) {
-        texto = texto.toLowerCase();
-        List<Integer> dias = new ArrayList<>();
-        // Acepta versiones con y sin tilde
-        final String[] nombres = {"lunes","martes","miércoles","jueves","viernes","sábado","domingo"};
-        final String[] alt     = {"lunes","martes","miercoles","jueves","viernes","sabado","domingo"};
-        for (int i = 0; i < nombres.length; i++) {
-            if (texto.contains(nombres[i]) || texto.contains(alt[i])) {
-                if (!dias.contains(VALORES_DIA[i])) // evitar duplicados
-                    dias.add(VALORES_DIA[i]);
-            }
-        }
-        return dias;
-    }
-
-    // =========================================================================
-    // Helpers
-    // =========================================================================
-
-    /** Wrapper que garantiza que hablarOSimular siempre se llama en el hilo principal. */
-    private void hablarEnMain(String texto) {
-        if (Looper.myLooper() == Looper.getMainLooper()) {
-            hablarOSimular(texto);
+        // Regex para "H y M" o "H M" o "H:M"
+        java.util.regex.Matcher matY = java.util.regex.Pattern.compile("(\\d{1,2})\\s*(?:y|:|\\s)\\s*(\\d{1,2})").matcher(texto);
+        if (matY.find()) {
+            h = Integer.parseInt(matY.group(1));
+            m = Integer.parseInt(matY.group(2));
         } else {
-            runOnUiThread(() -> hablarOSimular(texto));
+            // Solo hora
+            java.util.regex.Matcher matH = java.util.regex.Pattern.compile("(\\d{1,2})").matcher(texto);
+            if (matH.find()) {
+                h = Integer.parseInt(matH.group(1));
+                m = 0;
+            }
+        }
+
+        if (h != -1 && h <= 23 && m <= 59) {
+            if (h < 13) h = ajustarTarde(h, esTarde, esMañana);
+            return h * 60 + m;
+        }
+
+        return null;
+    }
+
+    private int ajustarTarde(int h, boolean esTarde, boolean esMañana) {
+        int res = (h == 12) ? 0 : h;
+        if (esTarde) return (h == 12) ? 12 : res + 12;
+        if (esMañana) return res;
+        if (res >= 1 && res <= 6) return res + 12; // Heurística
+        return h;
+    }
+
+    private List<Integer> parsearDiasVoz(String t) {
+        t = t.toLowerCase(); List<Integer> d = new ArrayList<>();
+        String[] n = {"lunes","martes","miércoles","jueves","viernes","sábado","domingo"};
+        String[] a = {"lunes","martes","miercoles","jueves","viernes","sabado","domingo"};
+        for (int i = 0; i < n.length; i++) if (t.contains(n[i]) || t.contains(a[i])) d.add(VALORES_DIA[i]);
+        return d;
+    }
+
+    private void actualizarDisplayAnticipacion(TextView tv, int min) {
+        if (min <= 0) tv.setText("Sin aviso previo");
+        else tv.setText(min + " minutos antes");
+    }
+
+    /** Parsea un número hablado (0-60) */
+    private Integer parsearNumeroVoz(String texto) {
+        texto = texto.toLowerCase().trim();
+        if (texto.contains("cero") || texto.contains("ningun")) return 0;
+
+        String[] palabras = {"una","dos","tres","cuatro","cinco","seis","siete","ocho","nueve","diez",
+                "once","doce","trece","catorce","quince","veinte","treinta","cuarenta","cincuenta","sesenta"};
+        int[] valores = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,20,30,40,50,60};
+
+        for (int i = 0; i < palabras.length; i++) {
+            if (texto.contains(palabras[i])) return valores[i];
+        }
+
+        java.util.regex.Matcher m = java.util.regex.Pattern.compile("(\\d+)").matcher(texto);
+        if (m.find()) return Integer.parseInt(m.group(1));
+
+        return null;
+    }
+
+    private void hablarEnMain(String t) { runOnUiThread(() -> hablarOSimular(t)); }
+    private void abrirTimePicker(TextView tv) {
+        new TimePickerDialog(this, (v, h, m) -> { horaSeleccionada = h*60+m; actualizarDisplayHora(tv, horaSeleccionada); },
+                horaSeleccionada/60, horaSeleccionada%60, true).show();
+    }
+    private void actualizarDisplayHora(TextView tv, int m) { tv.setText(String.format("%02d:%02d", m/60, m%60)); }
+    private void actualizarBotonesDia(TextView[] b, int[] v, List<Integer> s) {
+        for (int i=0; i<b.length; i++) {
+            boolean sel = s.contains(v[i]);
+            b[i].setBackgroundResource(sel ? R.drawable.bg_tipo_selected : R.drawable.bg_tipo_normal);
+            b[i].setTextColor(sel ? Color.WHITE : Color.BLACK);
         }
     }
-
-    private void abrirTimePicker(final TextView tv) {
-        int h = horaSeleccionada / 60, m = horaSeleccionada % 60;
-        new TimePickerDialog(this, android.R.style.Theme_Material_Dialog,
-                (view, hh, mm) -> {
-                    horaSeleccionada = hh * 60 + mm;
-                    actualizarDisplayHora(tv, horaSeleccionada);
-                }, h, m, true).show();
-    }
-
-    private void actualizarDisplayHora(TextView tv, int minutos) {
-        tv.setText(String.format("%02d:%02d", minutos / 60, minutos % 60));
-    }
-
-    private void actualizarBotonesDia(TextView[] botones, int[] valores, List<Integer> sel) {
-        for (int i = 0; i < botones.length; i++) {
-            botones[i].setBackgroundResource(sel.contains(valores[i])
-                    ? R.drawable.bg_tipo_selected
-                    : R.drawable.bg_tipo_normal);
-        }
-    }
-
-    private float dpToPx(int dp) {
-        return dp * getResources().getDisplayMetrics().density;
-    }
+    private float dpToPx(int dp) { return dp * getResources().getDisplayMetrics().density; }
 }
