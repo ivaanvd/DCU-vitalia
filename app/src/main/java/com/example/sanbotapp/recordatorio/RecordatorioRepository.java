@@ -3,6 +3,8 @@ package com.example.sanbotapp.recordatorio;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.example.sanbotapp.alarmas.AlarmScheduler;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,9 +25,11 @@ public class RecordatorioRepository {
     private static final String KEY_NEXT_ID = "next_id";
 
     private final SharedPreferences prefs;
+    private final Context context;
 
     public RecordatorioRepository(Context context) {
-        prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        this.context = context.getApplicationContext();
+        this.prefs   = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
     }
 
     // ── Leer todo ─────────────────────────────────────────────────────────────
@@ -72,6 +76,8 @@ public class RecordatorioRepository {
                 .putString(KEY_LISTA, toJsonArray(lista))
                 .putInt(KEY_NEXT_ID, nextId + 1)
                 .apply();
+        
+        AlarmScheduler.programarRecordatorio(context, r);
         return r;
     }
 
@@ -86,11 +92,13 @@ public class RecordatorioRepository {
             }
         }
         prefs.edit().putString(KEY_LISTA, toJsonArray(lista)).apply();
+        AlarmScheduler.programarRecordatorio(context, updated);
     }
 
     // ── Eliminar ──────────────────────────────────────────────────────────────
 
     public void delete(int id) {
+        AlarmScheduler.cancelarRecordatorio(context, id);
         List<Recordatorio> lista = getAll();
         for (int i = 0; i < lista.size(); i++) {
             if (lista.get(i).getId() == id) {

@@ -31,6 +31,7 @@ public class RecordatoriosActivity extends BaseActivity {
     private LinearLayout           containerRecordatorios;
     private TextView               tvVacio;
     private RecordatorioRepository repo;
+    private com.example.sanbotapp.actividad.ActividadRepository actividadRepo;
 
     // ── Estado del diálogo ────────────────────────────────────────────────────
     private int  horaSeleccionada   = 9 * 60;
@@ -62,6 +63,7 @@ public class RecordatoriosActivity extends BaseActivity {
         containerRecordatorios = findViewById(R.id.containerRecordatorios);
         tvVacio                = findViewById(R.id.tvVacioRecordatorios);
         repo                   = new RecordatorioRepository(this);
+        actividadRepo          = new com.example.sanbotapp.actividad.ActividadRepository(this);
         fechaSeleccionadaMs    = fechaHoyInicio();
 
         LinearLayout btnAnadir = findViewById(R.id.btnAnadirRecordatorio);
@@ -251,6 +253,7 @@ public class RecordatoriosActivity extends BaseActivity {
     }
 
     private boolean haySolapamiento(long fechaMs, int horaMinutos, int idAExcluir) {
+        // 1. Comprobar contra otros recordatorios
         for (Recordatorio r : repo.getFuturos()) {
             if (r.getId() == idAExcluir) continue;
             if (r.getFechaMs() == fechaMs) {
@@ -259,6 +262,27 @@ public class RecordatoriosActivity extends BaseActivity {
                 if (s1 < e2 && s2 < e1) return true;
             }
         }
+
+        // 2. Comprobar contra actividades (si coinciden en día)
+        java.util.Calendar cal = java.util.Calendar.getInstance();
+        cal.setTimeInMillis(fechaMs);
+        int diaSemanaRec = cal.get(java.util.Calendar.DAY_OF_WEEK);
+
+        for (com.example.sanbotapp.actividad.Actividad a : actividadRepo.getAll()) {
+            // Si la actividad ya está COMPLETADA hoy, no bloquea el solapamiento.
+            if (com.example.sanbotapp.actividad.Actividad.ESTADO_COMPLETADA.equals(a.getEstado()) && a.coincideHoy()) {
+                // Solo ignoramos si el recordatorio es para HOY.
+                // Pero como fechaMs es el inicio del día, comparamos:
+                if (fechaMs == fechaHoyInicio()) continue;
+            }
+
+            if (a.getDiasSemana().contains(diaSemanaRec)) {
+                int s1 = horaMinutos,         e1 = s1 + 30;
+                int s2 = a.getHoraMinutos(),  e2 = s2 + a.getDuracionMinutos();
+                if (s1 < e2 && s2 < e1) return true;
+            }
+        }
+
         return false;
     }
 

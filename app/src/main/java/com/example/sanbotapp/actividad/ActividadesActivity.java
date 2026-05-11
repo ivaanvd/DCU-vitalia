@@ -94,7 +94,8 @@ public class ActividadesActivity extends BaseActivity {
     // ── Vistas principales ────────────────────────────────────────────────────
     private LinearLayout containerActividades;
     private TextView     tvVacio;
-    private ActividadRepository repo;
+    private ActividadRepository     repo;
+    private com.example.sanbotapp.recordatorio.RecordatorioRepository recordatorioRepo;
 
     // ── Estado del diálogo abierto ────────────────────────────────────────────
     private int           horaSeleccionada  = HORA_DEFAULT_MINUTOS;
@@ -135,6 +136,7 @@ public class ActividadesActivity extends BaseActivity {
         containerActividades = findViewById(R.id.containerActividades);
         tvVacio              = findViewById(R.id.tvVacioActividades);
         repo                 = new ActividadRepository(this);
+        recordatorioRepo     = new com.example.sanbotapp.recordatorio.RecordatorioRepository(this);
 
         LinearLayout btnAnadir = findViewById(R.id.btnAnadirActividad);
         btnAnadir.setOnClickListener(v -> mostrarDialogoAnadir(null));
@@ -552,17 +554,43 @@ public class ActividadesActivity extends BaseActivity {
     }
 
     /** Ejecutar sólo desde dbExecutor. */
+    /** Ejecutar sólo desde dbExecutor. */
     private boolean haySolapamiento(List<Integer> dias, int horaMinutos,
                                     int duracion, int idAExcluir) {
+        // 1. Comprobar contra otras actividades
         List<Actividad> lista = repo.getAll();
         for (Actividad a : lista) {
             if (a.getId() == idAExcluir) continue;
+            
+            // Si la actividad ya está COMPLETADA hoy, no bloquea el solapamiento.
+            // Nota: Esto asume que el reset diario ya ha ocurrido.
+            if (Actividad.ESTADO_COMPLETADA.equals(a.getEstado()) && a.coincideHoy()) {
+                // Si estamos editando o añadiendo para "hoy", y ya se hizo, ignoramos su duración.
+                continue;
+            }
+
             if (tienenDiaComun(dias, a.getDiasSemana())) {
                 int start1 = horaMinutos,       end1 = start1 + duracion;
                 int start2 = a.getHoraMinutos(), end2 = start2 + a.getDuracionMinutos();
                 if (start1 < end2 && start2 < end1) return true;
             }
         }
+
+        // 2. Comprobar contra recordatorios (si coinciden en día)
+        // Como las actividades son recurrentes, comprobamos si algún recordatorio futuro coincide en día de la semana.
+        List<com.example.sanbotapp.recordatorio.Recordatorio> recordatorios = recordatorioRepo.getFuturos();
+        for (com.example.sanbotapp.recordatorio.Recordatorio r : recordatorios) {
+            java.util.Calendar cal = java.util.Calendar.getInstance();
+            cal.setTimeInMillis(r.getFechaMs());
+            int diaSemanaRec = cal.get(java.util.Calendar.DAY_OF_WEEK);
+
+            if (dias.contains(diaSemanaRec)) {
+                int start1 = horaMinutos,       end1 = start1 + duracion;
+                int start2 = r.getHoraMinutos(), end2 = start2 + 30; // Recordatorios duran 30 min por defecto
+                if (start1 < end2 && start2 < end1) return true;
+            }
+        }
+
         return false;
     }
 

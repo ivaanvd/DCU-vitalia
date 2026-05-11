@@ -76,6 +76,21 @@
         <activity android:name=".juegos.FinBingoActivity" android:exported="false" android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".ajustes.AjustesActivity" android:exported="false" android:theme="@style/AppTheme.NoActionBar"/>
 
+        <activity
+            android:name=".alarmas.ActividadPopupActivity"
+            android:exported="false"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:launchMode="singleTop" />
+
+        <activity
+            android:name=".alarmas.RecordatorioPopupActivity"
+            android:exported="false"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:launchMode="singleTop" />
+
+        <receiver android:name=".alarmas.ActividadAlarmReceiver" android:exported="false" />
+        <receiver android:name=".alarmas.RecordatorioAlarmReceiver" android:exported="false" />
+
     </application>
 
 </manifest>

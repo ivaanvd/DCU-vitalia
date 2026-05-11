@@ -9,10 +9,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Repositorio de Actividades (rutinas semanales).
@@ -20,17 +23,14 @@ import java.util.List;
  */
 public class ActividadRepository {
 
-    private static final String PREFS_NAME  = "ActividadesPrefs";
-    private static final String KEY_LISTA   = "actividades";
-    private static final String KEY_NEXT_ID = "next_id";
+    private static final String PREFS_NAME       = "ActividadesPrefs";
+    private static final String KEY_LISTA        = "actividades";
+    private static final String KEY_NEXT_ID      = "next_id";
+    private static final String KEY_LAST_RESET   = "last_reset_date";
 
     private final SharedPreferences prefs;
     private final Context context;
 
-    /*
-     * Pre: Recibe el contexto de la aplicación
-     * Post: Inicializa el acceso a SharedPreferences con la clave del repositorio
-     */
     public ActividadRepository(Context context) {
         this.context = context.getApplicationContext();
         prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
@@ -38,10 +38,6 @@ public class ActividadRepository {
 
     // ── Leer todo ─────────────────────────────────────────────────────────────
 
-    /*
-     * Pre: Existen datos almacenados (o vacío) en formato JSON en SharedPreferences
-     * Post: Devuelve una lista de objetos Actividad parseados
-     */
     public List<Actividad> getAll() {
         List<Actividad> lista = new ArrayList<>();
         String json = prefs.getString(KEY_LISTA, "[]");
@@ -56,11 +52,12 @@ public class ActividadRepository {
         return lista;
     }
 
-    /*
-     * Pre: Existen actividades almacenadas en la base de datos
-     * Post: Devuelve una lista ordenada cronológicamente de las actividades del día actual
+    /**
+     * Devuelve las actividades de hoy, realizando un reset de estados si es un nuevo día.
      */
     public List<Actividad> getDeHoy() {
+        verificarYReiniciarEstados();
+
         List<Actividad> todas = getAll();
         List<Actividad> hoy   = new ArrayList<>();
         for (Actividad a : todas) {
@@ -74,10 +71,33 @@ public class ActividadRepository {
         return hoy;
     }
 
-    /*
-     * Pre: Recibe un ID numérico de actividad
-     * Post: Devuelve el objeto Actividad con ese ID, o null si no existe
+    /**
+     * Si la fecha actual es distinta a la del último reset, vuelve todas a PENDIENTE.
      */
+    private void verificarYReiniciarEstados() {
+        String hoyStr = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        String lastReset = prefs.getString(KEY_LAST_RESET, "");
+
+        if (!hoyStr.equals(lastReset)) {
+            List<Actividad> lista = getAll();
+            boolean modificado = false;
+            for (Actividad a : lista) {
+                if (!Actividad.ESTADO_PENDIENTE.equals(a.getEstado())) {
+                    a.setEstado(Actividad.ESTADO_PENDIENTE);
+                    modificado = true;
+                }
+            }
+            if (modificado) {
+                prefs.edit()
+                        .putString(KEY_LISTA, toJsonArray(lista))
+                        .putString(KEY_LAST_RESET, hoyStr)
+                        .apply();
+            } else {
+                prefs.edit().putString(KEY_LAST_RESET, hoyStr).apply();
+            }
+        }
+    }
+
     public Actividad getById(int id) {
         for (Actividad a : getAll()) {
             if (a.getId() == id) return a;
@@ -92,10 +112,6 @@ public class ActividadRepository {
         return a;
     }
 
-    /*
-     * Pre: Recibe una actividad nueva sin ID asignado
-     * Post: Asigna ID único, persiste en SharedPreferences y programa su alarma
-     */
     public int insert(Actividad a) {
         int nextId = prefs.getInt(KEY_NEXT_ID, 1);
         a.setId(nextId);
@@ -111,10 +127,6 @@ public class ActividadRepository {
 
     // ── Actualizar ────────────────────────────────────────────────────────────
 
-    /*
-     * Pre: Recibe una actividad modificada que ya existe en BD mediante su ID
-     * Post: Actualiza el objeto en la lista y guarda sobreescribiendo el JSON
-     */
     public void update(Actividad updated) {
         List<Actividad> lista = getAll();
         for (int i = 0; i < lista.size(); i++) {
@@ -128,10 +140,6 @@ public class ActividadRepository {
 
     // ── Lógica de posponer ───────────────────────────────────────────────────
 
-    /*
-     * Pre: Recibe el ID de la actividad a posponer y los minutos de delay
-     * Post: Cancela la alarma original, la borra, y crea una nueva con la hora desplazada
-     */
     public Actividad posponerActividad(int actividadId, int minutosDelay) {
         Actividad original = getById(actividadId);
         if (original == null) return null;
@@ -147,15 +155,11 @@ public class ActividadRepository {
         nueva.setCreadaPorSistema(true);
         nueva.setEstado(Actividad.ESTADO_PENDIENTE);
 
-        int nuevoId = insert(nueva); // insert ya programa la nueva alarma
+        int nuevoId = insert(nueva);
         nueva.setId(nuevoId);
         return nueva;
     }
 
-    /*
-     * Pre: El usuario completa una actividad que fue pospuesta (creadaPorSistema)
-     * Post: Cancela su alarma, borra la copia y marca la original como completada
-     */
     public void completarPospuesta(int idCopia) {
         Actividad copia = getById(idCopia);
         if (copia == null || !copia.isCreadaPorSistema()) return;
@@ -173,10 +177,6 @@ public class ActividadRepository {
 
     // ── Eliminar ──────────────────────────────────────────────────────────────
 
-    /*
-     * Pre: Se demanda eliminar un registro por su ID
-     * Post: Cancela la alarma asociada y elimina el objeto de SharedPreferences
-     */
     public void delete(int id) {
         AlarmScheduler.cancelarActividad(context, id);
         List<Actividad> lista = getAll();
