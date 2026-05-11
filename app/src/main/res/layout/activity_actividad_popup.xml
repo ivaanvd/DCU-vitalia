@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F2F2F7">
+
+    <include layout="@layout/include_top_back_banner" />
+
+    <!-- Cuerpo principal centrado -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="32dp">
+
+        <!-- Icono circular de emoción del robot -->
+        <FrameLayout
+            android:id="@+id/framePopupIcono"
+            android:layout_width="180dp"
+            android:layout_height="180dp"
+            android:background="@drawable/bg_icon_circle_blue"
+            android:layout_marginBottom="32dp">
+
+            <ImageView
+                android:id="@+id/ivPopupIcono"
+                android:layout_width="108dp"
+                android:layout_height="108dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_calendario"/>
+
+        </FrameLayout>
+
+        <!-- Título principal -->
+        <TextView
+            android:id="@+id/tvPopupTitulo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="¡ES HORA DE MEDICACIÓN!"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            android:textColor="#1C1C1E"
+            android:gravity="center"
+            android:layout_marginBottom="12dp"/>
+
+        <!-- Descripción opcional -->
+        <TextView
+            android:id="@+id/tvPopupDesc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Descripción"
+            android:textSize="20sp"
+            android:textColor="#6E6E73"
+            android:gravity="center"
+            android:layout_marginBottom="12dp"/>
+
+        <!-- Duración estimada -->
+        <TextView
+            android:id="@+id/tvPopupDuracion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Duración estimada: 5 min"
+            android:textSize="18sp"
+            android:textColor="#AEAEB2"
+            android:gravity="center"
+            android:layout_marginBottom="48dp"/>
+
+        <!-- Botón principal: HACER AHORA -->
+        <Button
+            android:id="@+id/btnPopupHacerAhora"
+            android:layout_width="340dp"
+            android:layout_height="80dp"
+            android:text="HACER AHORA"
+            android:textColor="#FFFFFF"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:background="@drawable/bg_btn_guardar"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Botón secundario: POSPONER -->
+        <Button
+            android:id="@+id/btnPopupPosponer"
+            android:layout_width="340dp"
+            android:layout_height="80dp"
+            android:text="POSPONER 30 MIN"
+            android:textColor="#ffffff"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:background="@drawable/bg_btn_cancelar"/>
+
+    </LinearLayout>
+
+</LinearLayout>

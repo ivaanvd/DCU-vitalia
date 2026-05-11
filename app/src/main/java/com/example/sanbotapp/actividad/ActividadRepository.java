@@ -1,9 +1,9 @@
 package com.example.sanbotapp.actividad;
 
-import static android.provider.SyncStateContract.Helpers.insert;
-
 import android.content.Context;
 import android.content.SharedPreferences;
+
+import com.example.sanbotapp.alarmas.AlarmScheduler;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,12 +25,14 @@ public class ActividadRepository {
     private static final String KEY_NEXT_ID = "next_id";
 
     private final SharedPreferences prefs;
+    private final Context context;
 
     /*
      * Pre: Recibe el contexto de la aplicación
      * Post: Inicializa el acceso a SharedPreferences con la clave del repositorio
      */
     public ActividadRepository(Context context) {
+        this.context = context.getApplicationContext();
         prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
     }
 
@@ -56,7 +58,7 @@ public class ActividadRepository {
 
     /*
      * Pre: Existen actividades almacenadas en la base de datos
-     * Post: Devuelve una lista ordenada cronológicamente de las actividades asignadas para el día de la semana actual
+     * Post: Devuelve una lista ordenada cronológicamente de las actividades del día actual
      */
     public List<Actividad> getDeHoy() {
         List<Actividad> todas = getAll();
@@ -72,6 +74,17 @@ public class ActividadRepository {
         return hoy;
     }
 
+    /*
+     * Pre: Recibe un ID numérico de actividad
+     * Post: Devuelve el objeto Actividad con ese ID, o null si no existe
+     */
+    public Actividad getById(int id) {
+        for (Actividad a : getAll()) {
+            if (a.getId() == id) return a;
+        }
+        return null;
+    }
+
     // ── Añadir ────────────────────────────────────────────────────────────────
 
     public Actividad add(Actividad a) {
@@ -79,6 +92,10 @@ public class ActividadRepository {
         return a;
     }
 
+    /*
+     * Pre: Recibe una actividad nueva sin ID asignado
+     * Post: Asigna ID único, persiste en SharedPreferences y programa su alarma
+     */
     public int insert(Actividad a) {
         int nextId = prefs.getInt(KEY_NEXT_ID, 1);
         a.setId(nextId);
@@ -88,6 +105,7 @@ public class ActividadRepository {
                 .putString(KEY_LISTA, toJsonArray(lista))
                 .putInt(KEY_NEXT_ID, nextId + 1)
                 .apply();
+        AlarmScheduler.programarActividad(context, a);
         return nextId;
     }
 
@@ -110,61 +128,46 @@ public class ActividadRepository {
 
     // ── Lógica de posponer ───────────────────────────────────────────────────
 
-    /**
-     * Pospone una actividad: elimina la original y crea una nueva pendiente
-     * con la hora indicada y marcada como creada por el sistema.
-     *
-     * @param actividadId        ID de la actividad a posponer
-     * @param nuevaHoraMinutos   Nueva hora en minutos desde medianoche
-     * @return                   La nueva actividad creada, o null si no se encontró la original
+    /*
+     * Pre: Recibe el ID de la actividad a posponer y los minutos de delay
+     * Post: Cancela la alarma original, la borra, y crea una nueva con la hora desplazada
      */
-    public Actividad posponerActividad(int actividadId, int nuevaHoraMinutos) {
-        Actividad original = null;
-        for (Actividad a : getAll()) {
-            if (a.getId() == actividadId) { original = a; break; }
-        }
+    public Actividad posponerActividad(int actividadId, int minutosDelay) {
+        Actividad original = getById(actividadId);
         if (original == null) return null;
 
-        delete(actividadId);  // borra la original
+        AlarmScheduler.cancelarActividad(context, actividadId);
+        delete(actividadId);
 
-        Actividad nueva = new Actividad(0, original.getTipo(), nuevaHoraMinutos, original.getDescripcion());
+        int nuevaHora = original.getHoraMinutos() + minutosDelay;
+
+        Actividad nueva = new Actividad(0, original.getTipo(), nuevaHora, original.getDescripcion());
         nueva.setDiasSemana(new ArrayList<>(original.getDiasSemana()));
         nueva.setIdActividadOriginal(actividadId);
         nueva.setCreadaPorSistema(true);
         nueva.setEstado(Actividad.ESTADO_PENDIENTE);
 
-        int nuevoId = insert(nueva);  // ← corregido
+        int nuevoId = insert(nueva); // insert ya programa la nueva alarma
         nueva.setId(nuevoId);
         return nueva;
     }
+
     /*
-     * Pre: El usuario presiona el botón completar en una actividad clonada como 'pospuesta'
-     * Post: Elimina la actividad temporal y marca el registro original subyacente como completado
+     * Pre: El usuario completa una actividad que fue pospuesta (creadaPorSistema)
+     * Post: Cancela su alarma, borra la copia y marca la original como completada
      */
     public void completarPospuesta(int idCopia) {
-        List<Actividad> lista = getAll();
-        Actividad copia = null;
-        for (Actividad a : lista) {
-            if (a.getId() == idCopia) {
-                copia = a;
-                break;
-            }
-        }
+        Actividad copia = getById(idCopia);
+        if (copia == null || !copia.isCreadaPorSistema()) return;
 
-        if (copia != null && copia.isCreadaPorSistema()) {
-            int originalId = copia.getIdActividadOriginal();
-            // Borramos la copia
-            delete(idCopia);
-            
-            // Buscamos y completamos la original
-            List<Actividad> updatedLista = getAll(); // refetch in case it changed
-            for (Actividad a : updatedLista) {
-                if (a.getId() == originalId) {
-                    a.setEstado(Actividad.ESTADO_COMPLETADA);
-                    update(a);
-                    break;
-                }
-            }
+        int originalId = copia.getIdActividadOriginal();
+        AlarmScheduler.cancelarActividad(context, idCopia);
+        delete(idCopia);
+
+        Actividad original = getById(originalId);
+        if (original != null) {
+            original.setEstado(Actividad.ESTADO_COMPLETADA);
+            update(original);
         }
     }
 
@@ -172,9 +175,10 @@ public class ActividadRepository {
 
     /*
      * Pre: Se demanda eliminar un registro por su ID
-     * Post: Busca y elimina el objeto de la lista serializada de SharedPreferences
+     * Post: Cancela la alarma asociada y elimina el objeto de SharedPreferences
      */
     public void delete(int id) {
+        AlarmScheduler.cancelarActividad(context, id);
         List<Actividad> lista = getAll();
         for (int i = 0; i < lista.size(); i++) {
             if (lista.get(i).getId() == id) {

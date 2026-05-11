@@ -16,7 +16,6 @@ import android.widget.TextView;
 import com.example.sanbotapp.actividad.Actividad;
 import com.example.sanbotapp.actividad.ActividadRepository;
 import com.example.sanbotapp.actividad.ActividadesActivity;
-import com.example.sanbotapp.actividad.ActivitySchedulerHelper;
 import com.example.sanbotapp.recordatorio.RecordatoriosActivity;
 
 import java.io.File;
@@ -49,8 +48,7 @@ public class MainActivity extends BaseActivity {
     // Nombre del usuario
     private SharedPreferences prefs;
     private String nombreUsuario = "amigo/a";
-    // Comprobador de si hay actividades para activar   
-    private ActivitySchedulerHelper scheduler;
+    // Comprobador de si hay actividades para activar
     private boolean yaHeSaludado = false;
 
     /*
@@ -68,13 +66,13 @@ public class MainActivity extends BaseActivity {
         prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
         // Verificar si es la primera vez que se abre la app
-        if (prefs.getBoolean(KEY_FIRST_RUN, true)) { //Cambiar a true
-            // Es la primera vez: abrir WelcomeActivity
-            Intent intent = new Intent(this, WelcomeActivity.class);
-            startActivity(intent);
-            finish();
-            return;
-        }
+//        if (prefs.getBoolean(KEY_FIRST_RUN, true)) { //Cambiar a true
+//            // Es la primera vez: abrir WelcomeActivity
+//            Intent intent = new Intent(this, WelcomeActivity.class);
+//            startActivity(intent);
+//            finish();
+//            return;
+//        }
 
         // Se preparan las vistas y componentes de la pantalla principal
         inicializarVistas();
@@ -82,17 +80,6 @@ public class MainActivity extends BaseActivity {
         mostrarFechaActual();
         configurarBotones();
         reiniciarBrazos();
-
-        // Se inicializa el vigilante que comprobará si es hora de ejecutar una actividad programada
-        scheduler = new ActivitySchedulerHelper(this, new ActivitySchedulerHelper.RobotActionCallback() {
-            @Override
-            public void onTriggerRobotAction(String frase, String tipoEmocion) {
-                // Cuando es la hora, manda orden al robot de hablar y mostrar emoción
-                hablarOSimular(frase);
-                // Recarga la lista de rutinas de hoy para reflejar cambios (ej. si una tarea desaparece o pospone)
-                cargarRutinaHoy(); // Refresh list to show popup/postponed changes
-            }
-        });
     }
 
     // Se ejecuta al volver a visualizar la pantalla (ej. tras cerrar la pantalla de rutinas)
@@ -104,7 +91,6 @@ public class MainActivity extends BaseActivity {
     public void onResume() {
         super.onResume();
         cargarRutinaHoy(); // Recargamos por si se añadió alguna actividad en otra ventana
-        if (scheduler != null) scheduler.start(); // Reinicia el reloj vigilante
     }
 
     /*
@@ -114,7 +100,6 @@ public class MainActivity extends BaseActivity {
     @Override
     public void onPause() {
         super.onPause();
-        if (scheduler != null) scheduler.stop(); // Se pausa el vigilante para ahorrar batería/recursos
     }
 
     /*
