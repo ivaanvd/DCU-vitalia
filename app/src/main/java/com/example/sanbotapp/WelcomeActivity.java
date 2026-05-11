@@ -61,6 +61,7 @@ public class WelcomeActivity extends BaseActivity {
 
     /** Evita activar el reconocimiento dos veces a la vez. */
     private boolean esperandoNombre = false;
+    private boolean saludoRealizado = false;
 
     // =========================================================================
     // Ciclo de vida
@@ -78,7 +79,18 @@ public class WelcomeActivity extends BaseActivity {
         btnCapturarFoto       = findViewById(R.id.btnCapturarFoto);
         btnSeleccionarGaleria = findViewById(R.id.btnSeleccionarGaleria);
         btnGuardar            = findViewById(R.id.btnGuardar);
-        tvEstado              = findViewById(R.id.tvEstado);
+
+        // Hacer la foto redonda
+        ivFoto.setClipToOutline(true);
+        ivFoto.setOutlineProvider(new android.view.ViewOutlineProvider() {
+            @Override
+            public void getOutline(android.view.View view, android.graphics.Outline outline) {
+                outline.setOval(0, 0, view.getWidth(), view.getHeight());
+            }
+        });
+
+        // Ocultar teclado al inicio
+        getWindow().setSoftInputMode(android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         // Si btnCapturarVoz sigue en el layout y no quieres tocar el XML aún,
         // descomenta la siguiente línea para ocultarlo:
@@ -91,13 +103,13 @@ public class WelcomeActivity extends BaseActivity {
 
     @Override
     protected void onRobotServiceReady() {
+        if (saludoRealizado) return;
+        saludoRealizado = true;
+
         // El robot guía al usuario desde el principio con frases secuenciales.
         new Thread(() -> {
-            hablarYEsperar("¡Hola! Soy tu asistente Sanbot. Vamos a configurar tu perfil juntos.");
-            hablarYEsperar("Primero dime tu nombre. Toca mi cabeza y habla cuando estés listo.");
-            runOnUiThread(() ->
-                    tvEstado.setText("Toca la cabeza del robot para decir tu nombre")
-            );
+            hablarYEsperar("¡Hola! Soy Sanbot. Vamos a configurar tu perfil.");
+            hablarYEsperar("Dime tu nombre. Toca mi cabeza cuando estés listo.");
         }).start();
     }
 
@@ -117,24 +129,11 @@ public class WelcomeActivity extends BaseActivity {
      */
     @Override
     protected void onCabezaTocada() {
-        if (esperandoNombre) {
-            // Ya estamos escuchando, evitar doble activación
-            return;
-        }
-
+        if (esperandoNombre) return;
         esperandoNombre = true;
 
-        runOnUiThread(() ->
-                tvEstado.setText("🎙 Escuchando… Di tu nombre ahora")
-        );
-
-        hablarOSimular("Te escucho. Di tu nombre.");
-
-        // Esperar a que el TTS termine antes de activar el micrófono
-        new Thread(() -> {
-            sleep(1500);
-            escuchar();
-        }).start();
+        // No hablamos, solo escuchamos directamente (ya se dieron instrucciones antes)
+        new Thread(this::escuchar).start();
     }
 
     // =========================================================================
@@ -149,8 +148,6 @@ public class WelcomeActivity extends BaseActivity {
 
         runOnUiThread(() -> {
             etNombre.setText(texto);
-            tvEstado.setText("✔ Nombre capturado: " + texto
-                    + "\nAhora elige o toma una foto para tu perfil.");
         });
 
         // El robot confirma y guía al siguiente paso
@@ -240,27 +237,20 @@ public class WelcomeActivity extends BaseActivity {
         if (requestCode == REQUEST_CAMERA) {
             if (rutaFoto != null) {
                 mostrarFotoDesdeRuta(rutaFoto);
-                tvEstado.setText("✔ Foto capturada. Toca Guardar cuando estés listo.");
-                hablarOSimular("Foto guardada. Cuando quieras, toca el botón guardar para terminar.");
+                hablarOSimular("Foto guardada. Cuando quieras, toca el botón comenzar para terminar.");
             }
 
         } else if (requestCode == REQUEST_GALLERY && data != null) {
             Uri imageUri = data.getData();
-            if (imageUri == null) {
-                tvEstado.setText("No se pudo obtener la imagen");
-                return;
-            }
+            if (imageUri == null) return;
+
             try {
                 rutaFoto = copiarFotoAAlmacenamiento(imageUri);
                 if (rutaFoto != null) {
                     mostrarFotoDesdeRuta(rutaFoto);
-                    tvEstado.setText("✔ Foto seleccionada. Toca Guardar cuando estés listo.");
-                    hablarOSimular("Foto seleccionada. Cuando quieras, toca el botón guardar para terminar.");
-                } else {
-                    tvEstado.setText("Error al copiar la foto");
+                    hablarOSimular("Foto seleccionada. Cuando quieras, toca el botón comenzar para terminar.");
                 }
             } catch (IOException e) {
-                tvEstado.setText("Error al procesar la foto: " + e.getMessage());
                 Toast.makeText(this, "Error: " + e.getMessage(),
                         Toast.LENGTH_LONG).show();
             }

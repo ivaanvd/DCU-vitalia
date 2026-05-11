@@ -69,7 +69,7 @@ public class JuegoMiniRoscoActivity extends BaseActivity {
         }
 
         inicializarFilaLetras();
-        mostrarPregunta();
+        // mostrarPregunta() se llama ahora en onRobotServiceReady para asegurar que hable
 
         if (btnOpcion1 != null) btnOpcion1.setOnClickListener(v -> procesarRespuesta(1));
         if (btnOpcion2 != null) btnOpcion2.setOnClickListener(v -> procesarRespuesta(2));
@@ -122,10 +122,9 @@ public class JuegoMiniRoscoActivity extends BaseActivity {
             PreguntaRosco p = preguntasDelTema.get(indiceActual);
             if (tvLetra != null) tvLetra.setVisibility(TextView.GONE);
             if (tvPistaRobot != null) {
-                String textoCompleto = "CON LA " + p.getLetra() + ": \"" + p.getPista() + "\"";
+                String textoCompleto = "CON LA " + p.getLetra() + ": " + p.getPista();
                 tvPistaRobot.setText(textoCompleto);
                 hablarOSimular(textoCompleto);
-                hablarOSimular("Pista: " + p.getPista());
             }
             if (btnOpcion1 != null) btnOpcion1.setText(p.getOpcion1());
             if (btnOpcion2 != null) btnOpcion2.setText(p.getOpcion2());
@@ -226,5 +225,10 @@ public class JuegoMiniRoscoActivity extends BaseActivity {
 
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    protected void onRobotServiceReady() {
+        mostrarPregunta();
     }
 }

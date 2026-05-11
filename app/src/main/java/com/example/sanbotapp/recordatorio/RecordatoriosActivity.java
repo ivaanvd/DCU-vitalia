@@ -40,6 +40,8 @@ public class RecordatoriosActivity extends BaseActivity {
 
     // ── Estado de voz ─────────────────────────────────────────────────────────
     private CampoVozEspera campoEspera = CampoVozEspera.NINGUNO;
+    private String valorPendienteConfirmar = "";
+    private CampoVozEspera campoAConfirmar = CampoVozEspera.NINGUNO;
 
     // Referencias débiles al diálogo activo
     private java.lang.ref.WeakReference<AlertDialog> dialogRef;
@@ -109,33 +111,54 @@ public class RecordatoriosActivity extends BaseActivity {
         String instruccion;
         switch (campo) {
             case TITULO:
-                instruccion = "Dime el título del recordatorio. "
-                        + "Cuando estés listo, toca mi cabeza.";
+                instruccion = "Dime el título del recordatorio. Toca mi cabeza cuando estés listo.";
                 break;
             case DESCRIPCION:
-                instruccion = "Dime una descripción, o di 'ninguna' para dejarla vacía. "
-                        + "Toca mi cabeza cuando estés listo.";
+                instruccion = "Dime una descripción, o di 'ninguna' para dejarla vacía. Toca mi cabeza.";
                 break;
             case HORA:
-                instruccion = "Dime la hora. Por ejemplo: nueve y media, o las doce. "
-                        + "Toca mi cabeza cuando estés listo.";
+                instruccion = "Dime la hora. Por ejemplo: nueve y media. Toca mi cabeza.";
                 break;
             case FECHA:
-                instruccion = "Dime la fecha. Por ejemplo: quince de marzo de dos mil veinticinco. "
-                        + "Toca mi cabeza cuando estés listo.";
+                instruccion = "Dime la fecha. Por ejemplo: quince de mayo. Toca mi cabeza.";
                 break;
             case CAMPO_EDITAR:
-                instruccion = "¿Qué quieres cambiar? Título, descripción, hora, fecha, o antelación. "
-                        + "También puedes decir 'confirmar' o 'cancelar'. Toca mi cabeza cuando estés listo.";
+                // Si el título está vacío, vamos directamente a pedirlo
+                EditText etT = etTituloRef != null ? etTituloRef.get() : null;
+                if (etT != null && (etT.getText().toString().trim().isEmpty() || etT.getText().toString().equals("Sin título"))) {
+                    campoEspera = CampoVozEspera.TITULO;
+                    instruccion = "¿Qué título le ponemos al recordatorio? Toca mi cabeza y dímelo.";
+                } else {
+                    instruccion = obtenerInstruccionDinamicaRec();
+                }
                 break;
             case ANTICIPACION:
-                instruccion = "¿Con cuántos minutos de antelación quieres que te avise? Por ejemplo: cinco, diez o treinta. "
-                        + "Toca mi cabeza cuando estés listo.";
+                instruccion = "¿Con cuántos minutos de antelación quieres el aviso? Toca mi cabeza.";
+                break;
+            case CONFIRMACION_CAMPO:
+                instruccion = "He entendido '" + valorPendienteConfirmar + "'. ¿Es correcto? Di sí o no.";
                 break;
             default:
                 return;
         }
         hablarEnMain(instruccion);
+    }
+
+    private String obtenerInstruccionDinamicaRec() {
+        EditText etTitulo = etTituloRef != null ? etTituloRef.get() : null;
+        String titulo = (etTitulo != null) ? etTitulo.getText().toString().trim() : "";
+
+        AlertDialog dlg = dialogRef != null ? dialogRef.get() : null;
+        String btnAction = "Añadir";
+        if (dlg != null && dlg.findViewById(R.id.btnGuardarDialogRec) instanceof android.widget.Button) {
+            btnAction = ((android.widget.Button) dlg.findViewById(R.id.btnGuardarDialogRec)).getText().toString();
+        }
+
+        if (titulo.isEmpty() || titulo.equalsIgnoreCase("Sin título")) {
+            return "¿Qué título le ponemos al recordatorio? Toca mi cabeza para decírmelo.";
+        }
+
+        return "El título es " + titulo + ". ¿Quieres cambiar algo o prefieres '" + btnAction + "' ya? Toca mi cabeza.";
     }
 
     // =========================================================================
@@ -151,12 +174,18 @@ public class RecordatoriosActivity extends BaseActivity {
         String tGlobal = texto.toLowerCase().trim();
 
         // ── Comandos globales ────────────────────────────────────────────────
-        String btnText = "";
+        String btnText = "añadir";
         if (dlg.findViewById(R.id.btnGuardarDialogRec) instanceof android.widget.Button) {
             btnText = ((android.widget.Button) dlg.findViewById(R.id.btnGuardarDialogRec)).getText().toString().toLowerCase();
         }
 
-        if (tGlobal.equalsIgnoreCase("confirmar") || tGlobal.equalsIgnoreCase("aceptar") || tGlobal.contains("guardar") || (btnText.contains("añadir") && tGlobal.contains("añadir"))) {
+        boolean quiereConfirmar = tGlobal.equalsIgnoreCase("confirmar") 
+                || tGlobal.equalsIgnoreCase("aceptar") 
+                || tGlobal.contains("guardar")
+                || (btnText.contains("añadir") && tGlobal.contains("añadir"))
+                || tGlobal.contains(btnText);
+
+        if (quiereConfirmar) {
             hablarEnMain("Entendido.");
             runOnUiThread(() -> {
                 if (dlg.findViewById(R.id.btnGuardarDialogRec) != null) {
@@ -165,120 +194,144 @@ public class RecordatoriosActivity extends BaseActivity {
             });
             return;
         }
-        if (tGlobal.equalsIgnoreCase("cancelar") || tGlobal.equalsIgnoreCase("salir") || tGlobal.equalsIgnoreCase("cerrar")) {
-            hablarEnMain("Cancelado.");
+
+        if (tGlobal.contains("cancelar") || tGlobal.contains("atrás") || tGlobal.contains("atras") || tGlobal.contains("cerrar")) {
+            hablarEnMain("Vale, cerramos.");
             runOnUiThread(dlg::dismiss);
             return;
         }
 
+        // ── Manejo por estados ───────────────────────────────────────────────
         switch (campoEspera) {
-
-            // ── El usuario dice qué campo quiere editar ───────────────────────
-            case CAMPO_EDITAR: {
-                String t = texto.toLowerCase().trim();
-                if (t.contains("título") || t.contains("titulo") || t.contains("nombre")) {
-                    hablarEnMain("De acuerdo.");
-                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.TITULO), 1000);
-                } else if (t.contains("descripción") || t.contains("descripcion")) {
-                    hablarEnMain("Entendido.");
-                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.DESCRIPCION), 1000);
-                } else if (t.contains("hora") || t.contains("tiempo")) {
+            case CONFIRMACION_CAMPO: {
+                if (tGlobal.contains("sí") || tGlobal.contains("si") || tGlobal.contains("correcto") || tGlobal.contains("vale") || tGlobal.contains("bueno") || tGlobal.contains("está bien")) {
+                    aplicarValorConfirmadoRec();
                     hablarEnMain("Perfecto.");
-                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.HORA), 1000);
-                } else if (t.contains("fecha") || t.contains("día") || t.contains("dia")) {
-                    hablarEnMain("Perfecto.");
-                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.FECHA), 1000);
-                } else if (t.contains("antelación") || t.contains("antelacion") || t.contains("aviso") || t.contains("antes")) {
-                    hablarEnMain("Entendido.");
-                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.ANTICIPACION), 1000);
+                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.CAMPO_EDITAR), 1000);
                 } else {
-                    hablarEnMain("No entendí. Di: título, descripción, hora, fecha, antelación, o confirmar.");
-                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.CAMPO_EDITAR), 2500);
+                    hablarEnMain("Vaya, lo siento. Intentémoslo de nuevo.");
+                    CampoVozEspera volverA = campoAConfirmar;
+                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(volverA), 1500);
                 }
                 break;
             }
 
-            // ── Título ────────────────────────────────────────────────────────
             case TITULO: {
-                final String titulo = texto.trim();
-                runOnUiThread(() -> {
-                    EditText et = etTituloRef != null ? etTituloRef.get() : null;
-                    if (et != null) et.setText(titulo);
-                });
-                hablarEnMain("Título guardado: " + titulo + ".");
-                mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.CAMPO_EDITAR), 1500);
+                valorPendienteConfirmar = texto;
+                campoAConfirmar = CampoVozEspera.TITULO;
+                anunciarCampoYEsperarToque(CampoVozEspera.CONFIRMACION_CAMPO);
                 break;
             }
 
-            // ── Descripción ───────────────────────────────────────────────────
             case DESCRIPCION: {
-                String desc = texto.trim().equalsIgnoreCase("ninguna") ? "" : texto.trim();
-                runOnUiThread(() -> {
-                    EditText et = etDescRef != null ? etDescRef.get() : null;
-                    if (et != null) et.setText(desc);
-                });
-                hablarEnMain("Descripción guardada.");
-                mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.CAMPO_EDITAR), 1500);
+                if (tGlobal.contains("ninguna") || tGlobal.contains("nada") || tGlobal.contains("vacío") || tGlobal.contains("vacio")) {
+                    valorPendienteConfirmar = "";
+                } else {
+                    valorPendienteConfirmar = texto;
+                }
+                campoAConfirmar = CampoVozEspera.DESCRIPCION;
+                anunciarCampoYEsperarToque(CampoVozEspera.CONFIRMACION_CAMPO);
                 break;
             }
 
-            // ── Hora ──────────────────────────────────────────────────────────
             case HORA: {
-                Integer minutosVoz = parsearHoraVoz(texto);
-                if (minutosVoz != null) {
-                    horaSeleccionada = minutosVoz;
-                    runOnUiThread(() -> {
-                        TextView tv = tvHoraRef != null ? tvHoraRef.get() : null;
-                        if (tv != null) actualizarDisplayHora(tv, horaSeleccionada);
-                    });
-                    hablarEnMain("Hora guardada.");
-                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.CAMPO_EDITAR), 1500);
+                int minutos = parsearHoraVoz(texto);
+                if (minutos != -1) {
+                    int h = minutos / 60;
+                    int m = minutos % 60;
+                    valorPendienteConfirmar = String.format("%02d:%02d", h, m);
+                    campoAConfirmar = CampoVozEspera.HORA;
+                    anunciarCampoYEsperarToque(CampoVozEspera.CONFIRMACION_CAMPO);
                 } else {
-                    hablarEnMain("No entendí la hora. Inténtalo de nuevo.");
-                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.HORA), 2000);
+                    hablarEnMain("No te entendí bien la hora. Inténtalo de nuevo.");
+                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.HORA), 2500);
                 }
                 break;
             }
 
-            // ── Fecha ─────────────────────────────────────────────────────────
             case FECHA: {
                 long[] fechaVoz = parsearFechaVoz(texto);
                 if (fechaVoz != null) {
-                    fechaSeleccionadaMs = fechaVoz[0];
-                    runOnUiThread(() -> {
-                        TextView tv = tvFechaRef != null ? tvFechaRef.get() : null;
-                        if (tv != null) actualizarDisplayFecha(tv, fechaSeleccionadaMs);
-                    });
-                    hablarEnMain("Fecha guardada.");
-                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.CAMPO_EDITAR), 1500);
+                    valorPendienteConfirmar = new java.text.SimpleDateFormat("dd 'de' MMMM", new java.util.Locale("es", "ES")).format(new java.util.Date(fechaVoz[0]));
+                    campoAConfirmar = CampoVozEspera.FECHA;
+                    anunciarCampoYEsperarToque(CampoVozEspera.CONFIRMACION_CAMPO);
                 } else {
-                    hablarEnMain("No entendí la fecha. Inténtalo de nuevo.");
-                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.FECHA), 2000);
+                    hablarEnMain("No entendí la fecha. Dime por ejemplo: doce de octubre.");
+                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.FECHA), 2500);
                 }
                 break;
             }
 
-            // ── Anticipación ──────────────────────────────────────────────────
             case ANTICIPACION: {
-                Integer minutos = parsearNumeroVoz(texto);
-                if (minutos != null) {
-                    anticipacionSeleccionada = minutos;
-                    runOnUiThread(() -> {
-                        TextView tv = tvAnticipacionRef != null ? tvAnticipacionRef.get() : null;
-                        if (tv != null) actualizarDisplayAnticipacion(tv, anticipacionSeleccionada);
-                    });
-                    hablarEnMain("Antelación guardada: " + minutos + " minutos.");
-                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.CAMPO_EDITAR), 1500);
+                Integer min = parsearNumeroVoz(texto);
+                if (min != null) {
+                    valorPendienteConfirmar = min + " minutos";
+                    campoAConfirmar = CampoVozEspera.ANTICIPACION;
+                    anunciarCampoYEsperarToque(CampoVozEspera.CONFIRMACION_CAMPO);
                 } else {
-                    hablarEnMain("No entendí el número. Di por ejemplo: cinco, diez o quince.");
+                    hablarEnMain("No entendí el número. Intenta de nuevo.");
                     mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.ANTICIPACION), 2500);
                 }
                 break;
             }
 
-            default:
+            case CAMPO_EDITAR: {
+                if (tGlobal.contains("título") || tGlobal.contains("titulo") || tGlobal.contains("nombre")) {
+                    hablarEnMain("De acuerdo.");
+                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.TITULO), 1000);
+                } else if (tGlobal.contains("descripción") || tGlobal.contains("descripcion") || tGlobal.contains("detalle")) {
+                    hablarEnMain("Entendido.");
+                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.DESCRIPCION), 1000);
+                } else if (tGlobal.contains("hora") || tGlobal.contains("momento") || tGlobal.contains("cuándo")) {
+                    hablarEnMain("Vale.");
+                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.HORA), 1000);
+                } else if (tGlobal.contains("fecha") || tGlobal.contains("día") || tGlobal.contains("dia")) {
+                    hablarEnMain("Cambiamos la fecha.");
+                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.FECHA), 1000);
+                } else if (tGlobal.contains("antelación") || tGlobal.contains("antelacion") || tGlobal.contains("aviso")) {
+                    hablarEnMain("De acuerdo.");
+                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.ANTICIPACION), 1000);
+                } else {
+                    hablarEnMain("No te entendí. Di por ejemplo: título o hora.");
+                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.CAMPO_EDITAR), 2500);
+                }
                 break;
+            }
         }
+    }
+
+    private void aplicarValorConfirmadoRec() {
+        runOnUiThread(() -> {
+            switch (campoAConfirmar) {
+                case TITULO:
+                    if (etTituloRef != null && etTituloRef.get() != null) etTituloRef.get().setText(valorPendienteConfirmar);
+                    break;
+                case DESCRIPCION:
+                    if (etDescRef != null && etDescRef.get() != null) etDescRef.get().setText(valorPendienteConfirmar);
+                    break;
+                case HORA:
+                    int m = parsearHoraVoz(valorPendienteConfirmar);
+                    if (m != -1) {
+                        horaSeleccionada = m;
+                        if (tvHoraRef != null && tvHoraRef.get() != null) actualizarDisplayHora(tvHoraRef.get(), m);
+                    }
+                    break;
+                case FECHA:
+                    long[] fechaVoz = parsearFechaVoz(valorPendienteConfirmar);
+                    if (fechaVoz != null) {
+                        fechaSeleccionadaMs = fechaVoz[0];
+                        if (tvFechaRef != null && tvFechaRef.get() != null) actualizarDisplayFecha(tvFechaRef.get(), fechaSeleccionadaMs);
+                    }
+                    break;
+                case ANTICIPACION:
+                    String clean = valorPendienteConfirmar.replace(" minutos", "").trim();
+                    try {
+                        anticipacionSeleccionada = Integer.parseInt(clean);
+                        if (tvAnticipacionRef != null && tvAnticipacionRef.get() != null) actualizarDisplayAnticipacion(tvAnticipacionRef.get(), anticipacionSeleccionada);
+                    } catch (Exception ignored) {}
+                    break;
+            }
+        });
     }
 
     // ── Flag para saber si el diálogo es de edición o de creación ────────────

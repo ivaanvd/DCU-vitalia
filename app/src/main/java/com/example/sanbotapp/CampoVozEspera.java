@@ -13,5 +13,6 @@ public enum CampoVozEspera {
     FECHA,
     TIPO,          // "lunes y miércoles", etc.
     CAMPO_EDITAR,
-    ANTICIPACION
+    ANTICIPACION,
+    CONFIRMACION_CAMPO
 }

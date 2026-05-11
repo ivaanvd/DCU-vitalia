@@ -72,6 +72,8 @@ public class ActividadesActivity extends BaseActivity {
     private int           horaSeleccionada  = HORA_DEFAULT_MINUTOS;
     private List<Integer> diasSeleccionados = new ArrayList<>();
     private CampoVozEspera campoEspera = CampoVozEspera.NINGUNO;
+    private String valorPendienteConfirmar = "";
+    private CampoVozEspera campoAConfirmar = CampoVozEspera.NINGUNO;
 
     private java.lang.ref.WeakReference<AlertDialog> dialogRef;
     private java.lang.ref.WeakReference<TextView>    dialogTvHoraRef;
@@ -135,13 +137,39 @@ public class ActividadesActivity extends BaseActivity {
                 instruccion = "Dime los días de la semana. Por ejemplo: lunes, miércoles y viernes. Toca mi cabeza cuando estés listo.";
                 break;
             case CAMPO_EDITAR:
-                instruccion = "¿Qué quieres cambiar? Descripción, tipo, hora, o días. "
-                        + "También puedes decir '" + (dialogRef != null && dialogRef.get() != null && dialogRef.get().findViewById(R.id.btnGuardarDialogActividad) != null ? ((Button)dialogRef.get().findViewById(R.id.btnGuardarDialogActividad)).getText().toString() : "Añadir") + "'. Toca mi cabeza cuando estés listo.";
+                // Si la descripción está vacía, vamos directamente a pedirla
+                EditText etD = dialogEtDescRef != null ? dialogEtDescRef.get() : null;
+                if (etD != null && etD.getText().toString().trim().isEmpty()) {
+                    campoEspera = CampoVozEspera.DESCRIPCION;
+                    instruccion = "¿Qué descripción le ponemos a esta actividad? Toca mi cabeza para decírmelo.";
+                } else {
+                    instruccion = obtenerInstruccionDinamicaAct();
+                }
+                break;
+            case CONFIRMACION_CAMPO:
+                instruccion = "He entendido '" + valorPendienteConfirmar + "'. ¿Es correcto? Di sí o no.";
                 break;
             default:
                 return;
         }
         hablarEnMain(instruccion);
+    }
+
+    private String obtenerInstruccionDinamicaAct() {
+        EditText etDesc = dialogEtDescRef != null ? dialogEtDescRef.get() : null;
+        String desc = (etDesc != null) ? etDesc.getText().toString().trim() : "";
+
+        AlertDialog dlg = dialogRef != null ? dialogRef.get() : null;
+        String btnAction = "Añadir";
+        if (dlg != null && dlg.findViewById(R.id.btnGuardarDialogActividad) != null) {
+            btnAction = ((Button)dlg.findViewById(R.id.btnGuardarDialogActividad)).getText().toString();
+        }
+
+        if (desc.isEmpty()) {
+            return "¿Qué descripción le ponemos a esta actividad? Toca mi cabeza para decírmelo.";
+        }
+
+        return "La actividad es " + desc + ". ¿Quieres cambiar algo o prefieres '" + btnAction + "' ya? Toca mi cabeza.";
     }
 
     @Override
@@ -153,12 +181,18 @@ public class ActividadesActivity extends BaseActivity {
         String tGlobal = texto.toLowerCase().trim();
 
         // ── Comandos globales ────────────────────────────────────────────────
-        String btnText = "";
+        String btnText = "añadir";
         if (dlg.findViewById(R.id.btnGuardarDialogActividad) instanceof Button) {
             btnText = ((Button) dlg.findViewById(R.id.btnGuardarDialogActividad)).getText().toString().toLowerCase();
         }
 
-        if (tGlobal.equalsIgnoreCase("confirmar") || tGlobal.equalsIgnoreCase("aceptar") || tGlobal.contains("guardar") || (btnText.contains("añadir") && tGlobal.contains("añadir"))) {
+        boolean quiereConfirmar = tGlobal.equalsIgnoreCase("confirmar") 
+                || tGlobal.equalsIgnoreCase("aceptar") 
+                || tGlobal.contains("guardar")
+                || (btnText.contains("añadir") && tGlobal.contains("añadir"))
+                || tGlobal.contains(btnText);
+
+        if (quiereConfirmar) {
             hablarEnMain("Entendido.");
             runOnUiThread(() -> {
                 if (dlg.findViewById(R.id.btnGuardarDialogActividad) != null) {
@@ -167,104 +201,141 @@ public class ActividadesActivity extends BaseActivity {
             });
             return;
         }
-        if (tGlobal.equalsIgnoreCase("cancelar") || tGlobal.equalsIgnoreCase("salir") || tGlobal.equalsIgnoreCase("cerrar")) {
-            hablarEnMain("Cancelado.");
+
+        if (tGlobal.contains("cancelar") || tGlobal.contains("atrás") || tGlobal.contains("atras") || tGlobal.contains("cerrar")) {
+            hablarEnMain("Vale, cerramos.");
             runOnUiThread(dlg::dismiss);
             return;
         }
 
+        // ── Manejo por estados ───────────────────────────────────────────────
         switch (campoEspera) {
+            case CONFIRMACION_CAMPO: {
+                if (tGlobal.contains("sí") || tGlobal.contains("si") || tGlobal.contains("correcto") || tGlobal.contains("vale") || tGlobal.contains("bueno") || tGlobal.contains("está bien")) {
+                    aplicarValorConfirmadoAct();
+                    hablarEnMain("Perfecto.");
+                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.CAMPO_EDITAR), 1000);
+                } else {
+                    hablarEnMain("Vaya, lo siento. Intentémoslo de nuevo.");
+                    CampoVozEspera volverA = campoAConfirmar;
+                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(volverA), 1500);
+                }
+                break;
+            }
+
             case DESCRIPCION: {
-                final String desc = texto.trim();
-                runOnUiThread(() -> {
-                    EditText et = dialogEtDescRef != null ? dialogEtDescRef.get() : null;
-                    if (et != null) et.setText(desc);
-                });
-                hablarEnMain("Descripción guardada: " + desc + ".");
-                mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.CAMPO_EDITAR), 1500);
+                valorPendienteConfirmar = texto;
+                campoAConfirmar = CampoVozEspera.DESCRIPCION;
+                anunciarCampoYEsperarToque(CampoVozEspera.CONFIRMACION_CAMPO);
                 break;
             }
+
             case TIPO: {
-                String tipoReconocido = parsearTipoVoz(texto);
-                if (tipoReconocido != null) {
-                    runOnUiThread(() -> {
-                        Spinner spinner = dialogSpinnerRef != null ? dialogSpinnerRef.get() : null;
-                        if (spinner != null) {
-                            String[] claves = TipoActividad.claves();
-                            for (int i = 0; i < claves.length; i++) {
-                                if (claves[i].equals(tipoReconocido)) {
-                                    spinner.setSelection(i);
-                                    break;
-                                }
-                            }
-                        }
-                    });
-                    String etiqueta = tipoReconocido;
-                    for (TipoActividad t : TipoActividad.values()) {
-                        if (t.clave.equals(tipoReconocido)) { etiqueta = t.etiqueta; break; }
+                String[] claves = TipoActividad.claves();
+                String[] etiquetas = TipoActividad.etiquetas();
+                String match = null;
+                for (int i = 0; i < etiquetas.length; i++) {
+                    if (tGlobal.contains(etiquetas[i].toLowerCase()) || tGlobal.contains(claves[i].toLowerCase())) {
+                        match = etiquetas[i];
+                        break;
                     }
-                    hablarEnMain("Tipo guardado: " + etiqueta + ".");
-                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.CAMPO_EDITAR), 1500);
+                }
+                if (match != null) {
+                    valorPendienteConfirmar = match;
+                    campoAConfirmar = CampoVozEspera.TIPO;
+                    anunciarCampoYEsperarToque(CampoVozEspera.CONFIRMACION_CAMPO);
                 } else {
-                    hablarEnMain("No reconocí el tipo. Inténtalo de nuevo.");
-                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.TIPO), 2000);
+                    hablarEnMain("No reconocí ese tipo. Inténtalo de nuevo.");
+                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.TIPO), 2500);
                 }
                 break;
             }
+
             case HORA: {
-                Integer minutosVoz = parsearHoraVoz(texto);
-                if (minutosVoz != null) {
-                    horaSeleccionada = minutosVoz;
-                    runOnUiThread(() -> {
-                        TextView tv = dialogTvHoraRef != null ? dialogTvHoraRef.get() : null;
-                        if (tv != null) actualizarDisplayHora(tv, horaSeleccionada);
-                    });
-                    hablarEnMain("Hora guardada.");
-                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.CAMPO_EDITAR), 1500);
+                int minutos = parsearHoraVoz(texto);
+                if (minutos != -1) {
+                    int h = minutos / 60;
+                    int m = minutos % 60;
+                    valorPendienteConfirmar = String.format("%02d:%02d", h, m);
+                    campoAConfirmar = CampoVozEspera.HORA;
+                    anunciarCampoYEsperarToque(CampoVozEspera.CONFIRMACION_CAMPO);
                 } else {
-                    hablarEnMain("No entendí la hora. Inténtalo de nuevo.");
-                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.HORA), 2000);
+                    hablarEnMain("No te entendí bien la hora. Inténtalo de nuevo.");
+                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.HORA), 2500);
                 }
                 break;
             }
+
             case DIA_SEMANA: {
-                List<Integer> diasVoz = parsearDiasVoz(texto);
-                if (!diasVoz.isEmpty()) {
-                    diasSeleccionados.clear();
-                    diasSeleccionados.addAll(diasVoz);
-                    runOnUiThread(() -> {
-                        TextView[] btns = dialogBtnsDiaRef != null ? dialogBtnsDiaRef.get() : null;
-                        if (btns != null) actualizarBotonesDia(btns, VALORES_DIA, diasSeleccionados);
-                    });
-                    hablarEnMain("Días guardados. Toca mi cabeza si quieres cambiar otro campo.");
-                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.CAMPO_EDITAR), 1500);
+                List<Integer> dias = parsearDiasVoz(texto);
+                if (!dias.isEmpty()) {
+                    valorPendienteConfirmar = texto;
+                    campoAConfirmar = CampoVozEspera.DIA_SEMANA;
+                    anunciarCampoYEsperarToque(CampoVozEspera.CONFIRMACION_CAMPO);
                 } else {
-                    hablarEnMain("No entendí los días. Inténtalo de nuevo.");
-                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.DIA_SEMANA), 2000);
+                    hablarEnMain("No entendí los días. Di por ejemplo: lunes y jueves.");
+                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.DIA_SEMANA), 2500);
                 }
                 break;
             }
+
             case CAMPO_EDITAR: {
-                String t = texto.toLowerCase();
-                if (t.contains("descripción") || t.contains("descripcion") || t.contains("nombre")) {
-                    hablarEnMain("De acuerdo.");
+                if (tGlobal.contains("descripción") || tGlobal.contains("descripcion") || tGlobal.contains("detalle")) {
+                    hablarEnMain("Entendido.");
                     mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.DESCRIPCION), 1000);
-                } else if (t.contains("tipo") || t.contains("categoría") || t.contains("categoria")) {
-                    hablarEnMain("De acuerdo.");
+                } else if (tGlobal.contains("tipo") || tGlobal.contains("categoría") || tGlobal.contains("categoria")) {
+                    hablarEnMain("Vale.");
                     mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.TIPO), 1000);
-                } else if (t.contains("hora") || t.contains("tiempo") || t.contains("horario")) {
+                } else if (tGlobal.contains("hora") || tGlobal.contains("momento") || tGlobal.contains("cuándo")) {
                     hablarEnMain("De acuerdo.");
                     mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.HORA), 1000);
-                } else if (t.contains("día") || t.contains("dia") || t.contains("días") || t.contains("dias") || t.contains("semana")) {
-                    hablarEnMain("De acuerdo.");
+                } else if (tGlobal.contains("día") || tGlobal.contains("dias") || tGlobal.contains("semana")) {
+                    hablarEnMain("Cambiamos los días.");
                     mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.DIA_SEMANA), 1000);
                 } else {
-                    hablarEnMain("No entendí. Di descripción, tipo, hora, o días.");
+                    hablarEnMain("No te entendí. Di por ejemplo: descripción o tipo.");
                     mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.CAMPO_EDITAR), 2500);
                 }
                 break;
             }
         }
+    }
+
+    private void aplicarValorConfirmadoAct() {
+        runOnUiThread(() -> {
+            switch (campoAConfirmar) {
+                case DESCRIPCION:
+                    if (dialogEtDescRef != null && dialogEtDescRef.get() != null) dialogEtDescRef.get().setText(valorPendienteConfirmar);
+                    break;
+                case TIPO:
+                    Spinner spinner = dialogSpinnerRef != null ? dialogSpinnerRef.get() : null;
+                    if (spinner != null) {
+                        String[] etiquetas = TipoActividad.etiquetas();
+                        for (int i = 0; i < etiquetas.length; i++) {
+                            if (etiquetas[i].equalsIgnoreCase(valorPendienteConfirmar)) {
+                                spinner.setSelection(i);
+                                break;
+                            }
+                        }
+                    }
+                    break;
+                case HORA:
+                    int mTotal = parsearHoraVoz(valorPendienteConfirmar);
+                    if (mTotal != -1) {
+                        horaSeleccionada = mTotal;
+                        if (dialogTvHoraRef != null && dialogTvHoraRef.get() != null) actualizarDisplayHora(dialogTvHoraRef.get(), mTotal);
+                    }
+                    break;
+                case DIA_SEMANA:
+                    List<Integer> dias = parsearDiasVoz(valorPendienteConfirmar);
+                    if (!dias.isEmpty()) {
+                        diasSeleccionados.clear();
+                        diasSeleccionados.addAll(dias);
+                        if (dialogBtnsDiaRef != null && dialogBtnsDiaRef.get() != null) actualizarBotonesDia(dialogBtnsDiaRef.get(), VALORES_DIA, diasSeleccionados);
+                    }
+                    break;
+            }
+        });
     }
 
     private void mostrarDialogoAnadir(final Actividad existente) {
