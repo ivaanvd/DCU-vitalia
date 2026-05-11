@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.example.sanbotapp.BaseActivity;
 import com.example.sanbotapp.R;
+import com.qihancloud.opensdk.function.beans.LED;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -119,10 +120,12 @@ public class JuegoBingoActivity extends BaseActivity {
         fallos++;
         mostrarEmocion("CRY");
         hablarOSimular("Oh no, esa no era. Léelo bien e inténtalo de nuevo.");
-        moverCabezaBasico("ABAJO");
-        reiniciarCabeza();
+        encenderLed(LED.PART_ALL, LED.MODE_RED);
+//        moverCabezaBasico("ABAJO");
+//        reiniciarCabeza();
 
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            apagarLed(LED.PART_ALL);
             juegoBloqueado = false;
         }, 2500);
     }

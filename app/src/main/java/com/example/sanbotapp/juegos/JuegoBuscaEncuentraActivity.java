@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.example.sanbotapp.BaseActivity;
 import com.example.sanbotapp.R;
+import com.qihancloud.opensdk.function.beans.LED;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -177,13 +178,15 @@ public class JuegoBuscaEncuentraActivity extends BaseActivity {
 
                 mostrarEmocion("PRISE"); // Emoción "orgulloso/feliz"
                 hablarOSimular("¡¡MUY BIEN! ESTE ERA EL ICONO CORRECTO");
-                moverBrazos("LEVANTAR_BRAZO", "AMBOS"); // Celebración: brazos arriba
-                moverBrazos("BAJAR_BRAZO", "AMBOS");
+                encenderLed(LED.PART_ALL, LED.MODE_GREEN);
+//                moverBrazos("LEVANTAR_BRAZO", "AMBOS"); // Celebración: brazos arriba
+//                moverBrazos("BAJAR_BRAZO", "AMBOS");
                 tvMensajeAuxiliar.setText("¡MUY BIEN! ESTE ERA EL ICONO CORRECTO");
                 tvMensajeAuxiliar.setTextColor(Color.parseColor("#198754"));
                 mostrarTodosLosIconosReales();
 
                 handler.postDelayed(() -> {
+                    apagarLed(LED.PART_ALL);
                     Intent intent = new Intent(this, FinBuscaEncuentraActivity.class);
                     intent.putExtra("SEGUNDOS", segundos);
                     startActivity(intent);
@@ -196,6 +199,9 @@ public class JuegoBuscaEncuentraActivity extends BaseActivity {
                 botonPulsado.setImageResource(mapaIconos.get(botonPulsado.getId()));
                 botonPulsado.setBackgroundResource(R.drawable.bg_tipo_incorrecto);
                 botonPulsado.setForeground(null);
+
+                encenderLed(LED.PART_ALL, LED.MODE_RED);
+                handler.postDelayed(() -> apagarLed(LED.PART_ALL), 1500);
             }
         };
 

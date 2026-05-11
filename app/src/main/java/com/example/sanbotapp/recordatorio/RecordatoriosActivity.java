@@ -80,44 +80,54 @@ public class RecordatoriosActivity extends BaseActivity {
     // Sensor táctil de cabeza → entrada por voz
     // =========================================================================
 
+    /**
+     * Llamado desde BaseActivity cuando el usuario toca la cabeza del robot.
+     * Ahora solo activa la escucha, ya que la instrucción se dio antes.
+     */
     @Override
     protected void onCabezaTocada() {
         AlertDialog dlg = dialogRef != null ? dialogRef.get() : null;
         if (dlg == null || !dlg.isShowing()) return;
+        if (campoEspera == CampoVozEspera.NINGUNO) return;
 
-        switch (campoEspera) {
+        // Parar cualquier TTS en curso y escuchar inmediatamente
+        pararVoz();
+        mainHandler.removeCallbacksAndMessages(null);
+        mainHandler.postDelayed(this::escuchar, 300); // pequeño margen tras parar voz
+    }
 
-            case CAMPO_EDITAR:
-                hablarEnMain("¿Qué campo quieres cambiar? Puedes decir: "
-                        + "título, descripción, hora, o fecha.");
-                mainHandler.postDelayed(this::escuchar, DELAY_MICRO_MS);
-                break;
-
+    /**
+     * Anuncia al usuario qué tiene que decir en el siguiente campo
+     * y le pide que toque la cabeza cuando esté listo.
+     */
+    private void anunciarCampoYEsperarToque(CampoVozEspera campo) {
+        campoEspera = campo;
+        String instruccion;
+        switch (campo) {
             case TITULO:
-                hablarEnMain("Dime el título del recordatorio.");
-                mainHandler.postDelayed(this::escuchar, DELAY_MICRO_MS);
+                instruccion = "Dime el título del recordatorio. "
+                        + "Cuando estés listo, toca mi cabeza.";
                 break;
-
             case DESCRIPCION:
-                hablarEnMain("Dime una descripción, o di 'ninguna' para dejarlo vacío.");
-                mainHandler.postDelayed(this::escuchar, DELAY_MICRO_MS);
+                instruccion = "Dime una descripción, o di 'ninguna' para dejarla vacía. "
+                        + "Toca mi cabeza cuando estés listo.";
                 break;
-
             case HORA:
-                hablarEnMain("Dime la hora. Por ejemplo: nueve y media, o las doce.");
-                mainHandler.postDelayed(this::escuchar, DELAY_MICRO_MS);
+                instruccion = "Dime la hora. Por ejemplo: nueve y media, o las doce. "
+                        + "Toca mi cabeza cuando estés listo.";
                 break;
-
             case FECHA:
-                hablarEnMain("Dime la fecha. Por ejemplo: quince de marzo de dos mil veinticinco.");
-                mainHandler.postDelayed(this::escuchar, DELAY_MICRO_MS);
+                instruccion = "Dime la fecha. Por ejemplo: quince de marzo de dos mil veinticinco. "
+                        + "Toca mi cabeza cuando estés listo.";
                 break;
-
-            case NINGUNO:
+            case CAMPO_EDITAR:
+                instruccion = "¿Qué campo quieres cambiar? Título, descripción, hora, o fecha. "
+                        + "Toca mi cabeza cuando estés listo.";
+                break;
             default:
-                hablarEnMain("Todos los campos están listos. Pulsa Guardar cuando quieras.");
-                break;
+                return;
         }
+        hablarEnMain(instruccion);
     }
 
     // =========================================================================
@@ -136,42 +146,33 @@ public class RecordatoriosActivity extends BaseActivity {
             case CAMPO_EDITAR: {
                 String t = texto.toLowerCase().trim();
                 if (t.contains("título") || t.contains("titulo") || t.contains("nombre")) {
-                    campoEspera = CampoVozEspera.TITULO;
-                    hablarEnMain("De acuerdo. Toca mi cabeza y dime el nuevo título.");
+                    hablarEnMain("De acuerdo.");
+                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.TITULO), 1000);
                 } else if (t.contains("descripción") || t.contains("descripcion")) {
-                    campoEspera = CampoVozEspera.DESCRIPCION;
-                    hablarEnMain("Entendido. Toca mi cabeza y dime la nueva descripción.");
+                    hablarEnMain("Entendido.");
+                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.DESCRIPCION), 1000);
                 } else if (t.contains("hora") || t.contains("tiempo")) {
-                    campoEspera = CampoVozEspera.HORA;
-                    hablarEnMain("Perfecto. Toca mi cabeza y dime la nueva hora.");
+                    hablarEnMain("Perfecto.");
+                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.HORA), 1000);
                 } else if (t.contains("fecha") || t.contains("día") || t.contains("dia")) {
-                    campoEspera = CampoVozEspera.FECHA;
-                    hablarEnMain("Perfecto. Toca mi cabeza y dime la nueva fecha.");
+                    hablarEnMain("Perfecto.");
+                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.FECHA), 1000);
                 } else {
-                    // No reconocido → sin avanzar, reintento
-                    hablarEnMain("No entendí qué campo. Toca mi cabeza y di: "
-                            + "título, descripción, hora, o fecha.");
+                    hablarEnMain("No entendí qué campo. Di: título, descripción, hora, o fecha.");
+                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.CAMPO_EDITAR), 2500);
                 }
                 break;
             }
 
             // ── Título ────────────────────────────────────────────────────────
             case TITULO: {
-                String titulo = texto.trim();
+                final String titulo = texto.trim();
                 runOnUiThread(() -> {
                     EditText et = etTituloRef != null ? etTituloRef.get() : null;
                     if (et != null) et.setText(titulo);
                 });
-                // Flujo nuevo: avanza a descripción. Flujo edición: vuelve a CAMPO_EDITAR
-                if (esDialogoEdicion) {
-                    campoEspera = CampoVozEspera.CAMPO_EDITAR;
-                    hablarEnMain("Título guardado: " + titulo
-                            + ". Toca mi cabeza si quieres cambiar otro campo.");
-                } else {
-                    campoEspera = CampoVozEspera.DESCRIPCION;
-                    hablarEnMain("Título guardado: " + titulo
-                            + ". Toca mi cabeza para decirme la descripción.");
-                }
+                hablarEnMain("Título guardado: " + titulo + ".");
+                mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.CAMPO_EDITAR), 1500);
                 break;
             }
 
@@ -182,13 +183,8 @@ public class RecordatoriosActivity extends BaseActivity {
                     EditText et = etDescRef != null ? etDescRef.get() : null;
                     if (et != null) et.setText(desc);
                 });
-                if (esDialogoEdicion) {
-                    campoEspera = CampoVozEspera.CAMPO_EDITAR;
-                    hablarEnMain("Descripción guardada. Toca mi cabeza si quieres cambiar otro campo.");
-                } else {
-                    campoEspera = CampoVozEspera.HORA;
-                    hablarEnMain("Descripción guardada. Toca mi cabeza para decirme la hora.");
-                }
+                hablarEnMain("Descripción guardada.");
+                mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.CAMPO_EDITAR), 1500);
                 break;
             }
 
@@ -201,16 +197,11 @@ public class RecordatoriosActivity extends BaseActivity {
                         TextView tv = tvHoraRef != null ? tvHoraRef.get() : null;
                         if (tv != null) actualizarDisplayHora(tv, horaSeleccionada);
                     });
-                    if (esDialogoEdicion) {
-                        campoEspera = CampoVozEspera.CAMPO_EDITAR;
-                        hablarEnMain("Hora guardada. Toca mi cabeza si quieres cambiar otro campo.");
-                    } else {
-                        campoEspera = CampoVozEspera.FECHA;
-                        hablarEnMain("Hora guardada. Toca mi cabeza para decirme la fecha.");
-                    }
+                    hablarEnMain("Hora guardada.");
+                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.CAMPO_EDITAR), 1500);
                 } else {
-                    // Reintento: campoEspera no avanza
-                    hablarEnMain("No entendí la hora. Toca mi cabeza de nuevo para repetirla.");
+                    hablarEnMain("No entendí la hora. Inténtalo de nuevo.");
+                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.HORA), 2000);
                 }
                 break;
             }
@@ -224,17 +215,11 @@ public class RecordatoriosActivity extends BaseActivity {
                         TextView tv = tvFechaRef != null ? tvFechaRef.get() : null;
                         if (tv != null) actualizarDisplayFecha(tv, fechaSeleccionadaMs);
                     });
-                    if (esDialogoEdicion) {
-                        campoEspera = CampoVozEspera.CAMPO_EDITAR;
-                        hablarEnMain("Fecha guardada. Toca mi cabeza si quieres cambiar otro campo.");
-                    } else {
-                        campoEspera = CampoVozEspera.NINGUNO;
-                        hablarEnMain("Fecha guardada. Ya puedes pulsar Guardar cuando estés listo.");
-                    }
+                    hablarEnMain("Fecha guardada.");
+                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.CAMPO_EDITAR), 1500);
                 } else {
-                    // Reintento: campoEspera no avanza
-                    hablarEnMain("No entendí la fecha. Toca mi cabeza de nuevo. "
-                            + "Di, por ejemplo: quince de marzo de dos mil veinticinco.");
+                    hablarEnMain("No entendí la fecha. Inténtalo de nuevo.");
+                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.FECHA), 2000);
                 }
                 break;
             }
@@ -389,15 +374,10 @@ public class RecordatoriosActivity extends BaseActivity {
         // El robot explica el flujo al abrirse
         mainHandler.postDelayed(() -> {
             if (!esDialogoEdicion) {
-                // Creación: flujo lineal título → descripción → hora → fecha
-                campoEspera = CampoVozEspera.TITULO;
-                hablarEnMain("Vamos a añadir un recordatorio. "
-                        + "Toca mi cabeza cuando estés listo y dime el título.");
+                hablarEnMain("Vamos a añadir un recordatorio.");
+                mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.CAMPO_EDITAR), 2000);
             } else {
-                // Edición: el robot pregunta qué campo
-                campoEspera = CampoVozEspera.CAMPO_EDITAR;
-                hablarEnMain("Toca mi cabeza y dime qué campo quieres cambiar: "
-                        + "título, descripción, hora, o fecha.");
+                anunciarCampoYEsperarToque(CampoVozEspera.CAMPO_EDITAR);
             }
         }, 400);
     }

@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.example.sanbotapp.BaseActivity;
 import com.example.sanbotapp.R;
+import com.qihancloud.opensdk.function.beans.LED;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -159,10 +160,12 @@ public class JuegoMiniRoscoActivity extends BaseActivity {
         // Feedback robot — igual que Refranes
         mostrarEmocion("PRISE");
         hablarOSimular("¡Correcto! Excelente respuesta");
-        moverBrazos("LEVANTAR_BRAZO", "AMBOS");
-        moverBrazos("BAJAR_BRAZO", "AMBOS");
+        encenderLed(LED.PART_ALL, LED.MODE_GREEN);
+//        moverBrazos("LEVANTAR_BRAZO", "AMBOS");
+//        moverBrazos("BAJAR_BRAZO", "AMBOS");
 
         handler.postDelayed(() -> {
+            apagarLed(LED.PART_ALL);
             restaurarBotones();
             indiceActual++;
             mostrarPregunta();
@@ -186,10 +189,12 @@ public class JuegoMiniRoscoActivity extends BaseActivity {
         // Feedback robot — igual que Refranes
         mostrarEmocion("CRY");
         hablarOSimular("Lástima, te acercabas");
-        moverCabezaBasico("ABAJO");
-        reiniciarCabeza();
+        encenderLed(LED.PART_ALL, LED.MODE_RED);
+//        moverCabezaBasico("ABAJO");
+//        reiniciarCabeza();
 
         handler.postDelayed(() -> {
+            apagarLed(LED.PART_ALL);
             restaurarBotones();
             indiceActual++;
             mostrarPregunta();

@@ -230,7 +230,7 @@ public class ActividadesActivity extends BaseActivity {
                 });
                 hablarEnMain("Descripción guardada: " + desc + ".");
                 mainHandler.postDelayed(
-                        () -> anunciarCampoYEsperarToque(CampoVozEspera.TIPO), 1500);
+                        () -> anunciarCampoYEsperarToque(CampoVozEspera.CAMPO_EDITAR), 1500);
                 break;
             }
 
@@ -257,7 +257,7 @@ public class ActividadesActivity extends BaseActivity {
                     final String etiquetaFinal = etiqueta;
                     hablarEnMain("Tipo guardado: " + etiquetaFinal + ".");
                     mainHandler.postDelayed(
-                            () -> anunciarCampoYEsperarToque(CampoVozEspera.HORA), 1500);
+                            () -> anunciarCampoYEsperarToque(CampoVozEspera.CAMPO_EDITAR), 1500);
                 } else {
                     hablarEnMain("No reconocí el tipo. Inténtalo de nuevo.");
                     mainHandler.postDelayed(
@@ -276,7 +276,7 @@ public class ActividadesActivity extends BaseActivity {
                     });
                     hablarEnMain("Hora guardada.");
                     mainHandler.postDelayed(
-                            () -> anunciarCampoYEsperarToque(CampoVozEspera.DIA_SEMANA), 1500);
+                            () -> anunciarCampoYEsperarToque(CampoVozEspera.CAMPO_EDITAR), 1500);
                 } else {
                     hablarEnMain("No entendí la hora. Inténtalo de nuevo.");
                     mainHandler.postDelayed(
@@ -295,8 +295,9 @@ public class ActividadesActivity extends BaseActivity {
                         if (btns != null)
                             actualizarBotonesDia(btns, VALORES_DIA, diasSeleccionados);
                     });
-                    campoEspera = CampoVozEspera.NINGUNO;
-                    hablarEnMain("Días guardados. Ya puedes pulsar Añadir cuando estés listo.");
+                    hablarEnMain("Días guardados. Toca mi cabeza si quieres cambiar otro campo.");
+                    mainHandler.postDelayed(
+                            () -> anunciarCampoYEsperarToque(CampoVozEspera.CAMPO_EDITAR), 1500);
                 } else {
                     hablarEnMain("No entendí los días. Inténtalo de nuevo.");
                     mainHandler.postDelayed(
@@ -466,7 +467,7 @@ public class ActividadesActivity extends BaseActivity {
             if (existente == null) {
                 hablarEnMain("Vamos a añadir una actividad.");
                 mainHandler.postDelayed(
-                        () -> anunciarCampoYEsperarToque(CampoVozEspera.DESCRIPCION), 2000);
+                        () -> anunciarCampoYEsperarToque(CampoVozEspera.CAMPO_EDITAR), 2000);
             } else {
                 anunciarCampoYEsperarToque(CampoVozEspera.CAMPO_EDITAR);
             }
