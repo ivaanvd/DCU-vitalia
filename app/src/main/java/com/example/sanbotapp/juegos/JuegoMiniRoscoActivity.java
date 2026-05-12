@@ -37,6 +37,7 @@ public class JuegoMiniRoscoActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_juego_mini_rosco);
         setupTopBackBanner("Mini-Rosco");
+        setVoiceEnabled(false); // Deshabilitar escucha en el rosco
 
         temaSeleccionado = getIntent().getStringExtra("TEMA");
         if (temaSeleccionado == null) temaSeleccionado = "Varios";

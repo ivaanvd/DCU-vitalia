@@ -99,6 +99,23 @@ public class WelcomeActivity extends BaseActivity {
         btnCapturarFoto.setOnClickListener(v -> abrirCamara());
         btnSeleccionarGaleria.setOnClickListener(v -> abrirGaleria());
         btnGuardar.setOnClickListener(v -> guardarDatos());
+
+        // Click en el avatar → Diálogo de selección
+        ivFoto.setOnClickListener(v -> {
+            androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+            builder.setTitle("¿Cómo quieres añadir la foto?");
+            builder.setItems(new CharSequence[]{"Usar Cámara", "Elegir de Galería"}, (dialog, which) -> {
+                if (which == 0) abrirCamara();
+                else abrirGaleria();
+            });
+            builder.show();
+        });
+
+        // Botón repetir saludo
+        findViewById(R.id.btnRepetirSaludo).setOnClickListener(v -> {
+            saludoRealizado = false;
+            onRobotServiceReady();
+        });
     }
 
     @Override

@@ -73,6 +73,9 @@ public abstract class BaseActivity extends TopBaseActivity {
     /** Controla comportamientos de movimiento compuestos. */
     private MovementControl movementControl;
 
+    /** Indica si esta pantalla soporta interacción por voz activa (tocar cabeza). */
+    private boolean isVoiceEnabled = true;
+
 
     // ══════════════════════════════════════════════════════════════════════════
     // CICLO DE VIDA DEL SERVICIO DEL ROBOT
@@ -227,9 +230,17 @@ public abstract class BaseActivity extends TopBaseActivity {
 
     public void escuchar() {
         if (speechManager != null) {
+            // Visual feedback: robot looks like it's thinking/listening
+            mostrarEmocion("QUESTION");
+            encenderLed(com.qihancloud.opensdk.function.beans.LED.PART_ALL, com.qihancloud.opensdk.function.beans.LED.MODE_YELLOW);
+
             speechManager.setOnSpeechListener(new RecognizeListener() {
                 @Override
                 public boolean onRecognizeResult(Grammar grammar) {
+                    // Clear feedback
+                    apagarLed(com.qihancloud.opensdk.function.beans.LED.PART_ALL);
+                    mostrarEmocion("NORMAL");
+
                     if (grammar != null && !TextUtils.isEmpty(grammar.getText())) {
                         onTextoEscuchado(grammar.getText());
                         return true;
@@ -319,7 +330,16 @@ public abstract class BaseActivity extends TopBaseActivity {
      * Puede llamarse desde un hilo secundario — usar runOnUiThread() si se toca la UI.
      */
     protected void onCabezaTocada() {
-        // Gancho opcional para subclases
+        if (!isVoiceEnabled) {
+            hablarOSimular("Lo siento, en esta pantalla no puedo escucharte. Por favor, usa los botones de la pantalla.");
+        }
+    }
+
+    /**
+     * Permite a las subclases habilitar o deshabilitar la escucha por voz al tocar la cabeza.
+     */
+    protected void setVoiceEnabled(boolean enabled) {
+        this.isVoiceEnabled = enabled;
     }
     // ══════════════════════════════════════════════════════════════════════════
     // BRAZOS

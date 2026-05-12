@@ -16,9 +16,18 @@ public class FinRefranesActivity extends BaseActivity {
 
         // Recuperar envíos
         int aciertos = getIntent().getIntExtra("ACIERTOS", 0);
-        int total = getIntent().getIntExtra("TOTAL", 0);
+        int total = getIntent().getIntExtra("TOTAL", 1);
         String mensaje = getIntent().getStringExtra("MENSAJE");
-        if (mensaje == null) mensaje = "¡Muy bien! ¡Tú sí que sabes de refranes!";
+        
+        if (aciertos >= (total / 2)) {
+            mostrarEmocion("PRISE");
+            encenderLed(com.qihancloud.opensdk.function.beans.LED.PART_ALL, com.qihancloud.opensdk.function.beans.LED.MODE_GREEN);
+            if (mensaje == null) mensaje = "¡Muy bien! ¡Tú sí que sabes de refranes!";
+        } else {
+            mostrarEmocion("CRY");
+            encenderLed(com.qihancloud.opensdk.function.beans.LED.PART_ALL, com.qihancloud.opensdk.function.beans.LED.MODE_RED);
+            if (mensaje == null) mensaje = "¡Casi lo tienes! Sigue practicando y verás cómo mejoras.";
+        }
 
 
         // Actualizar UI

@@ -33,6 +33,7 @@ public class JuegoBingoActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_juego_bingo);
         setupTopBackBanner("Bingo");
+        setVoiceEnabled(false); // Deshabilitar escucha en el bingo
 
         tvRobot = findViewById(R.id.tvBocadilloTexto);
         tvFeedback = findViewById(R.id.tvFeedbackBingo);

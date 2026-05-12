@@ -125,29 +125,22 @@ public class ActividadesActivity extends BaseActivity {
         String instruccion;
         switch (campo) {
             case DESCRIPCION:
-                instruccion = "Ahora dime una descripción para esta actividad. Cuando estés listo, toca mi cabeza.";
+                instruccion = obtenerInstruccionDescripcionAct();
                 break;
             case TIPO:
-                instruccion = "Dime el tipo de actividad. Por ejemplo: medicación, beber agua, comer, paseo, juegos, aseo, llamada familiar, o ir a dormir. Toca mi cabeza cuando estés listo.";
+                instruccion = "¡Hola! Vamos a añadir una actividad. ¿Qué tipo de actividad es? Puede ser: medicina, comer, pasear, jugar o aseo. Toca mi cabeza para hablar.";
                 break;
             case HORA:
-                instruccion = "Dime la hora. Por ejemplo: nueve y media, o las doce y diez. Toca mi cabeza cuando estés listo.";
+                instruccion = "¿A qué hora prefieres hacerlo? Dime por ejemplo: 'A las diez de la mañana'. Toca mi cabeza y dímelo.";
                 break;
             case DIA_SEMANA:
-                instruccion = "Dime los días de la semana. Por ejemplo: lunes, miércoles y viernes. Toca mi cabeza cuando estés listo.";
+                instruccion = "¿Qué días de la semana? Di los días que quieras, como 'Lunes y Jueves'. Toca mi cabeza y dímelo.";
                 break;
             case CAMPO_EDITAR:
-                // Si la descripción está vacía, vamos directamente a pedirla
-                EditText etD = dialogEtDescRef != null ? dialogEtDescRef.get() : null;
-                if (etD != null && etD.getText().toString().trim().isEmpty()) {
-                    campoEspera = CampoVozEspera.DESCRIPCION;
-                    instruccion = "¿Qué descripción le ponemos a esta actividad? Toca mi cabeza para decírmelo.";
-                } else {
-                    instruccion = obtenerInstruccionDinamicaAct();
-                }
+                instruccion = obtenerInstruccionDinamicaAct();
                 break;
             case CONFIRMACION_CAMPO:
-                instruccion = "He entendido '" + valorPendienteConfirmar + "'. ¿Es correcto? Di sí o no.";
+                instruccion = "He entendido '" + valorPendienteConfirmar + "'. ¿Es correcto? Di: sí o no.";
                 break;
             default:
                 return;
@@ -155,21 +148,65 @@ public class ActividadesActivity extends BaseActivity {
         hablarEnMain(instruccion);
     }
 
+    /**
+     * Devuelve una instrucción personalizada para el campo descripción según el tipo de actividad.
+     */
+    private String obtenerInstruccionDescripcionAct() {
+        Spinner spinner = dialogSpinnerRef != null ? dialogSpinnerRef.get() : null;
+        if (spinner == null) return "¿Qué detalles quieres añadir? Toca mi cabeza y dímelo.";
+
+        String tipoLabel = spinner.getSelectedItem().toString();
+        if (tipoLabel.equalsIgnoreCase("MEDICACIÓN")) {
+            return "¿Qué medicina te toca tomar? Por ejemplo: 'Paracetamol'. Toca mi cabeza y dímelo.";
+        } else if (tipoLabel.equalsIgnoreCase("COMER")) {
+            return "¿Qué vas a comer hoy? Por ejemplo: 'Sopa de verduras'. Toca mi cabeza y dímelo.";
+        } else if (tipoLabel.equalsIgnoreCase("LLAMADA FAMILIAR")) {
+            return "¿A quién vas a llamar? Por ejemplo: 'A mi hija María'. Toca mi cabeza y dímelo.";
+        } else if (tipoLabel.equalsIgnoreCase("PASEO/EJERCICIO")) {
+            return "¿A dónde vas a ir a caminar? Por ejemplo: 'Al parque del retiro'. Toca mi cabeza y dímelo.";
+        }
+        return "¿Qué detalles quieres añadir a esta actividad? Toca mi cabeza y dímelo.";
+    }
+
+    /**
+     * Muestra/Oculta y renombra el campo de detalles según el tipo de actividad.
+     */
+    private void actualizarCampoDinamico(String tipoLabel) {
+        android.view.View container = dialogRef.get().findViewById(R.id.containerDetallesDinamicos);
+        TextView tvLabel = dialogRef.get().findViewById(R.id.tvLabelDetalleDinamico);
+        
+        if (container == null || tvLabel == null) return;
+
+        boolean mostrar = true;
+        String nuevoLabel = "Información adicional";
+
+        if (tipoLabel.equalsIgnoreCase("MEDICACIÓN")) {
+            nuevoLabel = "¿Qué medicamento es?";
+        } else if (tipoLabel.equalsIgnoreCase("COMER")) {
+            nuevoLabel = "¿Qué vas a comer?";
+        } else if (tipoLabel.equalsIgnoreCase("LLAMADA FAMILIAR")) {
+            nuevoLabel = "¿A quién vas a llamar?";
+        } else if (tipoLabel.equalsIgnoreCase("PASEO/EJERCICIO")) {
+            nuevoLabel = "¿A dónde vas?";
+        } else {
+            mostrar = false;
+        }
+
+        tvLabel.setText(nuevoLabel);
+        container.setVisibility(mostrar ? android.view.View.VISIBLE : android.view.View.GONE);
+    }
+
     private String obtenerInstruccionDinamicaAct() {
-        EditText etDesc = dialogEtDescRef != null ? dialogEtDescRef.get() : null;
-        String desc = (etDesc != null) ? etDesc.getText().toString().trim() : "";
+        Spinner  spinner = dialogSpinnerRef != null ? dialogSpinnerRef.get() : null;
+        String   tipoLabel = (spinner != null) ? (String) spinner.getSelectedItem() : "la seleccionada";
 
         AlertDialog dlg = dialogRef != null ? dialogRef.get() : null;
         String btnAction = "Añadir";
-        if (dlg != null && dlg.findViewById(R.id.btnGuardarDialogActividad) != null) {
+        if (dlg != null && dlg.findViewById(R.id.btnGuardarDialogActividad) instanceof Button) {
             btnAction = ((Button)dlg.findViewById(R.id.btnGuardarDialogActividad)).getText().toString();
         }
 
-        if (desc.isEmpty()) {
-            return "¿Qué descripción le ponemos a esta actividad? Toca mi cabeza para decírmelo.";
-        }
-
-        return "La actividad es " + desc + ". ¿Quieres cambiar algo o prefieres '" + btnAction + "' ya? Toca mi cabeza.";
+        return "La actividad es de tipo " + tipoLabel + ". ¿Quieres cambiar algo más o prefieres '" + btnAction + "' ya? Toca mi cabeza.";
     }
 
     @Override
@@ -368,6 +405,16 @@ public class ActividadesActivity extends BaseActivity {
 
         actualizarDisplayHora(tvHora, horaSeleccionada);
 
+        // Listener para actualizar campo dinámico según el tipo
+        spinner.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(android.widget.AdapterView<?> parent, View view, int position, long id) {
+                actualizarCampoDinamico(dv, parent.getItemAtPosition(position).toString());
+            }
+            @Override
+            public void onNothingSelected(android.widget.AdapterView<?> parent) {}
+        });
+
         final TextView[] btnsDia = {
                 dv.findViewById(R.id.btnDiaLun), dv.findViewById(R.id.btnDiaMar),
                 dv.findViewById(R.id.btnDiaMie), dv.findViewById(R.id.btnDiaJue),
@@ -410,8 +457,32 @@ public class ActividadesActivity extends BaseActivity {
         dv.findViewById(R.id.btnCancelarDialogActividad2).setOnClickListener(v -> dialog.dismiss());
 
         btnGuardar.setOnClickListener(v -> {
-            final String desc      = etDesc.getText().toString().trim();
-            final String tipo      = TipoActividad.claves()[spinner.getSelectedItemPosition()];
+            final String desc = etDesc.getText().toString().trim();
+            final String tipo = TipoActividad.claves()[spinner.getSelectedItemPosition()];
+
+            // VALIDACIÓN: Descripción obligatoria para ciertos tipos
+            if (desc.isEmpty()) {
+                if (tipo.equals(Actividad.TIPO_MEDICACION) || tipo.equals(Actividad.TIPO_COMER) 
+                    || tipo.equals(Actividad.TIPO_LLAMADA_FAMILIAR) || tipo.equals(Actividad.TIPO_PASEO_EJERCICIO)) {
+                    
+                    String campoFaltante = "la información";
+                    if (tipo.equals(Actividad.TIPO_MEDICACION)) campoFaltante = "el nombre de la medicina";
+                    else if (tipo.equals(Actividad.TIPO_COMER)) campoFaltante = "qué vas a comer";
+                    else if (tipo.equals(Actividad.TIPO_LLAMADA_FAMILIAR)) campoFaltante = "a quién vas a llamar";
+
+                    hablarEnMain("Por favor, dime " + campoFaltante + ". Es necesario para poder ayudarte mejor.");
+                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.DESCRIPCION), 2500);
+                    return;
+                }
+            }
+
+            // VALIDACIÓN: Días de la semana obligatorios
+            if (diasSeleccionados == null || diasSeleccionados.isEmpty()) {
+                hablarEnMain("Faltan los días de la semana. Por favor, selecciona al menos uno.");
+                mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.DIA_SEMANA), 2500);
+                return;
+            }
+
             final int    duracion  = new Actividad(0, tipo, horaSeleccionada, "").getDuracionMinutos();
             final int    idExcluir = (existente != null) ? existente.getId() : ID_NUEVO;
 
@@ -435,8 +506,7 @@ public class ActividadesActivity extends BaseActivity {
         dialog.show();
         mainHandler.postDelayed(() -> {
             if (existente == null) {
-                hablarEnMain("Vamos a añadir una actividad.");
-                mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.CAMPO_EDITAR), 2000);
+                anunciarCampoYEsperarToque(CampoVozEspera.TIPO);
             } else {
                 anunciarCampoYEsperarToque(CampoVozEspera.CAMPO_EDITAR);
             }
@@ -506,6 +576,33 @@ public class ActividadesActivity extends BaseActivity {
         else btnEditar.setOnClickListener(v -> mostrarDialogoAnadir(a));
         item.findViewById(R.id.btnEliminarItem).setOnClickListener(v -> confirmarEliminar(a));
         return item;
+    }
+
+    /**
+     * Muestra/Oculta y renombra el campo de detalles según el tipo de actividad.
+     */
+    private void actualizarCampoDinamico(View dv, String tipoEtiqueta) {
+        View container = dv.findViewById(R.id.containerDetallesDinamicos);
+        TextView tvLabel = dv.findViewById(R.id.tvLabelDetalleDinamico);
+        if (container == null || tvLabel == null) return;
+
+        boolean mostrar = true;
+        String nuevoLabel = "Información adicional";
+
+        if (tipoEtiqueta.equalsIgnoreCase("MEDICACIÓN")) {
+            nuevoLabel = "¿Qué medicamento es?";
+        } else if (tipoEtiqueta.equalsIgnoreCase("COMER")) {
+            nuevoLabel = "¿Qué vas a comer?";
+        } else if (tipoEtiqueta.equalsIgnoreCase("LLAMADA FAMILIAR")) {
+            nuevoLabel = "¿A quién vas a llamar?";
+        } else if (tipoEtiqueta.equalsIgnoreCase("PASEO/EJERCICIO")) {
+            nuevoLabel = "¿A dónde vas?";
+        } else {
+            mostrar = false;
+        }
+
+        tvLabel.setText(nuevoLabel);
+        container.setVisibility(mostrar ? View.VISIBLE : View.GONE);
     }
 
     private void guardarActividad(Actividad existente, String tipo, String desc) {

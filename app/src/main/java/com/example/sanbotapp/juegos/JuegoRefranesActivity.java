@@ -29,16 +29,13 @@ public class JuegoRefranesActivity extends BaseActivity {
     private Button btnOpcion1;
     private Button btnOpcion2;
 
-    // Colores para el feedback visual
-    private static final String COLOR_CORRECTO = "#00CC00";  // Verde
-    private static final String COLOR_INCORRECTO = "#FF0000"; // Rojo
-    private static final String COLOR_NORMAL = "#FFFFFF";     // Azul original
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_juego_refranes);
         setupTopBackBanner("Juego de Refranes");
+        setVoiceEnabled(false); // Deshabilitar escucha en los refranes
 
         tvRefran = findViewById(R.id.tvBocadilloTexto);
         tvEstadoPregunta = findViewById(R.id.tvEstadoPregunta);
@@ -74,7 +71,13 @@ public class JuegoRefranesActivity extends BaseActivity {
 
             if (tvRefran != null) {
                 tvRefran.setText(actual.getTextoCuestion());
-                hablarOSimular(actual.getTextoCuestion());
+
+                // ← Solo la primera pregunta necesita el delay
+                if (indiceActual == 0) {
+                    handler.postDelayed(() -> hablarOSimular(actual.getTextoCuestion()), 1500);
+                } else {
+                    hablarOSimular(actual.getTextoCuestion());
+                }
             }
 
             if (btnOpcion1 != null && btnOpcion2 != null) {

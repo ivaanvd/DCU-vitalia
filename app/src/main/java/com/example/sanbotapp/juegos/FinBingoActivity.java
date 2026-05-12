@@ -20,6 +20,10 @@ public class FinBingoActivity extends BaseActivity {
         String mensaje = getIntent().getStringExtra("MENSAJE");
         if (mensaje == null) mensaje = "¡Línea y bingo! ¡Es usted un hacha!";
 
+        // Emoción y LEDs de éxito (Bingo siempre es éxito)
+        mostrarEmocion("PRISE");
+        encenderLed(com.qihancloud.opensdk.function.beans.LED.PART_ALL, com.qihancloud.opensdk.function.beans.LED.MODE_GREEN);
+
         TextView tvRobot = findViewById(R.id.tvBocadilloTexto);
         if (tvRobot != null) tvRobot.setText(mensaje);
         hablarOSimular(mensaje);

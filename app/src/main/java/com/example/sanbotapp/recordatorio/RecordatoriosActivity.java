@@ -46,7 +46,6 @@ public class RecordatoriosActivity extends BaseActivity {
     // Referencias débiles al diálogo activo
     private java.lang.ref.WeakReference<AlertDialog> dialogRef;
     private java.lang.ref.WeakReference<EditText>    etTituloRef;
-    private java.lang.ref.WeakReference<EditText>    etDescRef;
     private java.lang.ref.WeakReference<TextView>    tvHoraRef;
     private java.lang.ref.WeakReference<TextView>    tvFechaRef;
     private java.lang.ref.WeakReference<TextView>    tvAnticipacionRef;
@@ -111,32 +110,22 @@ public class RecordatoriosActivity extends BaseActivity {
         String instruccion;
         switch (campo) {
             case TITULO:
-                instruccion = "Dime el título del recordatorio. Toca mi cabeza cuando estés listo.";
-                break;
-            case DESCRIPCION:
-                instruccion = "Dime una descripción, o di 'ninguna' para dejarla vacía. Toca mi cabeza.";
+                instruccion = "¡Hola! Vamos a añadir un recordatorio. ¿Qué quieres que te recuerde? Por ejemplo: 'Cita con el médico'. Toca mi cabeza para decírmelo.";
                 break;
             case HORA:
-                instruccion = "Dime la hora. Por ejemplo: nueve y media. Toca mi cabeza.";
+                instruccion = "¿A qué hora te pongo el aviso? Dime por ejemplo: 'A las cinco de la tarde'. Toca mi cabeza.";
                 break;
             case FECHA:
-                instruccion = "Dime la fecha. Por ejemplo: quince de mayo. Toca mi cabeza.";
+                instruccion = "¿Para qué día es? Dime la fecha, como 'Doce de Octubre'. Toca mi cabeza y dímelo.";
                 break;
             case CAMPO_EDITAR:
-                // Si el título está vacío, vamos directamente a pedirlo
-                EditText etT = etTituloRef != null ? etTituloRef.get() : null;
-                if (etT != null && (etT.getText().toString().trim().isEmpty() || etT.getText().toString().equals("Sin título"))) {
-                    campoEspera = CampoVozEspera.TITULO;
-                    instruccion = "¿Qué título le ponemos al recordatorio? Toca mi cabeza y dímelo.";
-                } else {
-                    instruccion = obtenerInstruccionDinamicaRec();
-                }
+                instruccion = obtenerInstruccionDinamicaRec();
                 break;
             case ANTICIPACION:
-                instruccion = "¿Con cuántos minutos de antelación quieres el aviso? Toca mi cabeza.";
+                instruccion = "¿Cuántos minutos antes quieres que te avise? Dime un número, como 'Diez'. Toca mi cabeza.";
                 break;
             case CONFIRMACION_CAMPO:
-                instruccion = "He entendido '" + valorPendienteConfirmar + "'. ¿Es correcto? Di sí o no.";
+                instruccion = "He entendido '" + valorPendienteConfirmar + "'. ¿Es correcto? Di: sí o no.";
                 break;
             default:
                 return;
@@ -155,10 +144,10 @@ public class RecordatoriosActivity extends BaseActivity {
         }
 
         if (titulo.isEmpty() || titulo.equalsIgnoreCase("Sin título")) {
-            return "¿Qué título le ponemos al recordatorio? Toca mi cabeza para decírmelo.";
+            return "Vamos a crear un recordatorio. ¿Qué título le ponemos? Toca mi cabeza.";
         }
 
-        return "El título es " + titulo + ". ¿Quieres cambiar algo o prefieres '" + btnAction + "' ya? Toca mi cabeza.";
+        return "El recordatorio es '" + titulo + "'. ¿Quieres cambiar algo más o prefieres '" + btnAction + "' ya? Toca mi cabeza.";
     }
 
     // =========================================================================
@@ -219,17 +208,6 @@ public class RecordatoriosActivity extends BaseActivity {
             case TITULO: {
                 valorPendienteConfirmar = texto;
                 campoAConfirmar = CampoVozEspera.TITULO;
-                anunciarCampoYEsperarToque(CampoVozEspera.CONFIRMACION_CAMPO);
-                break;
-            }
-
-            case DESCRIPCION: {
-                if (tGlobal.contains("ninguna") || tGlobal.contains("nada") || tGlobal.contains("vacío") || tGlobal.contains("vacio")) {
-                    valorPendienteConfirmar = "";
-                } else {
-                    valorPendienteConfirmar = texto;
-                }
-                campoAConfirmar = CampoVozEspera.DESCRIPCION;
                 anunciarCampoYEsperarToque(CampoVozEspera.CONFIRMACION_CAMPO);
                 break;
             }
@@ -305,9 +283,6 @@ public class RecordatoriosActivity extends BaseActivity {
             switch (campoAConfirmar) {
                 case TITULO:
                     if (etTituloRef != null && etTituloRef.get() != null) etTituloRef.get().setText(valorPendienteConfirmar);
-                    break;
-                case DESCRIPCION:
-                    if (etDescRef != null && etDescRef.get() != null) etDescRef.get().setText(valorPendienteConfirmar);
                     break;
                 case HORA:
                     int m = parsearHoraVoz(valorPendienteConfirmar);
@@ -421,7 +396,6 @@ public class RecordatoriosActivity extends BaseActivity {
                 .inflate(R.layout.dialog_anadir_recordatorio, null);
 
         final EditText etTitulo     = dv.findViewById(R.id.etTituloRecordatorio);
-        final EditText etDesc       = dv.findViewById(R.id.etDescripcionRecordatorio);
         final TextView tvHora       = dv.findViewById(R.id.tvHoraDialogRec);
         final View     tvFechaCont  = dv.findViewById(R.id.tvFechaDialogRec);
         final TextView tvFechaTexto = dv.findViewById(R.id.tvFechaTexto);
@@ -432,7 +406,6 @@ public class RecordatoriosActivity extends BaseActivity {
 
         if (existente != null) {
             etTitulo.setText(existente.getTitulo());
-            etDesc.setText(existente.getDescripcion());
             btnGuardar.setText("GUARDAR");
         }
 
@@ -458,7 +431,6 @@ public class RecordatoriosActivity extends BaseActivity {
 
         // Referencias débiles para acceso desde callbacks de voz
         etTituloRef = new java.lang.ref.WeakReference<>(etTitulo);
-        etDescRef   = new java.lang.ref.WeakReference<>(etDesc);
         tvHoraRef   = new java.lang.ref.WeakReference<>(tvHora);
         tvFechaRef  = new java.lang.ref.WeakReference<>(tvFechaTexto);
         tvAnticipacionRef = new java.lang.ref.WeakReference<>(tvAnticValor);
@@ -477,7 +449,6 @@ public class RecordatoriosActivity extends BaseActivity {
             campoEspera = CampoVozEspera.NINGUNO;
             dialogRef   = null;
             etTituloRef = null;
-            etDescRef   = null;
             tvHoraRef   = null;
             tvFechaRef  = null;
             tvAnticipacionRef = null;
@@ -490,11 +461,12 @@ public class RecordatoriosActivity extends BaseActivity {
 
         dv.findViewById(R.id.btnGuardarDialogRec).setOnClickListener(v -> {
             String titulo = etTitulo.getText().toString().trim();
-            String desc   = etDesc.getText().toString().trim();
-            if (titulo.isEmpty()) titulo = "Sin título";
+            if (titulo.isEmpty()) {
+                hablarEnMain("Por favor, dime qué quieres recordar tocando mi cabeza.");
+                return;
+            }
 
             final String finalTitulo = titulo;
-            final String finalDesc   = desc;
             final int    idExistente = esDialogoEdicion ? existente.getId() : -1;
 
             if (!esRecordatorioFuturo(fechaSeleccionadaMs, horaSeleccionada)) {
@@ -511,13 +483,13 @@ public class RecordatoriosActivity extends BaseActivity {
                         .setTitle("Solapamiento")
                         .setMessage("Ya hay un recordatorio a esa hora. ¿Deseas guardarlo de todos modos?")
                         .setPositiveButton("Sí", (d, w) -> {
-                            guardarRecordatorio(existente, finalTitulo, finalDesc);
+                            guardarRecordatorio(existente, finalTitulo, "");
                             dialog.dismiss();
                         })
                         .setNegativeButton("No", null)
                         .show();
             } else {
-                guardarRecordatorio(existente, finalTitulo, finalDesc);
+                guardarRecordatorio(existente, finalTitulo, "");
                 dialog.dismiss();
             }
         });
@@ -527,8 +499,7 @@ public class RecordatoriosActivity extends BaseActivity {
         // El robot explica el flujo al abrirse
         mainHandler.postDelayed(() -> {
             if (!esDialogoEdicion) {
-                hablarEnMain("Vamos a añadir un recordatorio.");
-                mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.CAMPO_EDITAR), 2000);
+                anunciarCampoYEsperarToque(CampoVozEspera.TITULO);
             } else {
                 anunciarCampoYEsperarToque(CampoVozEspera.CAMPO_EDITAR);
             }

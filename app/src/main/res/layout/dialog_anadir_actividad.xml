@@ -19,114 +19,114 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="AÑADIR ACTIVIDAD"
-            android:textSize="20sp"
+            android:textSize="@dimen/text_size_large"
             android:textStyle="bold"
             android:textColor="#1C1C1E"
             android:gravity="center"
             android:layout_marginBottom="24dp"/>
 
+        <!-- 1. TIPO DE ACTIVIDAD (Ahora arriba) -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Descripción"
-            android:textSize="13sp"
-            android:textColor="#6E6E73"
-            android:layout_marginBottom="6dp"/>
-
-        <EditText
-            android:id="@+id/etDescripcionActividad"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:textSize="15sp"
+            android:text="¿Qué actividad quieres añadir?"
+            android:textSize="@dimen/text_size_small"
+            android:textStyle="bold"
             android:textColor="#1C1C1E"
-            android:background="@drawable/bg_campo_descripcion"
-            android:paddingStart="14dp"
-            android:paddingEnd="14dp"
-            android:singleLine="true"
-            android:inputType="text"
-            android:layout_marginBottom="20dp"/>
-
-        <!-- Hora + Tipo en misma fila -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="24dp">
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:layout_marginEnd="16dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Hora"
-                    android:textSize="13sp"
-                    android:textColor="#6E6E73"
-                    android:layout_marginBottom="6dp"/>
-
-                <TextView
-                    android:id="@+id/tvHoraDialogActividad"
-                    android:layout_width="match_parent"
-                    android:layout_height="72dp"
-                    android:text="00:00"
-                    android:textSize="38sp"
-                    android:textStyle="bold"
-                    android:textColor="#1C1C1E"
-                    android:gravity="center"
-                    android:background="@drawable/bg_campo_descripcion"
-                    android:clickable="true"
-                    android:focusable="true"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Tipo de actividad"
-                    android:textSize="13sp"
-                    android:textColor="#6E6E73"
-                    android:layout_marginBottom="6dp"/>
-
-                <Spinner
-                    android:id="@+id/spinnerTipoActividad"
-                    android:layout_width="match_parent"
-                    android:layout_height="72dp"
-                    android:background="@drawable/bg_campo_descripcion"
-                    android:paddingStart="14dp"
-                    android:paddingEnd="14dp"/>
-            </LinearLayout>
-        </LinearLayout>
-
-        <!-- Días de la semana -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Días de la semana"
-            android:textSize="13sp"
-            android:textColor="#6E6E73"
             android:layout_marginBottom="8dp"/>
 
+        <Spinner
+            android:id="@+id/spinnerTipoActividad"
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:background="@drawable/bg_spinner_custom"
+            android:paddingStart="14dp"
+            android:paddingEnd="40dp"
+            android:layout_marginBottom="20dp"
+            android:spinnerMode="dropdown"/>
+
+        <!-- 2. DETALLES DINÁMICOS (Se mostrará solo en algunos tipos) -->
+        <LinearLayout
+            android:id="@+id/containerDetallesDinamicos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_marginBottom="20dp">
+
+            <TextView
+                android:id="@+id/tvLabelDetalleDinamico"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Detalle"
+                android:textSize="@dimen/text_size_small"
+                android:textColor="#6E6E73"
+                android:layout_marginBottom="6dp"/>
+
+            <EditText
+                android:id="@+id/etDescripcionActividad"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:textSize="@dimen/text_size_medium"
+                android:textColor="#1C1C1E"
+                android:background="@drawable/bg_campo_descripcion"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp"
+                android:singleLine="true"
+                android:inputType="text"/>
+        </LinearLayout>
+
+        <!-- 3. HORA -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="24dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="¿A qué hora?"
+                android:textSize="@dimen/text_size_small"
+                android:textColor="#6E6E73"
+                android:layout_marginBottom="6dp"/>
+
+            <TextView
+                android:id="@+id/tvHoraDialogActividad"
+                android:layout_width="match_parent"
+                android:layout_height="84dp"
+                android:text="00:00"
+                android:textSize="48sp"
+                android:textStyle="bold"
+                android:textColor="#1C1C1E"
+                android:gravity="center"
+                android:background="@drawable/bg_campo_descripcion"
+                android:clickable="true"
+                android:focusable="true"/>
+        </LinearLayout>
+
+        <!-- 4. DÍAS DE LA SEMANA -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="¿Qué días? (Toca para seleccionar)"
+            android:textSize="@dimen/text_size_small"
+            android:textStyle="bold"
+            android:textColor="#1C1C1E"
+            android:layout_marginBottom="12dp"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginBottom="24dp">
-            <TextView android:id="@+id/btnDiaLun" android:layout_width="0dp" android:layout_height="36dp" android:layout_weight="1" android:text="L" android:gravity="center" android:textSize="13sp" android:textStyle="bold" android:textColor="#1C1C1E" android:background="@drawable/bg_tipo_normal" android:layout_marginEnd="4dp" android:clickable="true" android:focusable="true"/>
-            <TextView android:id="@+id/btnDiaMar" android:layout_width="0dp" android:layout_height="36dp" android:layout_weight="1" android:text="M" android:gravity="center" android:textSize="13sp" android:textStyle="bold" android:textColor="#1C1C1E" android:background="@drawable/bg_tipo_normal" android:layout_marginEnd="4dp" android:clickable="true" android:focusable="true"/>
-            <TextView android:id="@+id/btnDiaMie" android:layout_width="0dp" android:layout_height="36dp" android:layout_weight="1" android:text="X" android:gravity="center" android:textSize="13sp" android:textStyle="bold" android:textColor="#1C1C1E" android:background="@drawable/bg_tipo_normal" android:layout_marginEnd="4dp" android:clickable="true" android:focusable="true"/>
-            <TextView android:id="@+id/btnDiaJue" android:layout_width="0dp" android:layout_height="36dp" android:layout_weight="1" android:text="J" android:gravity="center" android:textSize="13sp" android:textStyle="bold" android:textColor="#1C1C1E" android:background="@drawable/bg_tipo_normal" android:layout_marginEnd="4dp" android:clickable="true" android:focusable="true"/>
-            <TextView android:id="@+id/btnDiaVie" android:layout_width="0dp" android:layout_height="36dp" android:layout_weight="1" android:text="V" android:gravity="center" android:textSize="13sp" android:textStyle="bold" android:textColor="#1C1C1E" android:background="@drawable/bg_tipo_normal" android:layout_marginEnd="4dp" android:clickable="true" android:focusable="true"/>
-            <TextView android:id="@+id/btnDiaSab" android:layout_width="0dp" android:layout_height="36dp" android:layout_weight="1" android:text="S" android:gravity="center" android:textSize="13sp" android:textStyle="bold" android:textColor="#1C1C1E" android:background="@drawable/bg_tipo_normal" android:layout_marginEnd="4dp" android:clickable="true" android:focusable="true"/>
-            <TextView android:id="@+id/btnDiaDom" android:layout_width="0dp" android:layout_height="36dp" android:layout_weight="1" android:text="D" android:gravity="center" android:textSize="13sp" android:textStyle="bold" android:textColor="#1C1C1E" android:background="@drawable/bg_tipo_normal" android:clickable="true" android:focusable="true"/>
+            android:layout_marginBottom="32dp">
+            <TextView android:id="@+id/btnDiaLun" android:layout_width="0dp" android:layout_height="56dp" android:layout_weight="1" android:text="L" android:gravity="center" android:textSize="@dimen/text_size_medium" android:textStyle="bold" android:textColor="#1C1C1E" android:background="@drawable/bg_tipo_normal" android:layout_marginEnd="6dp" android:clickable="true" android:focusable="true"/>
+            <TextView android:id="@+id/btnDiaMar" android:layout_width="0dp" android:layout_height="56dp" android:layout_weight="1" android:text="M" android:gravity="center" android:textSize="@dimen/text_size_medium" android:textStyle="bold" android:textColor="#1C1C1E" android:background="@drawable/bg_tipo_normal" android:layout_marginEnd="6dp" android:clickable="true" android:focusable="true"/>
+            <TextView android:id="@+id/btnDiaMie" android:layout_width="0dp" android:layout_height="56dp" android:layout_weight="1" android:text="X" android:gravity="center" android:textSize="@dimen/text_size_medium" android:textStyle="bold" android:textColor="#1C1C1E" android:background="@drawable/bg_tipo_normal" android:layout_marginEnd="6dp" android:clickable="true" android:focusable="true"/>
+            <TextView android:id="@+id/btnDiaJue" android:layout_width="0dp" android:layout_height="56dp" android:layout_weight="1" android:text="J" android:gravity="center" android:textSize="@dimen/text_size_medium" android:textStyle="bold" android:textColor="#1C1C1E" android:background="@drawable/bg_tipo_normal" android:layout_marginEnd="6dp" android:clickable="true" android:focusable="true"/>
+            <TextView android:id="@+id/btnDiaVie" android:layout_width="0dp" android:layout_height="56dp" android:layout_weight="1" android:text="V" android:gravity="center" android:textSize="@dimen/text_size_medium" android:textStyle="bold" android:textColor="#1C1C1E" android:background="@drawable/bg_tipo_normal" android:layout_marginEnd="6dp" android:clickable="true" android:focusable="true"/>
+            <TextView android:id="@+id/btnDiaSab" android:layout_width="0dp" android:layout_height="56dp" android:layout_weight="1" android:text="S" android:gravity="center" android:textSize="@dimen/text_size_medium" android:textStyle="bold" android:textColor="#1C1C1E" android:background="@drawable/bg_tipo_normal" android:layout_marginEnd="6dp" android:clickable="true" android:focusable="true"/>
+            <TextView android:id="@+id/btnDiaDom" android:layout_width="0dp" android:layout_height="56dp" android:layout_weight="1" android:text="D" android:gravity="center" android:textSize="@dimen/text_size_medium" android:textStyle="bold" android:textColor="#1C1C1E" android:background="@drawable/bg_tipo_normal" android:clickable="true" android:focusable="true"/>
         </LinearLayout>
 
         <LinearLayout
@@ -137,11 +137,11 @@
             <Button
                 android:id="@+id/btnCancelarDialogActividad"
                 android:layout_width="0dp"
-                android:layout_height="56dp"
+                android:layout_height="64dp"
                 android:layout_weight="1"
                 android:text="CANCELAR"
                 android:textColor="#FFFFFF"
-                android:textSize="15sp"
+                android:textSize="@dimen/text_size_medium"
                 android:textStyle="bold"
                 android:background="@drawable/bg_btn_cancelar"
                 android:layout_marginEnd="12dp"/>
@@ -149,11 +149,11 @@
             <Button
                 android:id="@+id/btnGuardarDialogActividad"
                 android:layout_width="0dp"
-                android:layout_height="56dp"
+                android:layout_height="64dp"
                 android:layout_weight="1"
                 android:text="AÑADIR"
                 android:textColor="#FFFFFF"
-                android:textSize="15sp"
+                android:textSize="@dimen/text_size_medium"
                 android:textStyle="bold"
                 android:background="@drawable/bg_btn_guardar"/>
         </LinearLayout>

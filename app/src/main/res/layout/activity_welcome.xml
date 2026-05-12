@@ -11,47 +11,67 @@
         android:orientation="vertical"
         android:padding="24dp">
 
-        <!-- Título de bienvenida -->
-        <TextView
+        <!-- Título de bienvenida + Botón repetir -->
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="¡Bienvenido!"
-            android:textSize="32sp"
-            android:textStyle="bold"
-            android:textColor="#1C1C1E"
-            android:textAlignment="center"
-            android:layout_marginBottom="4dp"/>
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:id="@+id/tvTituloBienvenida"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="¡Bienvenido!"
+                android:textSize="@dimen/text_size_xlarge"
+                android:textStyle="bold"
+                android:textColor="#1C1C1E"
+                android:textAlignment="center"/>
+
+            <ImageButton
+                android:id="@+id/btnRepetirSaludo"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_toEndOf="@id/tvTituloBienvenida"
+                android:layout_marginStart="12dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_volumen"
+                android:background="@drawable/bg_tipo_normal"
+                android:contentDescription="Repetir saludo del robot"
+                android:padding="8dp"
+                android:scaleType="fitCenter"/>
+        </RelativeLayout>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Configura tu perfil para empezar"
-            android:textSize="16sp"
+            android:textSize="@dimen/text_size_medium"
             android:textColor="#6E6E73"
             android:textAlignment="center"
-            android:layout_marginBottom="16dp"/>
+            android:layout_marginBottom="24dp"/>
 
         <!-- SECCIÓN: NOMBRE -->
         <EditText
             android:id="@+id/etNombre"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="64dp"
             android:hint="Escribe tu nombre"
-            android:textSize="16sp"
+            android:textSize="@dimen/text_size_medium"
             android:textColor="#1C1C1E"
             android:textColorHint="#A0A0A0"
             android:inputType="textPersonName|textCapWords"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:background="@drawable/bg_input_welcome"
-            android:layout_marginBottom="16dp"/>
+            android:layout_marginBottom="24dp"/>
 
         <!-- SECCIÓN: FOTO -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Foto de perfil"
-            android:textSize="16sp"
+            android:textSize="@dimen/text_size_medium"
             android:textStyle="bold"
             android:textColor="#1C1C1E"
             android:layout_marginBottom="12dp"
@@ -60,41 +80,43 @@
         <!-- Preview de la foto -->
         <ImageView
             android:id="@+id/ivFoto"
-            android:layout_width="140dp"
-            android:layout_height="140dp"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
             android:src="@drawable/ic_persona"
             android:scaleType="centerCrop"
             android:background="@drawable/bg_avatar_circle"
             android:layout_gravity="center_horizontal"
-            android:contentDescription="Vista previa de foto de perfil"
-            android:layout_marginBottom="16dp"/>
+            android:contentDescription="Vista previa de foto de perfil (Toca para cambiar)"
+            android:layout_marginBottom="16dp"
+            android:clickable="true"
+            android:focusable="true"/>
 
         <!-- Botones para foto (Horizontal) -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginBottom="24dp">
+            android:layout_marginBottom="32dp">
 
             <Button
                 android:id="@+id/btnCapturarFoto"
                 android:layout_width="0dp"
-                android:layout_height="44dp"
+                android:layout_height="56dp"
                 android:layout_weight="1"
                 android:text="Cámara"
-                android:textSize="14sp"
+                android:textSize="@dimen/text_size_small"
                 android:textColor="#111111"
                 android:background="@drawable/bg_tipo_normal"
                 android:textAllCaps="false"
-                android:layout_marginEnd="8dp"/>
+                android:layout_marginEnd="12dp"/>
 
             <Button
                 android:id="@+id/btnSeleccionarGaleria"
                 android:layout_width="0dp"
-                android:layout_height="44dp"
+                android:layout_height="56dp"
                 android:layout_weight="1"
                 android:text="Galería"
-                android:textSize="14sp"
+                android:textSize="@dimen/text_size_small"
                 android:textColor="#111111"
                 android:background="@drawable/bg_tipo_normal"
                 android:textAllCaps="false"/>
@@ -104,9 +126,9 @@
         <Button
             android:id="@+id/btnGuardar"
             android:layout_width="match_parent"
-            android:layout_height="52dp"
+            android:layout_height="64dp"
             android:text="COMENZAR"
-            android:textSize="16sp"
+            android:textSize="@dimen/text_size_medium"
             android:textStyle="bold"
             android:textColor="#FFFFFF"
             android:background="@drawable/bg_tipo_correcto"

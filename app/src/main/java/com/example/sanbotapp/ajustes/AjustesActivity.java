@@ -122,6 +122,10 @@ public class AjustesActivity extends BaseActivity {
         Button btnBorrarCuenta = findViewById(R.id.btnBorrarCuenta);
         btnBorrarCuenta.setOnClickListener(v -> mostrarDialogoConfirmacion());
 
+        // Botón GUARDAR CAMBIOS
+        Button btnGuardar = findViewById(R.id.btnGuardarAjustes);
+        btnGuardar.setOnClickListener(v -> consolidarGuardarAjustes());
+
         // Verificar permiso de escritura de ajustes del sistema al entrar
         verificarPermisosBrillo();
     }
@@ -129,8 +133,31 @@ public class AjustesActivity extends BaseActivity {
     @Override
     public void onPause() {
         super.onPause();
+        // Opcional: Podríamos no guardar aquí si queremos que sea 100% manual,
+        // pero por seguridad guardaremos el nombre si ha cambiado.
         guardarNombre();
     }
+
+    private void consolidarGuardarAjustes() {
+        // 1. Nombre
+        guardarNombre();
+
+        // 2. Volumen
+        int vol = limitar(leerEditTextSeguro(etVolumen, 70));
+        guardarVolumen(vol);
+        aplicarVolumenReal(vol);
+
+        // 3. Brillo
+        int bri = limitar(leerEditTextSeguro(etBrillo, 60));
+        guardarBrillo(bri);
+        aplicarBrilloReal(bri);
+
+        // 4. Feedback
+        Toast.makeText(this, "Ajustes guardados correctamente", Toast.LENGTH_SHORT).show();
+        hablarEnMain("He guardado todos tus cambios.");
+    }
+
+    private void hablarEnMain(String t) { runOnUiThread(() -> hablarOSimular(t)); }
 
 
     // ── Volumen ───────────────────────────────────────────────────────────────

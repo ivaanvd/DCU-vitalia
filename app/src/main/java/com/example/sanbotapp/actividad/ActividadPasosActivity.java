@@ -143,8 +143,18 @@ public class ActividadPasosActivity extends BaseActivity {
                 }
             }
         }
-        hablarOSimular("¡Muy bien! Has completado la actividad.");
-        finish();
+        
+        // Emotional feedback
+        mostrarEmocion("PRISE");
+        encenderLed(com.qihancloud.opensdk.function.beans.LED.PART_ALL, com.qihancloud.opensdk.function.beans.LED.MODE_GREEN);
+        hablarOSimular("¡Muy bien! Has completado la actividad. ¡Excelente trabajo!");
+        
+        // Wait 3 seconds before finishing to let the robot celebrate
+        handler.postDelayed(() -> {
+            apagarLed(com.qihancloud.opensdk.function.beans.LED.PART_ALL);
+            mostrarEmocion("NORMAL");
+            finish();
+        }, 3000);
     }
 
     // ── Color de fondo ────────────────────────────────────────────────────────
