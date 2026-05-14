@@ -35,10 +35,6 @@
             android:gravity="center"
             android:layout_marginBottom="28dp" />
 
-        <include
-            android:id="@+id/bocadillo_robot_resultado"
-            layout="@layout/include_robot_bocadillo" />
-
         <Space
             android:layout_width="match_parent"
             android:layout_height="60dp" />

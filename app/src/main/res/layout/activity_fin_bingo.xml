@@ -77,10 +77,6 @@
                 android:textStyle="bold"
                 android:textColor="#DC3545" />
         </LinearLayout>
-        <include
-            android:id="@+id/bocadillo_robot_fin_bingo"
-            layout="@layout/include_robot_bocadillo" />
-
         <Space
             android:layout_width="match_parent"
             android:layout_height="60dp" />
