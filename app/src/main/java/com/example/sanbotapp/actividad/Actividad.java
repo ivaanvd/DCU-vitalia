@@ -17,6 +17,7 @@ public class Actividad {
     public static final String TIPO_ASEO             = "ASEO";
     public static final String TIPO_LLAMADA_FAMILIAR = "LLAMADA_FAMILIAR";
     public static final String TIPO_IR_DORMIR        = "IR_DORMIR";
+    public static final String TIPO_OTROS            = "OTROS";
 
     // ── Estados ───────────────────────────────────────────────────────────────
     public static final String ESTADO_PENDIENTE  = "PENDIENTE";

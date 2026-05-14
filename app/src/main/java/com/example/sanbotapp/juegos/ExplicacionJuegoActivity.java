@@ -20,43 +20,20 @@ public class ExplicacionJuegoActivity extends BaseActivity {
     // ── Explicaciones completas por juego ─────────────────────────────────────
 
     private static final String EXPLICACION_ROSCO =
-            "Vamos a jugar al Mini-Rosco. " +
-            "Te haré preguntas sobre una temática que hayas elegido. " +
-            "Cada pregunta tiene dos opciones, y solo una es correcta. " +
-            "Te daré una descripción y tú deberás elegir la respuesta pulsando uno de los dos botones. " +
-            "Si aciertas, la letra se pondrá en verde. Si fallas, se pondrá en rojo y pasaremos a la siguiente. " +
-            "¡No te preocupes si fallas, lo importante es participar! " +
-            "Cuando estés listo o lista, pulsa el botón de empezar.";
+            "¡Vamos a jugar al Mini-Rosco! Elige la opción correcta para cada definición. " +
+            "Si aciertas, se pondrá en verde, y si fallas, en rojo. ¡Ánimo!";
 
     private static final String EXPLICACION_BINGO =
-            "Vamos a jugar al Bingo. " +
-            "Verás varias tarjetas con imágenes en la pantalla. " +
-            "Iré leyendo enunciados uno a uno, " +
-            "y tú deberás pulsar la tarjeta que corresponda a lo que describe. " +
-            "Si aciertas, la tarjeta se marcará en verde y pasaremos al siguiente enunciado. " +
-            "Si te equivocas, te avisaré y podrás intentarlo de nuevo. " +
-            "¡El objetivo es completar todas! " +
-            "Cuando estés listo o lista, pulsa el botón de empezar.";
+            "¡Es la hora del Bingo! Pulsa la imagen que corresponda a lo que yo diga. " +
+            "Si te equivocas, puedes intentarlo de nuevo hasta completar todas.";
 
     private static final String EXPLICACION_BUSCA_ENCUENTRA =
-            "Vamos a jugar a Busca y Encuentra. " +
-            "Primero te mostraré varios iconos en la pantalla durante unos segundos. " +
-            "Fíjate bien en dónde está cada uno, porque después los voy a ocultar. " +
-            "Entonces te pediré que encuentres uno de ellos. " +
-            "Tendrás que recordar dónde estaba y pulsar el sitio correcto. " +
-            "¡Cuanto más rápido lo encuentres, mejor! " +
-            "El cronómetro empezará en cuanto ocultemos los iconos. " +
-            "Cuando estés listo o lista, pulsa el botón de empezar.";
+            "En este juego debes memorizar los iconos antes de que se oculten. " +
+            "Después, tendrás que recordar dónde estaba el que yo te pida. ¡Sé rápido!";
 
     private static final String EXPLICACION_REFRANES =
-            "Vamos a jugar a los Refranes. " +
-            "Te diré la primera parte de un refrán muy conocido " +
-            "y tú deberás elegir cómo termina entre dos opciones. " +
-            "Solo una respuesta es la correcta. " +
-            "Si aciertas, me alegraré mucho. " +
-            "Si fallas, te diré cuál era la respuesta correcta y seguiremos adelante. " +
-            "¡Son refranes que seguro que has escuchado muchas veces! " +
-            "Cuando estés listo o lista, pulsa el botón de empezar.";
+            "¡Vamos con los Refranes! Yo digo la primera parte y tú eliges cómo termina. " +
+            "Seguro que te los sabes todos.";
 
     // ── Ciclo de vida ─────────────────────────────────────────────────────────
 
@@ -161,7 +138,11 @@ public class ExplicacionJuegoActivity extends BaseActivity {
     protected void onRobotServiceReady() {
         super.onRobotServiceReady();
         if (!juegoIniciado) {
-            hablarOSimular(explicacion);
+            // Añadimos un pequeño delay para que la transición de pantalla termine
+            // y no se corte la primera frase.
+            new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(() -> {
+                if (!juegoIniciado) hablarOSimular(explicacion);
+            }, 800);
         }
     }
 }

@@ -116,6 +116,20 @@ public class RecordatorioRepository {
         prefs.edit().putString(KEY_LISTA, toJsonArray(lista)).apply();
     }
 
+    /**
+     * Elimina todos los recordatorios de la base de datos y cancela sus alarmas.
+     */
+    public void deleteAll() {
+        List<Recordatorio> todos = getAll();
+        for (Recordatorio r : todos) {
+            AlarmScheduler.cancelarRecordatorio(context, r.getId());
+        }
+        prefs.edit()
+                .remove(KEY_LISTA)
+                .remove(KEY_NEXT_ID)
+                .apply();
+    }
+
     // ── Helpers JSON ──────────────────────────────────────────────────────────
 
     private Recordatorio fromJson(JSONObject obj) throws JSONException {

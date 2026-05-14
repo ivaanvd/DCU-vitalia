@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/stepRec4Container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:visibility="gone">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PASO 4: Avisar antes"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:textColor="#1C1C1E"
+        android:layout_marginBottom="12dp"/>
+
+    <LinearLayout
+        android:id="@+id/containerAnticipacion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:background="@drawable/bg_campo_descripcion"
+        android:padding="16dp"
+        android:layout_marginBottom="24dp">
+        
+        <Button
+            android:id="@+id/btnAnticMenos"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:text="-"
+            android:textSize="32sp"
+            android:background="@drawable/bg_tipo_normal"
+            android:textColor="#1C1C1E"/>
+
+        <TextView
+            android:id="@+id/tvAnticipacionRec"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="10 min"
+            android:textSize="28sp"
+            android:textColor="#1C1C1E"
+            android:textStyle="bold"
+            android:gravity="center"/>
+
+        <Button
+            android:id="@+id/btnAnticMas"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:text="+"
+            android:textSize="32sp"
+            android:background="@drawable/bg_tipo_normal"
+            android:textColor="#1C1C1E"/>
+    </LinearLayout>
+
+</LinearLayout>

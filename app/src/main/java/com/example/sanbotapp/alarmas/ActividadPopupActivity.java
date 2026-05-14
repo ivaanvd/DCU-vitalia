@@ -73,6 +73,7 @@ public class ActividadPopupActivity extends BaseActivity {
         if (alarmSound != null && alarmSound.isPlaying()) {
             alarmSound.stop();
         }
+        gestionarFeedbackHardware("IDLE"); // Detener animación al salir
     }
 
     // El robot habla cuando el SDK esté listo — igual que en tus otras Activities
@@ -80,6 +81,7 @@ public class ActividadPopupActivity extends BaseActivity {
     protected void onMainServiceConnected() {
         super.onMainServiceConnected();
         if (actividad != null) {
+            gestionarFeedbackHardware("ALARMA"); // MEJORA ÁREA 5: Animación de atención
             hablarOSimular("¡Atención! Es hora de " + actividad.getTipoLabel().toLowerCase());
         }
     }

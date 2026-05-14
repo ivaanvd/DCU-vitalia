@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/summaryContainerAct"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:visibility="gone"
+    android:gravity="center"
+    android:layout_marginBottom="24dp">
+    
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="REVISIÓN FINAL"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="#1C1C1E"
+        android:layout_marginBottom="12dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/bg_field_active"
+        android:padding="16dp">
+
+        <!-- Fila Tipo -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp">
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="📌 TIPO:"
+                android:textStyle="bold"
+                android:textColor="#3A3A3C"/>
+            <TextView
+                android:id="@+id/tvSummaryTipoAct"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="—"
+                android:textColor="#1C1C1E"/>
+        </LinearLayout>
+
+        <!-- Fila Detalles -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp">
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="📝 DETALLE:"
+                android:textStyle="bold"
+                android:textColor="#3A3A3C"/>
+            <TextView
+                android:id="@+id/tvSummaryDescAct"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="—"
+                android:textColor="#1C1C1E"/>
+        </LinearLayout>
+
+        <!-- Fila Hora -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp">
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="⏰ HORA:"
+                android:textStyle="bold"
+                android:textColor="#3A3A3C"/>
+            <TextView
+                android:id="@+id/tvSummaryHoraAct"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="—"
+                android:textColor="#1C1C1E"/>
+        </LinearLayout>
+
+        <!-- Fila Días -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="📅 DÍAS:"
+                android:textStyle="bold"
+                android:textColor="#3A3A3C"/>
+            <TextView
+                android:id="@+id/tvSummaryDiasAct"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="—"
+                android:textColor="#1C1C1E"/>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

@@ -76,6 +76,15 @@ public abstract class BaseActivity extends TopBaseActivity {
     /** Indica si esta pantalla soporta interacción por voz activa (tocar cabeza). */
     private boolean isVoiceEnabled = true;
 
+    /** Referencias a la UI del micrófono para feedback visual (Mejora P0). */
+    private View btnMicUI;
+    private android.widget.TextView tvEstadoMicUI;
+    private String textoOriginalMic = "PULSA PARA HABLAR";
+    private String lastSpokenText = "";
+
+    /** Handler para tareas programadas en el hilo principal. */
+    protected final android.os.Handler mainHandler = new android.os.Handler(android.os.Looper.getMainLooper());
+
 
     // ══════════════════════════════════════════════════════════════════════════
     // CICLO DE VIDA DEL SERVICIO DEL ROBOT
@@ -157,9 +166,9 @@ public abstract class BaseActivity extends TopBaseActivity {
     protected void onRobotServiceReady() {
         SharedPreferences prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE);
 
-        // Aplicar volumen guardado
-        int volumen = prefs.getInt("ajuste_volumen", 70);
-        setVolumenRobot(volumen);
+        // Aplicar volumen guardado (Comentado para evitar que cambie solo al entrar en actividades)
+        // int volumen = prefs.getInt("ajuste_volumen", 70);
+        // setVolumenRobot(volumen);
 
         // Aplicar brillo guardado (requiere permisos de sistema)
         if (android.provider.Settings.System.canWrite(this)) {
@@ -185,8 +194,11 @@ public abstract class BaseActivity extends TopBaseActivity {
     @Override
     public void onPause() {
         super.onPause();
+        // Resetear UI de micrófono por si acaso se quedó pillado
+        updateMicUI(false);
+        gestionarFeedbackHardware("IDLE");
+
         // No callar si es el Home para que no se corten frases tipo "Abriendo recordatorios..."
-        // que se lanzan justo antes de cambiar de pantalla.
         if (!(this instanceof MainActivity)) {
             pararVoz();
         }
@@ -211,12 +223,265 @@ public abstract class BaseActivity extends TopBaseActivity {
     /**
      * Hace que el robot pronuncie la frase dada en voz alta mediante TTS.
      */
-    protected void hablarOSimular(final String frase) {
-        if (speechControl != null) {
-            new Thread(() -> speechControl.hablar(frase)).start();
+    public void hablarOSimular(String texto) {
+        // No forzamos emoción por defecto para permitir que persistan las de error/duda
+        hablarOSimular(texto, null);
+    }
+
+    /**
+     * Versión extendida de hablarOSimular que permite especificar la emoción.
+     * Adaptado para evitar hardcodear SMILE siempre.
+     */
+    public void hablarOSimular(String texto, EmotionsType emocion) {
+        if (TextUtils.isEmpty(texto)) return;
+        this.lastSpokenText = texto;
+
+        actualizarBocadillo(texto);
+        
+        // Solo cambiamos la emoción si se especifica una nueva, para no tapar emociones anteriores
+        if (emocion != null) {
+            gestionarFeedbackHardware("HABLANDO", emocion);
         } else {
-            Log.w("BaseActivity[Robot]", "SpeechControl aún no listo. Frase: " + frase);
+            // Si no hay emoción, solo encendemos LEDs sin tocar la pantalla
+            if (hardwareControl != null) {
+                hardwareControl.encenderLED(com.qihancloud.opensdk.function.beans.LED.PART_ALL, (byte) 0x01);
+            }
         }
+
+        if (speechControl != null) {
+            speechControl.hablar(texto);
+            // Reducimos la latencia del hilo de finalización usando un pool o simplificando el post-habla
+            new Thread(() -> {
+                speechControl.heAcabado2();
+                // Al terminar de hablar, volvemos a IDLE solo si no hay una emoción crítica
+                runOnUiThread(() -> {
+                     if (hardwareControl != null) hardwareControl.apagarLED(com.qihancloud.opensdk.function.beans.LED.PART_ALL);
+                });
+            }).start();
+        } else {
+            Log.d("BaseActivity[Sim]", "Simulando habla: " + texto);
+            mainHandler.postDelayed(() -> {
+                if (hardwareControl != null) hardwareControl.apagarLED(com.qihancloud.opensdk.function.beans.LED.PART_ALL);
+            }, 200);
+        }
+    }
+
+    /**
+     * Actualiza el TextView del bocadillo (tvBocadilloTexto) si existe en el layout actual.
+     * Mejora Área 2: Feedback visual de lo que dice el robot.
+     */
+    protected void actualizarBocadillo(String texto) {
+        runOnUiThread(() -> {
+            TextView tvBocadillo = findViewById(R.id.tvBocadilloTexto);
+            if (tvBocadillo != null) {
+                tvBocadillo.setText(texto);
+            }
+            View btnRepetir = findViewById(R.id.btnRepetirBocadillo);
+            if (btnRepetir != null) {
+                btnRepetir.setOnClickListener(v -> repetirUltimaFrase());
+            }
+        });
+    }
+
+    /**
+     * Repite la última frase pronunciada por el robot (Cambio solicitado).
+     */
+    public void repetirUltimaFrase() {
+        if (!TextUtils.isEmpty(lastSpokenText)) {
+            hablarOSimular(lastSpokenText);
+        }
+    }
+
+    public void escuchar() {
+        Log.d("BaseActivity", "Iniciando escucha...");
+        gestionarFeedbackHardware("ESCUCHANDO");
+        updateMicUI(true);
+
+        if (speechControl != null) {
+            speechControl.iniciarUnaVez(text -> {
+                runOnUiThread(() -> {
+                    updateMicUI(false);
+                    gestionarFeedbackHardware("IDLE");
+                    onTextoEscuchado(text);
+                });
+            });
+        } else {
+            Log.d("BaseActivity[Sim]", "Simulando escucha (esperando 3s)...");
+            mainHandler.postDelayed(() -> {
+                updateMicUI(false);
+                gestionarFeedbackHardware("IDLE");
+                onTextoEscuchado("simulación");
+            }, 3000);
+        }
+    }
+
+    public void gestionarFeedbackHardware(String estado) {
+        gestionarFeedbackHardware(estado, EmotionsType.SMILE);
+    }
+
+    public void gestionarFeedbackHardware(String estado, EmotionsType emocionDefault) {
+        if (hardwareControl == null || systemControl == null || movementControl == null) return;
+
+        // Ejecutamos en segundo plano para no bloquear el hilo de UI con llamadas IPC
+        new Thread(() -> {
+            switch (estado) {
+                case "ESCUCHANDO":
+                    hardwareControl.encenderLED(com.qihancloud.opensdk.function.beans.LED.PART_ALL, (byte) 0x04);
+                    systemControl.cambiarEmocion(EmotionsType.QUESTION);
+                    movementControl.activarSeguimiento();
+                    if (headControl != null) headControl.controlBasicoCabeza(HeadControl.AccionesCabeza.ARRIBA);
+                    break;
+
+                case "HABLANDO":
+                    hardwareControl.encenderLED(com.qihancloud.opensdk.function.beans.LED.PART_ALL, (byte) 0x01);
+                    if (emocionDefault != null) {
+                        systemControl.cambiarEmocion(emocionDefault);
+                    }
+                    movementControl.activarSeguimiento();
+                    break;
+
+                case "ACIERTO":
+                    hardwareControl.encenderLED(com.qihancloud.opensdk.function.beans.LED.PART_ALL, (byte) 0x02); // Verde
+                    systemControl.cambiarEmocion(EmotionsType.SURPRISE);
+                    if (handsControl != null) {
+                        handsControl.controlBasicoBrazos(HandsControl.AccionesBrazos.LEVANTAR_BRAZO, HandsControl.TipoBrazo.AMBOS);
+                        mainHandler.postDelayed(() -> new Thread(() -> {
+                            handsControl.controlBasicoBrazos(HandsControl.AccionesBrazos.BAJAR_BRAZO, HandsControl.TipoBrazo.AMBOS);
+                            hardwareControl.apagarLED(com.qihancloud.opensdk.function.beans.LED.PART_ALL);
+                            systemControl.cambiarEmocion(EmotionsType.SMILE);
+                        }).start(), 2000);
+                    }
+                    break;
+
+                case "FALLO":
+                    hardwareControl.encenderLED(com.qihancloud.opensdk.function.beans.LED.PART_ALL, (byte) 0x03); // Rojo
+                    systemControl.cambiarEmocion(EmotionsType.CRY);
+                    if (handsControl != null) {
+                        mainHandler.postDelayed(() -> new Thread(() -> {
+                            hardwareControl.apagarLED(com.qihancloud.opensdk.function.beans.LED.PART_ALL);
+                            systemControl.cambiarEmocion(EmotionsType.NORMAL);
+                        }).start(), 2000);
+                    }
+                    break;
+
+                case "SUMMARY_START":
+                    hardwareControl.encenderLED(com.qihancloud.opensdk.function.beans.LED.PART_ALL, (byte) 0x05); // Púrpura/Morado
+                    systemControl.cambiarEmocion(EmotionsType.GRIEVANCE);
+                    break;
+
+                case "THINKING_START":
+                    systemControl.cambiarEmocion(EmotionsType.QUESTION);
+                    break;
+
+                case "MOURN":
+                    hardwareControl.encenderLED(com.qihancloud.opensdk.function.beans.LED.PART_ALL, (byte) 0x03); // Rojo
+                    systemControl.cambiarEmocion(EmotionsType.CRY);
+                    if (headControl != null) {
+                        new Thread(() -> headControl.controlBasicoCabeza(HeadControl.AccionesCabeza.ABAJO)).start();
+                    }
+                    if (handsControl != null) {
+                        handsControl.controlBasicoBrazos(HandsControl.AccionesBrazos.BAJAR_BRAZO, HandsControl.TipoBrazo.AMBOS);
+                    }
+                    mainHandler.postDelayed(() -> new Thread(() -> {
+                        hardwareControl.apagarLED(com.qihancloud.opensdk.function.beans.LED.PART_ALL);
+                        systemControl.cambiarEmocion(EmotionsType.NORMAL);
+                        if (headControl != null) {
+                            headControl.reiniciar(); // Reset cabeza
+                        }
+                    }).start(), 5000);
+                    break;
+
+                case "EXITO":
+                    hardwareControl.encenderLED(com.qihancloud.opensdk.function.beans.LED.PART_ALL, (byte) 0x02);
+                    systemControl.cambiarEmocion(EmotionsType.SMILE);
+                    asentirConCabeza();
+                    break;
+
+                case "CANCELADO":
+                    hardwareControl.encenderLED(com.qihancloud.opensdk.function.beans.LED.PART_ALL, (byte) 0x06);
+                    systemControl.cambiarEmocion(EmotionsType.GRIEVANCE);
+                    break;
+
+                case "ERROR":
+                    hardwareControl.encenderLED(com.qihancloud.opensdk.function.beans.LED.PART_ALL, (byte) 0x03);
+                    systemControl.cambiarEmocion(EmotionsType.QUESTION);
+                    break;
+
+                case "ALARMA":
+                    systemControl.cambiarEmocion(EmotionsType.SURPRISE);
+                    if (handsControl != null) handsControl.controlBasicoBrazos(HandsControl.AccionesBrazos.LEVANTAR_BRAZO, HandsControl.TipoBrazo.AMBOS);
+                    if (headControl != null) headControl.controlBasicoCabeza(HeadControl.AccionesCabeza.ARRIBA);
+                    hardwareControl.encenderLED(com.qihancloud.opensdk.function.beans.LED.PART_ALL, (byte) 0x05);
+                    break;
+
+                case "CELEBRACION":
+                    systemControl.cambiarEmocion(EmotionsType.SMILE);
+                    hardwareControl.encenderLED(com.qihancloud.opensdk.function.beans.LED.PART_ALL, (byte) 0x02);
+                    asentirConCabeza();
+                    if (handsControl != null) {
+                        handsControl.controlBasicoBrazos(HandsControl.AccionesBrazos.LEVANTAR_BRAZO, HandsControl.TipoBrazo.AMBOS);
+                        mainHandler.postDelayed(() -> new Thread(() -> handsControl.controlBasicoBrazos(HandsControl.AccionesBrazos.BAJAR_BRAZO, HandsControl.TipoBrazo.AMBOS)).start(), 2000);
+                    }
+                    break;
+
+                case "SALUDO":
+                    systemControl.cambiarEmocion(EmotionsType.SMILE);
+                    if (handsControl != null) {
+                        handsControl.controlBasicoBrazos(HandsControl.AccionesBrazos.LEVANTAR_BRAZO, HandsControl.TipoBrazo.DERECHO);
+                        mainHandler.postDelayed(() -> new Thread(() -> handsControl.controlBasicoBrazos(HandsControl.AccionesBrazos.BAJAR_BRAZO, HandsControl.TipoBrazo.DERECHO)).start(), 1500);
+                    }
+                    break;
+
+                case "IDLE":
+                    hardwareControl.apagarLED(com.qihancloud.opensdk.function.beans.LED.PART_ALL);
+                    systemControl.cambiarEmocion(EmotionsType.NORMAL);
+                    movementControl.desactivarSeguimiento();
+                    if (headControl != null) headControl.controlBasicoCabeza(HeadControl.AccionesCabeza.CENTRO);
+                    break;
+            }
+        }).start();
+    }
+
+    /**
+     * Gesto de saludo inicial (Área 5).
+     */
+    protected void realizarSaludoHumanizado() {
+        if (handsControl == null || headControl == null) return;
+        new Thread(() -> {
+            handsControl.controlBasicoBrazos(HandsControl.AccionesBrazos.LEVANTAR_BRAZO, HandsControl.TipoBrazo.AMBOS);
+            headControl.controlBasicoCabeza(HeadControl.AccionesCabeza.ARRIBA);
+            try { Thread.sleep(1000); } catch (InterruptedException ignored) {}
+            handsControl.controlBasicoBrazos(HandsControl.AccionesBrazos.BAJAR_BRAZO, HandsControl.TipoBrazo.AMBOS);
+            headControl.controlBasicoCabeza(HeadControl.AccionesCabeza.CENTRO);
+        }).start();
+    }
+
+    /**
+     * Activa el seguimiento de personas (Mejora Área 5 - Cambio 2).
+     */
+    public void activarSeguimiento() {
+        if (movementControl != null) movementControl.activarSeguimiento();
+    }
+
+    /**
+     * Desactiva el seguimiento de personas.
+     */
+    public void desactivarSeguimiento() {
+        if (movementControl != null) movementControl.desactivarSeguimiento();
+    }
+
+    /**
+     * Gesto de asentir con la cabeza (Cambio 1).
+     */
+    protected void asentirConCabeza() {
+        if (headControl == null) return;
+        new Thread(() -> {
+            headControl.controlBasicoCabeza(HeadControl.AccionesCabeza.ABAJO);
+            try { Thread.sleep(500); } catch (InterruptedException ignored) {}
+            headControl.controlBasicoCabeza(HeadControl.AccionesCabeza.ARRIBA);
+            try { Thread.sleep(500); } catch (InterruptedException ignored) {}
+            headControl.controlBasicoCabeza(HeadControl.AccionesCabeza.CENTRO);
+        }).start();
     }
 
     /**
@@ -228,34 +493,36 @@ public abstract class BaseActivity extends TopBaseActivity {
         }
     }
 
-    public void escuchar() {
-        if (speechManager != null) {
-            // Visual feedback: robot looks like it's thinking/listening
-            mostrarEmocion("QUESTION");
-            encenderLed(com.qihancloud.opensdk.function.beans.LED.PART_ALL, com.qihancloud.opensdk.function.beans.LED.MODE_YELLOW);
 
-            speechManager.setOnSpeechListener(new RecognizeListener() {
-                @Override
-                public boolean onRecognizeResult(Grammar grammar) {
-                    // Clear feedback
-                    apagarLed(com.qihancloud.opensdk.function.beans.LED.PART_ALL);
-                    mostrarEmocion("NORMAL");
-
-                    if (grammar != null && !TextUtils.isEmpty(grammar.getText())) {
-                        onTextoEscuchado(grammar.getText());
-                        return true;
-                    }
-                    return false;
-                }
-
-                @Override
-                public void onRecognizeVolume(int volume) {
-                    // opcional: puedes ignorarlo o sobreescribir onVolumenDetectado()
-                }
-            });
-        } else {
-            Log.w("BaseActivity[Robot]", "speechManager null — escuchar() ignorado");
+    /**
+     * Registra los elementos de UI que representan el micrófono para actualizar su estado.
+     * Mejora P0: Eliminar barrera de "tocar cabeza".
+     */
+    protected void setMicUI(View btn, TextView statusText) {
+        this.btnMicUI = btn;
+        this.tvEstadoMicUI = statusText;
+        if (statusText != null) {
+            this.textoOriginalMic = statusText.getText().toString();
         }
+    }
+
+    /**
+     * Actualiza la UI del micrófono según si el robot está escuchando o no.
+     * Mejora P0: Feedback visual claro.
+     */
+    protected void updateMicUI(boolean listening) {
+        runOnUiThread(() -> {
+            if (btnMicUI != null) {
+                // Cambiar color de fondo (usando tint para no machacar el ripple)
+                btnMicUI.setBackgroundTintList(android.content.res.ColorStateList.valueOf(
+                        getResources().getColor(listening ? R.color.mic_listening : R.color.mic_normal)
+                ));
+            }
+            if (tvEstadoMicUI != null) {
+                tvEstadoMicUI.setText(listening ? "TE ESTOY ESCUCHANDO..." : textoOriginalMic);
+                tvEstadoMicUI.setTextColor(getResources().getColor(listening ? R.color.mic_listening : R.color.mic_normal));
+            }
+        });
     }
 
     /**
@@ -411,11 +678,4 @@ public abstract class BaseActivity extends TopBaseActivity {
         if (movementControl != null) movementControl.desactivarMovimientoAleatorio();
     }
 
-    public void activarSeguimiento() {
-        if (movementControl != null) movementControl.activarSeguimiento();
-    }
-
-    public void desactivarSeguimiento() {
-        if (movementControl != null) movementControl.desactivarSeguimiento();
-    }
 }

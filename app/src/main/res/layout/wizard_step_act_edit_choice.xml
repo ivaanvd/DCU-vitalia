@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/editChoiceContainerAct"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:visibility="gone"
+    android:layout_marginBottom="24dp">
+    
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="¿Qué quieres cambiar?"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textColor="#1C1C1E"
+        android:layout_marginBottom="12dp"
+        android:layout_gravity="center"/>
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:columnCount="2"
+        android:rowCount="2"
+        android:alignmentMode="alignMargins">
+        <Button android:id="@+id/btnEditTipo" android:layout_width="0dp" android:layout_height="64dp" android:layout_columnWeight="1" android:text="Tipo" android:background="@drawable/bg_tipo_normal" android:layout_margin="4dp"/>
+        <Button android:id="@+id/btnEditDesc" android:layout_width="0dp" android:layout_height="64dp" android:layout_columnWeight="1" android:text="Detalle" android:background="@drawable/bg_tipo_normal" android:layout_margin="4dp"/>
+        <Button android:id="@+id/btnEditHora" android:layout_width="0dp" android:layout_height="64dp" android:layout_columnWeight="1" android:text="Hora" android:background="@drawable/bg_tipo_normal" android:layout_margin="4dp"/>
+        <Button android:id="@+id/btnEditDias" android:layout_width="0dp" android:layout_height="64dp" android:layout_columnWeight="1" android:text="Días" android:background="@drawable/bg_tipo_normal" android:layout_margin="4dp"/>
+    </GridLayout>
+</LinearLayout>

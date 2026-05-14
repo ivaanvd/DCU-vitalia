@@ -176,11 +176,7 @@ public class JuegoBuscaEncuentraActivity extends BaseActivity {
                 botonPulsado.setAlpha(1f);
                 botonPulsado.setForeground(null);
 
-                mostrarEmocion("PRISE"); // Emoción "orgulloso/feliz"
-                hablarOSimular("¡¡MUY BIEN! ESTE ERA EL ICONO CORRECTO");
-                encenderLed(LED.PART_ALL, LED.MODE_GREEN);
-//                moverBrazos("LEVANTAR_BRAZO", "AMBOS"); // Celebración: brazos arriba
-//                moverBrazos("BAJAR_BRAZO", "AMBOS");
+                gestionarFeedbackHardware("ACIERTO");
                 tvMensajeAuxiliar.setText("¡MUY BIEN! ESTE ERA EL ICONO CORRECTO");
                 tvMensajeAuxiliar.setTextColor(Color.parseColor("#198754"));
                 mostrarTodosLosIconosReales();
@@ -200,8 +196,8 @@ public class JuegoBuscaEncuentraActivity extends BaseActivity {
                 botonPulsado.setBackgroundResource(R.drawable.bg_tipo_incorrecto);
                 botonPulsado.setForeground(null);
 
-                encenderLed(LED.PART_ALL, LED.MODE_RED);
-                handler.postDelayed(() -> apagarLed(LED.PART_ALL), 1500);
+                gestionarFeedbackHardware("FALLO");
+                hablarOSimular("Ese no es el icono que busco. Sigue buscando.");
             }
         };
 

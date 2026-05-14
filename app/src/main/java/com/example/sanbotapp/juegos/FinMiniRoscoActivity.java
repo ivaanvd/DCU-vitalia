@@ -19,12 +19,10 @@ public class FinMiniRoscoActivity extends BaseActivity {
         String mensaje = getIntent().getStringExtra("MENSAJE");
         
         if (aciertos >= (total / 2)) {
-            mostrarEmocion("PRISE");
-            encenderLed(com.qihancloud.opensdk.function.beans.LED.PART_ALL, com.qihancloud.opensdk.function.beans.LED.MODE_GREEN);
+            gestionarFeedbackHardware("CELEBRACION");
             if (mensaje == null) mensaje = "¡Misión cumplida! ¡Qué bien se te da esto!";
         } else {
-            mostrarEmocion("CRY");
-            encenderLed(com.qihancloud.opensdk.function.beans.LED.PART_ALL, com.qihancloud.opensdk.function.beans.LED.MODE_RED);
+            gestionarFeedbackHardware("MOURN");
             if (mensaje == null) mensaje = "¡Buen intento! Seguro que la próxima vez lo haces mejor.";
         }
         

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/summaryContainerRec"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:visibility="gone"
+    android:gravity="center"
+    android:layout_marginBottom="24dp">
+    
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="REVISIÓN FINAL"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="#1C1C1E"
+        android:layout_marginBottom="12dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/bg_field_active"
+        android:padding="16dp">
+
+        <!-- Fila Título -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp">
+            <TextView
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:text="🔔 RECORDAR:"
+                android:textStyle="bold"
+                android:textColor="#3A3A3C"/>
+            <TextView
+                android:id="@+id/tvSummaryTituloRec"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="—"
+                android:textColor="#1C1C1E"/>
+        </LinearLayout>
+
+        <!-- Fila Fecha -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp">
+            <TextView
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:text="📅 FECHA:"
+                android:textStyle="bold"
+                android:textColor="#3A3A3C"/>
+            <TextView
+                android:id="@+id/tvSummaryFechaRec"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="—"
+                android:textColor="#1C1C1E"/>
+        </LinearLayout>
+
+        <!-- Fila Hora -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp">
+            <TextView
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:text="⏰ HORA:"
+                android:textStyle="bold"
+                android:textColor="#3A3A3C"/>
+            <TextView
+                android:id="@+id/tvSummaryHoraRec"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="—"
+                android:textColor="#1C1C1E"/>
+        </LinearLayout>
+
+        <!-- Fila Anticipación -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:text="⚠️ AVISO:"
+                android:textStyle="bold"
+                android:textColor="#3A3A3C"/>
+            <TextView
+                android:id="@+id/tvSummaryAnticRec"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="—"
+                android:textColor="#1C1C1E"/>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

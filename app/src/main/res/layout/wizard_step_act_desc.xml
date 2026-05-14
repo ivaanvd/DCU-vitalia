@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/containerDetallesDinamicos"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:visibility="gone">
+
+    <TextView
+        android:id="@+id/tvLabelDetalleDinamico"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PASO 2: Detalle"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:textColor="#1C1C1E"
+        android:layout_marginBottom="12dp"/>
+
+    <EditText
+        android:id="@+id/etDescripcionActividad"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:textSize="18sp"
+        android:textColor="#1C1C1E"
+        android:background="@drawable/bg_campo_descripcion"
+        android:paddingStart="14dp"
+        android:paddingEnd="14dp"
+        android:singleLine="true"
+        android:layout_marginBottom="24dp"
+        android:inputType="textCapSentences"/>
+</LinearLayout>

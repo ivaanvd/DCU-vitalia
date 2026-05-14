@@ -77,11 +77,16 @@ public class ActividadesActivity extends BaseActivity {
     private String valorPendienteConfirmar = "";
     private CampoVozEspera campoAConfirmar = CampoVozEspera.NINGUNO;
 
+    private boolean isAssistantActive = false;
+    private boolean isEditingFromSummary = false;
+    private boolean isManual = false;
+    private String tipoSeleccionado = Actividad.TIPO_OTROS;
+
     private java.lang.ref.WeakReference<AlertDialog> dialogRef;
     private java.lang.ref.WeakReference<TextView> dialogTvHoraRef;
     private java.lang.ref.WeakReference<TextView[]> dialogBtnsDiaRef;
     private java.lang.ref.WeakReference<EditText> dialogEtDescRef;
-    private java.lang.ref.WeakReference<Spinner> dialogSpinnerRef;
+    private java.util.Map<String, Button> typeButtons = new java.util.HashMap<>();
 
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
     private final java.util.concurrent.ExecutorService dbExecutor = java.util.concurrent.Executors
@@ -101,7 +106,14 @@ public class ActividadesActivity extends BaseActivity {
         LinearLayout btnAnadir = findViewById(R.id.btnAnadirActividad);
         btnAnadir.setOnClickListener(v -> mostrarDialogoAnadir(null));
 
-        renderizarLista();
+        dbExecutor.execute(this::renderizarLista);
+    }
+
+    @Override
+    protected void onRobotServiceReady() {
+        super.onRobotServiceReady();
+        // Solo renderizamos la lista, ya no saludamos cada vez para no cansar al usuario
+        dbExecutor.execute(this::renderizarLista);
     }
 
     @Override
@@ -121,10 +133,17 @@ public class ActividadesActivity extends BaseActivity {
 
         pararVoz();
         mainHandler.removeCallbacksAndMessages(null);
-        mainHandler.postDelayed(this::escuchar, 300);
+                    mainHandler.post(this::escuchar);
     }
 
     private void anunciarCampoYEsperarToque(CampoVozEspera campo) {
+        // Si venimos de resumen o de elegir qué editar, marcamos que estamos editando
+        if (campoEspera == CampoVozEspera.RESUMEN_FINAL || campoEspera == CampoVozEspera.ELECCION_EDICION) {
+            if (campo != CampoVozEspera.RESUMEN_FINAL && campo != CampoVozEspera.CONFIRMACION_CAMPO) {
+                isEditingFromSummary = true;
+            }
+        }
+
         campoEspera = campo;
         String instruccion;
         switch (campo) {
@@ -132,24 +151,259 @@ public class ActividadesActivity extends BaseActivity {
                 instruccion = obtenerInstruccionDescripcionAct();
                 break;
             case TIPO:
-                instruccion = "¡Hola! Vamos a añadir una actividad. ¿Qué tipo de actividad es? Puede ser: medicina, comer, pasear, jugar o aseo. Toca mi cabeza para hablar.";
+                instruccion = "¿Qué tipo de actividad vamos a añadir? Puedes elegir una de las opciones que aparecen en pantalla.";
                 break;
             case HORA:
-                instruccion = "¿A qué hora prefieres hacerlo? Dime por ejemplo: 'A las diez de la mañana'. Toca mi cabeza y dímelo.";
+                instruccion = "¿Y a qué hora te gustaría realizarla? Por ejemplo, puedes decir: a las diez y media.";
                 break;
             case DIA_SEMANA:
-                instruccion = "¿Qué días de la semana? Di los días que quieras, como 'Lunes y Jueves'. Toca mi cabeza y dímelo.";
+                instruccion = "Ya casi terminamos. ¿Qué días de la semana quieres que te avise?";
                 break;
             case CAMPO_EDITAR:
                 instruccion = obtenerInstruccionDinamicaAct();
                 break;
             case CONFIRMACION_CAMPO:
-                instruccion = "He entendido '" + valorPendienteConfirmar + "'. ¿Es correcto? Di: sí o no.";
+                instruccion = "He anotado '" + valorPendienteConfirmar + "'. ¿Está bien así?";
+                break;
+            case RESUMEN_FINAL:
+                isEditingFromSummary = false;
+                instruccion = "¿Es todo correcto? Si es así, pulsa 'sí, guardar'. Si quieres cambiar algo, pulsa 'no, cambiar'.";
+                gestionarFeedbackHardware("SUMMARY_START");
+                break;
+            case ELECCION_EDICION:
+                isEditingFromSummary = true;
+                instruccion = "¿Qué campo quieres cambiar? Pulsa uno de los botones de la pantalla.";
+                gestionarFeedbackHardware("THINKING_START");
                 break;
             default:
                 return;
         }
-        hablarEnMain(instruccion);
+        if (campo == CampoVozEspera.RESUMEN_FINAL) isEditingFromSummary = false;
+        if (campo == CampoVozEspera.ELECCION_EDICION) isEditingFromSummary = true;
+        
+        if (campo == CampoVozEspera.CAMPO_EDITAR || campo == CampoVozEspera.ELECCION_EDICION) {
+            hablarEnMain(instruccion, com.qihancloud.opensdk.function.beans.EmotionsType.QUESTION);
+        } else {
+            hablarEnMain(instruccion);
+        }
+        actualizarProgresoYResaltadoAct(campo);
+    }
+
+    /**
+     * Actualiza visualmente el campo activo y los indicadores de progreso.
+     * Mejora Área 2: Feedback visual.
+     */
+    private void actualizarProgresoYResaltadoAct(CampoVozEspera campo) {
+        AlertDialog dlg = dialogRef != null ? dialogRef.get() : null;
+        if (dlg == null) return;
+
+        runOnUiThread(() -> {
+            // 1. Limpiar resaltados previos
+            View spinner = dlg.findViewById(R.id.spinnerTipoActividad);
+            View etDesc = dlg.findViewById(R.id.etDescripcionActividad);
+            View tvHora = dlg.findViewById(R.id.tvHoraDialogActividad);
+            View containerDias = dlg.findViewById(R.id.containerDiasSemana);
+
+            if (spinner != null) spinner.setBackgroundResource(R.drawable.bg_spinner_custom);
+            if (etDesc != null) etDesc.setBackgroundResource(R.drawable.bg_campo_descripcion);
+            if (tvHora != null) tvHora.setBackgroundResource(R.drawable.bg_campo_descripcion);
+            if (containerDias != null) containerDias.setPadding(0, 0, 0, 0);
+
+            View dotContainer = dlg.findViewById(R.id.dotContainerAct);
+            if (dotContainer != null) dotContainer.setVisibility(View.VISIBLE);
+
+            // 2. Resaltar campo actual y calcular paso de progreso
+            int step = 0;
+            View s1 = dlg.findViewById(R.id.step1Container);
+            View s2 = dlg.findViewById(R.id.containerDetallesDinamicos);
+            View s3 = dlg.findViewById(R.id.step3Container);
+            View s4 = dlg.findViewById(R.id.step4Container);
+            View sum = dlg.findViewById(R.id.summaryContainerAct);
+            View edt = dlg.findViewById(R.id.editChoiceContainerAct);
+            View step0 = dlg.findViewById(R.id.step0Container);
+
+            if (s1 != null) s1.setVisibility(View.GONE);
+            if (s2 != null) s2.setVisibility(View.GONE);
+            if (s3 != null) s3.setVisibility(View.GONE);
+            if (s4 != null) s4.setVisibility(View.GONE);
+            if (sum != null) sum.setVisibility(View.GONE);
+            if (edt != null) edt.setVisibility(View.GONE);
+
+            if (campo == CampoVozEspera.NINGUNO) {
+                if (s1 != null) s1.setVisibility(View.GONE);
+                if (s2 != null) s2.setVisibility(View.GONE);
+                if (s3 != null) s3.setVisibility(View.GONE);
+                if (s4 != null) s4.setVisibility(View.GONE);
+                if (sum != null) sum.setVisibility(View.GONE);
+                if (edt != null) edt.setVisibility(View.GONE);
+                if (dotContainer != null) dotContainer.setVisibility(View.GONE);
+                
+                // OCULTAR MIC Y BOTONES EN PASO 0
+                View mic = dlg.findViewById(R.id.containerMicEstadoAct);
+                Button btnAnt = dlg.findViewById(R.id.btnWizardAnterior);
+                Button btnSig = dlg.findViewById(R.id.btnWizardSiguiente);
+                if (mic != null) mic.setVisibility(View.GONE);
+                if (btnAnt != null) btnAnt.setVisibility(View.GONE);
+                if (btnSig != null) btnSig.setVisibility(View.GONE);
+                
+                if (step0 != null) step0.setVisibility(View.VISIBLE);
+                return;
+            }
+
+            // MOSTRAR MIC POR DEFECTO EN EL RESTO DE PASOS
+            View mic = dlg.findViewById(R.id.containerMicEstadoAct);
+            if (mic != null) mic.setVisibility(View.VISIBLE);
+
+            // Siempre ocultar el paso 0 si no estamos en NINGUNO
+            if (step0 != null) step0.setVisibility(View.GONE);
+
+            switch (campo) {
+                case TIPO:
+                    step = 1;
+                    if (s1 != null) s1.setVisibility(View.VISIBLE);
+                    break;
+                case DESCRIPCION:
+                    step = 2;
+                    if (s2 != null) s2.setVisibility(View.VISIBLE);
+                    if (etDesc != null) etDesc.setBackgroundResource(R.drawable.bg_field_active);
+                    break;
+                case HORA:
+                    step = 3;
+                    if (s3 != null) s3.setVisibility(View.VISIBLE);
+                    if (tvHora != null) tvHora.setBackgroundResource(R.drawable.bg_field_active);
+                    break;
+                case DIA_SEMANA:
+                    step = 4;
+                    if (s4 != null) s4.setVisibility(View.VISIBLE);
+                    break;
+                case CAMPO_EDITAR:
+                    step = 0; // Menu de edicion es como un paso intermedio
+                    if (edt != null) edt.setVisibility(View.VISIBLE);
+                    break;
+                case CONFIRMACION_CAMPO:
+                    // Mostrar solo el paso que se está confirmando y resaltarlo
+                    if (campoAConfirmar == CampoVozEspera.TIPO) { 
+                        step = 1; 
+                        if (s1 != null) s1.setVisibility(View.VISIBLE); 
+                    }
+                    else if (campoAConfirmar == CampoVozEspera.DESCRIPCION) { 
+                        step = 2; 
+                        if (s2 != null) s2.setVisibility(View.VISIBLE); 
+                        if (etDesc != null) etDesc.setBackgroundResource(R.drawable.bg_field_active);
+                    }
+                    else if (campoAConfirmar == CampoVozEspera.HORA) { 
+                        step = 3; 
+                        if (s3 != null) s3.setVisibility(View.VISIBLE); 
+                        if (tvHora != null) tvHora.setBackgroundResource(R.drawable.bg_field_active);
+                    }
+                    else if (campoAConfirmar == CampoVozEspera.DIA_SEMANA) { 
+                        step = 4; 
+                        if (s4 != null) s4.setVisibility(View.VISIBLE); 
+                        if (containerDias != null) containerDias.setPadding(4, 4, 4, 4);
+                    }
+                    break;
+                case RESUMEN_FINAL:
+                    step = 5;
+                    View summary = dlg.findViewById(R.id.summaryContainerAct);
+                    if (summary != null) {
+                        summary.setVisibility(View.VISIBLE);
+                        actualizarTextoResumen(dlg);
+                    }
+                    break;
+                case ELECCION_EDICION:
+                    step = 5;
+                    View editChoice = dlg.findViewById(R.id.editChoiceContainerAct);
+                    if (editChoice != null) editChoice.setVisibility(View.VISIBLE);
+                    break;
+            }
+
+            // Actualizar botones de navegación y colores
+            Button btnAnt = dlg.findViewById(R.id.btnWizardAnterior);
+            Button btnSig = dlg.findViewById(R.id.btnWizardSiguiente);
+            
+            boolean isStep0 = (dlg.findViewById(R.id.step0Container) != null && dlg.findViewById(R.id.step0Container).getVisibility() == View.VISIBLE);
+            boolean isManual = !isAssistantActive; // Necesitamos esta variable
+
+            if (btnAnt != null && btnSig != null) {
+                if (isStep0) {
+                    btnAnt.setVisibility(View.GONE);
+                    btnSig.setVisibility(View.GONE);
+                } else if (campo == CampoVozEspera.CONFIRMACION_CAMPO) {
+                    // Solo Repetir y Confirmar
+                    btnAnt.setVisibility(View.VISIBLE);
+                    btnSig.setVisibility(View.VISIBLE);
+                    btnAnt.setText("REPETIR");
+                    btnAnt.setBackgroundResource(R.drawable.bg_btn_wizard_nav);
+                    btnSig.setText("CONFIRMAR");
+                    btnSig.setBackgroundResource(R.drawable.bg_btn_guardar);
+                } else if (campo == CampoVozEspera.RESUMEN_FINAL) {
+                    btnAnt.setVisibility(View.VISIBLE);
+                    btnSig.setVisibility(View.VISIBLE);
+                    btnAnt.setText("no, cambiar");
+                    btnAnt.setBackgroundResource(R.drawable.bg_btn_cancelar);
+                    btnSig.setText("sí, guardar");
+                    btnSig.setBackgroundResource(R.drawable.bg_btn_guardar);
+                } else if (campo == CampoVozEspera.ELECCION_EDICION) {
+                    btnAnt.setVisibility(View.VISIBLE);
+                    btnSig.setVisibility(View.GONE); // No hay siguiente aquí, se eligen botones
+                    btnAnt.setText("VOLVER");
+                    btnAnt.setBackgroundResource(R.drawable.bg_btn_wizard_nav);
+                } else if (isEditingFromSummary) {
+                    // MODO EDICIÓN DESDE RESUMEN
+                    btnAnt.setVisibility(View.VISIBLE);
+                    btnSig.setVisibility(View.VISIBLE);
+                    btnAnt.setText("VOLVER");
+                    btnAnt.setBackgroundResource(R.drawable.bg_btn_wizard_nav);
+                    btnSig.setText("CONFIRMAR");
+                    btnSig.setBackgroundResource(R.drawable.bg_btn_guardar);
+                } else {
+                    btnAnt.setVisibility(View.VISIBLE);
+                    btnSig.setVisibility(View.VISIBLE);
+                    
+                    if (campo == CampoVozEspera.CAMPO_EDITAR) {
+                        btnAnt.setText("CANCELAR");
+                        btnAnt.setBackgroundResource(R.drawable.bg_btn_cancelar);
+                        btnSig.setText("GUARDAR");
+                        btnSig.setBackgroundResource(R.drawable.bg_btn_guardar);
+                    } else if (step == 1) {
+                        btnAnt.setText("CANCELAR");
+                        btnAnt.setBackgroundResource(R.drawable.bg_btn_cancelar);
+                        btnSig.setText("SIGUIENTE");
+                        btnSig.setBackgroundResource(R.drawable.bg_btn_wizard_nav);
+                    } else if (step == 4) {
+                        btnAnt.setText("ANTERIOR");
+                        btnAnt.setBackgroundResource(R.drawable.bg_btn_wizard_nav);
+                        btnSig.setText("SIGUIENTE"); // Ahora va al resumen
+                        btnSig.setBackgroundResource(R.drawable.bg_btn_wizard_nav);
+                    } else {
+                        btnAnt.setText("ANTERIOR");
+                        btnAnt.setBackgroundResource(R.drawable.bg_btn_wizard_nav);
+                        btnSig.setText("SIGUIENTE");
+                        btnSig.setBackgroundResource(R.drawable.bg_btn_wizard_nav);
+                    }
+                }
+            }
+
+            // 3. Actualizar bolitas de progreso
+            View progressLayout = dlg.findViewById(R.id.dotContainerAct);
+            View micLayout = dlg.findViewById(R.id.containerMicEstadoAct);
+            
+            if (progressLayout != null) progressLayout.setVisibility(isStep0 ? View.GONE : View.VISIBLE);
+            if (micLayout != null) {
+                // No mostrar micro si es manual o paso 0 o resumen/elección o confirmación
+                boolean ocultarMic = isStep0 || isManual || campo == CampoVozEspera.RESUMEN_FINAL 
+                    || campo == CampoVozEspera.ELECCION_EDICION || campo == CampoVozEspera.CONFIRMACION_CAMPO;
+                micLayout.setVisibility(ocultarMic ? View.GONE : View.VISIBLE);
+            }
+
+            int[] dotIds = {R.id.dotStep1, R.id.dotStep2, R.id.dotStep3, R.id.dotStep4};
+            for (int i = 0; i < dotIds.length; i++) {
+                View dot = dlg.findViewById(dotIds[i]);
+                if (dot != null) {
+                    dot.setBackgroundResource(i < step ? R.drawable.step_dot_active : R.drawable.step_dot_inactive);
+                }
+            }
+        });
     }
 
     /**
@@ -157,18 +411,16 @@ public class ActividadesActivity extends BaseActivity {
      * tipo de actividad.
      */
     private String obtenerInstruccionDescripcionAct() {
-        Spinner spinner = dialogSpinnerRef != null ? dialogSpinnerRef.get() : null;
-        if (spinner == null)
-            return "¿Qué detalles quieres añadir? Toca mi cabeza y dímelo.";
+        String tipo = tipoSeleccionado;
+        if (tipo == null) tipo = "";
 
-        String tipoLabel = spinner.getSelectedItem().toString();
-        if (tipoLabel.equalsIgnoreCase("MEDICACIÓN")) {
+        if (tipo.equals(Actividad.TIPO_MEDICACION)) {
             return "¿Qué medicina te toca tomar? Por ejemplo: 'Paracetamol'. Toca mi cabeza y dímelo.";
-        } else if (tipoLabel.equalsIgnoreCase("COMER")) {
+        } else if (tipo.equals(Actividad.TIPO_COMER)) {
             return "¿Qué vas a comer hoy? Por ejemplo: 'Sopa de verduras'. Toca mi cabeza y dímelo.";
-        } else if (tipoLabel.equalsIgnoreCase("LLAMADA FAMILIAR")) {
+        } else if (tipo.equals(Actividad.TIPO_LLAMADA_FAMILIAR)) {
             return "¿A quién vas a llamar? Por ejemplo: 'A mi hija María'. Toca mi cabeza y dímelo.";
-        } else if (tipoLabel.equalsIgnoreCase("PASEO/EJERCICIO")) {
+        } else if (tipo.equals(Actividad.TIPO_PASEO_EJERCICIO)) {
             return "¿A dónde vas a ir a caminar? Por ejemplo: 'Al parque del retiro'. Toca mi cabeza y dímelo.";
         }
         return "¿Qué detalles quieres añadir a esta actividad? Toca mi cabeza y dímelo.";
@@ -204,13 +456,13 @@ public class ActividadesActivity extends BaseActivity {
     }
 
     private String obtenerInstruccionDinamicaAct() {
-        Spinner spinner = dialogSpinnerRef != null ? dialogSpinnerRef.get() : null;
-        String tipoLabel = (spinner != null) ? (String) spinner.getSelectedItem() : "la seleccionada";
+        String tipo = tipoSeleccionado;
+        String tipoLabel = (tipo != null) ? tipo : "la seleccionada";
 
         AlertDialog dlg = dialogRef != null ? dialogRef.get() : null;
-        String btnAction = "Añadir";
-        if (dlg != null && dlg.findViewById(R.id.btnGuardarDialogActividad) instanceof Button) {
-            btnAction = ((Button) dlg.findViewById(R.id.btnGuardarDialogActividad)).getText().toString();
+        String btnAction = "GUARDAR";
+        if (dlg != null && dlg.findViewById(R.id.btnWizardSiguiente) instanceof Button) {
+            btnAction = ((Button) dlg.findViewById(R.id.btnWizardSiguiente)).getText().toString();
         }
 
         return "La actividad es de tipo " + tipoLabel + ". ¿Quieres cambiar algo más o prefieres '" + btnAction
@@ -228,22 +480,23 @@ public class ActividadesActivity extends BaseActivity {
         String tGlobal = texto.toLowerCase().trim();
 
         // ── Comandos globales ────────────────────────────────────────────────
-        String btnText = "añadir";
-        if (dlg.findViewById(R.id.btnGuardarDialogActividad) instanceof Button) {
-            btnText = ((Button) dlg.findViewById(R.id.btnGuardarDialogActividad)).getText().toString().toLowerCase();
+        String btnText = "guardar";
+        if (dlg.findViewById(R.id.btnWizardSiguiente) instanceof Button) {
+            btnText = ((Button) dlg.findViewById(R.id.btnWizardSiguiente)).getText().toString().toLowerCase();
         }
 
         boolean quiereConfirmar = tGlobal.equalsIgnoreCase("confirmar")
                 || tGlobal.equalsIgnoreCase("aceptar")
                 || tGlobal.contains("guardar")
                 || (btnText.contains("añadir") && tGlobal.contains("añadir"))
-                || tGlobal.contains(btnText);
+                || tGlobal.contains(btnText)
+                || tGlobal.equalsIgnoreCase("siguiente");
 
         if (quiereConfirmar) {
             hablarEnMain("Entendido.");
             runOnUiThread(() -> {
-                if (dlg.findViewById(R.id.btnGuardarDialogActividad) != null) {
-                    dlg.findViewById(R.id.btnGuardarDialogActividad).performClick();
+                if (dlg.findViewById(R.id.btnWizardSiguiente) != null) {
+                    dlg.findViewById(R.id.btnWizardSiguiente).performClick();
                 }
             });
             return;
@@ -251,8 +504,47 @@ public class ActividadesActivity extends BaseActivity {
 
         if (tGlobal.contains("cancelar") || tGlobal.contains("atrás") || tGlobal.contains("atras")
                 || tGlobal.contains("cerrar")) {
-            hablarEnMain("Vale, cerramos.");
-            runOnUiThread(dlg::dismiss);
+            hablarEnMain("Vale.");
+            runOnUiThread(() -> {
+                if (dlg.findViewById(R.id.btnWizardAnterior) != null) {
+                    dlg.findViewById(R.id.btnWizardAnterior).performClick();
+                }
+            });
+            return;
+        }
+
+        if (campoEspera == CampoVozEspera.RESUMEN_FINAL) {
+            if (tGlobal.contains("sí") || tGlobal.contains("si") || tGlobal.contains("correcto") || tGlobal.contains("bien")) {
+                hablarEnMain("¡Perfecto! Guardando...");
+                runOnUiThread(() -> {
+                    if (dlg.findViewById(R.id.btnWizardSiguiente) != null) {
+                        dlg.findViewById(R.id.btnWizardSiguiente).performClick();
+                    }
+                });
+            } else if (tGlobal.contains("no") || tGlobal.contains("cambiar") || tGlobal.contains("error")) {
+                hablarEnMain("De acuerdo. ¿Qué quieres cambiar?");
+                anunciarCampoYEsperarToque(CampoVozEspera.ELECCION_EDICION);
+            }
+            return;
+        }
+
+        if (campoEspera == CampoVozEspera.ELECCION_EDICION) {
+            if (tGlobal.contains("tipo") || tGlobal.contains("actividad")) {
+                hablarEnMain("Vale, cambiamos el tipo.");
+                anunciarCampoYEsperarToque(CampoVozEspera.TIPO);
+            } else if (tGlobal.contains("hora")) {
+                hablarEnMain("De acuerdo, la hora.");
+                anunciarCampoYEsperarToque(CampoVozEspera.HORA);
+            } else if (tGlobal.contains("día") || tGlobal.contains("dia") || tGlobal.contains("semana")) {
+                hablarEnMain("Entendido, los días.");
+                anunciarCampoYEsperarToque(CampoVozEspera.DIA_SEMANA);
+            } else if (tGlobal.contains("descripción") || tGlobal.contains("descripcion") || tGlobal.contains("detalle")) {
+                hablarEnMain("Cambiamos los detalles.");
+                anunciarCampoYEsperarToque(CampoVozEspera.DESCRIPCION);
+            } else if (tGlobal.contains("volver") || tGlobal.contains("resumen")) {
+                hablarEnMain("Volvemos al resumen.");
+                anunciarCampoYEsperarToque(CampoVozEspera.RESUMEN_FINAL);
+            }
             return;
         }
 
@@ -263,11 +555,10 @@ public class ActividadesActivity extends BaseActivity {
                         || tGlobal.contains("vale") || tGlobal.contains("bueno") || tGlobal.contains("está bien")) {
                     aplicarValorConfirmadoAct();
                     hablarEnMain("Perfecto.");
-                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.CAMPO_EDITAR), 1000);
                 } else {
                     hablarEnMain("Vaya, lo siento. Intentémoslo de nuevo.");
                     CampoVozEspera volverA = campoAConfirmar;
-                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(volverA), 1500);
+                    anunciarCampoYEsperarToque(volverA);
                 }
                 break;
             }
@@ -295,7 +586,7 @@ public class ActividadesActivity extends BaseActivity {
                     anunciarCampoYEsperarToque(CampoVozEspera.CONFIRMACION_CAMPO);
                 } else {
                     hablarEnMain("No reconocí ese tipo. Inténtalo de nuevo.");
-                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.TIPO), 2500);
+                    anunciarCampoYEsperarToque(CampoVozEspera.TIPO);
                 }
                 break;
             }
@@ -310,7 +601,7 @@ public class ActividadesActivity extends BaseActivity {
                     anunciarCampoYEsperarToque(CampoVozEspera.CONFIRMACION_CAMPO);
                 } else {
                     hablarEnMain("No te entendí bien la hora. Inténtalo de nuevo.");
-                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.HORA), 2500);
+                    anunciarCampoYEsperarToque(CampoVozEspera.HORA);
                 }
                 break;
             }
@@ -323,7 +614,7 @@ public class ActividadesActivity extends BaseActivity {
                     anunciarCampoYEsperarToque(CampoVozEspera.CONFIRMACION_CAMPO);
                 } else {
                     hablarEnMain("No entendí los días. Di por ejemplo: lunes y jueves.");
-                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.DIA_SEMANA), 2500);
+                    anunciarCampoYEsperarToque(CampoVozEspera.DIA_SEMANA);
                 }
                 break;
             }
@@ -331,19 +622,19 @@ public class ActividadesActivity extends BaseActivity {
             case CAMPO_EDITAR: {
                 if (tGlobal.contains("descripción") || tGlobal.contains("descripcion") || tGlobal.contains("detalle")) {
                     hablarEnMain("Entendido.");
-                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.DESCRIPCION), 1000);
+                    anunciarCampoYEsperarToque(CampoVozEspera.DESCRIPCION);
                 } else if (tGlobal.contains("tipo") || tGlobal.contains("categoría") || tGlobal.contains("categoria")) {
                     hablarEnMain("Vale.");
-                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.TIPO), 1000);
+                    anunciarCampoYEsperarToque(CampoVozEspera.TIPO);
                 } else if (tGlobal.contains("hora") || tGlobal.contains("momento") || tGlobal.contains("cuándo")) {
                     hablarEnMain("De acuerdo.");
-                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.HORA), 1000);
+                    anunciarCampoYEsperarToque(CampoVozEspera.HORA);
                 } else if (tGlobal.contains("día") || tGlobal.contains("dias") || tGlobal.contains("semana")) {
                     hablarEnMain("Cambiamos los días.");
-                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.DIA_SEMANA), 1000);
+                    anunciarCampoYEsperarToque(CampoVozEspera.DIA_SEMANA);
                 } else {
                     hablarEnMain("No te entendí. Di por ejemplo: descripción o tipo.");
-                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.CAMPO_EDITAR), 2500);
+                    anunciarCampoYEsperarToque(CampoVozEspera.CAMPO_EDITAR);
                 }
                 break;
             }
@@ -358,14 +649,12 @@ public class ActividadesActivity extends BaseActivity {
                         dialogEtDescRef.get().setText(valorPendienteConfirmar);
                     break;
                 case TIPO:
-                    Spinner spinner = dialogSpinnerRef != null ? dialogSpinnerRef.get() : null;
-                    if (spinner != null) {
-                        String[] etiquetas = TipoActividad.etiquetas();
-                        for (int i = 0; i < etiquetas.length; i++) {
-                            if (etiquetas[i].equalsIgnoreCase(valorPendienteConfirmar)) {
-                                spinner.setSelection(i);
-                                break;
-                            }
+                    String[] etiquetas = TipoActividad.etiquetas();
+                    String[] claves = TipoActividad.claves();
+                    for (int i = 0; i < etiquetas.length; i++) {
+                        if (etiquetas[i].equalsIgnoreCase(valorPendienteConfirmar)) {
+                            seleccionarTipoUI(claves[i]);
+                            break;
                         }
                     }
                     break;
@@ -387,6 +676,18 @@ public class ActividadesActivity extends BaseActivity {
                     }
                     break;
             }
+
+            // Progresar al siguiente paso automáticamente
+            CampoVozEspera siguiente = CampoVozEspera.RESUMEN_FINAL;
+            if (isEditingFromSummary) {
+                siguiente = CampoVozEspera.RESUMEN_FINAL;
+            } else {
+                if (campoAConfirmar == CampoVozEspera.TIPO) siguiente = CampoVozEspera.DESCRIPCION;
+                else if (campoAConfirmar == CampoVozEspera.DESCRIPCION) siguiente = CampoVozEspera.HORA;
+                else if (campoAConfirmar == CampoVozEspera.HORA) siguiente = CampoVozEspera.DIA_SEMANA;
+            }
+
+            anunciarCampoYEsperarToque(siguiente);
         });
     }
 
@@ -396,46 +697,28 @@ public class ActividadesActivity extends BaseActivity {
                 ? new ArrayList<>(existente.getDiasSemana())
                 : new ArrayList<>();
         campoEspera = CampoVozEspera.NINGUNO;
+        isEditingFromSummary = false;
 
         final View dv = LayoutInflater.from(this).inflate(R.layout.dialog_anadir_actividad, null);
         final TextView tvHora = dv.findViewById(R.id.tvHoraDialogActividad);
         final EditText etDesc = dv.findViewById(R.id.etDescripcionActividad);
-        final Spinner spinner = dv.findViewById(R.id.spinnerTipoActividad);
         final TextView tvTitulo = dv.findViewById(R.id.tvTituloDialogActividad);
-        final Button btnGuardar = dv.findViewById(R.id.btnGuardarDialogActividad);
 
         tvTitulo.setText(existente != null ? "EDITAR ACTIVIDAD" : "AÑADIR ACTIVIDAD");
-        btnGuardar.setText(existente != null ? "GUARDAR" : "AÑADIR");
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,
-                TipoActividad.etiquetas());
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
 
         if (existente != null) {
             etDesc.setText(existente.getDescripcion());
-            String[] claves = TipoActividad.claves();
-            for (int i = 0; i < claves.length; i++) {
-                if (claves[i].equals(existente.getTipo())) {
-                    spinner.setSelection(i);
-                    break;
-                }
-            }
         }
 
         actualizarDisplayHora(tvHora, horaSeleccionada);
 
-        // Listener para actualizar campo dinámico según el tipo
-        spinner.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(android.widget.AdapterView<?> parent, View view, int position, long id) {
-                actualizarCampoDinamico(dv, parent.getItemAtPosition(position).toString());
-            }
-
-            @Override
-            public void onNothingSelected(android.widget.AdapterView<?> parent) {
-            }
-        });
+        // Gestión de Selección de Tipo (Botones)
+        setupBotonesTipo(dv);
+        if (existente != null) {
+            seleccionarTipoUI(existente.getTipo());
+        } else {
+            seleccionarTipoUI(Actividad.TIPO_MEDICACION);
+        }
 
         final TextView[] btnsDia = {
                 dv.findViewById(R.id.btnDiaLun), dv.findViewById(R.id.btnDiaMar),
@@ -461,87 +744,286 @@ public class ActividadesActivity extends BaseActivity {
         dialogTvHoraRef = new java.lang.ref.WeakReference<>(tvHora);
         dialogBtnsDiaRef = new java.lang.ref.WeakReference<>(btnsDia);
         dialogEtDescRef = new java.lang.ref.WeakReference<>(etDesc);
-        dialogSpinnerRef = new java.lang.ref.WeakReference<>(spinner);
 
         AlertDialog dialog = new AlertDialog.Builder(this).setView(dv).setCancelable(true).create();
         if (dialog.getWindow() != null) {
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-            // Evitar que el teclado salga solo
             dialog.getWindow().setSoftInputMode(android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         }
         dialogRef = new java.lang.ref.WeakReference<>(dialog);
 
+        // MEJORA P0: Botón de micrófono en pantalla
+        View btnMic = dv.findViewById(R.id.btnMicDialogAct);
+        TextView tvEstadoMic = dv.findViewById(R.id.tvEstadoMicAct);
+        if (btnMic != null && tvEstadoMic != null) {
+            setMicUI(btnMic, tvEstadoMic);
+            btnMic.setOnClickListener(v -> onCabezaTocada());
+        }
+
         dialog.setOnDismissListener(d -> {
+            setMicUI(null, null);
             campoEspera = CampoVozEspera.NINGUNO;
             mainHandler.removeCallbacksAndMessages(null);
-            pararVoz(); // Se calla al cerrar
+            pararVoz();
         });
 
-        dv.findViewById(R.id.btnCancelarDialogActividad).setOnClickListener(v -> dialog.dismiss());
-        dv.findViewById(R.id.btnCancelarDialogActividad2).setOnClickListener(v -> dialog.dismiss());
+        // BOTONES NAVEGACIÓN WIZARD
+        Button btnSig = dv.findViewById(R.id.btnWizardSiguiente);
+        Button btnAnt = dv.findViewById(R.id.btnWizardAnterior);
 
-        btnGuardar.setOnClickListener(v -> {
-            final String desc = etDesc.getText().toString().trim();
-            final String tipo = TipoActividad.claves()[spinner.getSelectedItemPosition()];
-
-            // VALIDACIÓN: Descripción obligatoria para ciertos tipos
-            if (desc.isEmpty()) {
-                if (tipo.equals(Actividad.TIPO_MEDICACION) || tipo.equals(Actividad.TIPO_COMER)
-                        || tipo.equals(Actividad.TIPO_LLAMADA_FAMILIAR)
-                        || tipo.equals(Actividad.TIPO_PASEO_EJERCICIO)) {
-
-                    String campoFaltante = "la información";
-                    if (tipo.equals(Actividad.TIPO_MEDICACION))
-                        campoFaltante = "el nombre de la medicina";
-                    else if (tipo.equals(Actividad.TIPO_COMER))
-                        campoFaltante = "qué vas a comer";
-                    else if (tipo.equals(Actividad.TIPO_LLAMADA_FAMILIAR))
-                        campoFaltante = "a quién vas a llamar";
-
-                    hablarEnMain("Por favor, dime " + campoFaltante + ". Es necesario para poder ayudarte mejor.");
-                    mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.DESCRIPCION), 2500);
-                    return;
-                }
-            }
-
-            // VALIDACIÓN: Días de la semana obligatorios
-            if (diasSeleccionados == null || diasSeleccionados.isEmpty()) {
-                hablarEnMain("Faltan los días de la semana. Por favor, selecciona al menos uno.");
-                mainHandler.postDelayed(() -> anunciarCampoYEsperarToque(CampoVozEspera.DIA_SEMANA), 2500);
+        btnAnt.setOnClickListener(v -> {
+            gestionarFeedbackHardware("CANCELADO");
+            
+            // Si estamos editando un campo concreto viniendo del resumen, volver siempre al resumen
+            if (isEditingFromSummary && campoEspera != CampoVozEspera.ELECCION_EDICION && campoEspera != CampoVozEspera.RESUMEN_FINAL) {
+                anunciarCampoYEsperarToque(CampoVozEspera.RESUMEN_FINAL);
                 return;
             }
 
-            final int duracion = new Actividad(0, tipo, horaSeleccionada, "").getDuracionMinutos();
-            final int idExcluir = (existente != null) ? existente.getId() : ID_NUEVO;
-
-            dbExecutor.execute(() -> {
-                final boolean solapa = haySolapamiento(diasSeleccionados, horaSeleccionada, duracion, idExcluir);
-                runOnUiThread(() -> {
-                    if (solapa) {
-                        new AlertDialog.Builder(ActividadesActivity.this)
-                                .setTitle("Solapamiento")
-                                .setMessage("Ya hay una actividad que se solapa. ¿Deseas guardarla de todos modos?")
-                                .setPositiveButton("Sí", (d, w) -> {
-                                    guardarActividad(existente, tipo, desc);
-                                    dialog.dismiss();
-                                })
-                                .setNegativeButton("No", null).show();
+            switch (campoEspera) {
+                case TIPO:
+                case CAMPO_EDITAR:
+                    dialog.dismiss();
+                    break;
+                case DESCRIPCION:
+                    anunciarCampoYEsperarToque(CampoVozEspera.TIPO);
+                    break;
+                case HORA:
+                    anunciarCampoYEsperarToque(CampoVozEspera.DESCRIPCION);
+                    break;
+                case DIA_SEMANA:
+                    anunciarCampoYEsperarToque(CampoVozEspera.HORA);
+                    break;
+                case CONFIRMACION_CAMPO:
+                    // REPETIR
+                    anunciarCampoYEsperarToque(campoAConfirmar);
+                    break;
+                case RESUMEN_FINAL:
+                    // NO, CAMBIAR
+                    anunciarCampoYEsperarToque(CampoVozEspera.ELECCION_EDICION);
+                    break;
+                case ELECCION_EDICION:
+                    // VOLVER al resumen
+                    anunciarCampoYEsperarToque(CampoVozEspera.RESUMEN_FINAL);
+                    break;
+                default:
+                    if (isEditingFromSummary) {
+                        anunciarCampoYEsperarToque(CampoVozEspera.RESUMEN_FINAL);
                     } else {
-                        guardarActividad(existente, tipo, desc);
                         dialog.dismiss();
                     }
-                });
-            });
+                    break;
+            }
         });
 
-        dialog.show();
-        mainHandler.postDelayed(() -> {
-            if (existente == null) {
-                anunciarCampoYEsperarToque(CampoVozEspera.TIPO);
-            } else {
-                anunciarCampoYEsperarToque(CampoVozEspera.CAMPO_EDITAR);
+        btnSig.setOnClickListener(v -> {
+            switch (campoEspera) {
+                case TIPO:
+                    if (tipoSeleccionado == null || tipoSeleccionado.isEmpty()) {
+                        hablarEnMain("Por favor, selecciona qué actividad vas a hacer.");
+                        return;
+                    }
+                    if (isEditingFromSummary) anunciarCampoYEsperarToque(CampoVozEspera.RESUMEN_FINAL);
+                    else anunciarCampoYEsperarToque(CampoVozEspera.DESCRIPCION);
+                    break;
+                case DESCRIPCION:
+                    if (isEditingFromSummary) anunciarCampoYEsperarToque(CampoVozEspera.RESUMEN_FINAL);
+                    else anunciarCampoYEsperarToque(CampoVozEspera.HORA);
+                    break;
+                case HORA:
+                    if (isEditingFromSummary) anunciarCampoYEsperarToque(CampoVozEspera.RESUMEN_FINAL);
+                    else anunciarCampoYEsperarToque(CampoVozEspera.DIA_SEMANA);
+                    break;
+                case DIA_SEMANA:
+                    if (diasSeleccionados == null || diasSeleccionados.isEmpty()) {
+                        hablarEnMain("Dime qué días quieres repetir la actividad.");
+                        return;
+                    }
+                    anunciarCampoYEsperarToque(CampoVozEspera.RESUMEN_FINAL);
+                    break;
+                case CONFIRMACION_CAMPO:
+                    aplicarValorConfirmadoAct();
+                    break;
+                case RESUMEN_FINAL:
+                case CAMPO_EDITAR:
+                case ELECCION_EDICION:
+                    validarYGuardarActividad(existente, etDesc, dialog);
+                    break;
+                default:
+                    if (isEditingFromSummary) {
+                        anunciarCampoYEsperarToque(CampoVozEspera.RESUMEN_FINAL);
+                    }
+                    break;
             }
-        }, 400);
+        });
+
+        // Listeners para botones de edición granular (ELECCION_EDICION)
+        dv.findViewById(R.id.btnEditTipo).setOnClickListener(v -> anunciarCampoYEsperarToque(CampoVozEspera.TIPO));
+        dv.findViewById(R.id.btnEditDesc).setOnClickListener(v -> anunciarCampoYEsperarToque(CampoVozEspera.DESCRIPCION));
+        dv.findViewById(R.id.btnEditHora).setOnClickListener(v -> anunciarCampoYEsperarToque(CampoVozEspera.HORA));
+        dv.findViewById(R.id.btnEditDias).setOnClickListener(v -> anunciarCampoYEsperarToque(CampoVozEspera.DIA_SEMANA));
+
+        dv.findViewById(R.id.btnCancelarDialogActividad2).setOnClickListener(v -> dialog.dismiss());
+
+        dialog.show();
+
+        // Gestión de Paso 0 (Asistente)
+        View step0 = dv.findViewById(R.id.step0Container);
+        if (existente == null) {
+            actualizarProgresoYResaltadoAct(CampoVozEspera.NINGUNO);
+            
+            hablarOSimular("Hola, soy Vitalia. ¿Quieres que te ayude a añadir esta actividad o prefieres hacerlo tú solo?");
+
+            dv.findViewById(R.id.btnEmpezarAsistenteAct).setOnClickListener(v -> {
+                isAssistantActive = true;
+                step0.setVisibility(View.GONE);
+                anunciarCampoYEsperarToque(CampoVozEspera.TIPO);
+            });
+
+            dv.findViewById(R.id.btnManualAct).setOnClickListener(v -> {
+                isAssistantActive = false;
+                isManual = true;
+                step0.setVisibility(View.GONE);
+                pararVoz();
+                mainHandler.removeCallbacksAndMessages(null);
+                anunciarCampoYEsperarToque(CampoVozEspera.TIPO); 
+            });
+            
+            // Forzar actualización visual para ocultar mic/dots en paso 0
+            actualizarProgresoYResaltadoAct(CampoVozEspera.NINGUNO);
+        } else {
+            if (step0 != null) step0.setVisibility(View.GONE);
+            anunciarCampoYEsperarToque(CampoVozEspera.ELECCION_EDICION);
+        }
+    }
+
+    private void setupBotonesTipo(View dv) {
+        typeButtons.clear();
+        typeButtons.put(Actividad.TIPO_MEDICACION, dv.findViewById(R.id.btnTypeMed));
+        typeButtons.put(Actividad.TIPO_COMER, dv.findViewById(R.id.btnTypeCom));
+        typeButtons.put(Actividad.TIPO_BEBER_AGUA, dv.findViewById(R.id.btnTypeAgu));
+        typeButtons.put(Actividad.TIPO_PASEO_EJERCICIO, dv.findViewById(R.id.btnTypePas));
+        typeButtons.put(Actividad.TIPO_ASEO, dv.findViewById(R.id.btnTypeAse));
+        typeButtons.put(Actividad.TIPO_JUEGOS, dv.findViewById(R.id.btnTypeJue));
+        typeButtons.put(Actividad.TIPO_LLAMADA_FAMILIAR, dv.findViewById(R.id.btnTypeFam));
+        typeButtons.put(Actividad.TIPO_IR_DORMIR, dv.findViewById(R.id.btnTypeDor));
+
+        for (java.util.Map.Entry<String, Button> entry : typeButtons.entrySet()) {
+            if (entry.getValue() != null) {
+                entry.getValue().setOnClickListener(v -> {
+                    seleccionarTipoUI(entry.getKey());
+                    actualizarCampoDinamico(dv, entry.getKey());
+                });
+            }
+        }
+    }
+
+    private void seleccionarTipoUI(String tipo) {
+        this.tipoSeleccionado = tipo;
+        for (java.util.Map.Entry<String, Button> entry : typeButtons.entrySet()) {
+            if (entry.getValue() != null) {
+                boolean isSelected = entry.getKey().equals(tipo);
+                entry.getValue().setBackgroundResource(isSelected ? R.drawable.bg_tipo_seleccionado : R.drawable.bg_tipo_normal);
+                entry.getValue().setTextColor(isSelected ? android.graphics.Color.WHITE : android.graphics.Color.BLACK);
+            }
+        }
+    }
+
+    private void actualizarTextoResumen(AlertDialog dlg) {
+        String desc = "";
+        if (dialogEtDescRef != null && dialogEtDescRef.get() != null) {
+            desc = dialogEtDescRef.get().getText().toString().trim();
+        }
+
+        String tipoLabel = "(Desconocido)";
+        String[] claves = TipoActividad.claves();
+        String[] etiquetas = TipoActividad.etiquetas();
+        for(int i=0; i<claves.length; i++) {
+            if(claves[i].equals(tipoSeleccionado)) {
+                tipoLabel = etiquetas[i];
+                break;
+            }
+        }
+
+        TextView tvTipo = dlg.findViewById(R.id.tvSummaryTipoAct);
+        TextView tvDesc = dlg.findViewById(R.id.tvSummaryDescAct);
+        TextView tvHora = dlg.findViewById(R.id.tvSummaryHoraAct);
+        TextView tvDias = dlg.findViewById(R.id.tvSummaryDiasAct);
+
+        if (tvTipo != null) tvTipo.setText(tipoLabel);
+        if (tvDesc != null) tvDesc.setText(desc.isEmpty() ? "(Vacío)" : desc);
+        if (tvHora != null) tvHora.setText(String.format("%02d:%02d", horaSeleccionada / 60, horaSeleccionada % 60));
+        
+        if (tvDias != null) {
+            if (diasSeleccionados.isEmpty()) {
+                tvDias.setText("(Ninguno)");
+            } else {
+                StringBuilder sbDias = new StringBuilder();
+                String[] nombres = { "Lun", "Mar", "Mie", "Jue", "Vie", "Sab", "Dom" };
+                for (int i = 0; i < VALORES_DIA.length; i++) {
+                    if (diasSeleccionados.contains(VALORES_DIA[i])) {
+                        sbDias.append(nombres[i]).append(" ");
+                    }
+                }
+                tvDias.setText(sbDias.toString().trim());
+            }
+        }
+    }
+
+    private void validarYGuardarActividad(Actividad existente, EditText etDesc, AlertDialog dialog) {
+        final String desc = etDesc.getText().toString().trim();
+        final String tipo = tipoSeleccionado;
+
+        if (desc.isEmpty() && (tipo.equals(Actividad.TIPO_MEDICACION) || tipo.equals(Actividad.TIPO_COMER)
+                || tipo.equals(Actividad.TIPO_LLAMADA_FAMILIAR) || tipo.equals(Actividad.TIPO_PASEO_EJERCICIO))) {
+            gestionarFeedbackHardware("ERROR");
+            hablarEnMain("Por favor, dime los detalles. Es necesario para ayudarte mejor.");
+            return;
+        }
+
+        if (diasSeleccionados == null || diasSeleccionados.isEmpty()) {
+            hablarEnMain("Selecciona al menos un día de la semana.");
+            return;
+        }
+
+        final int duracion = new Actividad(0, tipo, horaSeleccionada, "").getDuracionMinutos();
+        final int idExcluir = (existente != null) ? existente.getId() : ID_NUEVO;
+
+        dbExecutor.execute(() -> {
+            final boolean solapa = haySolapamiento(diasSeleccionados, horaSeleccionada, duracion, idExcluir);
+            runOnUiThread(() -> {
+                if (solapa) {
+                    new AlertDialog.Builder(this)
+                            .setTitle("Solapamiento")
+                            .setMessage("Ya hay otra actividad a esta hora. ¿Guardar de todos modos?")
+                            .setPositiveButton("Sí", (d, w) -> {
+                                guardarActividad(existente, tipo, desc);
+                                dialog.dismiss();
+                            })
+                            .setNegativeButton("No", null).show();
+                } else {
+                    guardarActividad(existente, tipo, desc);
+                    dialog.dismiss();
+                }
+            });
+        });
+    }
+
+
+    private void seleccionarTipoYPasar(String tipoClave) {
+        seleccionarTipoUI(tipoClave);
+        pararVoz();
+        mainHandler.removeCallbacksAndMessages(null);
+        anunciarCampoYEsperarToque(CampoVozEspera.DESCRIPCION);
+    }
+
+    private void seleccionarHoraYPasar(int h, int m) {
+        horaSeleccionada = h * 60 + m;
+        TextView tvHora = dialogTvHoraRef != null ? dialogTvHoraRef.get() : null;
+        if (tvHora != null) actualizarDisplayHora(tvHora, horaSeleccionada);
+        pararVoz();
+        mainHandler.removeCallbacksAndMessages(null);
+        anunciarCampoYEsperarToque(CampoVozEspera.DIA_SEMANA);
     }
 
     private String parsearTipoVoz(String texto) {
@@ -635,40 +1117,33 @@ public class ActividadesActivity extends BaseActivity {
     /**
      * Muestra/Oculta y renombra el campo de detalles según el tipo de actividad.
      */
-    private void actualizarCampoDinamico(View dv, String tipoEtiqueta) {
-        View container = dv.findViewById(R.id.containerDetallesDinamicos);
+    private void actualizarCampoDinamico(View dv, String tipoInterno) {
         TextView tvLabel = dv.findViewById(R.id.tvLabelDetalleDinamico);
-        if (container == null || tvLabel == null)
-            return;
+        if (tvLabel == null) return;
 
-        boolean mostrar = true;
         String nuevoLabel = "Información adicional";
-
-        if (tipoEtiqueta.equalsIgnoreCase("MEDICACIÓN")) {
+        if (Actividad.TIPO_MEDICACION.equals(tipoInterno)) {
             nuevoLabel = "¿Qué medicamento es?";
-        } else if (tipoEtiqueta.equalsIgnoreCase("COMER")) {
+        } else if (Actividad.TIPO_COMER.equals(tipoInterno)) {
             nuevoLabel = "¿Qué vas a comer?";
-        } else if (tipoEtiqueta.equalsIgnoreCase("LLAMADA FAMILIAR")) {
+        } else if (Actividad.TIPO_LLAMADA_FAMILIAR.equals(tipoInterno)) {
             nuevoLabel = "¿A quién vas a llamar?";
-        } else if (tipoEtiqueta.equalsIgnoreCase("PASEO/EJERCICIO")) {
+        } else if (Actividad.TIPO_PASEO_EJERCICIO.equals(tipoInterno)) {
             nuevoLabel = "¿A dónde vas?";
-        } else {
-            mostrar = false;
         }
-
         tvLabel.setText(nuevoLabel);
-        container.setVisibility(mostrar ? View.VISIBLE : View.GONE);
     }
 
     private void guardarActividad(Actividad existente, String tipo, String desc) {
+        gestionarFeedbackHardware("CELEBRACION");
         dbExecutor.execute(() -> {
             if (existente == null) {
-                hablarEnMain("¡Listo! He añadido la actividad.");
+                hablarEnMain("¡Enhorabuena! Se ha creado la actividad correctamente.");
                 Actividad nueva = new Actividad(0, tipo, horaSeleccionada, desc);
                 nueva.setDiasSemana(new ArrayList<>(diasSeleccionados));
                 repo.add(nueva);
             } else {
-                hablarEnMain("Perfecto. He guardado los cambios.");
+                hablarEnMain("¡Perfecto! Se ha guardado la edición de la actividad con éxito.");
                 existente.setTipo(tipo);
                 existente.setHoraMinutos(horaSeleccionada);
                 existente.setDescripcion(desc);
@@ -688,6 +1163,18 @@ public class ActividadesActivity extends BaseActivity {
         ((android.widget.ImageView) dv.findViewById(R.id.tvEmojiDetAct)).setImageResource(a.getIconoRes());
         ((TextView) dv.findViewById(R.id.tvHoraDetAct)).setText(a.getHoraFormateada());
         ((TextView) dv.findViewById(R.id.tvTipoDetAct)).setText(a.getTipoLabel());
+        
+        // Adaptar etiqueta de descripción según el tipo (MEJORA SOLICITADA)
+        TextView tvLabelDesc = dv.findViewById(R.id.tvLabelDescDetAct);
+        if (tvLabelDesc != null) {
+            String tipo = a.getTipo();
+            if (Actividad.TIPO_MEDICACION.equals(tipo)) tvLabelDesc.setText("Medicamento:");
+            else if (Actividad.TIPO_COMER.equals(tipo)) tvLabelDesc.setText("Comida:");
+            else if (Actividad.TIPO_LLAMADA_FAMILIAR.equals(tipo)) tvLabelDesc.setText("Llamar a:");
+            else if (Actividad.TIPO_PASEO_EJERCICIO.equals(tipo)) tvLabelDesc.setText("Lugar del paseo:");
+            else tvLabelDesc.setText("Detalles:");
+        }
+
         ((TextView) dv.findViewById(R.id.tvDescDetAct))
                 .setText((a.getDescripcion() != null && !a.getDescripcion().isEmpty()) ? a.getDescripcion() : "—");
         int[] ids = { R.id.detDiaLun, R.id.detDiaMar, R.id.detDiaMie, R.id.detDiaJue, R.id.detDiaVie, R.id.detDiaSab,
@@ -778,7 +1265,7 @@ public class ActividadesActivity extends BaseActivity {
             return h * 60 + m;
         }
 
-        return null;
+        return -1;
     }
 
     private int ajustarTarde(int h, boolean esTarde, boolean esMañana) {
@@ -833,7 +1320,11 @@ public class ActividadesActivity extends BaseActivity {
     }
 
     private void hablarEnMain(String t) {
-        runOnUiThread(() -> hablarOSimular(t));
+        hablarEnMain(t, null);
+    }
+
+    private void hablarEnMain(String t, com.qihancloud.opensdk.function.beans.EmotionsType emotion) {
+        runOnUiThread(() -> hablarOSimular(t, emotion));
     }
 
     private void abrirTimePicker(TextView tv) {

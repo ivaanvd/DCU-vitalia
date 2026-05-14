@@ -115,6 +115,15 @@ public class ActividadRepository {
     public int insert(Actividad a) {
         int nextId = prefs.getInt(KEY_NEXT_ID, 1);
         a.setId(nextId);
+
+        // Si la actividad coincide con el día de hoy y su hora ya ha pasado, 
+        // la marcamos como COMPLETADA para que no salte inmediatamente.
+        java.util.Calendar now = java.util.Calendar.getInstance();
+        int currentMinutes = now.get(java.util.Calendar.HOUR_OF_DAY) * 60 + now.get(java.util.Calendar.MINUTE);
+        if (a.coincideHoy() && a.getHoraMinutos() < currentMinutes) {
+            a.setEstado(Actividad.ESTADO_COMPLETADA);
+        }
+
         List<Actividad> lista = getAll();
         lista.add(a);
         prefs.edit()
@@ -188,6 +197,21 @@ public class ActividadRepository {
             }
         }
         prefs.edit().putString(KEY_LISTA, toJsonArray(lista)).apply();
+    }
+
+    /**
+     * Elimina todas las actividades de la base de datos y cancela sus alarmas.
+     */
+    public void deleteAll() {
+        List<Actividad> todas = getAll();
+        for (Actividad a : todas) {
+            AlarmScheduler.cancelarActividad(context, a.getId());
+        }
+        prefs.edit()
+                .remove(KEY_LISTA)
+                .remove(KEY_NEXT_ID)
+                .remove(KEY_LAST_RESET)
+                .apply();
     }
 
     // ── Helpers JSON ──────────────────────────────────────────────────────────

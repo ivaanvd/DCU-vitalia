@@ -16,6 +16,8 @@ import android.widget.TextView;
 import com.example.sanbotapp.BaseActivity;
 import com.example.sanbotapp.R;
 import com.example.sanbotapp.WelcomeActivity;
+import com.example.sanbotapp.actividad.ActividadRepository;
+import com.example.sanbotapp.recordatorio.RecordatorioRepository;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -157,7 +159,13 @@ public class AjustesActivity extends BaseActivity {
         hablarEnMain("He guardado todos tus cambios.");
     }
 
-    private void hablarEnMain(String t) { runOnUiThread(() -> hablarOSimular(t)); }
+    private void hablarEnMain(String t) {
+        hablarEnMain(t, null);
+    }
+
+    private void hablarEnMain(String t, com.qihancloud.opensdk.function.beans.EmotionsType emotion) {
+        runOnUiThread(() -> hablarOSimular(t, emotion));
+    }
 
 
     // ── Volumen ───────────────────────────────────────────────────────────────
@@ -335,6 +343,10 @@ public class AjustesActivity extends BaseActivity {
                 .remove(KEY_BRILLO)
                 .putBoolean(KEY_FIRST_RUN, true)
                 .apply();
+
+        // Eliminar actividades y recordatorios de la base de datos (SharedPreferences)
+        new ActividadRepository(this).deleteAll();
+        new RecordatorioRepository(this).deleteAll();
 
         Intent intent = new Intent(this, WelcomeActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

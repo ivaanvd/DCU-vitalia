@@ -20,13 +20,13 @@ public class FinBingoActivity extends BaseActivity {
         String mensaje = getIntent().getStringExtra("MENSAJE");
         if (mensaje == null) mensaje = "¡Línea y bingo! ¡Es usted un hacha!";
 
-        // Emoción y LEDs de éxito (Bingo siempre es éxito)
-        mostrarEmocion("PRISE");
-        encenderLed(com.qihancloud.opensdk.function.beans.LED.PART_ALL, com.qihancloud.opensdk.function.beans.LED.MODE_GREEN);
-
-        TextView tvRobot = findViewById(R.id.tvBocadilloTexto);
-        if (tvRobot != null) tvRobot.setText(mensaje);
-        hablarOSimular(mensaje);
+        if (aciertos >= total / 2) {
+            gestionarFeedbackHardware("CELEBRACION");
+            hablarOSimular("¡Enhorabuena! Has hecho un trabajo fantástico.");
+        } else {
+            gestionarFeedbackHardware("MOURN");
+            hablarOSimular("No pasa nada, a veces se gana y otras se aprende. ¡La próxima será mejor!");
+        }
 
 
         TextView tvAciertos = findViewById(R.id.tvAciertosBingo);

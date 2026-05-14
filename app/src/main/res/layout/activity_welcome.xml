@@ -11,44 +11,12 @@
         android:orientation="vertical"
         android:padding="24dp">
 
-        <!-- Título de bienvenida + Botón repetir -->
-        <RelativeLayout
+        <!-- SECCIÓN: NOMBRE -->
+
+        <!-- BOCADILLO DEL ROBOT (Mejora Área 2) -->
+        <include layout="@layout/include_robot_bocadillo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp">
-
-            <TextView
-                android:id="@+id/tvTituloBienvenida"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:text="¡Bienvenido!"
-                android:textSize="@dimen/text_size_xlarge"
-                android:textStyle="bold"
-                android:textColor="#1C1C1E"
-                android:textAlignment="center"/>
-
-            <ImageButton
-                android:id="@+id/btnRepetirSaludo"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_toEndOf="@id/tvTituloBienvenida"
-                android:layout_marginStart="12dp"
-                android:layout_centerVertical="true"
-                android:src="@drawable/ic_volumen"
-                android:background="@drawable/bg_tipo_normal"
-                android:contentDescription="Repetir saludo del robot"
-                android:padding="8dp"
-                android:scaleType="fitCenter"/>
-        </RelativeLayout>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Configura tu perfil para empezar"
-            android:textSize="@dimen/text_size_medium"
-            android:textColor="#6E6E73"
-            android:textAlignment="center"
             android:layout_marginBottom="24dp"/>
 
         <!-- SECCIÓN: NOMBRE -->
@@ -64,62 +32,92 @@
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:background="@drawable/bg_input_welcome"
-            android:layout_marginBottom="24dp"/>
+            android:layout_marginBottom="16dp"/>
 
-        <!-- SECCIÓN: FOTO -->
-        <TextView
-            android:layout_width="wrap_content"
+        <!-- Botón de micrófono para dictar nombre -->
+        <LinearLayout
+            android:id="@+id/containerMicWelcome"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Foto de perfil"
-            android:textSize="@dimen/text_size_medium"
-            android:textStyle="bold"
-            android:textColor="#1C1C1E"
-            android:layout_marginBottom="12dp"
-            android:layout_gravity="center_horizontal"/>
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_marginBottom="24dp">
 
-        <!-- Preview de la foto -->
-        <ImageView
-            android:id="@+id/ivFoto"
-            android:layout_width="160dp"
-            android:layout_height="160dp"
-            android:src="@drawable/ic_persona"
-            android:scaleType="centerCrop"
-            android:background="@drawable/bg_avatar_circle"
-            android:layout_gravity="center_horizontal"
-            android:contentDescription="Vista previa de foto de perfil (Toca para cambiar)"
-            android:layout_marginBottom="16dp"
-            android:clickable="true"
-            android:focusable="true"/>
+            <ImageButton
+                android:id="@+id/btnMicWelcome"
+                android:layout_width="84dp"
+                android:layout_height="84dp"
+                android:src="@drawable/ic_microfono"
+                android:background="@drawable/bg_fab_mic"
+                android:scaleType="centerInside"
+                android:padding="20dp"
+                android:layout_marginBottom="8dp"
+                android:contentDescription="Pulsa para decir tu nombre"
+                android:elevation="4dp"/>
 
-        <!-- Botones para foto (Horizontal) -->
+            <TextView
+                android:id="@+id/tvEstadoMicWelcome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PULSA AQUÍ Y DIME TU NOMBRE"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/mic_normal"
+                android:gravity="center"/>
+        </LinearLayout>
+
+        <!-- SECCIÓN: FOTO (Avatar arriba, Botones abajo horizontalmente) -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:orientation="vertical"
+            android:gravity="center"
             android:layout_marginBottom="32dp">
 
-            <Button
-                android:id="@+id/btnCapturarFoto"
-                android:layout_width="0dp"
-                android:layout_height="56dp"
-                android:layout_weight="1"
-                android:text="Cámara"
-                android:textSize="@dimen/text_size_small"
-                android:textColor="#111111"
-                android:background="@drawable/bg_tipo_normal"
-                android:textAllCaps="false"
-                android:layout_marginEnd="12dp"/>
+            <!-- Avatar centrado -->
+            <ImageView
+                android:id="@+id/ivFoto"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:src="@drawable/ic_persona"
+                android:scaleType="centerCrop"
+                android:background="@drawable/bg_avatar_circle"
+                android:contentDescription="Vista previa de foto de perfil"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_marginBottom="24dp"/>
 
-            <Button
-                android:id="@+id/btnSeleccionarGaleria"
-                android:layout_width="0dp"
-                android:layout_height="56dp"
-                android:layout_weight="1"
-                android:text="Galería"
-                android:textSize="@dimen/text_size_small"
-                android:textColor="#111111"
-                android:background="@drawable/bg_tipo_normal"
-                android:textAllCaps="false"/>
+            <!-- Botones horizontales abajo -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <Button
+                    android:id="@+id/btnCapturarFoto"
+                    android:layout_width="0dp"
+                    android:layout_height="64dp"
+                    android:layout_weight="1"
+                    android:text="USAR CÁMARA"
+                    android:textSize="16sp"
+                    android:textColor="#111111"
+                    android:background="@drawable/bg_tipo_normal"
+                    android:textAllCaps="false"
+                    android:layout_marginEnd="8dp"/>
+
+                <Button
+                    android:id="@+id/btnSeleccionarGaleria"
+                    android:layout_width="0dp"
+                    android:layout_height="64dp"
+                    android:layout_weight="1"
+                    android:text="DE LA GALERÍA"
+                    android:textSize="16sp"
+                    android:textColor="#111111"
+                    android:background="@drawable/bg_tipo_normal"
+                    android:textAllCaps="false"
+                    android:layout_marginStart="8dp"/>
+            </LinearLayout>
         </LinearLayout>
 
         <!-- Botón guardar -->

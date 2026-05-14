@@ -90,6 +90,7 @@ public class JuegoBingoActivity extends BaseActivity {
                 marcarTarjetaCorrecta(v);
                 aciertos++;
                 indiceRonda++;
+                gestionarFeedbackHardware("ACIERTO");
 
                 if (indiceRonda < rondasFuturas.size()) {
                     new Handler(Looper.getMainLooper()).postDelayed(() -> {
@@ -119,16 +120,20 @@ public class JuegoBingoActivity extends BaseActivity {
     private void mostrarFeedbackError() {
         juegoBloqueado = true;
         fallos++;
-        mostrarEmocion("CRY");
+        
+        // Guardar el mensaje original para restaurarlo después
+        final String consignaOriginal = rondasFuturas.get(indiceRonda).getConsigna();
+        
+        gestionarFeedbackHardware("FALLO");
         hablarOSimular("Oh no, esa no era. Léelo bien e inténtalo de nuevo.");
-        encenderLed(LED.PART_ALL, LED.MODE_RED);
-//        moverCabezaBasico("ABAJO");
-//        reiniciarCabeza();
-
+        
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            apagarLed(LED.PART_ALL);
             juegoBloqueado = false;
-        }, 2500);
+            // Restaurar el texto de la consigna en el bocadillo
+            if (tvRobot != null) {
+                tvRobot.setText(consignaOriginal);
+            }
+        }, 3500); // Un poco más de tiempo para que termine de hablar
     }
 
     private void finalizarJuego() {
@@ -137,6 +142,7 @@ public class JuegoBingoActivity extends BaseActivity {
         intent.putExtra("FALLOS", fallos);
         intent.putExtra("TOTAL", rondasFuturas.size());
         intent.putExtra("MENSAJE", "¡Espectacular Bingo! Has completado toda la tarjeta.");
+        gestionarFeedbackHardware("CELEBRACION");
         startActivity(intent);
         finish();
     }

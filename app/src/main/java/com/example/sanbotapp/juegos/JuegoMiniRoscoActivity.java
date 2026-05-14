@@ -157,12 +157,9 @@ public class JuegoMiniRoscoActivity extends BaseActivity {
         boton.setBackgroundResource(R.drawable.bg_tipo_correcto);
         boton.setTextColor(Color.WHITE);
 
-        // Feedback robot — igual que Refranes
-        mostrarEmocion("PRISE");
+        // Feedback robot
+        gestionarFeedbackHardware("ACIERTO");
         hablarOSimular("¡Correcto! Excelente respuesta");
-        encenderLed(LED.PART_ALL, LED.MODE_GREEN);
-//        moverBrazos("LEVANTAR_BRAZO", "AMBOS");
-//        moverBrazos("BAJAR_BRAZO", "AMBOS");
 
         handler.postDelayed(() -> {
             apagarLed(LED.PART_ALL);
@@ -186,12 +183,9 @@ public class JuegoMiniRoscoActivity extends BaseActivity {
         botonCorrecto.setBackgroundResource(R.drawable.bg_tipo_correcto);
         botonCorrecto.setTextColor(Color.WHITE);
 
-        // Feedback robot — igual que Refranes
-        mostrarEmocion("CRY");
+        // Feedback robot
+        gestionarFeedbackHardware("FALLO");
         hablarOSimular("Lástima, te acercabas");
-        encenderLed(LED.PART_ALL, LED.MODE_RED);
-//        moverCabezaBasico("ABAJO");
-//        reiniciarCabeza();
 
         handler.postDelayed(() -> {
             apagarLed(LED.PART_ALL);
@@ -224,6 +218,7 @@ public class JuegoMiniRoscoActivity extends BaseActivity {
                 : "Ese rosco se nos ha resistido un poco, ¡pero muy buen esfuerzo!";
         intent.putExtra("MENSAJE", sms);
 
+        gestionarFeedbackHardware("CELEBRACION");
         startActivity(intent);
         finish();
     }

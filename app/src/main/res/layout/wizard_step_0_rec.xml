@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/stepRec0Container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="20dp"
+    android:visibility="gone">
+    
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="¿Quieres que te ayude a rellenarlo?"
+        android:textSize="@dimen/text_size_medium"
+        android:textColor="#1C1C1E"
+        android:layout_marginBottom="16dp"
+        android:textAlignment="center"/>
+
+    <Button
+        android:id="@+id/btnEmpezarAsistenteRec"
+        android:layout_width="match_parent"
+        android:layout_height="84dp"
+        android:text="SÍ, AYÚDAME (VOZ)"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:background="@drawable/bg_btn_assistant"
+        android:elevation="4dp"
+        android:layout_marginBottom="16dp"/>
+
+    <Button
+        android:id="@+id/btnManualRec"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:text="ESCRIBIRLO YO MISMO"
+        android:textSize="@dimen/text_size_medium"
+        android:textColor="#3A3A3C"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:background="@drawable/bg_btn_secondary"/>
+</LinearLayout>

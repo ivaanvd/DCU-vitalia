@@ -22,185 +22,39 @@
             android:textStyle="bold"
             android:textColor="#1C1C1E"
             android:gravity="center"
-            android:layout_marginBottom="24dp"/>
+            android:layout_marginBottom="16dp"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="¿Qué quieres recordar?"
-            android:textSize="@dimen/text_size_small"
-            android:textStyle="bold"
-            android:textColor="#1C1C1E"
-            android:layout_marginBottom="8dp"/>
-
-        <EditText
-            android:id="@+id/etTituloRecordatorio"
-            android:layout_width="match_parent"
-            android:layout_height="64dp"
-            android:textSize="@dimen/text_size_medium"
-            android:textColor="#1C1C1E"
-            android:background="@drawable/bg_campo_descripcion"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:singleLine="true"
-            android:inputType="text"
-            android:layout_marginBottom="24dp"/>
-
-
-        <!-- Hora + Fecha -->
+        <!-- BARRA DE PROGRESO -->
         <LinearLayout
+            android:id="@+id/dotContainerRec"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginBottom="24dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="¿A qué hora?"
-                android:textSize="@dimen/text_size_small"
-                android:textColor="#6E6E73"
-                android:layout_marginBottom="6dp"/>
-
-            <TextView
-                android:id="@+id/tvHoraDialogRec"
-                android:layout_width="match_parent"
-                android:layout_height="84dp"
-                android:text="00:00"
-                android:textSize="48sp"
-                android:textStyle="bold"
-                android:textColor="#1C1C1E"
-                android:gravity="center"
-                android:background="@drawable/bg_campo_descripcion"
-                android:clickable="true"
-                android:focusable="true"
-                android:layout_marginBottom="20dp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="¿Qué día?"
-                android:textSize="@dimen/text_size_small"
-                android:textColor="#6E6E73"
-                android:layout_marginBottom="6dp"/>
-
-            <LinearLayout
-                android:id="@+id/tvFechaDialogRec"
-                android:layout_width="match_parent"
-                android:layout_height="72dp"
-                android:orientation="horizontal"
-                android:gravity="center"
-                android:paddingStart="14dp"
-                android:paddingEnd="14dp"
-                android:background="@drawable/bg_campo_descripcion"
-                android:clickable="true"
-                android:focusable="true">
-
-                <TextView
-                    android:id="@+id/tvFechaTexto"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="dd/mm/aaaa"
-                    android:textSize="@dimen/text_size_medium"
-                    android:textStyle="bold"
-                    android:textColor="#1C1C1E"
-                    android:gravity="center_vertical"/>
-
-                <ImageView
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:src="@drawable/ic_calendario"
-                    android:contentDescription=""/>
-            </LinearLayout>
-        </LinearLayout>
-
-        <!-- Anticipación -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Avisarme con antelación"
-            android:textSize="@dimen/text_size_small"
-            android:textColor="#6E6E73"
-            android:layout_marginBottom="12dp"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="64dp"
             android:orientation="horizontal"
             android:gravity="center"
-            android:layout_marginBottom="32dp">
-
-            <TextView
-                android:id="@+id/btnAnticipacionMenos"
-                android:layout_width="64dp"
-                android:layout_height="match_parent"
-                android:text="−"
-                android:textSize="32sp"
-                android:textStyle="bold"
-                android:textColor="#111111"
-                android:gravity="center"
-                android:background="@drawable/bg_tipo_normal"
-                android:clickable="true"
-                android:focusable="true"/>
-
-            <TextView
-                android:id="@+id/tvAnticipacionValor"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="10 minutos antes"
-                android:textSize="@dimen/text_size_medium"
-                android:textStyle="bold"
-                android:textColor="#1C1C1E"
-                android:gravity="center"/>
-
-            <TextView
-                android:id="@+id/btnAnticipacionMas"
-                android:layout_width="64dp"
-                android:layout_height="match_parent"
-                android:text="+"
-                android:textSize="32sp"
-                android:textStyle="bold"
-                android:textColor="#111111"
-                android:gravity="center"
-                android:background="@drawable/bg_tipo_normal"
-                android:clickable="true"
-                android:focusable="true"/>
+            android:layout_marginBottom="16dp">
+            <View android:id="@+id/dotStepRec1" android:layout_width="16dp" android:layout_height="16dp" android:background="@drawable/step_dot_active" android:layout_marginEnd="8dp"/>
+            <View android:id="@+id/dotStepRec2" android:layout_width="16dp" android:layout_height="16dp" android:background="@drawable/step_dot_inactive" android:layout_marginEnd="8dp"/>
+            <View android:id="@+id/dotStepRec3" android:layout_width="16dp" android:layout_height="16dp" android:background="@drawable/step_dot_inactive" android:layout_marginEnd="8dp"/>
+            <View android:id="@+id/dotStepRec4" android:layout_width="16dp" android:layout_height="16dp" android:background="@drawable/step_dot_inactive"/>
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/btnCancelarDialogRec"
-                android:layout_width="0dp"
-                android:layout_height="64dp"
-                android:layout_weight="1"
-                android:text="CANCELAR"
-                android:textColor="#FFFFFF"
-                android:textSize="@dimen/text_size_medium"
-                android:textStyle="bold"
-                android:background="@drawable/bg_btn_cancelar"
-                android:layout_marginEnd="12dp"/>
 
-            <Button
-                android:id="@+id/btnGuardarDialogRec"
-                android:layout_width="0dp"
-                android:layout_height="64dp"
-                android:layout_weight="1"
-                android:text="AÑADIR"
-                android:textColor="#FFFFFF"
-                android:textSize="@dimen/text_size_medium"
-                android:textStyle="bold"
-                android:background="@drawable/bg_btn_guardar"/>
-        </LinearLayout>
+        <!-- PASOS DEL WIZARD (INCLUIDOS) -->
+        <include layout="@layout/wizard_step_0_rec" />
+        <include layout="@layout/wizard_step_rec_titulo" />
+        <include layout="@layout/wizard_step_rec_hora" />
+        <include layout="@layout/wizard_step_rec_fecha" />
+        <include layout="@layout/wizard_step_rec_anticipacion" />
+        <include layout="@layout/wizard_step_rec_summary" />
+        <include layout="@layout/wizard_step_rec_edit_choice" />
+
+        <!-- FOOTER (MIC + BOTONES) -->
+        <include layout="@layout/wizard_footer_rec" />
 
     </LinearLayout>
 
-    <!-- X dentro de la tarjeta -->
+    <!-- Botón X de cierre -->
     <TextView
         android:id="@+id/btnCerrarDialogRec"
         android:layout_width="40dp"

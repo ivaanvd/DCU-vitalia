@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <!-- Botón de micrófono y estado de voz -->
+    <LinearLayout
+        android:id="@+id/containerMicEstadoAct"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_marginBottom="24dp">
+
+        <ImageButton
+            android:id="@+id/btnMicDialogAct"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:src="@drawable/ic_microfono"
+            android:background="@drawable/bg_fab_mic"
+            android:scaleType="centerInside"
+            android:padding="16dp"
+            android:layout_marginBottom="8dp"
+            android:contentDescription="Pulsa para hablar"
+            android:elevation="4dp"/>
+
+        <TextView
+            android:id="@+id/tvEstadoMicAct"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PULSA PARA HABLAR"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/mic_normal"
+            android:gravity="center"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnWizardAnterior"
+            android:layout_width="0dp"
+            android:layout_height="64dp"
+            android:layout_weight="1"
+            android:text="ANTERIOR"
+            android:textColor="#FFFFFF"
+            android:textSize="@dimen/text_size_medium"
+            android:textStyle="bold"
+            android:background="@drawable/bg_btn_cancelar"
+            android:layout_marginEnd="12dp"/>
+
+        <Button
+            android:id="@+id/btnWizardSiguiente"
+            android:layout_width="0dp"
+            android:layout_height="64dp"
+            android:layout_weight="1"
+            android:text="SIGUIENTE"
+            android:textColor="#FFFFFF"
+            android:textSize="@dimen/text_size_medium"
+            android:textStyle="bold"
+            android:background="@drawable/bg_btn_guardar"/>
+    </LinearLayout>
+</LinearLayout>

@@ -111,7 +111,7 @@ public class JuegoRefranesActivity extends BaseActivity {
         boton.setBackgroundResource(R.drawable.bg_tipo_correcto);
         boton.setTextColor(Color.WHITE);
 
-        mostrarEmocion("PRISE");
+        gestionarFeedbackHardware("ACIERTO");
         hablarOSimular("¡Correcto! Excelente respuesta");
 
         handler.postDelayed(() -> {
@@ -137,7 +137,7 @@ public class JuegoRefranesActivity extends BaseActivity {
         botonCorrecto.setBackgroundResource(R.drawable.bg_tipo_correcto);
         botonCorrecto.setTextColor(Color.WHITE);
 
-        mostrarEmocion("CRY");
+        gestionarFeedbackHardware("FALLO");
         hablarOSimular("Lástima, te acercabas");
 //        moverCabezaBasico("ABAJO");
 //        reiniciarCabeza();
@@ -179,6 +179,7 @@ public class JuegoRefranesActivity extends BaseActivity {
         }
         intent.putExtra("MENSAJE", mensaje);
 
+        gestionarFeedbackHardware("CELEBRACION");
         startActivity(intent);
         finish();
     }

@@ -95,6 +95,7 @@ public class MainActivity extends BaseActivity {
         super.onResume();
         cargarDatosGuardados(); // Recargar nombre y foto por si cambiaron en Ajustes
         cargarRutinaHoy(); // Recargamos por si se añadió alguna actividad en otra ventana
+        activarSeguimiento(); // MEJORA ÁREA 5: El robot mira al usuario al inicio
     }
 
     /*
@@ -104,6 +105,7 @@ public class MainActivity extends BaseActivity {
     @Override
     public void onPause() {
         super.onPause();
+        desactivarSeguimiento(); // Desactivar seguimiento al salir para ahorrar recursos
     }
 
     /*
@@ -111,12 +113,23 @@ public class MainActivity extends BaseActivity {
      * Post: Cuando el robot está listo, se ejecuta este método y saluda al usuario
      */
     @Override
-    protected void onRobotServiceReady() { // Obligatorio por extender BaseActivity porque es una clase abstracta: Se ejecuta cuando el hardware del robot despierta y está listo
+    protected void onRobotServiceReady() {
         nombreUsuario = prefs.getString(KEY_NOMBRE, "amigo/a");
+        
+        // Saludo solo la primera vez que se entra en la app para no ser repetitivo
         if (!yaHeSaludado) {
-            hablarOSimular(generarSaludoContextual(nombreUsuario));
-            mostrarEmocion(getEmocionPorHora());
             yaHeSaludado = true;
+            boolean isNewUser = getIntent().getBooleanExtra("is_new_user", false);
+            
+            if (isNewUser) {
+                // Mensaje específico tras registro
+                hablarOSimular("Bienvenido " + nombreUsuario + " a Vitalia, aquí puedes gestionar toda tu aplicación.");
+            } else {
+                // Saludo estándar contextual
+                gestionarFeedbackHardware("SALUDO");
+                hablarOSimular(generarSaludoContextual(nombreUsuario));
+            }
+            mostrarEmocion(getEmocionPorHora());
         }
     }
 
@@ -364,26 +377,22 @@ public class MainActivity extends BaseActivity {
 
         btnActividades.setOnClickListener(v -> {
             hablarOSimular("Abriendo tus actividades.");
-            v.postDelayed(() ->
-                    startActivity(new Intent(this, ActividadesActivity.class)), 1200);
+            startActivity(new Intent(this, ActividadesActivity.class));
         });
 
         btnRecordatorios.setOnClickListener(v -> {
             hablarOSimular("Vamos a ver tus recordatorios.");
-            v.postDelayed(() ->
-                    startActivity(new Intent(this, RecordatoriosActivity.class)), 1200);
+            startActivity(new Intent(this, RecordatoriosActivity.class));
         });
 
         btnJuegos.setOnClickListener(v -> {
             hablarOSimular("¡Hora de jugar!");
-            v.postDelayed(() ->
-                    startActivity(new Intent(this, com.example.sanbotapp.juegos.JuegosActivity.class)), 1200);
+            startActivity(new Intent(this, com.example.sanbotapp.juegos.JuegosActivity.class));
         });
 
         btnAjustes.setOnClickListener(v -> {
             hablarOSimular("Abriendo ajustes.");
-            v.postDelayed(() ->
-                    startActivity(new Intent(this, com.example.sanbotapp.ajustes.AjustesActivity.class)), 1200);
+            startActivity(new Intent(this, com.example.sanbotapp.ajustes.AjustesActivity.class));
         });
     }
 

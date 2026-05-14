@@ -251,13 +251,43 @@ public class SpeechControl {
 
     private void procesarTexto(String texto) {
         if (texto.contains("hola")) {
-            speechManager.startSpeak("Hola, ¿cómo estás?");
+            speechManager.startSpeak("Hola, ¿cómo estás?", speakOption);
         } else if (texto.contains("adiós")) {
             detener();
-            speechManager.startSpeak("Hasta luego.");
+            speechManager.startSpeak("Hasta luego.", speakOption);
             speechManager.doSleep();
         }
     }
 
+    public void iniciarUnaVez(OnSpeechResultListener listener) {
+        escuchando = false; 
+        handler.removeCallbacksAndMessages(null);
+        
+        Log.i("SpeechControl", "Iniciando escucha de una sola vez...");
+        speechManager.doWakeUp();
 
+        // Timeout de seguridad: si en 7 segundos no hay nada, avisar al listener
+        handler.postDelayed(() -> {
+            Log.w("SpeechControl", "Timeout de escucha alcanzado.");
+            if (listener != null) listener.onResult("");
+        }, 7000);
+
+        speechManager.setOnSpeechListener(new RecognizeListener() {
+            @Override
+            public boolean onRecognizeResult(Grammar grammar) {
+                handler.removeCallbacksAndMessages(null); // Cancelar timeout
+                String texto = (grammar != null) ? grammar.getText() : "";
+                Log.i("SpeechControl", "Texto reconocido (una vez): " + texto);
+                if (listener != null) listener.onResult(texto);
+                return true;
+            }
+
+            @Override
+            public void onRecognizeVolume(int i) {}
+        });
+    }
+
+    public interface OnSpeechResultListener {
+        void onResult(String text);
+    }
 }

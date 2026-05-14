@@ -114,11 +114,10 @@ public class ActividadPasosActivity extends BaseActivity {
         if (bloqueado) return;
         bloqueado = true;
 
-        handler.postDelayed(() -> {
-            bloqueado = false;
-            indicePasoActual++;
-            mostrarPaso();
-        }, 1000);
+        // Quitamos el delay artificial de 1000ms para una respuesta inmediata
+        bloqueado = false;
+        indicePasoActual++;
+        mostrarPaso();
     }
 
     @Override
@@ -144,15 +143,13 @@ public class ActividadPasosActivity extends BaseActivity {
             }
         }
         
-        // Emotional feedback
-        mostrarEmocion("PRISE");
-        encenderLed(com.qihancloud.opensdk.function.beans.LED.PART_ALL, com.qihancloud.opensdk.function.beans.LED.MODE_GREEN);
+        // Emotional feedback — MEJORA ÁREA 5: Celebración
+        gestionarFeedbackHardware("CELEBRACION");
         hablarOSimular("¡Muy bien! Has completado la actividad. ¡Excelente trabajo!");
         
         // Wait 3 seconds before finishing to let the robot celebrate
         handler.postDelayed(() -> {
-            apagarLed(com.qihancloud.opensdk.function.beans.LED.PART_ALL);
-            mostrarEmocion("NORMAL");
+            gestionarFeedbackHardware("IDLE");
             finish();
         }, 3000);
     }

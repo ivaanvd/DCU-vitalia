@@ -111,8 +111,16 @@ public class WelcomeActivity extends BaseActivity {
             builder.show();
         });
 
+        // MEJORA P0: Botón de micrófono en pantalla
+        android.view.View btnMic = findViewById(R.id.btnMicWelcome);
+        android.widget.TextView tvEstadoMic = findViewById(R.id.tvEstadoMicWelcome);
+        if (btnMic != null && tvEstadoMic != null) {
+            setMicUI(btnMic, tvEstadoMic);
+            btnMic.setOnClickListener(v -> onCabezaTocada());
+        }
+
         // Botón repetir saludo
-        findViewById(R.id.btnRepetirSaludo).setOnClickListener(v -> {
+        findViewById(R.id.btnRepetirBocadillo).setOnClickListener(v -> {
             saludoRealizado = false;
             onRobotServiceReady();
         });
@@ -124,9 +132,10 @@ public class WelcomeActivity extends BaseActivity {
         saludoRealizado = true;
 
         // El robot guía al usuario desde el principio con frases secuenciales.
+        realizarSaludoHumanizado(); // MEJORA ÁREA 5: Saludo con brazos y cabeza
         new Thread(() -> {
             hablarYEsperar("¡Hola! Soy Sanbot. Vamos a configurar tu perfil.");
-            hablarYEsperar("Dime tu nombre. Toca mi cabeza cuando estés listo.");
+            hablarYEsperar("Pulsa el botón del micrófono o toca mi cabeza y dime tu nombre.");
         }).start();
     }
 
@@ -150,6 +159,7 @@ public class WelcomeActivity extends BaseActivity {
         esperandoNombre = true;
 
         // No hablamos, solo escuchamos directamente (ya se dieron instrucciones antes)
+        runOnUiThread(() -> etNombre.setBackgroundResource(R.drawable.bg_field_active));
         new Thread(this::escuchar).start();
     }
 
@@ -165,6 +175,7 @@ public class WelcomeActivity extends BaseActivity {
 
         runOnUiThread(() -> {
             etNombre.setText(texto);
+            etNombre.setBackgroundResource(R.drawable.bg_campo_descripcion); // Quitar resaltado
         });
 
         // El robot confirma y guía al siguiente paso
@@ -375,6 +386,7 @@ public class WelcomeActivity extends BaseActivity {
         hablarOSimular("¡Todo listo, " + nombre + "! Bienvenido a la aplicación.");
 
         Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("is_new_user", true);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();

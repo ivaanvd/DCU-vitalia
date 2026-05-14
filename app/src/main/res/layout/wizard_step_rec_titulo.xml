@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/stepRec1Container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:visibility="gone">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PASO 1: ¿Qué recordamos?"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:textColor="#1C1C1E"
+        android:layout_marginBottom="12dp"/>
+
+    <EditText
+        android:id="@+id/etTituloRecordatorio"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:hint="Ej: Cita médica"
+        android:textSize="18sp"
+        android:textColor="#1C1C1E"
+        android:background="@drawable/bg_campo_descripcion"
+        android:paddingStart="14dp"
+        android:paddingEnd="14dp"
+        android:singleLine="true"
+        android:layout_marginBottom="24dp"
+        android:inputType="textCapSentences"/>
+
+</LinearLayout>

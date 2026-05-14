@@ -31,18 +31,31 @@
         android:background="@drawable/bg_bocadillo"
         android:minHeight="96dp"
         android:gravity="center_vertical"
+        android:orientation="horizontal"
         android:paddingStart="20dp"
-        android:paddingEnd="20dp"
+        android:paddingEnd="12dp"
         android:paddingTop="18dp"
         android:paddingBottom="18dp">
 
         <TextView
             android:id="@+id/tvBocadilloTexto"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="¡Hola!"
             android:textColor="#1A1A1A"
-            android:textSize="30sp"
+            android:textSize="26sp"
             android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/btnRepetirBocadillo"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/bg_tipo_normal"
+            android:src="@drawable/ic_volumen"
+            android:scaleType="centerInside"
+            android:padding="12dp"
+            android:contentDescription="Repetir mensaje"/>
     </LinearLayout>
 </LinearLayout>
