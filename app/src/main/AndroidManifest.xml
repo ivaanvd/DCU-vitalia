@@ -77,7 +77,10 @@
         <activity android:name=".juegos.FinMiniRoscoActivity" android:exported="false" android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".juegos.JuegoBingoActivity" android:exported="false" android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".juegos.FinBingoActivity" android:exported="false" android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".ajustes.AjustesActivity" android:exported="false" android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ajustes.AjustesActivity" 
+            android:exported="false" 
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden" />
 
         <activity
             android:name=".alarmas.ActividadPopupActivity"

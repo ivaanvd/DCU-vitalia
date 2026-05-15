@@ -21,7 +21,7 @@
         android:id="@+id/etDescripcionActividad"
         android:layout_width="match_parent"
         android:layout_height="64dp"
-        android:textSize="18sp"
+        android:textSize="24sp"
         android:textColor="#1C1C1E"
         android:background="@drawable/bg_campo_descripcion"
         android:paddingStart="14dp"

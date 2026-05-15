@@ -13,8 +13,9 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:layout_marginTop="18dp"
-        android:paddingStart="16dp"
-        android:paddingEnd="10dp"
+        android:paddingStart="42dp"
+        android:paddingEnd="42dp"
+
         android:clipToPadding="false"
         android:scrollbars="vertical"
         android:fadeScrollbars="false"
@@ -35,7 +36,8 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:text="No hay recordatorios futuros.\n¡Añade el primero!"
-        android:textSize="16sp"
+        android:textSize="26sp"
+
         android:textColor="#9E9E9E"
         android:gravity="center"
         android:visibility="gone"/>
@@ -74,7 +76,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="AÑADIR"
-            android:textSize="22sp"
+            android:textSize="28sp"
+
             android:textStyle="bold"
             android:textColor="#FFFFFF"
             android:letterSpacing="0.05"/>

@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="¿Qué actividad vamos a añadir?"
-        android:textSize="20sp"
+        android:textSize="26sp"
         android:textStyle="bold"
         android:textColor="#1C1C1E"
         android:layout_marginBottom="12dp"
@@ -26,14 +26,14 @@
         android:alignmentMode="alignMargins"
         android:layout_marginBottom="16dp">
 
-        <Button android:id="@+id/btnTypeMed" android:layout_width="0dp" android:layout_height="80dp" android:layout_columnWeight="1" android:text="Tomar medicina" android:textSize="16sp" android:background="@drawable/bg_tipo_normal" android:layout_margin="4dp" android:textAllCaps="false"/>
-        <Button android:id="@+id/btnTypeCom" android:layout_width="0dp" android:layout_height="80dp" android:layout_columnWeight="1" android:text="Comer" android:textSize="16sp" android:background="@drawable/bg_tipo_normal" android:layout_margin="4dp" android:textAllCaps="false"/>
-        <Button android:id="@+id/btnTypeAgu" android:layout_width="0dp" android:layout_height="80dp" android:layout_columnWeight="1" android:text="Beber agua" android:textSize="16sp" android:background="@drawable/bg_tipo_normal" android:layout_margin="4dp" android:textAllCaps="false"/>
-        <Button android:id="@+id/btnTypePas" android:layout_width="0dp" android:layout_height="80dp" android:layout_columnWeight="1" android:text="Ir a caminar" android:textSize="16sp" android:background="@drawable/bg_tipo_normal" android:layout_margin="4dp" android:textAllCaps="false"/>
-        <Button android:id="@+id/btnTypeAse" android:layout_width="0dp" android:layout_height="80dp" android:layout_columnWeight="1" android:text="Aseo personal" android:textSize="16sp" android:background="@drawable/bg_tipo_normal" android:layout_margin="4dp" android:textAllCaps="false"/>
-        <Button android:id="@+id/btnTypeJue" android:layout_width="0dp" android:layout_height="80dp" android:layout_columnWeight="1" android:text="Juegos" android:textSize="16sp" android:background="@drawable/bg_tipo_normal" android:layout_margin="4dp" android:textAllCaps="false"/>
-        <Button android:id="@+id/btnTypeFam" android:layout_width="0dp" android:layout_height="80dp" android:layout_columnWeight="1" android:text="Llamar a la familia" android:textSize="16sp" android:background="@drawable/bg_tipo_normal" android:layout_margin="4dp" android:textAllCaps="false"/>
-        <Button android:id="@+id/btnTypeDor" android:layout_width="0dp" android:layout_height="80dp" android:layout_columnWeight="1" android:text="Dormir" android:textSize="16sp" android:background="@drawable/bg_tipo_normal" android:layout_margin="4dp" android:textAllCaps="false"/>
+        <Button android:id="@+id/btnTypeMed" android:layout_width="0dp" android:layout_height="80dp" android:layout_columnWeight="1" android:text="Tomar medicina" android:textSize="20sp" android:background="@drawable/bg_tipo_normal" android:layout_margin="4dp" android:textAllCaps="false"/>
+        <Button android:id="@+id/btnTypeCom" android:layout_width="0dp" android:layout_height="80dp" android:layout_columnWeight="1" android:text="Comer" android:textSize="20sp" android:background="@drawable/bg_tipo_normal" android:layout_margin="4dp" android:textAllCaps="false"/>
+        <Button android:id="@+id/btnTypeAgu" android:layout_width="0dp" android:layout_height="80dp" android:layout_columnWeight="1" android:text="Beber agua" android:textSize="20sp" android:background="@drawable/bg_tipo_normal" android:layout_margin="4dp" android:textAllCaps="false"/>
+        <Button android:id="@+id/btnTypePas" android:layout_width="0dp" android:layout_height="80dp" android:layout_columnWeight="1" android:text="Ir a caminar" android:textSize="20sp" android:background="@drawable/bg_tipo_normal" android:layout_margin="4dp" android:textAllCaps="false"/>
+        <Button android:id="@+id/btnTypeAse" android:layout_width="0dp" android:layout_height="80dp" android:layout_columnWeight="1" android:text="Aseo personal" android:textSize="20sp" android:background="@drawable/bg_tipo_normal" android:layout_margin="4dp" android:textAllCaps="false"/>
+        <Button android:id="@+id/btnTypeJue" android:layout_width="0dp" android:layout_height="80dp" android:layout_columnWeight="1" android:text="Juegos" android:textSize="20sp" android:background="@drawable/bg_tipo_normal" android:layout_margin="4dp" android:textAllCaps="false"/>
+        <Button android:id="@+id/btnTypeFam" android:layout_width="0dp" android:layout_height="80dp" android:layout_columnWeight="1" android:text="Llamar a la familia" android:textSize="20sp" android:background="@drawable/bg_tipo_normal" android:layout_margin="4dp" android:textAllCaps="false"/>
+        <Button android:id="@+id/btnTypeDor" android:layout_width="0dp" android:layout_height="80dp" android:layout_columnWeight="1" android:text="Dormir" android:textSize="20sp" android:background="@drawable/bg_tipo_normal" android:layout_margin="4dp" android:textAllCaps="false"/>
     </GridLayout>
 
     <Spinner

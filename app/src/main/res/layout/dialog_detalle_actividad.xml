@@ -48,7 +48,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="JUEGOS"
-            android:textSize="22sp"
+            android:textSize="40sp"
             android:textStyle="bold"
             android:textColor="#1C1C1E"
             android:layout_marginBottom="6dp"/>
@@ -58,7 +58,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Detalles:"
-            android:textSize="13sp"
+            android:textSize="30sp"
             android:textStyle="bold"
             android:textColor="#8E8E93"
             android:layout_marginBottom="2dp"/>
@@ -68,27 +68,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="—"
-            android:textSize="15sp"
+            android:textSize="25sp"
             android:textStyle="bold"
             android:textColor="#3C3C43"
             android:gravity="center"
             android:layout_marginBottom="24dp"/>
 
-        <!-- Días de la semana -->
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:id="@+id/containerDiasDetAct"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center">
+            android:gravity="center"
+            android:layout_marginTop="8dp"/>
 
-            <TextView android:id="@+id/detDiaLun" android:layout_width="42dp" android:layout_height="42dp" android:text="L" android:gravity="center" android:textSize="14sp" android:textStyle="bold" android:textColor="#1C1C1E" android:background="@drawable/bg_tipo_normal" android:layout_marginEnd="6dp"/>
-            <TextView android:id="@+id/detDiaMar" android:layout_width="42dp" android:layout_height="42dp" android:text="M" android:gravity="center" android:textSize="14sp" android:textStyle="bold" android:textColor="#1C1C1E" android:background="@drawable/bg_tipo_normal" android:layout_marginEnd="6dp"/>
-            <TextView android:id="@+id/detDiaMie" android:layout_width="42dp" android:layout_height="42dp" android:text="X" android:gravity="center" android:textSize="14sp" android:textStyle="bold" android:textColor="#1C1C1E" android:background="@drawable/bg_tipo_normal" android:layout_marginEnd="6dp"/>
-            <TextView android:id="@+id/detDiaJue" android:layout_width="42dp" android:layout_height="42dp" android:text="J" android:gravity="center" android:textSize="14sp" android:textStyle="bold" android:textColor="#1C1C1E" android:background="@drawable/bg_tipo_normal" android:layout_marginEnd="6dp"/>
-            <TextView android:id="@+id/detDiaVie" android:layout_width="42dp" android:layout_height="42dp" android:text="V" android:gravity="center" android:textSize="14sp" android:textStyle="bold" android:textColor="#1C1C1E" android:background="@drawable/bg_tipo_normal" android:layout_marginEnd="6dp"/>
-            <TextView android:id="@+id/detDiaSab" android:layout_width="42dp" android:layout_height="42dp" android:text="S" android:gravity="center" android:textSize="14sp" android:textStyle="bold" android:textColor="#1C1C1E" android:background="@drawable/bg_tipo_normal" android:layout_marginEnd="6dp"/>
-            <TextView android:id="@+id/detDiaDom" android:layout_width="42dp" android:layout_height="42dp" android:text="D" android:gravity="center" android:textSize="14sp" android:textStyle="bold" android:textColor="#1C1C1E" android:background="@drawable/bg_tipo_normal"/>
-        </LinearLayout>
 
     </LinearLayout>
 

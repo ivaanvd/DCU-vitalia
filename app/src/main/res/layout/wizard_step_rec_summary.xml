@@ -9,13 +9,40 @@
     android:gravity="center"
     android:layout_marginBottom="24dp">
     
+    <!-- Icono Campana -->
+    <FrameLayout
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/bg_icon_circle_white">
+        <ImageView
+            android:layout_width="54dp"
+            android:layout_height="54dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_calendario"
+            android:contentDescription=""/>
+    </FrameLayout>
+
     <TextView
+        android:id="@+id/tvSummaryHoraRec"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="REVISIÓN FINAL"
-        android:textSize="18sp"
+        android:text="11:35"
+        android:textSize="48sp"
         android:textStyle="bold"
         android:textColor="#1C1C1E"
+        android:layout_marginBottom="2dp"/>
+
+    <TextView
+        android:id="@+id/tvSummaryTituloRec"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TÍTULO"
+        android:textSize="36sp"
+        android:textStyle="bold"
+        android:textColor="#1C1C1E"
+        android:gravity="center"
         android:layout_marginBottom="12dp"/>
 
     <LinearLayout
@@ -23,85 +50,46 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="@drawable/bg_field_active"
-        android:padding="16dp">
+        android:padding="20dp"
+        android:gravity="center">
 
-        <!-- Fila Título -->
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="8dp">
-            <TextView
-                android:layout_width="120dp"
-                android:layout_height="wrap_content"
-                android:text="🔔 RECORDAR:"
-                android:textStyle="bold"
-                android:textColor="#3A3A3C"/>
-            <TextView
-                android:id="@+id/tvSummaryTituloRec"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="—"
-                android:textColor="#1C1C1E"/>
-        </LinearLayout>
+            android:text="FECHA PROGRAMADA:"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#8E8E93"
+            android:layout_marginBottom="4dp"/>
 
-        <!-- Fila Fecha -->
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/tvSummaryFechaRec"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="8dp">
-            <TextView
-                android:layout_width="120dp"
-                android:layout_height="wrap_content"
-                android:text="📅 FECHA:"
-                android:textStyle="bold"
-                android:textColor="#3A3A3C"/>
-            <TextView
-                android:id="@+id/tvSummaryFechaRec"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="—"
-                android:textColor="#1C1C1E"/>
-        </LinearLayout>
+            android:text="—"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:textColor="#3C3C43"
+            android:layout_marginBottom="16dp"/>
 
-        <!-- Fila Hora -->
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="8dp">
-            <TextView
-                android:layout_width="120dp"
-                android:layout_height="wrap_content"
-                android:text="⏰ HORA:"
-                android:textStyle="bold"
-                android:textColor="#3A3A3C"/>
-            <TextView
-                android:id="@+id/tvSummaryHoraRec"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="—"
-                android:textColor="#1C1C1E"/>
-        </LinearLayout>
+            android:text="AVISO PREVIO:"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#8E8E93"
+            android:layout_marginBottom="4dp"/>
 
-        <!-- Fila Anticipación -->
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/tvSummaryAnticRec"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="120dp"
-                android:layout_height="wrap_content"
-                android:text="⚠️ AVISO:"
-                android:textStyle="bold"
-                android:textColor="#3A3A3C"/>
-            <TextView
-                android:id="@+id/tvSummaryAnticRec"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="—"
-                android:textColor="#1C1C1E"/>
-        </LinearLayout>
+            android:text="—"
+            android:textSize="22sp"
+            android:textColor="#8E8E93"
+            android:textStyle="bold"/>
+
     </LinearLayout>
+
 </LinearLayout>

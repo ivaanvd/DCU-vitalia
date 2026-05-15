@@ -185,6 +185,34 @@ public class ActividadRepository {
         }
     }
 
+    // ── Lógica de Negocio (Movida desde la Activity) ─────────────────────────
+
+    /**
+     * Comprueba si una actividad se solapa con otras existentes.
+     */
+    public boolean haySolapamiento(List<Integer> dias, int horaMinutos, int duracion, int idAExcluir) {
+        List<Actividad> lista = getAll();
+        for (Actividad a : lista) {
+            if (a.getId() == idAExcluir) continue;
+            // No comparamos con actividades ya completadas hoy
+            if (Actividad.ESTADO_COMPLETADA.equals(a.getEstado()) && a.coincideHoy()) continue;
+
+            if (tienenDiaComun(dias, a.getDiasSemana())) {
+                int s1 = horaMinutos, e1 = s1 + duracion;
+                int s2 = a.getHoraMinutos(), e2 = s2 + a.getDuracionMinutos();
+                // Si el inicio de una es antes del fin de la otra y viceversa
+                if (s1 < e2 && s2 < e1) return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean tienenDiaComun(List<Integer> d1, List<Integer> d2) {
+        if (d1 == null || d2 == null) return false;
+        for (Integer d : d1) if (d2.contains(d)) return true;
+        return false;
+    }
+
     // ── Eliminar ──────────────────────────────────────────────────────────────
 
     public void delete(int id) {

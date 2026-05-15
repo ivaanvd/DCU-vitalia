@@ -1,12 +1,7 @@
 package com.example.sanbotapp;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.media.AudioManager;
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
+import com.example.sanbotapp.util.AppConstants;
+import com.example.sanbotapp.util.EstadoFeedback;
 
 import com.example.sanbotapp.moduloReactivo.MovementControl;
 import com.example.sanbotapp.robotControl.AudioControl;
@@ -16,6 +11,15 @@ import com.example.sanbotapp.robotControl.HardwareControl;
 import com.example.sanbotapp.robotControl.SpeechControl;
 import com.example.sanbotapp.robotControl.SystemControl;
 import com.example.sanbotapp.robotControl.WheelControl;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.media.AudioManager;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
+
 
 
 
@@ -164,15 +168,15 @@ public abstract class BaseActivity extends TopBaseActivity {
      * Las subclases pueden sobreescribirlo para ejecutar acciones de bienvenida.
      */
     protected void onRobotServiceReady() {
-        SharedPreferences prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE);
+        SharedPreferences prefs = getSharedPreferences(AppConstants.PREFS_NAME, MODE_PRIVATE);
 
         // Aplicar volumen guardado (Comentado para evitar que cambie solo al entrar en actividades)
-        // int volumen = prefs.getInt("ajuste_volumen", 70);
+        // int volumen = prefs.getInt(AppConstants.KEY_VOLUMEN, 70);
         // setVolumenRobot(volumen);
 
         // Aplicar brillo guardado (requiere permisos de sistema)
         if (android.provider.Settings.System.canWrite(this)) {
-            int brillo = prefs.getInt("ajuste_brillo", 60);
+            int brillo = prefs.getInt(AppConstants.KEY_BRILLO, 60);
             int brillo255 = Math.round(brillo * 255f / 100f);
             try {
                 android.provider.Settings.System.putInt(
@@ -196,7 +200,7 @@ public abstract class BaseActivity extends TopBaseActivity {
         super.onPause();
         // Resetear UI de micrófono por si acaso se quedó pillado
         updateMicUI(false);
-        gestionarFeedbackHardware("IDLE");
+        gestionarFeedbackHardware(EstadoFeedback.IDLE);
 
         // No callar si es el Home para que no se corten frases tipo "Abriendo recordatorios..."
         if (!(this instanceof MainActivity)) {
@@ -220,6 +224,18 @@ public abstract class BaseActivity extends TopBaseActivity {
     // VOZ
     // ══════════════════════════════════════════════════════════════════════════
 
+    public void hablarEnMain(String texto) {
+        hablarEnMain(texto, null);
+    }
+
+    public void hablarEnMain(String texto, EmotionsType emotion) {
+        if (android.os.Looper.myLooper() == android.os.Looper.getMainLooper()) {
+            hablarOSimular(texto, emotion);
+        } else {
+            runOnUiThread(() -> hablarOSimular(texto, emotion));
+        }
+    }
+
     /**
      * Hace que el robot pronuncie la frase dada en voz alta mediante TTS.
      */
@@ -240,7 +256,7 @@ public abstract class BaseActivity extends TopBaseActivity {
         
         // Solo cambiamos la emoción si se especifica una nueva, para no tapar emociones anteriores
         if (emocion != null) {
-            gestionarFeedbackHardware("HABLANDO", emocion);
+            gestionarFeedbackHardware(EstadoFeedback.HABLANDO, emocion);
         } else {
             // Si no hay emoción, solo encendemos LEDs sin tocar la pantalla
             if (hardwareControl != null) {
@@ -294,14 +310,14 @@ public abstract class BaseActivity extends TopBaseActivity {
 
     public void escuchar() {
         Log.d("BaseActivity", "Iniciando escucha...");
-        gestionarFeedbackHardware("ESCUCHANDO");
+        gestionarFeedbackHardware(EstadoFeedback.ESCUCHANDO);
         updateMicUI(true);
 
         if (speechControl != null) {
             speechControl.iniciarUnaVez(text -> {
                 runOnUiThread(() -> {
                     updateMicUI(false);
-                    gestionarFeedbackHardware("IDLE");
+                    gestionarFeedbackHardware(EstadoFeedback.IDLE);
                     onTextoEscuchado(text);
                 });
             });
@@ -309,30 +325,40 @@ public abstract class BaseActivity extends TopBaseActivity {
             Log.d("BaseActivity[Sim]", "Simulando escucha (esperando 3s)...");
             mainHandler.postDelayed(() -> {
                 updateMicUI(false);
-                gestionarFeedbackHardware("IDLE");
+                gestionarFeedbackHardware(EstadoFeedback.IDLE);
                 onTextoEscuchado("simulación");
             }, 3000);
         }
     }
 
+    /** @deprecated Usar gestionarFeedbackHardware(EstadoFeedback) */
+    @Deprecated
     public void gestionarFeedbackHardware(String estado) {
+        try {
+            gestionarFeedbackHardware(EstadoFeedback.valueOf(estado.toUpperCase()), EmotionsType.SMILE);
+        } catch (Exception e) {
+            Log.e("BaseActivity", "Estado de feedback no válido: " + estado);
+        }
+    }
+
+    public void gestionarFeedbackHardware(EstadoFeedback estado) {
         gestionarFeedbackHardware(estado, EmotionsType.SMILE);
     }
 
-    public void gestionarFeedbackHardware(String estado, EmotionsType emocionDefault) {
+    public void gestionarFeedbackHardware(EstadoFeedback estado, EmotionsType emocionDefault) {
         if (hardwareControl == null || systemControl == null || movementControl == null) return;
 
         // Ejecutamos en segundo plano para no bloquear el hilo de UI con llamadas IPC
         new Thread(() -> {
             switch (estado) {
-                case "ESCUCHANDO":
+                case ESCUCHANDO:
                     hardwareControl.encenderLED(com.qihancloud.opensdk.function.beans.LED.PART_ALL, (byte) 0x04);
                     systemControl.cambiarEmocion(EmotionsType.QUESTION);
                     movementControl.activarSeguimiento();
                     if (headControl != null) headControl.controlBasicoCabeza(HeadControl.AccionesCabeza.ARRIBA);
                     break;
 
-                case "HABLANDO":
+                case HABLANDO:
                     hardwareControl.encenderLED(com.qihancloud.opensdk.function.beans.LED.PART_ALL, (byte) 0x01);
                     if (emocionDefault != null) {
                         systemControl.cambiarEmocion(emocionDefault);
@@ -340,7 +366,7 @@ public abstract class BaseActivity extends TopBaseActivity {
                     movementControl.activarSeguimiento();
                     break;
 
-                case "ACIERTO":
+                case ACIERTO:
                     hardwareControl.encenderLED(com.qihancloud.opensdk.function.beans.LED.PART_ALL, (byte) 0x02); // Verde
                     systemControl.cambiarEmocion(EmotionsType.SURPRISE);
                     if (handsControl != null) {
@@ -353,7 +379,7 @@ public abstract class BaseActivity extends TopBaseActivity {
                     }
                     break;
 
-                case "FALLO":
+                case FALLO:
                     hardwareControl.encenderLED(com.qihancloud.opensdk.function.beans.LED.PART_ALL, (byte) 0x03); // Rojo
                     systemControl.cambiarEmocion(EmotionsType.CRY);
                     if (handsControl != null) {
@@ -364,16 +390,16 @@ public abstract class BaseActivity extends TopBaseActivity {
                     }
                     break;
 
-                case "SUMMARY_START":
+                case SUMMARY_START:
                     hardwareControl.encenderLED(com.qihancloud.opensdk.function.beans.LED.PART_ALL, (byte) 0x05); // Púrpura/Morado
                     systemControl.cambiarEmocion(EmotionsType.GRIEVANCE);
                     break;
 
-                case "THINKING_START":
+                case THINKING_START:
                     systemControl.cambiarEmocion(EmotionsType.QUESTION);
                     break;
 
-                case "MOURN":
+                case MOURN:
                     hardwareControl.encenderLED(com.qihancloud.opensdk.function.beans.LED.PART_ALL, (byte) 0x03); // Rojo
                     systemControl.cambiarEmocion(EmotionsType.CRY);
                     if (headControl != null) {
@@ -391,30 +417,30 @@ public abstract class BaseActivity extends TopBaseActivity {
                     }).start(), 5000);
                     break;
 
-                case "EXITO":
+                case EXITO:
                     hardwareControl.encenderLED(com.qihancloud.opensdk.function.beans.LED.PART_ALL, (byte) 0x02);
                     systemControl.cambiarEmocion(EmotionsType.SMILE);
                     asentirConCabeza();
                     break;
 
-                case "CANCELADO":
+                case CANCELADO:
                     hardwareControl.encenderLED(com.qihancloud.opensdk.function.beans.LED.PART_ALL, (byte) 0x06);
                     systemControl.cambiarEmocion(EmotionsType.GRIEVANCE);
                     break;
 
-                case "ERROR":
+                case ERROR:
                     hardwareControl.encenderLED(com.qihancloud.opensdk.function.beans.LED.PART_ALL, (byte) 0x03);
                     systemControl.cambiarEmocion(EmotionsType.QUESTION);
                     break;
 
-                case "ALARMA":
+                case ALARMA:
                     systemControl.cambiarEmocion(EmotionsType.SURPRISE);
                     if (handsControl != null) handsControl.controlBasicoBrazos(HandsControl.AccionesBrazos.LEVANTAR_BRAZO, HandsControl.TipoBrazo.AMBOS);
                     if (headControl != null) headControl.controlBasicoCabeza(HeadControl.AccionesCabeza.ARRIBA);
                     hardwareControl.encenderLED(com.qihancloud.opensdk.function.beans.LED.PART_ALL, (byte) 0x05);
                     break;
 
-                case "CELEBRACION":
+                case CELEBRACION:
                     systemControl.cambiarEmocion(EmotionsType.SMILE);
                     hardwareControl.encenderLED(com.qihancloud.opensdk.function.beans.LED.PART_ALL, (byte) 0x02);
                     asentirConCabeza();
@@ -424,7 +450,7 @@ public abstract class BaseActivity extends TopBaseActivity {
                     }
                     break;
 
-                case "SALUDO":
+                case SALUDO:
                     systemControl.cambiarEmocion(EmotionsType.SMILE);
                     if (handsControl != null) {
                         handsControl.controlBasicoBrazos(HandsControl.AccionesBrazos.LEVANTAR_BRAZO, HandsControl.TipoBrazo.DERECHO);
@@ -432,7 +458,7 @@ public abstract class BaseActivity extends TopBaseActivity {
                     }
                     break;
 
-                case "IDLE":
+                case IDLE:
                     hardwareControl.apagarLED(com.qihancloud.opensdk.function.beans.LED.PART_ALL);
                     systemControl.cambiarEmocion(EmotionsType.NORMAL);
                     movementControl.desactivarSeguimiento();

@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="PASO 1: ¿Qué recordamos?"
-        android:textSize="22sp"
+        android:textSize="26sp"
         android:textStyle="bold"
         android:textColor="#1C1C1E"
         android:layout_marginBottom="12dp"/>
@@ -21,7 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="64dp"
         android:hint="Ej: Cita médica"
-        android:textSize="18sp"
+        android:textSize="24sp"
         android:textColor="#1C1C1E"
         android:background="@drawable/bg_campo_descripcion"
         android:paddingStart="14dp"

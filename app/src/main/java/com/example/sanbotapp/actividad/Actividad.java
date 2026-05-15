@@ -74,7 +74,6 @@ public class Actividad {
     public void setCreadaPorSistema(boolean creadaPorSistema) { this.creadaPorSistema = creadaPorSistema; }
 
     // ── Helpers ───────────────────────────────────────────────────────────────
-
     /** Devuelve la hora en formato HH:mm. */
     public String getHoraFormateada() {
         return String.format("%02d:%02d", horaMinutos / 60, horaMinutos % 60);
@@ -92,67 +91,25 @@ public class Actividad {
 
     /** Devuelve el color de fondo asociado al tipo, en formato #RRGGBB. */
     public String getColorHex() {
-        switch (tipo) {
-            case TIPO_MEDICACION:       return "#4A90E2";
-            case TIPO_BEBER_AGUA:       return "#29B6C8";
-            case TIPO_COMER:            return "#F07070";
-            case TIPO_PASEO_EJERCICIO:  return "#F5A623";
-            case TIPO_JUEGOS:           return "#6BBF59";
-            case TIPO_ASEO:             return "#4DB6AC";
-            case TIPO_LLAMADA_FAMILIAR: return "#E9658B";
-            case TIPO_IR_DORMIR:        return "#9B79D4";
-            default:                    return "#9E9E9E";
-        }
+        return TipoActividad.fromString(tipo).getColorHex();
     }
 
     /** Devuelve la etiqueta visible para el usuario correspondiente al tipo. */
     public String getTipoLabel() {
-        switch (tipo) {
-            case TIPO_MEDICACION:       return "MEDICACIÓN";
-            case TIPO_BEBER_AGUA:       return "BEBER AGUA";
-            case TIPO_COMER:            return "COMER";
-            case TIPO_PASEO_EJERCICIO:  return "PASEO/EJERCICIO";
-            case TIPO_JUEGOS:           return "JUEGOS";
-            case TIPO_ASEO:             return "ASEO";
-            case TIPO_LLAMADA_FAMILIAR: return "LLAMADA FAMILIAR";
-            case TIPO_IR_DORMIR:        return "IR A DORMIR";
-            default:                    return "OTRO";
-        }
+        return TipoActividad.fromString(tipo).getLabel();
     }
 
     /**
      * Devuelve el drawable resource id del icono asociado al tipo.
-     * Centralizado aquí para que las Activities no necesiten su propio switch.
      */
     public int getIconoRes() {
-        switch (tipo) {
-            case TIPO_MEDICACION:       return R.drawable.ic_medicacion;
-            case TIPO_BEBER_AGUA:       return R.drawable.ic_agua;
-            case TIPO_COMER:            return R.drawable.ic_comida;
-            case TIPO_PASEO_EJERCICIO:  return R.drawable.ic_ejercicio;
-            case TIPO_JUEGOS:           return R.drawable.ic_puzzle;
-            case TIPO_ASEO:             return R.drawable.ic_aseo;
-            case TIPO_LLAMADA_FAMILIAR: return R.drawable.ic_llamada;
-            case TIPO_IR_DORMIR:        return R.drawable.ic_dormir;
-            default:                    return R.drawable.ic_calendario;
-        }
+        return TipoActividad.fromString(tipo).getIconoRes();
     }
 
     /**
      * Devuelve la duración estimada en minutos según el tipo.
-     * Valor hardcoded como referencia estándar para detección de solapamientos.
      */
     public int getDuracionMinutos() {
-        switch (tipo) {
-            case TIPO_MEDICACION:       return 5;
-            case TIPO_BEBER_AGUA:       return 5;
-            case TIPO_COMER:            return 30;
-            case TIPO_PASEO_EJERCICIO:  return 45;
-            case TIPO_JUEGOS:           return 30;
-            case TIPO_ASEO:             return 15;
-            case TIPO_LLAMADA_FAMILIAR: return 20;
-            case TIPO_IR_DORMIR:        return 10;
-            default:                    return 30;
-        }
+        return TipoActividad.fromString(tipo).getDuracionMinutos();
     }
 }

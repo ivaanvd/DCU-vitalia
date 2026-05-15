@@ -37,7 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="CITA MEDICA"
-            android:textSize="24sp"
+            android:textSize="40sp"
             android:textStyle="bold"
             android:textColor="#1C1C1E"
             android:gravity="center"
@@ -62,16 +62,6 @@
             android:textStyle="bold"
             android:textColor="#1C1C1E"
             android:layout_marginBottom="12dp"/>
-
-        <TextView
-            android:id="@+id/tvDescDetRec"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="—"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            android:textColor="#3C3C43"
-            android:gravity="center"/>
 
     </LinearLayout>
 

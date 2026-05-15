@@ -6,6 +6,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
+import com.example.sanbotapp.util.AppConstants;
+import com.example.sanbotapp.util.EstadoFeedback;
 
 /**
  * BaseActivity para el flavor TABLET.
@@ -126,4 +128,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         Log.d("BaseActivity[Tablet]", "activarSeguimiento"); }
     public void desactivarSeguimiento() {
         Log.d("BaseActivity[Tablet]", "desactivarSeguimiento"); }
+
+    public void gestionarFeedbackHardware(EstadoFeedback estado) {
+        Log.d("BaseActivity[Tablet]", "gestionarFeedbackHardware: " + estado);
+    }
 }

@@ -4,9 +4,11 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
 
     <!-- Font sizes for elderly accessibility -->
-    <dimen name="text_size_small">18sp</dimen>
-    <dimen name="text_size_medium">22sp</dimen>
-    <dimen name="text_size_large">26sp</dimen>
-    <dimen name="text_size_xlarge">32sp</dimen>
-    <dimen name="text_size_xxlarge">40sp</dimen>
+    <dimen name="text_size_small">26sp</dimen>
+    <dimen name="text_size_medium">32sp</dimen>
+    <dimen name="text_size_large">38sp</dimen>
+    <dimen name="text_size_xlarge">48sp</dimen>
+    <dimen name="text_size_xxlarge">58sp</dimen>
+
+
 </resources>

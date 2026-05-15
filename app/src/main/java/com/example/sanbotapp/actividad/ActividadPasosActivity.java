@@ -12,7 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.example.sanbotapp.BaseActivity;
 import com.example.sanbotapp.R;
-import java.util.ArrayList;
+import com.example.sanbotapp.util.EstadoFeedback;
+
 import java.util.List;
 
 public class ActividadPasosActivity extends BaseActivity {
@@ -20,10 +21,9 @@ public class ActividadPasosActivity extends BaseActivity {
     public static final String EXTRA_TIPO_ACTIVIDAD  = "extra_tipo_actividad";
     public static final String EXTRA_ACTIVIDAD_ID    = "extra_actividad_id";
 
-    private List<PasoActividad> pasos;
+    private List<TipoActividad.Paso> pasos;
     private int indicePasoActual = 0;
-    private boolean bloqueado = false;
-    private String tipoActividad;
+    private TipoActividad tipoEnum;
     private int actividadId = -1;
     private Handler handler = new Handler(Looper.getMainLooper());
 
@@ -33,17 +33,6 @@ public class ActividadPasosActivity extends BaseActivity {
     private Button btnAccion;
     private View cardPaso;
 
-    // ── Clase interna de paso ─────────────────────────────────────────────────
-
-    public static class PasoActividad {
-        public final String texto;
-        public final int    iconoRes;
-
-        public PasoActividad(String texto, int iconoRes) {
-            this.texto    = texto;
-            this.iconoRes = iconoRes;
-        }
-    }
 
     // ── Ciclo de vida ─────────────────────────────────────────────────────────
 
@@ -52,11 +41,11 @@ public class ActividadPasosActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_actividad_pasos);
 
-        tipoActividad = getIntent().getStringExtra(EXTRA_TIPO_ACTIVIDAD);
-        actividadId   = getIntent().getIntExtra(EXTRA_ACTIVIDAD_ID, -1);
-        if (tipoActividad == null) tipoActividad = Actividad.TIPO_MEDICACION;
+        String tipoStr = getIntent().getStringExtra(EXTRA_TIPO_ACTIVIDAD);
+        actividadId = getIntent().getIntExtra(EXTRA_ACTIVIDAD_ID, -1);
+        tipoEnum = TipoActividad.fromString(tipoStr);
 
-        setupTopBackBanner(getLabelParaTipo(tipoActividad));
+        setupTopBackBanner(tipoEnum.getLabel());
 
         tvContador  = findViewById(R.id.tvPasoContador);
         tvTextoPaso = findViewById(R.id.tvPasoTexto);
@@ -64,7 +53,7 @@ public class ActividadPasosActivity extends BaseActivity {
         btnAccion   = findViewById(R.id.btnPasoAccion);
         cardPaso    = findViewById(R.id.cardPaso);
 
-        pasos = getPasosParaTipo(tipoActividad);
+        pasos = tipoEnum.getPasos();
 
         aplicarColorFondo();
         mostrarPasoSinVoz(); // pinta la UI inmediatamente
@@ -98,7 +87,7 @@ public class ActividadPasosActivity extends BaseActivity {
     private void mostrarPasoSinVoz() {
         if (indicePasoActual >= pasos.size()) return;
 
-        PasoActividad paso  = pasos.get(indicePasoActual);
+        TipoActividad.Paso paso = pasos.get(indicePasoActual);
         int           total = pasos.size();
 
         tvContador.setText("PASO " + (indicePasoActual + 1) + " DE " + total);
@@ -111,11 +100,6 @@ public class ActividadPasosActivity extends BaseActivity {
 
     // avanzarPaso() ya usa mostrarPaso() que incluye voz, sin cambios
     private void avanzarPaso() {
-        if (bloqueado) return;
-        bloqueado = true;
-
-        // Quitamos el delay artificial de 1000ms para una respuesta inmediata
-        bloqueado = false;
         indicePasoActual++;
         mostrarPaso();
     }
@@ -144,12 +128,12 @@ public class ActividadPasosActivity extends BaseActivity {
         }
         
         // Emotional feedback — MEJORA ÁREA 5: Celebración
-        gestionarFeedbackHardware("CELEBRACION");
+        gestionarFeedbackHardware(EstadoFeedback.CELEBRACION);
         hablarOSimular("¡Muy bien! Has completado la actividad. ¡Excelente trabajo!");
         
         // Wait 3 seconds before finishing to let the robot celebrate
         handler.postDelayed(() -> {
-            gestionarFeedbackHardware("IDLE");
+            gestionarFeedbackHardware(EstadoFeedback.IDLE);
             finish();
         }, 3000);
     }
@@ -162,7 +146,7 @@ public class ActividadPasosActivity extends BaseActivity {
      */
     private void aplicarColorFondo() {
         try {
-            int colorBase = Color.parseColor(getColorParaTipo(tipoActividad));
+            int colorBase = Color.parseColor(tipoEnum.getColorHex());
             int colorConAlpha = Color.argb(90,
                     Color.red(colorBase),
                     Color.green(colorBase),
@@ -178,71 +162,4 @@ public class ActividadPasosActivity extends BaseActivity {
         }
     }
 
-    // ── Datos de pasos por tipo ───────────────────────────────────────────────
-
-    private List<PasoActividad> getPasosParaTipo(String tipo) {
-        List<PasoActividad> lista = new ArrayList<>();
-        switch (tipo) {
-            case Actividad.TIPO_MEDICACION:
-                lista.add(new PasoActividad("Lávate las manos",       R.drawable.ic_aseo));
-                lista.add(new PasoActividad("Ve a por la medicación",  R.drawable.ic_medicacion));
-                lista.add(new PasoActividad("Toma tu medicación",      R.drawable.ic_medicacion));
-                break;
-            case Actividad.TIPO_BEBER_AGUA:
-                lista.add(new PasoActividad("Ve a por un vaso de agua",              R.drawable.ic_agua));
-                lista.add(new PasoActividad("Bebe despacio, sin prisa",              R.drawable.ic_agua));
-                lista.add(new PasoActividad("Recuerda hidratarte cada hora",         R.drawable.ic_agua));
-                break;
-            case Actividad.TIPO_COMER:
-                lista.add(new PasoActividad("Prepara la mesa con calma",             R.drawable.ic_comida));
-                lista.add(new PasoActividad("Sirve tu comida",                       R.drawable.ic_comida));
-                lista.add(new PasoActividad("Come despacio y mastica bien",          R.drawable.ic_comida));
-                lista.add(new PasoActividad("Bebe agua durante la comida",           R.drawable.ic_agua));
-                break;
-            case Actividad.TIPO_PASEO_EJERCICIO:
-                lista.add(new PasoActividad("Siéntate en una silla",                 R.drawable.ic_ejercicio));
-                lista.add(new PasoActividad("Respira profundo",                      R.drawable.ic_ejercicio));
-                lista.add(new PasoActividad("Gira el cuello suavemente",             R.drawable.ic_ejercicio));
-                lista.add(new PasoActividad("Mueve los codos",                       R.drawable.ic_ejercicio));
-                lista.add(new PasoActividad("Levanta los brazos",                    R.drawable.ic_ejercicio));
-                break;
-            case Actividad.TIPO_JUEGOS:
-                lista.add(new PasoActividad("Busca un lugar tranquilo",              R.drawable.ic_puzzle));
-                lista.add(new PasoActividad("Realiza el ejercicio propuesto",        R.drawable.ic_puzzle));
-                lista.add(new PasoActividad("Descansa un momento",                   R.drawable.ic_puzzle));
-                break;
-            case Actividad.TIPO_ASEO:
-                lista.add(new PasoActividad("Prepara lo que necesitas",              R.drawable.ic_aseo));
-                lista.add(new PasoActividad("Realiza tu higiene personal",           R.drawable.ic_aseo));
-                lista.add(new PasoActividad("Recoge y deja todo ordenado",           R.drawable.ic_aseo));
-                break;
-            case Actividad.TIPO_LLAMADA_FAMILIAR:
-                lista.add(new PasoActividad("Piensa en alguien a quien llamar",      R.drawable.ic_llamada));
-                lista.add(new PasoActividad("Marca el número",                       R.drawable.ic_llamada));
-                lista.add(new PasoActividad("Saluda y pregunta cómo están",          R.drawable.ic_llamada));
-                break;
-            case Actividad.TIPO_IR_DORMIR:
-                lista.add(new PasoActividad("Apaga las luces de la casa",            R.drawable.ic_dormir));
-                lista.add(new PasoActividad("Prepara tu ropa para mañana",           R.drawable.ic_dormir));
-                lista.add(new PasoActividad("Ponte cómodo en la cama",               R.drawable.ic_dormir));
-                lista.add(new PasoActividad("Respira profundo y descansa",           R.drawable.ic_dormir));
-                break;
-            default:
-                lista.add(new PasoActividad("Realiza la actividad con calma",        R.drawable.ic_calendario));
-                break;
-        }
-        return lista;
-    }
-
-    // ── Helpers ───────────────────────────────────────────────────────────────
-
-    private String getColorParaTipo(String tipo) {
-        Actividad temp = new Actividad(0, tipo, 0, "");
-        return temp.getColorHex();
-    }
-
-    private String getLabelParaTipo(String tipo) {
-        Actividad temp = new Actividad(0, tipo, 0, "");
-        return temp.getTipoLabel();
-    }
 }

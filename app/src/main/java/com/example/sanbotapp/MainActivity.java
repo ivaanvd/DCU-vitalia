@@ -13,11 +13,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.sanbotapp.actividad.ActividadUIUtils;
+import com.example.sanbotapp.util.AppConstants;
+import com.example.sanbotapp.util.PhotoHelper;
 import com.example.sanbotapp.actividad.Actividad;
 import com.example.sanbotapp.actividad.ActividadRepository;
 import com.example.sanbotapp.actividad.ActividadesActivity;
-import com.example.sanbotapp.alarmas.AlarmScheduler;
 import com.example.sanbotapp.recordatorio.RecordatoriosActivity;
+import com.example.sanbotapp.alarmas.AlarmScheduler;
+
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -32,10 +36,6 @@ import java.util.Locale;
 public class MainActivity extends BaseActivity {
 
     // Constantes para guardar datos en SharedPreferences (nombre y foto del usuario)
-    private static final String PREFS_NAME   = "AppPrefs";
-    private static final String KEY_NOMBRE   = "nombre_usuario";
-    private static final String KEY_FOTO_PATH = "foto_path";
-    private static final String KEY_FIRST_RUN = "first_run";
 
     // Botones Principales
     private LinearLayout btnActividades, btnRecordatorios, btnJuegos, btnAjustes;
@@ -64,10 +64,10 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
 
         // Se inicializan las preferencias compartidas para leer datos como el nombre de usuario
-        prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        prefs = getSharedPreferences(AppConstants.PREFS_NAME, MODE_PRIVATE);
 
         // Verificar si es la primera vez que se abre la app
-        if (prefs.getBoolean(KEY_FIRST_RUN, true)) { //Cambiar a true
+        if (prefs.getBoolean(AppConstants.KEY_FIRST_RUN, true)) {
             // Es la primera vez: abrir WelcomeActivity
             Intent intent = new Intent(this, WelcomeActivity.class);
             startActivity(intent);
@@ -114,7 +114,7 @@ public class MainActivity extends BaseActivity {
      */
     @Override
     protected void onRobotServiceReady() {
-        nombreUsuario = prefs.getString(KEY_NOMBRE, "amigo/a");
+        nombreUsuario = prefs.getString(AppConstants.KEY_NOMBRE, "amigo/a");
         
         // Saludo solo la primera vez que se entra en la app para no ser repetitivo
         if (!yaHeSaludado) {
@@ -162,7 +162,7 @@ public class MainActivity extends BaseActivity {
         int hora = java.util.Calendar.getInstance().get(java.util.Calendar.HOUR_OF_DAY);
 
         if (hora >= 6 && hora < 12) {
-            return "SLEEPY";     // Mañana → cara alegre
+            return "SMILE";     // Mañana → cara alegre
         } else if (hora >= 12 && hora < 20) {
             return "NEUTRAL";   // Tarde → cara tranquila
         } else {
@@ -190,23 +190,12 @@ public class MainActivity extends BaseActivity {
      * Post: Se cargan los datos guardados (nombre y foto del usuario)
      */
     private void cargarDatosGuardados() {
-        nombreUsuario = prefs.getString(KEY_NOMBRE, "amigo/a");
+        nombreUsuario = prefs.getString(AppConstants.KEY_NOMBRE, "amigo/a");
         tvSaludo.setText("¡Hola, " + nombreUsuario + "!");
         tvNombreAvatar.setText(nombreUsuario);
 
-        String fotoPa = prefs.getString(KEY_FOTO_PATH, null);
-        if (fotoPa != null) {
-            try {
-                File fotoFile = new File(fotoPa);
-                if (fotoFile.exists()) {
-                    android.graphics.Bitmap bitmap = android.graphics.BitmapFactory.decodeFile(fotoPa);
-                    ((ImageView) findViewById(R.id.ivAvatar)).setImageBitmap(bitmap);
-                }
-            } catch (Exception e) {
-                // Si hay error, eliminar la ruta guardada
-                prefs.edit().remove(KEY_FOTO_PATH).apply();
-            }
-        }
+        String fotoPa = prefs.getString(AppConstants.KEY_FOTO_PATH, null);
+        PhotoHelper.mostrarFotoDesdeRuta(fotoPa, findViewById(R.id.ivAvatar));
     }
 
     /*
@@ -253,7 +242,7 @@ public class MainActivity extends BaseActivity {
 
         ((TextView) card.findViewById(R.id.tvHoraCard)).setText(a.getHoraFormateada());
         ((ImageView) card.findViewById(R.id.ivIconoCard))
-                .setImageResource(getIconoParaTipo(a.getTipo()));
+                .setImageResource(a.getIconoRes());
         ((TextView) card.findViewById(R.id.tvLabelCard)).setText(a.getTipoLabel());
 
         GradientDrawable bg = new GradientDrawable();
@@ -279,7 +268,7 @@ public class MainActivity extends BaseActivity {
         card.setBackground(bg);
         card.setClickable(true);
         card.setFocusable(true);
-        card.setOnClickListener(v -> mostrarDetalleActividad(a));
+        card.setOnClickListener(v -> ActividadUIUtils.mostrarDialogoDetalle(this, a));
 
         return card;
     }
@@ -288,81 +277,8 @@ public class MainActivity extends BaseActivity {
      * Pre: Se ejecuta al crear la pantalla principal
      * Post: Se muestra el detalle de la actividad
      */
-    private void mostrarDetalleActividad(final Actividad a) {
-        View dv = LayoutInflater.from(this)
-                .inflate(R.layout.dialog_detalle_actividad, null);
-
-        // Círculo de color con icono drawable (no emoji)
-        View frameCirculo = dv.findViewById(R.id.frameEmojiDetAct);
-        GradientDrawable bgCirculo = new GradientDrawable();
-        bgCirculo.setShape(GradientDrawable.OVAL);
-        bgCirculo.setColor(Color.parseColor(a.getColorHex()));
-        frameCirculo.setBackground(bgCirculo);
-
-        // El ImageView dentro del FrameLayout recibe el icono
-        ((ImageView) dv.findViewById(R.id.tvEmojiDetAct))
-                .setImageResource(getIconoParaTipo(a.getTipo()));
-
-        // Hora en negro (sin colorear)
-        ((TextView) dv.findViewById(R.id.tvHoraDetAct)).setText(a.getHoraFormateada());
-
-        // Nombre del tipo en mayúsculas
-        ((TextView) dv.findViewById(R.id.tvTipoDetAct)).setText(a.getTipoLabel());
-
-        // Descripción
-        String desc = (a.getDescripcion() != null && !a.getDescripcion().isEmpty())
-                ? a.getDescripcion().toUpperCase() : "—";
-        ((TextView) dv.findViewById(R.id.tvDescDetAct)).setText(desc);
-
-        // Días de la semana
-        final int[] VALORES_DIA = { 2, 3, 4, 5, 6, 7, 1 };
-        int[] idsDias = {
-                R.id.detDiaLun, R.id.detDiaMar, R.id.detDiaMie, R.id.detDiaJue,
-                R.id.detDiaVie, R.id.detDiaSab, R.id.detDiaDom
-        };
-        List<Integer> dias = a.getDiasSemana();
-        for (int i = 0; i < idsDias.length; i++) {
-            TextView tv = dv.findViewById(idsDias[i]);
-            boolean activo = dias != null && dias.contains(VALORES_DIA[i]);
-            if (activo) {
-                // Círculo relleno negro para días activos
-                GradientDrawable bgDia = new GradientDrawable();
-                bgDia.setShape(GradientDrawable.OVAL);
-                bgDia.setColor(Color.parseColor("#1C1C1E"));
-                tv.setBackground(bgDia);
-                tv.setTextColor(Color.WHITE);
-            } else {
-                // Círculo con borde fino gris para días inactivos
-                tv.setBackgroundResource(R.drawable.bg_tipo_normal);
-                tv.setTextColor(Color.parseColor("#1C1C1E"));
-            }
-        }
-
-        final AlertDialog dialog = new AlertDialog.Builder(this)
-                .setView(dv).setCancelable(true).create();
-        if (dialog.getWindow() != null)
-            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-
-        // X para cerrar
-        dv.findViewById(R.id.btnCerrarDetAct).setOnClickListener(v -> dialog.dismiss());
-
-        dialog.show();
-    }
 
 
-    private int getIconoParaTipo(String tipo) {
-        switch (tipo) {
-            case Actividad.TIPO_MEDICACION:       return R.drawable.ic_medicacion;
-            case Actividad.TIPO_BEBER_AGUA:       return R.drawable.ic_agua;
-            case Actividad.TIPO_COMER:            return R.drawable.ic_comida;
-            case Actividad.TIPO_PASEO_EJERCICIO:  return R.drawable.ic_ejercicio;
-            case Actividad.TIPO_JUEGOS:           return R.drawable.ic_puzzle;
-            case Actividad.TIPO_ASEO:             return R.drawable.ic_aseo;
-            case Actividad.TIPO_LLAMADA_FAMILIAR: return R.drawable.ic_llamada;
-            case Actividad.TIPO_IR_DORMIR:        return R.drawable.ic_dormir;
-            default:                              return R.drawable.ic_calendario;
-        }
-    }
 
     /**
      * Configura los listeners de los botones principales de la pantalla de inicio.

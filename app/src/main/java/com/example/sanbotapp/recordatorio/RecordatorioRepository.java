@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 
 import com.example.sanbotapp.actividad.Actividad;
 import com.example.sanbotapp.alarmas.AlarmScheduler;
+import com.example.sanbotapp.util.DateTimeUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -115,6 +116,46 @@ public class RecordatorioRepository {
         }
         prefs.edit().putString(KEY_LISTA, toJsonArray(lista)).apply();
     }
+
+    /**
+     * Comprueba si un recordatorio se solapa con otros recordatorios o actividades.
+     */
+    public boolean haySolapamiento(long fechaMs, int horaMinutos, int idAExcluir, List<Actividad> actividades) {
+        // 1. Comprobar contra otros recordatorios
+        for (Recordatorio r : getFuturos()) {
+            if (r.getId() == idAExcluir) continue;
+            if (r.getFechaMs() == fechaMs) {
+                int s1 = horaMinutos, e1 = s1 + 30; // Duración estándar 30 min
+                int s2 = r.getHoraMinutos(), e2 = s2 + 30;
+                if (s1 < e2 && s2 < e1) return true;
+            }
+        }
+
+        // 2. Comprobar contra actividades (si coinciden en día)
+        java.util.Calendar cal = java.util.Calendar.getInstance();
+        cal.setTimeInMillis(fechaMs);
+        int diaSemanaRec = cal.get(java.util.Calendar.DAY_OF_WEEK);
+        long hoyInicio = DateTimeUtils.fechaHoyInicio();
+
+        if (actividades != null) {
+            for (Actividad a : actividades) {
+                // Si la actividad ya está COMPLETADA hoy, no bloquea el solapamiento.
+                if (Actividad.ESTADO_COMPLETADA.equals(a.getEstado()) && a.coincideHoy()) {
+                    if (fechaMs == hoyInicio) continue;
+                }
+
+                if (a.getDiasSemana() != null && a.getDiasSemana().contains(diaSemanaRec)) {
+                    int s1 = horaMinutos, e1 = s1 + 30;
+                    int s2 = a.getHoraMinutos(), e2 = s2 + a.getDuracionMinutos();
+                    if (s1 < e2 && s2 < e1) return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+
 
     /**
      * Elimina todos los recordatorios de la base de datos y cancela sus alarmas.

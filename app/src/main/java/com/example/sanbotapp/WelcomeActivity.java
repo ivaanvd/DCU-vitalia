@@ -1,32 +1,18 @@
 package com.example.sanbotapp;
 
-import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
+import com.example.sanbotapp.util.AppConstants;
+import com.example.sanbotapp.util.PhotoHelper;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * WelcomeActivity
@@ -40,24 +26,13 @@ import java.io.InputStream;
  */
 public class WelcomeActivity extends BaseActivity {
 
-    private static final String PREFS_NAME     = "AppPrefs";
-    private static final String KEY_NOMBRE     = "nombre_usuario";
-    private static final String KEY_FOTO_PATH  = "foto_path";
-    private static final String KEY_FIRST_RUN  = "first_run";
-
-    private static final int REQUEST_CAMERA             = 100;
-    private static final int REQUEST_GALLERY            = 101;
-    private static final int CAMERA_PERMISSION_REQUEST  = 102;
-    private static final int STORAGE_PERMISSION_REQUEST = 103;
-
     private EditText  etNombre;
     private ImageView ivFoto;
     private Button    btnCapturarFoto, btnSeleccionarGaleria, btnGuardar;
-    private TextView  tvEstado;
 
     private SharedPreferences prefs;
-    private Uri    fotoUri;
     private String rutaFoto;
+    private PhotoHelper photoHelper;
 
     /** Evita activar el reconocimiento dos veces a la vez. */
     private boolean esperandoNombre = false;
@@ -72,13 +47,26 @@ public class WelcomeActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
 
-        prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        prefs = getSharedPreferences(AppConstants.PREFS_NAME, MODE_PRIVATE);
 
         etNombre              = findViewById(R.id.etNombre);
         ivFoto                = findViewById(R.id.ivFoto);
         btnCapturarFoto       = findViewById(R.id.btnCapturarFoto);
         btnSeleccionarGaleria = findViewById(R.id.btnSeleccionarGaleria);
         btnGuardar            = findViewById(R.id.btnGuardar);
+
+        photoHelper = new PhotoHelper(this, new PhotoHelper.PhotoCallback() {
+            @Override
+            public void onPhotoReady(String ruta) {
+                rutaFoto = ruta;
+                PhotoHelper.mostrarFotoDesdeRuta(ruta, ivFoto);
+                hablarOSimular("Foto añadida. Cuando quieras, toca el botón comenzar para terminar.");
+            }
+            @Override
+            public void onPermissionDenied() {
+                Toast.makeText(WelcomeActivity.this, "Permiso denegado", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         // Hacer la foto redonda
         ivFoto.setClipToOutline(true);
@@ -92,12 +80,8 @@ public class WelcomeActivity extends BaseActivity {
         // Ocultar teclado al inicio
         getWindow().setSoftInputMode(android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
-        // Si btnCapturarVoz sigue en el layout y no quieres tocar el XML aún,
-        // descomenta la siguiente línea para ocultarlo:
-        // findViewById(R.id.btnCapturarVoz).setVisibility(View.GONE);
-
-        btnCapturarFoto.setOnClickListener(v -> abrirCamara());
-        btnSeleccionarGaleria.setOnClickListener(v -> abrirGaleria());
+        btnCapturarFoto.setOnClickListener(v -> photoHelper.checkCameraPermissionAndOpen());
+        btnSeleccionarGaleria.setOnClickListener(v -> photoHelper.checkStoragePermissionAndOpen());
         btnGuardar.setOnClickListener(v -> guardarDatos());
 
         // Click en el avatar → Diálogo de selección
@@ -105,8 +89,8 @@ public class WelcomeActivity extends BaseActivity {
             androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
             builder.setTitle("¿Cómo quieres añadir la foto?");
             builder.setItems(new CharSequence[]{"Usar Cámara", "Elegir de Galería"}, (dialog, which) -> {
-                if (which == 0) abrirCamara();
-                else abrirGaleria();
+                if (which == 0) photoHelper.checkCameraPermissionAndOpen();
+                else photoHelper.checkStoragePermissionAndOpen();
             });
             builder.show();
         });
@@ -190,66 +174,6 @@ public class WelcomeActivity extends BaseActivity {
     // Cámara
     // =========================================================================
 
-    private void abrirCamara() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.CAMERA},
-                    CAMERA_PERMISSION_REQUEST);
-        } else {
-            iniciarCamara();
-        }
-    }
-
-    private void iniciarCamara() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (intent.resolveActivity(getPackageManager()) == null) {
-            Toast.makeText(this, "No se encontró una aplicación de cámara",
-                    Toast.LENGTH_SHORT).show();
-            return;
-        }
-        try {
-            File archivoFoto = crearArchivoFoto();
-            rutaFoto = archivoFoto.getAbsolutePath();
-            fotoUri  = FileProvider.getUriForFile(
-                    this,
-                    getApplicationContext().getPackageName() + ".fileprovider",
-                    archivoFoto);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, fotoUri);
-            startActivityForResult(intent, REQUEST_CAMERA);
-        } catch (IOException e) {
-            Toast.makeText(this, "Error al preparar el archivo de foto: " + e.getMessage(),
-                    Toast.LENGTH_LONG).show();
-        }
-    }
-
-    // =========================================================================
-    // Galería
-    // =========================================================================
-
-    private void abrirGaleria() {
-        String permiso = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
-                ? Manifest.permission.READ_MEDIA_IMAGES
-                : Manifest.permission.READ_EXTERNAL_STORAGE;
-
-        if (ContextCompat.checkSelfPermission(this, permiso)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{permiso},
-                    STORAGE_PERMISSION_REQUEST);
-            return;
-        }
-        lanzarSelectorGaleria();
-    }
-
-    private void lanzarSelectorGaleria() {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("image/*");
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        startActivityForResult(
-                Intent.createChooser(intent, "Seleccionar imagen"),
-                REQUEST_GALLERY);
-    }
 
     // =========================================================================
     // Resultado de intents (cámara y galería)
@@ -257,75 +181,15 @@ public class WelcomeActivity extends BaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode,
-                                    @Nullable Intent data) {
+                                    @androidx.annotation.Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        if (resultCode != RESULT_OK) return;
-
-        if (requestCode == REQUEST_CAMERA) {
-            if (rutaFoto != null) {
-                mostrarFotoDesdeRuta(rutaFoto);
-                hablarOSimular("Foto guardada. Cuando quieras, toca el botón comenzar para terminar.");
-            }
-
-        } else if (requestCode == REQUEST_GALLERY && data != null) {
-            Uri imageUri = data.getData();
-            if (imageUri == null) return;
-
-            try {
-                rutaFoto = copiarFotoAAlmacenamiento(imageUri);
-                if (rutaFoto != null) {
-                    mostrarFotoDesdeRuta(rutaFoto);
-                    hablarOSimular("Foto seleccionada. Cuando quieras, toca el botón comenzar para terminar.");
-                }
-            } catch (IOException e) {
-                Toast.makeText(this, "Error: " + e.getMessage(),
-                        Toast.LENGTH_LONG).show();
-            }
-        }
+        photoHelper.handleActivityResult(requestCode, resultCode, data);
     }
 
     // =========================================================================
     // Helpers de imagen
     // =========================================================================
 
-    private void mostrarFotoDesdeRuta(String ruta) {
-        Bitmap bitmap = BitmapFactory.decodeFile(ruta);
-        if (bitmap != null) {
-            ivFoto.setImageBitmap(bitmap);
-        } else {
-            Toast.makeText(this, "No se pudo decodificar la imagen",
-                    Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private File crearArchivoFoto() throws IOException {
-        File storageDir = getExternalFilesDir("fotos");
-        if (storageDir != null && !storageDir.exists()) {
-            if (!storageDir.mkdirs()) {
-                throw new IOException("No se pudo crear el directorio: " + storageDir);
-            }
-        }
-        return new File(storageDir, "avatar_usuario.jpg");
-    }
-
-    private String copiarFotoAAlmacenamiento(Uri sourceUri) throws IOException {
-        File destFile = crearArchivoFoto();
-        try (InputStream input  = getContentResolver().openInputStream(sourceUri);
-             FileOutputStream output = new FileOutputStream(destFile)) {
-
-            if (input == null) {
-                throw new IOException("No se pudo abrir el stream de la imagen seleccionada");
-            }
-            byte[] buffer = new byte[4096];
-            int bytesRead;
-            while ((bytesRead = input.read(buffer)) > 0) {
-                output.write(buffer, 0, bytesRead);
-            }
-            output.flush();
-        }
-        return destFile.getAbsolutePath();
-    }
 
     // =========================================================================
     // Permisos
@@ -333,28 +197,10 @@ public class WelcomeActivity extends BaseActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
+                                           @androidx.annotation.NonNull String[] permissions,
+                                           @androidx.annotation.NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        boolean granted = grantResults.length > 0
-                && grantResults[0] == PackageManager.PERMISSION_GRANTED;
-
-        if (requestCode == CAMERA_PERMISSION_REQUEST) {
-            if (granted) {
-                iniciarCamara();
-            } else {
-                Toast.makeText(this, "Permiso de cámara denegado",
-                        Toast.LENGTH_SHORT).show();
-            }
-        } else if (requestCode == STORAGE_PERMISSION_REQUEST) {
-            if (granted) {
-                lanzarSelectorGaleria();
-            } else {
-                Toast.makeText(this, "Permiso de almacenamiento denegado",
-                        Toast.LENGTH_SHORT).show();
-            }
-        }
+        photoHelper.handlePermissionsResult(requestCode, grantResults);
     }
 
     // =========================================================================
@@ -378,9 +224,9 @@ public class WelcomeActivity extends BaseActivity {
         }
 
         prefs.edit()
-                .putString(KEY_NOMBRE, nombre)
-                .putString(KEY_FOTO_PATH, rutaFoto)
-                .putBoolean(KEY_FIRST_RUN, false)
+                .putString(AppConstants.KEY_NOMBRE, nombre)
+                .putString(AppConstants.KEY_FOTO_PATH, rutaFoto)
+                .putBoolean(AppConstants.KEY_FIRST_RUN, false)
                 .apply();
 
         hablarOSimular("¡Todo listo, " + nombre + "! Bienvenido a la aplicación.");

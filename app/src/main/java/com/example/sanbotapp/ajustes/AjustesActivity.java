@@ -11,7 +11,9 @@ import android.provider.MediaStore;
 import android.provider.Settings;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.sanbotapp.BaseActivity;
 import com.example.sanbotapp.R;
@@ -23,31 +25,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import android.Manifest;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.widget.ImageView;
-import android.widget.Toast;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
+import com.example.sanbotapp.util.AppConstants;
+import com.example.sanbotapp.util.PhotoHelper;
 
 public class AjustesActivity extends BaseActivity {
-
-    private static final String PREFS_NAME    = "AppPrefs";
-    private static final String KEY_VOLUMEN   = "ajuste_volumen";
-    private static final String KEY_BRILLO    = "ajuste_brillo";
-    private static final String KEY_NOMBRE    = "nombre_usuario";
-    private static final String KEY_FOTO_PATH  = "foto_path"; // Coincide con WelcomeActivity
-    private static final String KEY_FIRST_RUN = "first_run";
-
-    private static final int REQUEST_CAMERA             = 100;
-    private static final int REQUEST_GALLERY            = 101;
-    private static final int CAMERA_PERMISSION_REQUEST  = 102;
-    private static final int STORAGE_PERMISSION_REQUEST = 103;
 
     private EditText etNombre;
     private ImageView ivAvatar;
@@ -56,6 +37,7 @@ public class AjustesActivity extends BaseActivity {
     private EditText etVolumen;
     private EditText etBrillo;
     private SharedPreferences prefs;
+    private PhotoHelper photoHelper;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,7 +45,7 @@ public class AjustesActivity extends BaseActivity {
         setContentView(R.layout.activity_ajustes);
         setupTopBackBanner("Ajustes");
 
-        prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        prefs = getSharedPreferences(AppConstants.PREFS_NAME, MODE_PRIVATE);
 
         etVolumen = findViewById(R.id.etVolumen);
         etBrillo  = findViewById(R.id.etBrillo);
@@ -78,15 +60,29 @@ public class AjustesActivity extends BaseActivity {
         Button btnCamara  = findViewById(R.id.btnCambiarFotoCamara);
         Button btnGaleria = findViewById(R.id.btnCambiarFotoGaleria);
 
+        photoHelper = new PhotoHelper(this, new PhotoHelper.PhotoCallback() {
+            @Override
+            public void onPhotoReady(String ruta) {
+                rutaFoto = ruta;
+                PhotoHelper.mostrarFotoDesdeRuta(ruta, ivAvatar);
+                prefs.edit().putString(AppConstants.KEY_FOTO_PATH, ruta).apply();
+                hablarEnMain("He actualizado tu foto de perfil.");
+            }
+            @Override
+            public void onPermissionDenied() {
+                Toast.makeText(AjustesActivity.this, "Permiso denegado", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         // ── Cargar valores reales del sistema (sin aplicarlos) ───────────────
         // Si nunca se han guardado, leemos del sistema; si ya había un valor
         // guardado por el usuario, lo respetamos.
-        int volumenInicial = prefs.contains(KEY_VOLUMEN)
-                ? prefs.getInt(KEY_VOLUMEN, 70)
+        int volumenInicial = prefs.contains(AppConstants.KEY_VOLUMEN)
+                ? prefs.getInt(AppConstants.KEY_VOLUMEN, 70)
                 : getVolumenSistema();
 
-        int brilloInicial = prefs.contains(KEY_BRILLO)
-                ? prefs.getInt(KEY_BRILLO, 60)
+        int brilloInicial = prefs.contains(AppConstants.KEY_BRILLO)
+                ? prefs.getInt(AppConstants.KEY_BRILLO, 60)
                 : getBrilloSistema();
 
         // Solo mostramos los valores en pantalla, NO los aplicamos al hardware
@@ -99,19 +95,19 @@ public class AjustesActivity extends BaseActivity {
         btnMenosBrillo .setOnClickListener(v -> cambiarBrillo(-1));
         btnMasBrillo   .setOnClickListener(v -> cambiarBrillo(+1));
 
-        btnCamara.setOnClickListener(v -> abrirCamara());
-        btnGaleria.setOnClickListener(v -> abrirGaleria());
+        btnCamara.setOnClickListener(v -> photoHelper.checkCameraPermissionAndOpen());
+        btnGaleria.setOnClickListener(v -> photoHelper.checkStoragePermissionAndOpen());
 
         // ── Cargar datos de perfil ───────────────────────────────────────────
-        String nombre = prefs.getString(KEY_NOMBRE, "Usuario");
+        String nombre = prefs.getString(AppConstants.KEY_NOMBRE, "Usuario");
         etNombre.setText(nombre);
         etNombre.setOnFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus) guardarNombre();
         });
 
-        rutaFoto = prefs.getString(KEY_FOTO_PATH, null);
+        rutaFoto = prefs.getString(AppConstants.KEY_FOTO_PATH, null);
         if (rutaFoto != null) {
-            mostrarFotoDesdeRuta(rutaFoto);
+            PhotoHelper.mostrarFotoDesdeRuta(rutaFoto, ivAvatar);
         }
 
         etVolumen.setOnFocusChangeListener((v, hasFocus) -> {
@@ -157,14 +153,12 @@ public class AjustesActivity extends BaseActivity {
         // 4. Feedback
         Toast.makeText(this, "Ajustes guardados correctamente", Toast.LENGTH_SHORT).show();
         hablarEnMain("He guardado todos tus cambios.");
-    }
-
-    private void hablarEnMain(String t) {
-        hablarEnMain(t, null);
-    }
-
-    private void hablarEnMain(String t, com.qihancloud.opensdk.function.beans.EmotionsType emotion) {
-        runOnUiThread(() -> hablarOSimular(t, emotion));
+        
+        // Volver a inicio
+        Intent intent = new Intent(this, com.example.sanbotapp.MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        startActivity(intent);
+        finish();
     }
 
 
@@ -301,11 +295,11 @@ public class AjustesActivity extends BaseActivity {
     }
 
     private void guardarVolumen(int valor) {
-        prefs.edit().putInt(KEY_VOLUMEN, valor).apply();
+        prefs.edit().putInt(AppConstants.KEY_VOLUMEN, valor).apply();
     }
 
     private void guardarBrillo(int valor) {
-        prefs.edit().putInt(KEY_BRILLO, valor).apply();
+        prefs.edit().putInt(AppConstants.KEY_BRILLO, valor).apply();
     }
 
     private int leerEditTextSeguro(EditText editText, int valorPorDefecto) {
@@ -337,11 +331,11 @@ public class AjustesActivity extends BaseActivity {
 
     private void borrarCuenta() {
         prefs.edit()
-                .remove(KEY_NOMBRE)
-                .remove(KEY_FOTO_PATH)
-                .remove(KEY_VOLUMEN)
-                .remove(KEY_BRILLO)
-                .putBoolean(KEY_FIRST_RUN, true)
+                .remove(AppConstants.KEY_NOMBRE)
+                .remove(AppConstants.KEY_FOTO_PATH)
+                .remove(AppConstants.KEY_VOLUMEN)
+                .remove(AppConstants.KEY_BRILLO)
+                .putBoolean(AppConstants.KEY_FIRST_RUN, true)
                 .apply();
 
         // Eliminar actividades y recordatorios de la base de datos (SharedPreferences)
@@ -359,109 +353,19 @@ public class AjustesActivity extends BaseActivity {
     private void guardarNombre() {
         String nombre = etNombre.getText().toString().trim();
         if (!nombre.isEmpty()) {
-            prefs.edit().putString(KEY_NOMBRE, nombre).apply();
+            prefs.edit().putString(AppConstants.KEY_NOMBRE, nombre).apply();
         }
-    }
-
-    private void abrirCamara() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.CAMERA},
-                    CAMERA_PERMISSION_REQUEST);
-        } else {
-            iniciarCamara();
-        }
-    }
-
-    private void iniciarCamara() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        try {
-            File archivoFoto = crearArchivoFoto();
-            rutaFoto = archivoFoto.getAbsolutePath();
-            Uri fotoUri  = FileProvider.getUriForFile(
-                    this,
-                    getApplicationContext().getPackageName() + ".fileprovider",
-                    archivoFoto);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, fotoUri);
-            startActivityForResult(intent, REQUEST_CAMERA);
-        } catch (IOException e) {
-            Toast.makeText(this, "Error al preparar cámara", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void abrirGaleria() {
-        String permiso = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
-                ? Manifest.permission.READ_MEDIA_IMAGES
-                : Manifest.permission.READ_EXTERNAL_STORAGE;
-
-        if (ContextCompat.checkSelfPermission(this, permiso)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{permiso}, STORAGE_PERMISSION_REQUEST);
-            return;
-        }
-        lanzarSelectorGaleria();
-    }
-
-    private void lanzarSelectorGaleria() {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("image/*");
-        startActivityForResult(Intent.createChooser(intent, "Seleccionar imagen"), REQUEST_GALLERY);
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, @androidx.annotation.Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode != RESULT_OK) return;
-
-        if (requestCode == REQUEST_CAMERA) {
-            if (rutaFoto != null) {
-                mostrarFotoDesdeRuta(rutaFoto);
-                prefs.edit().putString(KEY_FOTO_PATH, rutaFoto).apply();
-            }
-        } else if (requestCode == REQUEST_GALLERY && data != null) {
-            Uri imageUri = data.getData();
-            if (imageUri != null) {
-                try {
-                    rutaFoto = copiarFotoAAlmacenamiento(imageUri);
-                    mostrarFotoDesdeRuta(rutaFoto);
-                    prefs.edit().putString(KEY_FOTO_PATH, rutaFoto).apply();
-                } catch (IOException e) {
-                    Toast.makeText(this, "Error al copiar imagen", Toast.LENGTH_SHORT).show();
-                }
-            }
-        }
-    }
-
-    private void mostrarFotoDesdeRuta(String ruta) {
-        Bitmap bitmap = BitmapFactory.decodeFile(ruta);
-        if (bitmap != null) {
-            ivAvatar.setImageBitmap(bitmap);
-        }
-    }
-
-    private File crearArchivoFoto() throws IOException {
-        File storageDir = getExternalFilesDir("fotos");
-        if (storageDir != null && !storageDir.exists()) storageDir.mkdirs();
-        return new File(storageDir, "avatar_usuario.jpg");
-    }
-
-    private String copiarFotoAAlmacenamiento(Uri sourceUri) throws IOException {
-        File destFile = crearArchivoFoto();
-        try (InputStream input  = getContentResolver().openInputStream(sourceUri);
-             FileOutputStream output = new FileOutputStream(destFile)) {
-            byte[] buffer = new byte[4096];
-            int bytesRead;
-            while ((bytesRead = input.read(buffer)) > 0) output.write(buffer, 0, bytesRead);
-        }
-        return destFile.getAbsolutePath();
+        photoHelper.handleActivityResult(requestCode, resultCode, data);
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @androidx.annotation.NonNull String[] permissions, @androidx.annotation.NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        boolean granted = grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED;
-        if (requestCode == CAMERA_PERMISSION_REQUEST && granted) iniciarCamara();
-        else if (requestCode == STORAGE_PERMISSION_REQUEST && granted) lanzarSelectorGaleria();
+        photoHelper.handlePermissionsResult(requestCode, grantResults);
     }
 }
