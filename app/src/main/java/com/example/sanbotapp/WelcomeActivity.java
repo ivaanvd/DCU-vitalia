@@ -119,7 +119,7 @@ public class WelcomeActivity extends BaseActivity {
         realizarSaludoHumanizado(); // MEJORA ÁREA 5: Saludo con brazos y cabeza
         new Thread(() -> {
             hablarYEsperar("¡Hola! Soy Sanbot. Vamos a configurar tu perfil.");
-            hablarYEsperar("Pulsa el botón del micrófono o toca mi cabeza y dime tu nombre.");
+            hablarYEsperar("Pulsa el botón del micrófono y dime tu nombre.");
         }).start();
     }
 
@@ -213,7 +213,7 @@ public class WelcomeActivity extends BaseActivity {
         if (TextUtils.isEmpty(nombre)) {
             Toast.makeText(this, "Por favor, ingresa o captura tu nombre",
                     Toast.LENGTH_SHORT).show();
-            hablarOSimular("Aún no tengo tu nombre. Toca mi cabeza y dímelo.");
+            hablarOSimular("Aún no tengo tu nombre. Pulsa el micrófono y dímelo.");
             return;
         }
         if (TextUtils.isEmpty(rutaFoto)) {

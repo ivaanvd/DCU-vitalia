@@ -81,7 +81,7 @@ public class ActividadPopupActivity extends BaseActivity {
     protected void onMainServiceConnected() {
         super.onMainServiceConnected();
         if (actividad != null) {
-            gestionarFeedbackHardware("ALARMA"); // MEJORA ÁREA 5: Animación de atención
+            gestionarFeedbackHardware("ALARMA");
             hablarOSimular("¡Atención! Es hora de " + actividad.getTipoLabel().toLowerCase());
         }
     }

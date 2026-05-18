@@ -18,12 +18,12 @@ public class FinBuscaEncuentraActivity extends BaseActivity {
 
         TextView tvRobot = findViewById(R.id.tvBocadilloTexto);
         if (tvRobot != null) {
-            if (segundos < 10) {
+            if (segundos < 3) {
                 mostrarEmocion("SURPRISE");
                 encenderLed(com.qihancloud.opensdk.function.beans.LED.PART_ALL, com.qihancloud.opensdk.function.beans.LED.MODE_GREEN);
                 tvRobot.setText("¡Increíble! Lo has encontrado en un abrir y cerrar de ojos.");
                 hablarOSimular("¡Increíble! Lo has encontrado en un abrir y cerrar de ojos.");
-            } else if (segundos < 25) {
+            } else if (segundos < 10) {
                 mostrarEmocion("PRISE");
                 encenderLed(com.qihancloud.opensdk.function.beans.LED.PART_ALL, com.qihancloud.opensdk.function.beans.LED.MODE_GREEN);
                 tvRobot.setText("¡Con tu ayuda lo he encontrado! ¡Eres increíble!");

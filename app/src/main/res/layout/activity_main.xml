@@ -26,7 +26,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="¡Hola, Carmelo!"
-                android:textSize="42sp"
+                android:textSize="60sp"
                 android:textStyle="bold"
                 android:textColor="#1C1C1E"/>
 
@@ -35,7 +35,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="VIERNES, 20 de marzo de 2026"
-                android:textSize="24sp"
+                android:textSize="35sp"
                 android:textColor="#6E6E73"
                 android:layout_marginTop="2dp"/>
         </LinearLayout>
@@ -79,7 +79,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TU RUTINA DE HOY:"
-        android:textSize="22sp"
+        android:textSize="35sp"
         android:textStyle="bold"
         android:textColor="#1C1C1E"
         android:paddingStart="20dp"
@@ -110,7 +110,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:text="No hay actividades para hoy"
-        android:textSize="18sp"
+        android:textSize="26sp"
         android:textColor="#9E9E9E"
         android:gravity="center"
         android:paddingVertical="20px"
@@ -164,7 +164,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="ACTIVIDADES"
-                    android:textSize="20sp"
+                    android:textSize="26sp"
                     android:textStyle="bold"
                     android:textColor="#000000"
                     android:letterSpacing="0.02"/>
@@ -200,7 +200,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="RECORDATORIOS"
-                    android:textSize="18sp"
+                    android:textSize="26sp"
                     android:textStyle="bold"
                     android:textColor="#000000"
                     android:letterSpacing="0.02"/>
@@ -244,7 +244,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="JUEGOS"
-                    android:textSize="20sp"
+                    android:textSize="26sp"
                     android:textStyle="bold"
                     android:textColor="#000000"
                     android:letterSpacing="0.02"/>
@@ -280,7 +280,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="AJUSTES"
-                    android:textSize="20sp"
+                    android:textSize="26sp"
                     android:textStyle="bold"
                     android:textColor="#000000"
                     android:letterSpacing="0.02"/>

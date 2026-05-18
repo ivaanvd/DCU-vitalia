@@ -159,7 +159,7 @@ public class JuegoMiniRoscoActivity extends BaseActivity {
 
         // Feedback robot
         gestionarFeedbackHardware("ACIERTO");
-        hablarOSimular("¡Correcto! Excelente respuesta");
+        hablarOSimular("¡Correcto!");
 
         handler.postDelayed(() -> {
             apagarLed(LED.PART_ALL);

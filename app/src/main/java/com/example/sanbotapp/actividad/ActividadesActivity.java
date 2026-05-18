@@ -236,9 +236,13 @@ public class ActividadesActivity extends BaseActivity {
                 if (tipo != null) {
                     valorPendienteConfirmar = tipo;
                     campoAConfirmar = CampoVozEspera.TIPO;
+                    runOnUiThread(() -> {
+                        dialogManager.seleccionarTipoUI(tipo);
+                    });
                     anunciarCampoYEsperarToque(CampoVozEspera.CONFIRMACION_CAMPO);
                 } else hablarEnMain("No te entendí el tipo. Prueba con: Medicación o Paseo.");
                 break;
+
             case DESCRIPCION:
                 valorPendienteConfirmar = tGlobal;
                 campoAConfirmar = CampoVozEspera.DESCRIPCION;

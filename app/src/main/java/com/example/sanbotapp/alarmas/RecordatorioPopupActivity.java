@@ -67,7 +67,7 @@ public class RecordatorioPopupActivity extends BaseActivity {
 
     @Override
     protected void onMainServiceConnected() {
-        super.onMainServiceConnected(); // CRÍTICO: inicializa los controladores del robot
+        super.onMainServiceConnected();
         if (recordatorio != null) {
             hablarOSimular("Tienes un recordatorio: " + recordatorio.getTitulo());
         }
