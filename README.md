@@ -2,6 +2,12 @@
 
 Vitalia es una solución integral para el robot **Sanbot (Qihan)** diseñada para mejorar la calidad de vida de personas mayores en entornos asistenciales o domésticos.
 
+## 📂 Contenido del repositorio
+* `/app`: Código fuente de la aplicación móvil y del sistema robótico.
+* `/docs/documento_diseno_vitalia.pdf`: Memoria completa con la investigación de usuarios, arquitectura de la información y validación del sistema.
+
+---
+
 ## 🏗️ Arquitectura y Flavors
 
 El proyecto implementa un sistema multi-flavor para facilitar el desarrollo:
@@ -28,6 +34,24 @@ Garantiza que el usuario no olvide sus tareas:
 *   **Scheduler**: Programa alarmas exactas en el sistema Android.
 *   **Receiver**: Captura el evento del sistema incluso si la app está cerrada.
 *   **Popup**: Interfaz de alta prioridad que "despierta" al robot para anunciar el aviso.
+
+---
+
+## 🎨 Investigación, Requisitos y Diseño Centrado en el Usuario (UX)
+
+Antes de la codificación, el ecosistema de Vitalia se consolidó a través de una metodología completa de diseño orientada a producto (detallada en el documento PDF dentro de la carpeta `/docs`):
+
+### 1. Investigación Basada en Datos (Data-Driven UX Research)
+* Recopilación y análisis cuantitativo de las necesidades del público objetivo y cuidadores mediante encuestas estructuradas.
+* Procesamiento de datos y métricas empíricas para fundamentar las decisiones de diseño, asegurar la aceptación tecnológica y mitigar las barreras de fricción digital en la tercera edad.
+
+### 2. Ingeniería de Requisitos y Modelado de Comportamiento
+* Definición formal de la funcionalidad principal, viabilidad técnica de la plataforma y selección de componentes de hardware/software.
+* Modelado conceptual de usuarios y flujos lógicos mediante herramientas de la industria como *User Journey Maps*, arquetipos de *Personas* y escenarios complejos de interacción humano-robot.
+
+### 3. Arquitectura de la Información y Accesibilidad
+* Estructuración lógica del árbol de contenidos y de las pantallas de navegación del asistente.
+* Diseño de interfaces guiadas por principios de usabilidad, contraste adaptado y flujos conversacionales de baja carga cognitiva.
 
 ---
 
