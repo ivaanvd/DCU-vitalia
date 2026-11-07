@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Comunes a los juegos -->
+    <string name="juego_correcto">¡Correcto!</string>
+    <string name="juego_lastima">Lástima, te acercabas</string>
+    <string name="juego_explicacion_titulo">Explicación del Juego</string>
+
+    <!-- Explicaciones -->
+    <string name="explicacion_rosco">¡Vamos a jugar al Mini-Rosco! Elige la opción correcta para cada definición. Si aciertas, se pondrá en verde, y si fallas, en rojo. ¡Ánimo!</string>
+    <string name="explicacion_bingo">¡Es la hora del Bingo! Pulsa la imagen que corresponda a lo que yo diga. Si te equivocas, puedes intentarlo de nuevo hasta completar todas.</string>
+    <string name="explicacion_busca">En este juego debes memorizar los iconos antes de que se oculten. Después, tendrás que recordar dónde estaba el que yo te pida. ¡Sé rápido!</string>
+    <string name="explicacion_refranes">¡Vamos con los Refranes! Yo digo la primera parte y tú eliges cómo termina. Seguro que te los sabes todos.</string>
+
+    <!-- Mini-Rosco (preguntas en res/raw/juego_rosco.json) -->
+    <string name="juego_rosco_titulo">Mini-Rosco</string>
+    <string name="rosco_elegir_tematica_titulo">Elegir Temática</string>
+    <string name="rosco_elegir_tematica">¿De qué hablamos hoy? Selecciona algo que te guste.</string>
+    <string name="rosco_tematica">Temática: %1$s</string>
+    <string name="rosco_pista">CON LA %1$s: %2$s</string>
+    <string name="rosco_fin_pleno">¡Pleno! Un rosco impoluto.</string>
+    <string name="rosco_fin_esfuerzo">Ese rosco se nos ha resistido un poco, ¡pero muy buen esfuerzo!</string>
+    <string name="rosco_fin_bien">¡Misión cumplida! ¡Qué bien se te da esto!</string>
+    <string name="rosco_fin_intento">¡Buen intento! Seguro que la próxima vez lo haces mejor.</string>
+    <string name="rosco_fin_contador">%1$d/%2$d palabras</string>
+
+    <!-- Refranes (preguntas en res/raw/juego_refranes.json) -->
+    <string name="juego_refranes_titulo">Juego de Refranes</string>
+    <string name="refranes_contador">PREGUNTA %1$d DE %2$d</string>
+    <string name="refranes_correcto">¡Correcto! Excelente respuesta</string>
+    <string name="refranes_fin_todos">¡Excelente! Te sabes todos los refranes perfectamente.</string>
+    <string name="refranes_fin_casi">¡Muy bien! Te acuerdas de casi todo.</string>
+    <string name="refranes_fin_intento">Buen intento, seguro que en la próxima aciertas más.</string>
+    <string name="refranes_fin_bien">¡Muy bien! ¡Tú sí que sabes de refranes!</string>
+    <string name="refranes_fin_casi_lo_tienes">¡Casi lo tienes! Sigue practicando y verás cómo mejoras.</string>
+    <string name="refranes_fin_contador">%1$d/%2$d refranes acertados</string>
+
+    <!-- Bingo -->
+    <string name="juego_bingo_titulo">Juego de Bingo</string>
+    <string name="bingo_ronda_comida">¡\"Llegó la hora de nutrir el cuerpo!\"</string>
+    <string name="bingo_ronda_dormir">\"Ha caído la noche. ¿Qué tarjeta corresponde a descansar?\"</string>
+    <string name="bingo_ronda_medicacion">\"El médico nos recetó una ayuda.\"</string>
+    <string name="bingo_ronda_calendario">\"Marca la tarjeta de la cita para no olvidarla.\"</string>
+    <string name="bingo_error">Oh no, esa no era. Léelo bien e inténtalo de nuevo.</string>
+    <string name="bingo_fin">¡Espectacular Bingo! Has completado toda la tarjeta.</string>
+    <string name="bingo_fin_defecto">¡Línea y bingo! ¡Es usted un hacha!</string>
+    <string name="bingo_fin_enhorabuena">¡Enhorabuena! Has hecho un trabajo fantástico.</string>
+    <string name="bingo_fin_animo">No pasa nada, a veces se gana y otras se aprende. ¡La próxima será mejor!</string>
+
+    <!-- Busca y Encuentra -->
+    <string name="busca_atento">¡Atento a los iconos! Fíjate bien dónde están…</string>
+    <string name="busca_memoriza">MEMORIZA LA POSICIÓN DE LOS ICONOS</string>
+    <string name="busca_consigna">Uy, qué cabeza de hojalata… ¡He perdido la rueda de configuración! ¿La encuentras?</string>
+    <string name="busca_tiempo">Tiempo: %1$ds</string>
+    <string name="busca_correcto">¡MUY BIEN! ESTE ERA EL ICONO CORRECTO</string>
+    <string name="busca_error">Ese no es el icono que busco. Sigue buscando.</string>
+    <string name="busca_fin_rapido">¡Increíble! Lo has encontrado en un abrir y cerrar de ojos.</string>
+    <string name="busca_fin_medio">¡Con tu ayuda lo he encontrado! ¡Eres increíble!</string>
+    <string name="busca_fin_lento">¡Lo has conseguido! La memoria es como un músculo, ¡a seguir entrenando!</string>
+</resources>

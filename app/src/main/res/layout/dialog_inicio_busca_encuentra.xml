@@ -9,7 +9,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="BUSCA Y ENCUENTRA"
+        android:text="@string/ui_busca_y_encuentra"
         android:textSize="28sp"
         android:textStyle="bold"
         android:textColor="#1C1C1E"
@@ -19,7 +19,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Primero verás los iconos durante unos segundos. Después se darán la vuelta y tendrás que recordar dónde estaba el icono correcto."
+        android:text="@string/ui_primero_veras_los_iconos_durante_unos"
         android:textSize="22sp"
         android:textColor="#3C3C43"
         android:gravity="center"
@@ -30,7 +30,7 @@
         android:id="@+id/btnEntendidoBusca"
         android:layout_width="match_parent"
         android:layout_height="90dp"
-        android:text="ENTENDIDO"
+        android:text="@string/ui_entendido"
         android:textAllCaps="false"
         android:textSize="26sp"
         android:textStyle="bold"

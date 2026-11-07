@@ -15,7 +15,7 @@
         android:layout_marginStart="28dp"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="8dp"
-        android:text="PASO 1 DE 3"
+        android:text="@string/ui_paso_1_de_3"
         android:textColor="#1C1C1E"
         android:textSize="22sp"
         android:textStyle="bold" />
@@ -75,7 +75,7 @@
         android:layout_marginStart="28dp"
         android:layout_marginEnd="28dp"
         android:layout_marginBottom="32dp"
-        android:text="SIGUIENTE PASO"
+        android:text="@string/ui_siguiente_paso"
         android:background="@drawable/bg_btn_jugar"
         android:textColor="#000000"
         android:textSize="30sp"

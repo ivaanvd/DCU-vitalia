@@ -1,0 +1,28 @@
+{
+  "temas": [
+    {
+      "nombre": "Flora y Plantas",
+      "preguntas": [
+        { "letra": "A", "pista": "Árbol caducifolio muy común que da de fruto la bellota.", "opciones": ["Arce", "Alcornoque"], "correcta": 2 },
+        { "letra": "C", "pista": "Flor espinosa de muchos colores.", "opciones": ["Clavel", "Cactus"], "correcta": 1 },
+        { "letra": "O", "pista": "Árbol que da pequeñas frutas para extraer aceite.", "opciones": ["Olmo", "Olivo"], "correcta": 2 }
+      ]
+    },
+    {
+      "nombre": "Frutas",
+      "preguntas": [
+        { "letra": "M", "pista": "Fruta jugosa y dulce, puede ser roja o verde.", "opciones": ["Manzana", "Mora"], "correcta": 1 },
+        { "letra": "P", "pista": "Fruta amarilla de Canarias.", "opciones": ["Pera", "Plátano"], "correcta": 2 },
+        { "letra": "K", "pista": "Fruta ovalada de carne verde.", "opciones": ["Kiwi", "Kaki"], "correcta": 1 }
+      ]
+    },
+    {
+      "nombre": "Animales",
+      "preguntas": [
+        { "letra": "P", "pista": "Animal doméstico considerado el mejor amigo del hombre.", "opciones": ["Perro", "Pato"], "correcta": 1 },
+        { "letra": "G", "pista": "Felino que hace miau.", "opciones": ["Gato", "Gorila"], "correcta": 1 },
+        { "letra": "L", "pista": "El llamado 'rey de la selva'.", "opciones": ["León", "Lince"], "correcta": 1 }
+      ]
+    }
+  ]
+}

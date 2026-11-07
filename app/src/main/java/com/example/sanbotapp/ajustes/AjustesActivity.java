@@ -26,7 +26,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import com.example.sanbotapp.util.AppConstants;
+import com.example.sanbotapp.util.DateTimeUtils;
 import com.example.sanbotapp.util.PhotoHelper;
+
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.os.LocaleListCompat;
 
 public class AjustesActivity extends BaseActivity {
 
@@ -43,7 +47,7 @@ public class AjustesActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ajustes);
-        setupTopBackBanner("Ajustes");
+        setupTopBackBanner(getString(R.string.titulo_ajustes));
 
         prefs = getSharedPreferences(AppConstants.PREFS_NAME, MODE_PRIVATE);
 
@@ -66,11 +70,11 @@ public class AjustesActivity extends BaseActivity {
                 rutaFoto = ruta;
                 PhotoHelper.mostrarFotoDesdeRuta(ruta, ivAvatar);
                 prefs.edit().putString(AppConstants.KEY_FOTO_PATH, ruta).apply();
-                hablarEnMain("He actualizado tu foto de perfil.");
+                hablarEnMain(getString(R.string.ajustes_foto_actualizada));
             }
             @Override
             public void onPermissionDenied() {
-                Toast.makeText(AjustesActivity.this, "Permiso denegado", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AjustesActivity.this, R.string.permiso_denegado, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -99,7 +103,7 @@ public class AjustesActivity extends BaseActivity {
         btnGaleria.setOnClickListener(v -> photoHelper.checkStoragePermissionAndOpen());
 
         // ── Cargar datos de perfil ───────────────────────────────────────────
-        String nombre = prefs.getString(AppConstants.KEY_NOMBRE, "Usuario");
+        String nombre = prefs.getString(AppConstants.KEY_NOMBRE, getString(R.string.nombre_usuario_por_defecto));
         etNombre.setText(nombre);
         etNombre.setOnFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus) guardarNombre();
@@ -124,8 +128,40 @@ public class AjustesActivity extends BaseActivity {
         Button btnGuardar = findViewById(R.id.btnGuardarAjustes);
         btnGuardar.setOnClickListener(v -> consolidarGuardarAjustes());
 
+        configurarIdioma();
+
         // Verificar permiso de escritura de ajustes del sistema al entrar
         verificarPermisosBrillo();
+    }
+
+    // ── Idioma ────────────────────────────────────────────────────────────────
+
+    private void configurarIdioma() {
+        Button btnEs = findViewById(R.id.btnIdiomaEs);
+        Button btnEn = findViewById(R.id.btnIdiomaEn);
+        if (btnEs == null || btnEn == null) return;
+
+        boolean ingles = "en".equals(DateTimeUtils.localeApp(this).getLanguage());
+        marcarIdioma(btnEs, !ingles);
+        marcarIdioma(btnEn, ingles);
+        btnEs.setOnClickListener(v -> cambiarIdioma("es"));
+        btnEn.setOnClickListener(v -> cambiarIdioma("en"));
+    }
+
+    private void marcarIdioma(Button boton, boolean seleccionado) {
+        boton.setSelected(seleccionado);
+        boton.setBackgroundResource(seleccionado ? R.drawable.bg_tipo_selected : R.drawable.bg_tipo_normal);
+        boton.setTextColor(seleccionado ? 0xFFFFFFFF : 0xFF1A1A1A);
+    }
+
+    /**
+     * Cambia el idioma de la app (textos, voz del asistente y contenido de los juegos).
+     * AppCompat lo guarda y recrea las Activities abiertas.
+     */
+    private void cambiarIdioma(String idioma) {
+        if (idioma.equals(DateTimeUtils.localeApp(this).getLanguage())) return;
+        guardarNombre();
+        AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(idioma));
     }
 
     @Override
@@ -151,8 +187,8 @@ public class AjustesActivity extends BaseActivity {
         aplicarBrilloReal(bri);
 
         // 4. Feedback
-        Toast.makeText(this, "Ajustes guardados correctamente", Toast.LENGTH_SHORT).show();
-        hablarEnMain("He guardado todos tus cambios.");
+        Toast.makeText(this, R.string.ajustes_guardados_toast, Toast.LENGTH_SHORT).show();
+        hablarEnMain(getString(R.string.ajustes_guardados));
         
         // Volver a inicio
         Intent intent = new Intent(this, com.example.sanbotapp.MainActivity.class);
@@ -224,14 +260,14 @@ public class AjustesActivity extends BaseActivity {
     private void verificarPermisosBrillo() {
         if (!Settings.System.canWrite(this)) {
             new AlertDialog.Builder(this)
-                    .setTitle("Permiso necesario")
-                    .setMessage("Para cambiar el brillo de la pantalla necesitamos permiso de modificar ajustes del sistema.")
-                    .setPositiveButton("Conceder", (d, w) -> {
+                    .setTitle(R.string.ajustes_permiso_titulo)
+                    .setMessage(R.string.ajustes_permiso_brillo)
+                    .setPositiveButton(R.string.ajustes_conceder, (d, w) -> {
                         Intent intent = new Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS);
                         intent.setData(Uri.parse("package:" + getPackageName()));
                         startActivity(intent);
                     })
-                    .setNegativeButton("Cancelar", (d, w) -> d.dismiss())
+                    .setNegativeButton(R.string.accion_cancelar, (d, w) -> d.dismiss())
                     .show();
         }
     }
@@ -321,10 +357,10 @@ public class AjustesActivity extends BaseActivity {
 
     private void mostrarDialogoConfirmacion() {
         new AlertDialog.Builder(this)
-                .setTitle("⚠️ Borrar Cuenta")
-                .setMessage("¿Estás seguro de que quieres borrar tu cuenta y todos tus datos?\n\nEsta acción no se puede deshacer.")
-                .setPositiveButton("Borrar",   (d, w) -> borrarCuenta())
-                .setNegativeButton("Cancelar", (d, w) -> d.dismiss())
+                .setTitle(R.string.ajustes_borrar_cuenta_titulo)
+                .setMessage(R.string.ajustes_borrar_cuenta_mensaje)
+                .setPositiveButton(R.string.ajustes_borrar,   (d, w) -> borrarCuenta())
+                .setNegativeButton(R.string.accion_cancelar, (d, w) -> d.dismiss())
                 .create()
                 .show();
     }

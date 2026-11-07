@@ -17,24 +17,6 @@ public class ExplicacionJuegoActivity extends BaseActivity {
     private TextView tvExplicacion;
     private boolean juegoIniciado = false;
 
-    // ── Explicaciones completas por juego ─────────────────────────────────────
-
-    private static final String EXPLICACION_ROSCO =
-            "¡Vamos a jugar al Mini-Rosco! Elige la opción correcta para cada definición. " +
-            "Si aciertas, se pondrá en verde, y si fallas, en rojo. ¡Ánimo!";
-
-    private static final String EXPLICACION_BINGO =
-            "¡Es la hora del Bingo! Pulsa la imagen que corresponda a lo que yo diga. " +
-            "Si te equivocas, puedes intentarlo de nuevo hasta completar todas.";
-
-    private static final String EXPLICACION_BUSCA_ENCUENTRA =
-            "En este juego debes memorizar los iconos antes de que se oculten. " +
-            "Después, tendrás que recordar dónde estaba el que yo te pida. ¡Sé rápido!";
-
-    private static final String EXPLICACION_REFRANES =
-            "¡Vamos con los Refranes! Yo digo la primera parte y tú eliges cómo termina. " +
-            "Seguro que te los sabes todos.";
-
     // ── Ciclo de vida ─────────────────────────────────────────────────────────
 
     @Override
@@ -46,7 +28,7 @@ public class ExplicacionJuegoActivity extends BaseActivity {
         if (tipoJuego == null) tipoJuego = "ROSCO";
         tema = getIntent().getStringExtra("TEMA");
 
-        setupTopBackBanner("Explicación del Juego");
+        setupTopBackBanner(getString(R.string.juego_explicacion_titulo));
         tvExplicacion     = findViewById(R.id.tvExplicacion);
         TextView tvTituloJuego = findViewById(R.id.tvTituloJuego);
         btnEmpezarJuego   = findViewById(R.id.btnEmpezarJuego);
@@ -82,20 +64,20 @@ public class ExplicacionJuegoActivity extends BaseActivity {
     private void configurarInterfaz(TextView tvTituloJuego) {
         switch (tipoJuego) {
             case "BINGO":
-                explicacion = EXPLICACION_BINGO;
-                if (tvTituloJuego != null) tvTituloJuego.setText("Bingo");
+                explicacion = getString(R.string.explicacion_bingo);
+                if (tvTituloJuego != null) tvTituloJuego.setText(R.string.ui_bingo);
                 break;
             case "BUSCA_ENCUENTRA":
-                explicacion = EXPLICACION_BUSCA_ENCUENTRA;
-                if (tvTituloJuego != null) tvTituloJuego.setText("Busca & Encuentra");
+                explicacion = getString(R.string.explicacion_busca);
+                if (tvTituloJuego != null) tvTituloJuego.setText(R.string.ui_busca_y_encuentra_2);
                 break;
             case "REFRANES":
-                explicacion = EXPLICACION_REFRANES;
-                if (tvTituloJuego != null) tvTituloJuego.setText("Refranes");
+                explicacion = getString(R.string.explicacion_refranes);
+                if (tvTituloJuego != null) tvTituloJuego.setText(R.string.ui_refranes);
                 break;
             default: // ROSCO
-                explicacion = EXPLICACION_ROSCO;
-                if (tvTituloJuego != null) tvTituloJuego.setText("Mini-Rosco");
+                explicacion = getString(R.string.explicacion_rosco);
+                if (tvTituloJuego != null) tvTituloJuego.setText(R.string.juego_rosco_titulo);
                 break;
         }
         if (tvExplicacion != null) tvExplicacion.setText(explicacion);

@@ -14,15 +14,15 @@ public class ElegirTematicaRoscoActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_elegir_tematica_rosco);
-        setupTopBackBanner("Elegir Temática");
+        setupTopBackBanner(getString(R.string.rosco_elegir_tematica_titulo));
         
         TextView tvRefran = findViewById(R.id.tvBocadilloTexto);
         if (tvRefran != null) {
-            tvRefran.setText("¿De qué hablamos hoy? Selecciona algo que te guste.");
+            tvRefran.setText(R.string.rosco_elegir_tematica);
         }
         
-        // Obtener las categorías desde strings.xml
-        String[] categorias = getResources().getStringArray(R.array.rosco_categorias);
+        // Las temáticas salen del mismo fichero que las preguntas (res/raw/juego_rosco.json)
+        java.util.List<String> categorias = ContenidoJuegos.temasRosco(this);
         LinearLayout llContenedorBotones = findViewById(R.id.llContenedorBotones);
         
         // Generar los botones dinámicamente
@@ -61,6 +61,6 @@ public class ElegirTematicaRoscoActivity extends BaseActivity {
 
     @Override
     protected void onRobotServiceReady() {
-        hablarOSimular("¿De qué hablamos hoy? Selecciona algo que te guste.");
+        hablarOSimular(getString(R.string.rosco_elegir_tematica));
     }
 }

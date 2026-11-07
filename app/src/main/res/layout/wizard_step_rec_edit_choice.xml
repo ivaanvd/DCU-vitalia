@@ -11,7 +11,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="¿Qué quieres cambiar?"
+        android:text="@string/ui_que_quieres_cambiar"
         android:textSize="18sp"
         android:textStyle="bold"
         android:textColor="#1C1C1E"
@@ -29,7 +29,7 @@
             android:layout_width="0dp"
             android:layout_height="64dp"
             android:layout_columnWeight="1"
-            android:text="TÍTULO"
+            android:text="@string/ui_titulo"
             android:layout_margin="4dp"
             android:background="@drawable/bg_tipo_normal"/>
         <Button
@@ -37,7 +37,7 @@
             android:layout_width="0dp"
             android:layout_height="64dp"
             android:layout_columnWeight="1"
-            android:text="HORA"
+            android:text="@string/ui_hora_2"
             android:layout_margin="4dp"
             android:background="@drawable/bg_tipo_normal"/>
         <Button
@@ -45,7 +45,7 @@
             android:layout_width="0dp"
             android:layout_height="64dp"
             android:layout_columnWeight="1"
-            android:text="FECHA"
+            android:text="@string/ui_fecha"
             android:layout_margin="4dp"
             android:background="@drawable/bg_tipo_normal"/>
         <Button
@@ -53,7 +53,7 @@
             android:layout_width="0dp"
             android:layout_height="64dp"
             android:layout_columnWeight="1"
-            android:text="ANTELACIÓN"
+            android:text="@string/ui_antelacion"
             android:layout_margin="4dp"
             android:background="@drawable/bg_tipo_normal"/>
     </GridLayout>

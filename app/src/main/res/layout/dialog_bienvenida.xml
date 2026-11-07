@@ -12,7 +12,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Tu nombre:"
+        android:text="@string/ui_tu_nombre_2"
         android:textSize="18sp"
         android:textColor="#1C1C1E"
         android:layout_marginBottom="8dp"/>
@@ -21,7 +21,7 @@
         android:id="@+id/etNombre"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Escribe tu nombre"
+        android:hint="@string/ui_escribe_tu_nombre"
         android:textSize="20sp"
         android:inputType="textPersonName|textCapWords"
         android:padding="12dp"
@@ -32,7 +32,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Foto de perfil (opcional):"
+        android:text="@string/ui_foto_de_perfil_opcional"
         android:textSize="18sp"
         android:textColor="#1C1C1E"
         android:layout_marginBottom="12dp"/>
@@ -52,14 +52,14 @@
             android:background="@drawable/bg_avatar_circle"
             android:padding="10dp"
             android:layout_marginEnd="16dp"
-            android:contentDescription="Vista previa foto"/>
+            android:contentDescription="@string/ui_vista_previa_foto"/>
 
         <!-- Botón elegir foto -->
         <TextView
             android:id="@+id/btnElegirFoto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Elegir foto"
+            android:text="@string/ui_elegir_foto"
             android:textSize="17sp"
             android:textColor="#FFFFFF"
             android:background="@drawable/bg_card_blue"

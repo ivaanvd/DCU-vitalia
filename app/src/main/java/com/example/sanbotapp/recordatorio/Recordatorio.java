@@ -61,15 +61,17 @@ public class Recordatorio {
      * Post: Genera cadena simple legible humana HH:mm en interfaz usuario nativa de Java
      */
     public String getHoraFormateada() {
-        return String.format("%02d:%02d", horaMinutos / 60, horaMinutos % 60);
+        return String.format(Locale.ROOT, "%02d:%02d", horaMinutos / 60, horaMinutos % 60);
     }
 
     /*
      * Pre: Long timestamp existente en registro general de sistema
-     * Post: Traspone el String legible usando configuración idiomática simple formato Locale Español
+     * Post: Fecha numérica (dd/MM/yyyy, MM/dd/yyyy…) según la región del dispositivo
      */
     public String getFechaFormateada() {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", new Locale("es", "ES"));
+        Locale locale = Locale.getDefault();
+        String patron = android.text.format.DateFormat.getBestDateTimePattern(locale, "ddMMyyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat(patron, locale);
         return sdf.format(new Date(fechaMs));
     }
 

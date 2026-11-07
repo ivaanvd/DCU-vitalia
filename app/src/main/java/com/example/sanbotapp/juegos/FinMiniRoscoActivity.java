@@ -12,7 +12,7 @@ public class FinMiniRoscoActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fin_mini_rosco);
-        setupTopBackBanner("Mini-Rosco");
+        setupTopBackBanner(getString(R.string.juego_rosco_titulo));
 
         int aciertos = getIntent().getIntExtra("ACIERTOS", 0);
         int total = getIntent().getIntExtra("TOTAL", 1); // evitar div/0
@@ -20,16 +20,16 @@ public class FinMiniRoscoActivity extends BaseActivity {
         
         if (aciertos >= (total / 2)) {
             gestionarFeedbackHardware("CELEBRACION");
-            if (mensaje == null) mensaje = "¡Misión cumplida! ¡Qué bien se te da esto!";
+            if (mensaje == null) mensaje = getString(R.string.rosco_fin_bien);
         } else {
             gestionarFeedbackHardware("MOURN");
-            if (mensaje == null) mensaje = "¡Buen intento! Seguro que la próxima vez lo haces mejor.";
+            if (mensaje == null) mensaje = getString(R.string.rosco_fin_intento);
         }
         
         hablarOSimular(mensaje);
 
         TextView tvContador = findViewById(R.id.tvAciertosRosco);
-        if (tvContador != null) tvContador.setText(aciertos + "/" + total + " palabras");
+        if (tvContador != null) tvContador.setText(getString(R.string.rosco_fin_contador, aciertos, total));
         
         TextView tvRefran = findViewById(R.id.tvBocadilloTexto);
         if (tvRefran != null) tvRefran.setText(mensaje);

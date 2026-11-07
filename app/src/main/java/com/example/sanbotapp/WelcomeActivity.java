@@ -60,11 +60,11 @@ public class WelcomeActivity extends BaseActivity {
             public void onPhotoReady(String ruta) {
                 rutaFoto = ruta;
                 PhotoHelper.mostrarFotoDesdeRuta(ruta, ivFoto);
-                hablarOSimular("Foto añadida. Cuando quieras, toca el botón comenzar para terminar.");
+                hablarOSimular(getString(R.string.welcome_foto_anadida));
             }
             @Override
             public void onPermissionDenied() {
-                Toast.makeText(WelcomeActivity.this, "Permiso denegado", Toast.LENGTH_SHORT).show();
+                Toast.makeText(WelcomeActivity.this, R.string.permiso_denegado, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -87,8 +87,8 @@ public class WelcomeActivity extends BaseActivity {
         // Click en el avatar → Diálogo de selección
         ivFoto.setOnClickListener(v -> {
             androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
-            builder.setTitle("¿Cómo quieres añadir la foto?");
-            builder.setItems(new CharSequence[]{"Usar Cámara", "Elegir de Galería"}, (dialog, which) -> {
+            builder.setTitle(R.string.welcome_como_anadir_foto);
+            builder.setItems(new CharSequence[]{getString(R.string.foto_usar_camara), getString(R.string.foto_elegir_galeria)}, (dialog, which) -> {
                 if (which == 0) photoHelper.checkCameraPermissionAndOpen();
                 else photoHelper.checkStoragePermissionAndOpen();
             });
@@ -118,8 +118,8 @@ public class WelcomeActivity extends BaseActivity {
         // El robot guía al usuario desde el principio con frases secuenciales.
         realizarSaludoHumanizado(); // MEJORA ÁREA 5: Saludo con brazos y cabeza
         new Thread(() -> {
-            hablarYEsperar("¡Hola! Soy Sanbot. Vamos a configurar tu perfil.");
-            hablarYEsperar("Pulsa el botón del micrófono y dime tu nombre.");
+            hablarYEsperar(getString(R.string.welcome_hola));
+            hablarYEsperar(getString(R.string.welcome_pide_nombre));
         }).start();
     }
 
@@ -165,8 +165,7 @@ public class WelcomeActivity extends BaseActivity {
         // El robot confirma y guía al siguiente paso
         new Thread(() -> {
             sleep(300);
-            hablarOSimular("Perfecto, " + texto
-                    + ". Ahora necesito una foto tuya. Toca el botón de cámara o galería.");
+            hablarOSimular(getString(R.string.welcome_pide_foto, texto));
         }).start();
     }
 
@@ -211,15 +210,15 @@ public class WelcomeActivity extends BaseActivity {
         String nombre = etNombre.getText().toString().trim();
 
         if (TextUtils.isEmpty(nombre)) {
-            Toast.makeText(this, "Por favor, ingresa o captura tu nombre",
+            Toast.makeText(this, R.string.welcome_falta_nombre_toast,
                     Toast.LENGTH_SHORT).show();
-            hablarOSimular("Aún no tengo tu nombre. Pulsa el micrófono y dímelo.");
+            hablarOSimular(getString(R.string.welcome_falta_nombre));
             return;
         }
         if (TextUtils.isEmpty(rutaFoto)) {
-            Toast.makeText(this, "Por favor, captura o selecciona una foto",
+            Toast.makeText(this, R.string.welcome_falta_foto_toast,
                     Toast.LENGTH_SHORT).show();
-            hablarOSimular("Todavía necesito tu foto. Toca el botón de cámara o galería.");
+            hablarOSimular(getString(R.string.welcome_falta_foto));
             return;
         }
 
@@ -229,7 +228,7 @@ public class WelcomeActivity extends BaseActivity {
                 .putBoolean(AppConstants.KEY_FIRST_RUN, false)
                 .apply();
 
-        hablarOSimular("¡Todo listo, " + nombre + "! Bienvenido a la aplicación.");
+        hablarOSimular(getString(R.string.welcome_todo_listo, nombre));
 
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("is_new_user", true);

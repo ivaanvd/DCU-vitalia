@@ -45,14 +45,14 @@
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:src="@drawable/ic_escribiendo"
-                        android:contentDescription="Refranes" />
+                        android:contentDescription="@string/ui_refranes" />
                 </LinearLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:text="COMPLETAR&#10;REFRANES"
+                    android:text="@string/ui_completar_10_refranes"
                     android:textColor="@android:color/black"
                     android:textSize="40sp"
                     android:textStyle="bold"
@@ -82,14 +82,14 @@
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:src="@drawable/ic_lupa"
-                        android:contentDescription="Busca y Encuentra" />
+                        android:contentDescription="@string/ui_busca_y_encuentra_2" />
                 </LinearLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:text="BUSCA Y&#10;ENCUENTRA"
+                    android:text="@string/ui_busca_y_10_encuentra"
                     android:textColor="@android:color/black"
                     android:textSize="40sp"
                     android:textStyle="bold"
@@ -128,14 +128,14 @@
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:src="@drawable/ic_letras"
-                        android:contentDescription="Mini Rosco" />
+                        android:contentDescription="@string/ui_mini_rosco" />
                 </LinearLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:text="MINI-ROSCO&#10;DE LETRAS"
+                    android:text="@string/ui_mini_rosco_10_de_letras"
                     android:textColor="@android:color/black"
                     android:textSize="40sp"
                     android:textStyle="bold"
@@ -165,14 +165,14 @@
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:src="@drawable/ic_bingo"
-                        android:contentDescription="Bingo" />
+                        android:contentDescription="@string/ui_bingo" />
                 </LinearLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:text="BINGO"
+                    android:text="@string/ui_bingo_2"
                     android:textColor="@android:color/black"
                     android:textSize="40sp"
                     android:textStyle="bold"

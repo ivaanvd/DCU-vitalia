@@ -10,7 +10,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="PASO 1: ¿Qué recordamos?"
+        android:text="@string/ui_paso_1_que_recordamos"
         android:textSize="26sp"
         android:textStyle="bold"
         android:textColor="#1C1C1E"
@@ -20,7 +20,7 @@
         android:id="@+id/etTituloRecordatorio"
         android:layout_width="match_parent"
         android:layout_height="64dp"
-        android:hint="Ej: Cita médica"
+        android:hint="@string/ui_ej_cita_medica"
         android:textSize="24sp"
         android:textColor="#1C1C1E"
         android:background="@drawable/bg_campo_descripcion"

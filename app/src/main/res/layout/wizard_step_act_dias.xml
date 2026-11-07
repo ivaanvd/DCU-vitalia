@@ -10,7 +10,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="PASO 4: Selecciona los días"
+        android:text="@string/ui_paso_4_selecciona_los_dias"
         android:textSize="22sp"
         android:textStyle="bold"
         android:textColor="#1C1C1E"
@@ -30,13 +30,13 @@
             android:columnCount="4"
             android:alignmentMode="alignMargins">
             
-            <TextView android:id="@+id/btnDiaLun" android:layout_width="0dp" android:layout_height="60dp" android:layout_columnWeight="1" android:text="L" android:gravity="center" android:background="@drawable/bg_tipo_normal" android:layout_margin="4dp" android:textSize="20sp" android:textStyle="bold" android:textColor="#1C1C1E"/>
-            <TextView android:id="@+id/btnDiaMar" android:layout_width="0dp" android:layout_height="60dp" android:layout_columnWeight="1" android:text="M" android:gravity="center" android:background="@drawable/bg_tipo_normal" android:layout_margin="4dp" android:textSize="20sp" android:textStyle="bold" android:textColor="#1C1C1E"/>
-            <TextView android:id="@+id/btnDiaMie" android:layout_width="0dp" android:layout_height="60dp" android:layout_columnWeight="1" android:text="X" android:gravity="center" android:background="@drawable/bg_tipo_normal" android:layout_margin="4dp" android:textSize="20sp" android:textStyle="bold" android:textColor="#1C1C1E"/>
-            <TextView android:id="@+id/btnDiaJue" android:layout_width="0dp" android:layout_height="60dp" android:layout_columnWeight="1" android:text="J" android:gravity="center" android:background="@drawable/bg_tipo_normal" android:layout_margin="4dp" android:textSize="20sp" android:textStyle="bold" android:textColor="#1C1C1E"/>
-            <TextView android:id="@+id/btnDiaVie" android:layout_width="0dp" android:layout_height="60dp" android:layout_columnWeight="1" android:text="V" android:gravity="center" android:background="@drawable/bg_tipo_normal" android:layout_margin="4dp" android:textSize="20sp" android:textStyle="bold" android:textColor="#1C1C1E"/>
-            <TextView android:id="@+id/btnDiaSab" android:layout_width="0dp" android:layout_height="60dp" android:layout_columnWeight="1" android:text="S" android:gravity="center" android:background="@drawable/bg_tipo_normal" android:layout_margin="4dp" android:textSize="20sp" android:textStyle="bold" android:textColor="#1C1C1E"/>
-            <TextView android:id="@+id/btnDiaDom" android:layout_width="0dp" android:layout_height="60dp" android:layout_columnWeight="1" android:text="D" android:gravity="center" android:background="@drawable/bg_tipo_normal" android:layout_margin="4dp" android:textSize="20sp" android:textStyle="bold" android:textColor="#1C1C1E"/>
+            <TextView android:id="@+id/btnDiaLun" android:layout_width="0dp" android:layout_height="60dp" android:layout_columnWeight="1" android:text="@string/ui_l" android:gravity="center" android:background="@drawable/bg_tipo_normal" android:layout_margin="4dp" android:textSize="20sp" android:textStyle="bold" android:textColor="#1C1C1E"/>
+            <TextView android:id="@+id/btnDiaMar" android:layout_width="0dp" android:layout_height="60dp" android:layout_columnWeight="1" android:text="@string/ui_m" android:gravity="center" android:background="@drawable/bg_tipo_normal" android:layout_margin="4dp" android:textSize="20sp" android:textStyle="bold" android:textColor="#1C1C1E"/>
+            <TextView android:id="@+id/btnDiaMie" android:layout_width="0dp" android:layout_height="60dp" android:layout_columnWeight="1" android:text="@string/ui_x" android:gravity="center" android:background="@drawable/bg_tipo_normal" android:layout_margin="4dp" android:textSize="20sp" android:textStyle="bold" android:textColor="#1C1C1E"/>
+            <TextView android:id="@+id/btnDiaJue" android:layout_width="0dp" android:layout_height="60dp" android:layout_columnWeight="1" android:text="@string/ui_j" android:gravity="center" android:background="@drawable/bg_tipo_normal" android:layout_margin="4dp" android:textSize="20sp" android:textStyle="bold" android:textColor="#1C1C1E"/>
+            <TextView android:id="@+id/btnDiaVie" android:layout_width="0dp" android:layout_height="60dp" android:layout_columnWeight="1" android:text="@string/ui_v" android:gravity="center" android:background="@drawable/bg_tipo_normal" android:layout_margin="4dp" android:textSize="20sp" android:textStyle="bold" android:textColor="#1C1C1E"/>
+            <TextView android:id="@+id/btnDiaSab" android:layout_width="0dp" android:layout_height="60dp" android:layout_columnWeight="1" android:text="@string/ui_s" android:gravity="center" android:background="@drawable/bg_tipo_normal" android:layout_margin="4dp" android:textSize="20sp" android:textStyle="bold" android:textColor="#1C1C1E"/>
+            <TextView android:id="@+id/btnDiaDom" android:layout_width="0dp" android:layout_height="60dp" android:layout_columnWeight="1" android:text="@string/ui_d" android:gravity="center" android:background="@drawable/bg_tipo_normal" android:layout_margin="4dp" android:textSize="20sp" android:textStyle="bold" android:textColor="#1C1C1E"/>
             
         </GridLayout>
     </LinearLayout>

@@ -12,7 +12,7 @@ public class FinRefranesActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fin_refranes);
-        setupTopBackBanner("Juego de Refranes");
+        setupTopBackBanner(getString(R.string.juego_refranes_titulo));
 
         // Recuperar envíos
         int aciertos = getIntent().getIntExtra("ACIERTOS", 0);
@@ -21,17 +21,17 @@ public class FinRefranesActivity extends BaseActivity {
         
         if (aciertos >= (total / 2)) {
             gestionarFeedbackHardware("CELEBRACION");
-            if (mensaje == null) mensaje = "¡Muy bien! ¡Tú sí que sabes de refranes!";
+            if (mensaje == null) mensaje = getString(R.string.refranes_fin_bien);
         } else {
             gestionarFeedbackHardware("MOURN");
-            if (mensaje == null) mensaje = "¡Casi lo tienes! Sigue practicando y verás cómo mejoras.";
+            if (mensaje == null) mensaje = getString(R.string.refranes_fin_casi_lo_tienes);
         }
 
 
         // Actualizar UI
         TextView tvContador = findViewById(R.id.tvContadorAciertos);
         if (tvContador != null) {
-            tvContador.setText(aciertos + "/" + total + " refranes acertados");
+            tvContador.setText(getString(R.string.refranes_fin_contador, aciertos, total));
         }
         
         TextView tvRefran = findViewById(R.id.tvBocadilloTexto);

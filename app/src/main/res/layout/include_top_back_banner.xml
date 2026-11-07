@@ -22,7 +22,7 @@
             android:layout_height="48dp"
             android:src="@drawable/ic_back_arrow_lavender"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Atrás"
+            android:contentDescription="@string/ui_atras"
             android:scaleType="centerInside" />
 
         <TextView
@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginStart="16dp"
-            android:text="Título Generico"
+            android:text="@string/ui_titulo_generico"
             android:textColor="#241B35"
             android:textSize="30sp"
             android:textStyle="bold" />

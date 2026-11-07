@@ -82,7 +82,7 @@ public class ActividadPopupActivity extends BaseActivity {
         super.onMainServiceConnected();
         if (actividad != null) {
             gestionarFeedbackHardware("ALARMA");
-            hablarOSimular("¡Atención! Es hora de " + actividad.getTipoLabel().toLowerCase());
+            hablarOSimular(getString(R.string.popup_act_atencion, actividad.getTipoLabel(this).toLowerCase()));
         }
     }
 
@@ -96,7 +96,7 @@ public class ActividadPopupActivity extends BaseActivity {
         findViewById(R.id.framePopupIcono).setBackground(bg);
 
         ((TextView) findViewById(R.id.tvPopupTitulo))
-                .setText("¡ES HORA DE " + actividad.getTipoLabel().toUpperCase() + "!");
+                .setText(getString(R.string.popup_act_es_hora, actividad.getTipoLabel(this)).toUpperCase());
 
         TextView tvDesc = findViewById(R.id.tvPopupDesc);
         if (actividad.getDescripcion() != null && !actividad.getDescripcion().isEmpty()) {
@@ -106,7 +106,7 @@ public class ActividadPopupActivity extends BaseActivity {
         }
 
         ((TextView) findViewById(R.id.tvPopupDuracion))
-                .setText("Duración estimada: " + actividad.getDuracionMinutos() + " min");
+                .setText(getString(R.string.popup_act_duracion, actividad.getDuracionMinutos()));
     }
 
     private void configurarBotones() {
@@ -131,8 +131,8 @@ public class ActividadPopupActivity extends BaseActivity {
 
         btnPosponer.setOnClickListener(v -> {
             repo.posponerActividad(actividad.getId(), 30);
-            hablarOSimular("De acuerdo, te recuerdo en 30 minutos.");
-            Toast.makeText(this, "Actividad pospuesta 30 minutos", Toast.LENGTH_SHORT).show();
+            hablarOSimular(getString(R.string.popup_act_pospuesta_voz));
+            Toast.makeText(this, R.string.popup_act_pospuesta_toast, Toast.LENGTH_SHORT).show();
             finish();
         });
     }

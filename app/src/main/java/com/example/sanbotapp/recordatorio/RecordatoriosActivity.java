@@ -16,6 +16,7 @@ import com.example.sanbotapp.BaseActivity;
 import com.example.sanbotapp.CampoVozEspera;
 import com.example.sanbotapp.R;
 import com.example.sanbotapp.util.DateTimeUtils;
+import com.example.sanbotapp.util.VozComandos;
 import com.example.sanbotapp.util.VozParser;
 import com.example.sanbotapp.util.WizardFlowController;
 
@@ -65,7 +66,7 @@ public class RecordatoriosActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recordatorios);
-        setupTopBackBanner("Recordatorios");
+        setupTopBackBanner(getString(R.string.titulo_recordatorios));
 
         containerRecordatorios = findViewById(R.id.containerRecordatorios);
         tvVacio = findViewById(R.id.tvVacioRecordatorios);
@@ -182,7 +183,7 @@ public class RecordatoriosActivity extends BaseActivity {
             context = generarResumenVozRec();
         }
 
-        String instruccion = WizardFlowController.getInstruccionCampo(campo, context);
+        String instruccion = WizardFlowController.getInstruccionCampo(this, campo, context);
         if (isAssistantActive) {
             hablarEnMain(instruccion);
         }
@@ -216,8 +217,8 @@ public class RecordatoriosActivity extends BaseActivity {
             tvFecha.setText(tmp.getFechaFormateada().toUpperCase());
         }
         if (tvAntic != null) {
-            if (anticipacionSeleccionada <= 0) tvAntic.setText("SIN AVISO PREVIO");
-            else tvAntic.setText("AVISAR " + anticipacionSeleccionada + " MINUTOS ANTES");
+            if (anticipacionSeleccionada <= 0) tvAntic.setText(getString(R.string.rec_sin_aviso_previo).toUpperCase());
+            else tvAntic.setText(getResources().getQuantityString(R.plurals.rec_avisar_minutos_antes, anticipacionSeleccionada, anticipacionSeleccionada).toUpperCase());
         }
     }
 
@@ -230,17 +231,16 @@ public class RecordatoriosActivity extends BaseActivity {
         String titulo = (etTitulo != null) ? etTitulo.getText().toString().trim() : "";
 
         AlertDialog dlg = dialogRef != null ? dialogRef.get() : null;
-        String btnAction = "Añadir";
+        String btnAction = getString(R.string.accion_anadir);
         if (dlg != null && dlg.findViewById(R.id.btnWizardSiguienteRec) instanceof android.widget.Button) {
             btnAction = ((android.widget.Button) dlg.findViewById(R.id.btnWizardSiguienteRec)).getText().toString();
         }
 
-        if (titulo.isEmpty() || titulo.equalsIgnoreCase("Sin título")) {
-            return "Vamos a crear un recordatorio. ¿Qué título le ponemos? Toca mi cabeza.";
+        if (titulo.isEmpty() || titulo.equalsIgnoreCase(getString(R.string.rec_sin_titulo))) {
+            return getString(R.string.rec_instr_crear);
         }
 
-        return "El recordatorio es '" + titulo + "'. ¿Quieres cambiar algo más o prefieres '" + btnAction
-                + "' ya? Toca mi cabeza.";
+        return getString(R.string.rec_instr_dinamica, titulo, btnAction);
     }
 
     // =========================================================================
@@ -259,55 +259,51 @@ public class RecordatoriosActivity extends BaseActivity {
 
         // CASOS ESPECIALES: RESUMEN Y ELECCIÓN DE EDICIÓN
         if (campoEspera == CampoVozEspera.RESUMEN_FINAL) {
-            if (tGlobal.contains("sí") || tGlobal.contains("si") || tGlobal.contains("correcto") || tGlobal.contains("guardar")) {
-                hablarEnMain("Entendido, guardando...");
+            if (VozComandos.coincide(this, tGlobal, R.array.voz_si) || VozComandos.coincide(this, tGlobal, R.array.voz_guardar)) {
+                hablarEnMain(getString(R.string.voz_entendido_guardando));
                 gestionarFeedbackHardware("CELEBRACION");
                 // Simular click en Siguiente (que es Guardar en este estado)
                 android.widget.Button btnSig = dlg.findViewById(R.id.btnWizardSiguienteRec);
                 if (btnSig != null) btnSig.performClick();
-            } else if (tGlobal.contains("no") || tGlobal.contains("cambiar") || tGlobal.contains("error") || tGlobal.contains("mal")) {
-                hablarEnMain("¿Qué quieres cambiar?");
+            } else if (VozComandos.coincide(this, tGlobal, R.array.voz_no)) {
+                hablarEnMain(getString(R.string.voz_que_quieres_cambiar));
                 anunciarCampoYEsperarToque(CampoVozEspera.ELECCION_EDICION);
             }
             return;
         }
 
         if (campoEspera == CampoVozEspera.ELECCION_EDICION) {
-            if (tGlobal.contains("título") || tGlobal.contains("titulo")) {
-                hablarEnMain("Cambiamos el título.");
+            if (VozComandos.coincide(this, tGlobal, R.array.voz_campo_titulo)) {
+                hablarEnMain(getString(R.string.voz_cambiamos_titulo));
                 anunciarCampoYEsperarToque(CampoVozEspera.TITULO);
-            } else if (tGlobal.contains("hora")) {
-                hablarEnMain("Vale, la hora.");
+            } else if (VozComandos.coincide(this, tGlobal, R.array.voz_campo_hora)) {
+                hablarEnMain(getString(R.string.voz_vale_la_hora));
                 anunciarCampoYEsperarToque(CampoVozEspera.HORA);
-            } else if (tGlobal.contains("fecha") || tGlobal.contains("día") || tGlobal.contains("dia")) {
-                hablarEnMain("Entendido, la fecha.");
+            } else if (VozComandos.coincide(this, tGlobal, R.array.voz_campo_fecha)) {
+                hablarEnMain(getString(R.string.voz_entendido_la_fecha));
                 anunciarCampoYEsperarToque(CampoVozEspera.FECHA);
-            } else if (tGlobal.contains("aviso") || tGlobal.contains("antelación") || tGlobal.contains("antelacion")) {
-                hablarEnMain("De acuerdo, el aviso.");
+            } else if (VozComandos.coincide(this, tGlobal, R.array.voz_campo_aviso)) {
+                hablarEnMain(getString(R.string.voz_de_acuerdo_el_aviso));
                 anunciarCampoYEsperarToque(CampoVozEspera.ANTICIPACION);
-            } else if (tGlobal.contains("volver") || tGlobal.contains("resumen")) {
-                hablarEnMain("Volvemos al resumen.");
+            } else if (VozComandos.coincide(this, tGlobal, R.array.voz_volver_resumen)) {
+                hablarEnMain(getString(R.string.voz_volvemos_resumen));
                 anunciarCampoYEsperarToque(CampoVozEspera.RESUMEN_FINAL);
             }
             return;
         }
 
         // ── Comandos globales ────────────────────────────────────────────────
-        String btnText = "añadir";
+        String btnText = getString(R.string.accion_anadir).toLowerCase();
         if (dlg.findViewById(R.id.btnWizardSiguienteRec) instanceof android.widget.Button) {
             btnText = ((android.widget.Button) dlg.findViewById(R.id.btnWizardSiguienteRec)).getText().toString()
                     .toLowerCase();
         }
 
-        boolean quiereConfirmar = tGlobal.equalsIgnoreCase("confirmar")
-                || tGlobal.equalsIgnoreCase("aceptar")
-                || tGlobal.contains("guardar")
-                || (btnText.contains("añadir") && tGlobal.contains("añadir"))
-                || tGlobal.contains(btnText)
-                || tGlobal.equalsIgnoreCase("siguiente");
+        boolean quiereConfirmar = VozComandos.coincide(this, tGlobal, R.array.voz_confirmar)
+                || VozComandos.contieneAlguna(tGlobal, btnText);
 
         if (quiereConfirmar) {
-            hablarEnMain("Entendido.");
+            hablarEnMain(getString(R.string.voz_entendido));
             runOnUiThread(() -> {
                 if (dlg.findViewById(R.id.btnWizardSiguienteRec) != null) {
                     dlg.findViewById(R.id.btnWizardSiguienteRec).performClick();
@@ -316,9 +312,8 @@ public class RecordatoriosActivity extends BaseActivity {
             return;
         }
 
-        if (tGlobal.contains("cancelar") || tGlobal.contains("atrás") || tGlobal.contains("atras")
-                || tGlobal.contains("cerrar")) {
-            hablarEnMain("Vale.");
+        if (VozComandos.coincide(this, tGlobal, R.array.voz_cancelar)) {
+            hablarEnMain(getString(R.string.voz_vale));
             runOnUiThread(() -> {
                 if (dlg.findViewById(R.id.btnWizardAnteriorRec) != null) {
                     dlg.findViewById(R.id.btnWizardAnteriorRec).performClick();
@@ -327,15 +322,16 @@ public class RecordatoriosActivity extends BaseActivity {
             return;
         }
 
+        VozParser parser = VozParser.para(this);
+
         // ── Manejo por estados ───────────────────────────────────────────────
         switch (campoEspera) {
             case CONFIRMACION_CAMPO: {
-                if (tGlobal.contains("sí") || tGlobal.contains("si") || tGlobal.contains("correcto")
-                        || tGlobal.contains("vale") || tGlobal.contains("bueno") || tGlobal.contains("está bien")) {
+                if (VozComandos.coincide(this, tGlobal, R.array.voz_si)) {
                     aplicarValorConfirmadoRec();
-                    hablarEnMain("Perfecto.");
-                } else if (tGlobal.contains("no") || tGlobal.contains("repetir") || tGlobal.contains("mal")) {
-                    hablarEnMain("Vaya, lo siento. Intentémoslo de nuevo.");
+                    hablarEnMain(getString(R.string.voz_perfecto));
+                } else if (VozComandos.coincide(this, tGlobal, R.array.voz_no)) {
+                    hablarEnMain(getString(R.string.voz_lo_siento_otra_vez));
                     CampoVozEspera volverA = campoAConfirmar;
                     anunciarCampoYEsperarToque(volverA);
                 }
@@ -351,26 +347,25 @@ public class RecordatoriosActivity extends BaseActivity {
             }
 
             case HORA: {
-                int minutos = VozParser.parsearHoraVoz(texto);
+                int minutos = parser.parsearHoraVoz(texto);
                 if (minutos != -1) {
                     int h = minutos / 60;
                     int m = minutos % 60;
-                    valorPendienteConfirmar = String.format("%02d:%02d", h, m);
+                    valorPendienteConfirmar = String.format(java.util.Locale.ROOT, "%02d:%02d", h, m);
                     campoAConfirmar = CampoVozEspera.HORA;
                     runOnUiThread(() -> { if (tvHoraRef != null && tvHoraRef.get() != null) tvHoraRef.get().setText(valorPendienteConfirmar); });
                     anunciarCampoYEsperarToque(CampoVozEspera.CONFIRMACION_CAMPO);
                 } else {
-                    hablarEnMain("No te entendí bien la hora. Inténtalo de nuevo.");
+                    hablarEnMain(getString(R.string.rec_hora_no_entendida));
                     anunciarCampoYEsperarToque(CampoVozEspera.HORA);
                 }
                 break;
             }
 
             case FECHA: {
-                Long fechaMs = VozParser.parsearFechaVoz(texto);
+                Long fechaMs = parser.parsearFechaVoz(texto);
                 if (fechaMs != null) {
-                    valorPendienteConfirmar = new java.text.SimpleDateFormat("dd 'de' MMMM",
-                            new java.util.Locale("es", "ES")).format(new java.util.Date(fechaMs));
+                    valorPendienteConfirmar = DateTimeUtils.formatearDiaMes(this, fechaMs);
                     campoAConfirmar = CampoVozEspera.FECHA;
                     runOnUiThread(() -> { 
                         if (tvFechaRef != null && tvFechaRef.get() != null) {
@@ -381,21 +376,21 @@ public class RecordatoriosActivity extends BaseActivity {
                     });
                     anunciarCampoYEsperarToque(CampoVozEspera.CONFIRMACION_CAMPO);
                 } else {
-                    hablarEnMain("No entendí la fecha. Dime por ejemplo: doce de octubre.");
+                    hablarEnMain(getString(R.string.rec_fecha_no_entendida));
                     anunciarCampoYEsperarToque(CampoVozEspera.FECHA);
                 }
                 break;
             }
 
             case ANTICIPACION: {
-                Integer min = VozParser.parsearNumeroVoz(texto);
+                Integer min = parser.parsearNumeroVoz(texto);
                 if (min != null) {
-                    valorPendienteConfirmar = min + " minutos";
+                    valorPendienteConfirmar = getResources().getQuantityString(R.plurals.minutos_n, min, min);
                     campoAConfirmar = CampoVozEspera.ANTICIPACION;
                     runOnUiThread(() -> { if (tvAnticipacionRef != null && tvAnticipacionRef.get() != null) tvAnticipacionRef.get().setText(valorPendienteConfirmar); });
                     anunciarCampoYEsperarToque(CampoVozEspera.CONFIRMACION_CAMPO);
                 } else {
-                    hablarEnMain("No entendí el número. Intenta de nuevo.");
+                    hablarEnMain(getString(R.string.rec_numero_no_entendido));
                     anunciarCampoYEsperarToque(CampoVozEspera.ANTICIPACION);
                 }
                 break;
@@ -403,25 +398,23 @@ public class RecordatoriosActivity extends BaseActivity {
 
 
             case CAMPO_EDITAR: {
-                if (tGlobal.contains("título") || tGlobal.contains("titulo") || tGlobal.contains("nombre")) {
-                    hablarEnMain("De acuerdo.");
+                if (VozComandos.coincide(this, tGlobal, R.array.voz_campo_titulo)) {
+                    hablarEnMain(getString(R.string.voz_de_acuerdo));
                     anunciarCampoYEsperarToque(CampoVozEspera.TITULO);
-                } else if (tGlobal.contains("descripción") || tGlobal.contains("descripcion")
-                        || tGlobal.contains("detalle")) {
-                    hablarEnMain("Entendido.");
+                } else if (VozComandos.coincide(this, tGlobal, R.array.voz_campo_descripcion)) {
+                    hablarEnMain(getString(R.string.voz_entendido));
                     anunciarCampoYEsperarToque(CampoVozEspera.DESCRIPCION);
-                } else if (tGlobal.contains("hora") || tGlobal.contains("momento") || tGlobal.contains("cuándo")) {
-                    hablarEnMain("Vale.");
+                } else if (VozComandos.coincide(this, tGlobal, R.array.voz_campo_hora)) {
+                    hablarEnMain(getString(R.string.voz_vale));
                     anunciarCampoYEsperarToque(CampoVozEspera.HORA);
-                } else if (tGlobal.contains("fecha") || tGlobal.contains("día") || tGlobal.contains("dia")) {
-                    hablarEnMain("Cambiamos la fecha.");
+                } else if (VozComandos.coincide(this, tGlobal, R.array.voz_campo_fecha)) {
+                    hablarEnMain(getString(R.string.voz_cambiamos_fecha));
                     anunciarCampoYEsperarToque(CampoVozEspera.FECHA);
-                } else if (tGlobal.contains("antelación") || tGlobal.contains("antelacion")
-                        || tGlobal.contains("aviso")) {
-                    hablarEnMain("De acuerdo.");
+                } else if (VozComandos.coincide(this, tGlobal, R.array.voz_campo_aviso)) {
+                    hablarEnMain(getString(R.string.voz_de_acuerdo));
                     anunciarCampoYEsperarToque(CampoVozEspera.ANTICIPACION);
                 } else {
-                    hablarEnMain("No te entendí. Di por ejemplo: título o hora.");
+                    hablarEnMain(getString(R.string.rec_campo_no_entendido));
                     anunciarCampoYEsperarToque(CampoVozEspera.CAMPO_EDITAR);
                 }
                 break;
@@ -437,12 +430,12 @@ public class RecordatoriosActivity extends BaseActivity {
                         etTituloRef.get().setText(valorPendienteConfirmar);
                     break;
                 case HORA:
-                    horaSeleccionada = VozParser.parsearHoraVoz(valorPendienteConfirmar);
+                    horaSeleccionada = VozParser.para(this).parsearHoraVoz(valorPendienteConfirmar);
                     if (tvHoraRef != null && tvHoraRef.get() != null)
                         tvHoraRef.get().setText(DateTimeUtils.formatearHora(horaSeleccionada));
                     break;
                 case FECHA:
-                    fechaSeleccionadaMs = VozParser.parsearFechaVoz(valorPendienteConfirmar);
+                    fechaSeleccionadaMs = VozParser.para(this).parsearFechaVoz(valorPendienteConfirmar);
                     if (tvFechaRef != null && tvFechaRef.get() != null) {
                         Recordatorio tmp = new Recordatorio();
                         tmp.setFechaMs(fechaSeleccionadaMs);
@@ -450,9 +443,9 @@ public class RecordatoriosActivity extends BaseActivity {
                     }
                     break;
                 case ANTICIPACION:
-                    anticipacionSeleccionada = VozParser.parsearNumeroVoz(valorPendienteConfirmar);
+                    anticipacionSeleccionada = VozParser.para(this).parsearNumeroVoz(valorPendienteConfirmar);
                     if (tvAnticipacionRef != null && tvAnticipacionRef.get() != null)
-                        tvAnticipacionRef.get().setText(anticipacionSeleccionada + " minutos antes");
+                        tvAnticipacionRef.get().setText(getResources().getQuantityString(R.plurals.minutos_antes, anticipacionSeleccionada, anticipacionSeleccionada));
                     break;
             }
 
@@ -468,7 +461,7 @@ public class RecordatoriosActivity extends BaseActivity {
         }
 
         if (campoEspera == CampoVozEspera.CONFIRMACION_CAMPO) {
-            hablarEnMain("De acuerdo, dímelo otra vez.");
+            hablarEnMain(getString(R.string.voz_de_acuerdo_otra_vez));
             anunciarCampoYEsperarToque(campoAConfirmar);
         } else if (campoEspera == CampoVozEspera.RESUMEN_FINAL) {
             anunciarCampoYEsperarToque(CampoVozEspera.ELECCION_EDICION);
@@ -490,7 +483,7 @@ public class RecordatoriosActivity extends BaseActivity {
             switch (campoEspera) {
                 case TITULO:
                     if (etTitulo != null && etTitulo.getText().toString().trim().isEmpty()) {
-                        hablarEnMain("Por favor, dime un título para el recordatorio.");
+                        hablarEnMain(getString(R.string.rec_pide_titulo));
                         return;
                     }
                     anunciarCampoYEsperarToque(isEditingFromSummary ? CampoVozEspera.RESUMEN_FINAL : CampoVozEspera.HORA);
@@ -530,8 +523,8 @@ public class RecordatoriosActivity extends BaseActivity {
     private void validarYGuardarRecordatorio(Recordatorio existente, EditText etTitulo, AlertDialog dialog) {
         String titulo = etTitulo.getText().toString().trim();
         if (titulo.isEmpty()) {
-            etTitulo.setError("Introduce un título");
-            hablarEnMain("Por favor, introduce un título.");
+            etTitulo.setError(getString(R.string.rec_introduce_titulo));
+            hablarEnMain(getString(R.string.rec_por_favor_introduce_titulo));
             anunciarCampoYEsperarToque(CampoVozEspera.TITULO);
             return;
         }
@@ -549,10 +542,10 @@ public class RecordatoriosActivity extends BaseActivity {
         gestionarFeedbackHardware("EXITO");
         dbExecutor.execute(() -> {
             if (existente == null) {
-                hablarEnMain("¡Enhorabuena! Has creado el recordatorio correctamente.");
+                hablarEnMain(getString(R.string.rec_creado));
                 repo.add(new Recordatorio(0, titulo, horaSeleccionada, fechaSeleccionadaMs, desc, anticipacionSeleccionada));
             } else {
-                hablarEnMain("¡Enhorabuena! Has editado el recordatorio correctamente.");
+                hablarEnMain(getString(R.string.rec_editado));
                 existente.setTitulo(titulo);
                 existente.setHoraMinutos(horaSeleccionada);
                 existente.setFechaMs(fechaSeleccionadaMs);
@@ -565,25 +558,25 @@ public class RecordatoriosActivity extends BaseActivity {
     }
 
     private void confirmarEliminar(final Recordatorio r) {
-        String titulo = (r.getTitulo() != null && !r.getTitulo().isEmpty()) ? r.getTitulo() : "este recordatorio";
+        String titulo = (r.getTitulo() != null && !r.getTitulo().isEmpty()) ? r.getTitulo() : getString(R.string.rec_este_recordatorio);
         new AlertDialog.Builder(this)
-                .setTitle("Eliminar recordatorio")
-                .setMessage("¿Seguro que quieres eliminar \"" + titulo + "\"?")
-                .setPositiveButton("Eliminar", (d, w) -> {
+                .setTitle(R.string.rec_eliminar_titulo)
+                .setMessage(getString(R.string.rec_eliminar_mensaje, titulo))
+                .setPositiveButton(R.string.accion_eliminar, (d, w) -> {
                     dbExecutor.execute(() -> {
                         repo.delete(r.getId());
                         runOnUiThread(this::renderizarLista);
                     });
                 })
-                .setNegativeButton("Cancelar", null)
+                .setNegativeButton(R.string.accion_cancelar, null)
                 .show();
     }
 
     private String generarResumenVozRec() {
         EditText etTitulo = etTituloRef != null ? etTituloRef.get() : null;
-        String titulo = (etTitulo != null) ? etTitulo.getText().toString().trim() : "(Sin título)";
-        String hora = String.format("%02d:%02d", horaSeleccionada / 60, horaSeleccionada % 60);
-        return "Recordatorio: " + titulo + " a las " + hora;
+        String titulo = (etTitulo != null) ? etTitulo.getText().toString().trim() : getString(R.string.rec_sin_titulo_paren);
+        String hora = String.format(java.util.Locale.ROOT, "%02d:%02d", horaSeleccionada / 60, horaSeleccionada % 60);
+        return getString(R.string.rec_resumen_voz, titulo, hora);
     }
 
     private void actualizarDisplayFecha(TextView tv, long ms) {
@@ -594,9 +587,9 @@ public class RecordatoriosActivity extends BaseActivity {
 
     private void actualizarDisplayAnticipacion(TextView tv, int min) {
         if (min <= 0)
-            tv.setText("Sin aviso previo");
+            tv.setText(R.string.rec_sin_aviso_previo);
         else
-            tv.setText(min + " minutos antes");
+            tv.setText(getResources().getQuantityString(R.plurals.minutos_antes, min, min));
     }
 
     private long construirTimestampRecordatorio(long fechaMs, int horaMinutos) {

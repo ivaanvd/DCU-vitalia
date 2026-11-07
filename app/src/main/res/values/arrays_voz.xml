@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Palabras clave para comandos de voz (ver util/VozComandos).
+    Se comparan palabras completas, sin distinguir mayúsculas ni tildes.
+-->
+<resources>
+    <string-array name="voz_si">
+        <item>sí</item>
+        <item>correcto</item>
+        <item>vale</item>
+        <item>bueno</item>
+        <item>está bien</item>
+        <item>así es</item>
+    </string-array>
+    <string-array name="voz_no">
+        <item>no</item>
+        <item>cambiar</item>
+        <item>error</item>
+        <item>mal</item>
+        <item>repetir</item>
+    </string-array>
+    <string-array name="voz_guardar">
+        <item>guardar</item>
+        <item>guárdalo</item>
+    </string-array>
+    <string-array name="voz_confirmar">
+        <item>confirmar</item>
+        <item>aceptar</item>
+        <item>guardar</item>
+        <item>siguiente</item>
+        <item>añadir</item>
+    </string-array>
+    <string-array name="voz_cancelar">
+        <item>cancelar</item>
+        <item>atrás</item>
+        <item>cerrar</item>
+    </string-array>
+    <string-array name="voz_campo_titulo">
+        <item>título</item>
+        <item>nombre</item>
+    </string-array>
+    <string-array name="voz_campo_tipo">
+        <item>tipo</item>
+    </string-array>
+    <string-array name="voz_campo_descripcion">
+        <item>descripción</item>
+        <item>detalle</item>
+        <item>detalles</item>
+    </string-array>
+    <string-array name="voz_campo_hora">
+        <item>hora</item>
+        <item>momento</item>
+        <item>cuándo</item>
+    </string-array>
+    <string-array name="voz_campo_fecha">
+        <item>fecha</item>
+        <item>día</item>
+        <item>días</item>
+    </string-array>
+    <string-array name="voz_campo_dias">
+        <item>día</item>
+        <item>días</item>
+    </string-array>
+    <string-array name="voz_campo_aviso">
+        <item>aviso</item>
+        <item>antelación</item>
+    </string-array>
+    <string-array name="voz_volver_resumen">
+        <item>volver</item>
+        <item>resumen</item>
+    </string-array>
+</resources>

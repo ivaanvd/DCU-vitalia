@@ -22,7 +22,7 @@ public class AlarmScheduler {
         Intent intent = new Intent(context, ActividadAlarmReceiver.class);
         intent.putExtra("actividad_id", a.getId());
         intent.putExtra("actividad_tipo", a.getTipo());
-        intent.putExtra("actividad_label", a.getTipoLabel());
+        intent.putExtra("actividad_label", a.getTipoLabel(context));
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(
                 context,
@@ -145,10 +145,10 @@ public class AlarmScheduler {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             android.app.NotificationChannel channel = new android.app.NotificationChannel(
                     "alarmas_channel",
-                    "Alertas de Actividades",
+                    context.getString(com.example.sanbotapp.R.string.canal_alarmas_nombre),
                     android.app.NotificationManager.IMPORTANCE_HIGH
             );
-            channel.setDescription("Canal para las alarmas del robot");
+            channel.setDescription(context.getString(com.example.sanbotapp.R.string.canal_alarmas_descripcion));
             channel.setLockscreenVisibility(android.app.Notification.VISIBILITY_PUBLIC);
 
             android.app.NotificationManager manager = context.getSystemService(android.app.NotificationManager.class);

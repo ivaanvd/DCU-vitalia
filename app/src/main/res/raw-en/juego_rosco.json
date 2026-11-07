@@ -1,0 +1,28 @@
+{
+  "temas": [
+    {
+      "nombre": "Flowers and Plants",
+      "preguntas": [
+        { "letra": "O", "pista": "Large, long-lived tree that grows from an acorn.", "opciones": ["Oak", "Olive"], "correcta": 1 },
+        { "letra": "R", "pista": "Classic flower with thorns, given on Valentine's Day.", "opciones": ["Reed", "Rose"], "correcta": 2 },
+        { "letra": "S", "pista": "Tall yellow flower that turns to face the sun.", "opciones": ["Sunflower", "Snowdrop"], "correcta": 1 }
+      ]
+    },
+    {
+      "nombre": "Fruit",
+      "preguntas": [
+        { "letra": "A", "pista": "Crunchy red or green fruit. One a day keeps the doctor away.", "opciones": ["Apple", "Apricot"], "correcta": 1 },
+        { "letra": "B", "pista": "Long yellow fruit that monkeys love.", "opciones": ["Blueberry", "Banana"], "correcta": 2 },
+        { "letra": "K", "pista": "Small oval fruit, brown and furry outside, green inside.", "opciones": ["Kiwi", "Kumquat"], "correcta": 1 }
+      ]
+    },
+    {
+      "nombre": "Animals",
+      "preguntas": [
+        { "letra": "D", "pista": "Pet known as man's best friend.", "opciones": ["Duck", "Dog"], "correcta": 2 },
+        { "letra": "C", "pista": "Pet that purrs and says miaow.", "opciones": ["Cat", "Cow"], "correcta": 1 },
+        { "letra": "L", "pista": "Known as the king of the jungle.", "opciones": ["Lion", "Lynx"], "correcta": 1 }
+      ]
+    }
+  ]
+}

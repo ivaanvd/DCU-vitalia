@@ -35,7 +35,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:text="No hay recordatorios futuros.\n¡Añade el primero!"
+        android:text="@string/ui_no_hay_recordatorios_futuros_nanade_el"
         android:textSize="26sp"
 
         android:textColor="#9E9E9E"
@@ -54,7 +54,7 @@
         android:layout_marginBottom="24dp"
         android:clickable="true"
         android:focusable="true"
-        android:contentDescription="Añadir recordatorio">
+        android:contentDescription="@string/ui_anadir_recordatorio">
 
         <FrameLayout
             android:layout_width="42dp"
@@ -75,7 +75,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="AÑADIR"
+            android:text="@string/ui_anadir"
             android:textSize="28sp"
 
             android:textStyle="bold"

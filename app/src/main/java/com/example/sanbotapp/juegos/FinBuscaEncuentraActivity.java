@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.TextView;
 import com.example.sanbotapp.BaseActivity;
 import com.example.sanbotapp.R;
+import com.example.sanbotapp.util.RobotLed;
 
 public class FinBuscaEncuentraActivity extends BaseActivity {
 
@@ -12,7 +13,7 @@ public class FinBuscaEncuentraActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fin_busca_encuentra);
-        setupTopBackBanner("Busca y Encuentra");
+        setupTopBackBanner(getString(R.string.ui_busca_y_encuentra_2));
 
         long segundos = getIntent().getLongExtra("SEGUNDOS", 0);
 
@@ -20,19 +21,19 @@ public class FinBuscaEncuentraActivity extends BaseActivity {
         if (tvRobot != null) {
             if (segundos < 3) {
                 mostrarEmocion("SURPRISE");
-                encenderLed(com.qihancloud.opensdk.function.beans.LED.PART_ALL, com.qihancloud.opensdk.function.beans.LED.MODE_GREEN);
-                tvRobot.setText("¡Increíble! Lo has encontrado en un abrir y cerrar de ojos.");
-                hablarOSimular("¡Increíble! Lo has encontrado en un abrir y cerrar de ojos.");
+                encenderLed(RobotLed.PART_ALL, RobotLed.MODE_GREEN);
+                tvRobot.setText(R.string.busca_fin_rapido);
+                hablarOSimular(getString(R.string.busca_fin_rapido));
             } else if (segundos < 10) {
                 mostrarEmocion("PRISE");
-                encenderLed(com.qihancloud.opensdk.function.beans.LED.PART_ALL, com.qihancloud.opensdk.function.beans.LED.MODE_GREEN);
-                tvRobot.setText("¡Con tu ayuda lo he encontrado! ¡Eres increíble!");
-                hablarOSimular("¡Con tu ayuda lo he encontrado! ¡Eres increíble!");
+                encenderLed(RobotLed.PART_ALL, RobotLed.MODE_GREEN);
+                tvRobot.setText(R.string.busca_fin_medio);
+                hablarOSimular(getString(R.string.busca_fin_medio));
             } else {
                 mostrarEmocion("SMILE");
-                encenderLed(com.qihancloud.opensdk.function.beans.LED.PART_ALL, com.qihancloud.opensdk.function.beans.LED.MODE_GREEN);
-                tvRobot.setText("¡Lo has conseguido! La memoria es como un músculo, ¡a seguir entrenando!");
-                hablarOSimular("¡Lo has conseguido! La memoria es como un músculo, ¡a seguir entrenando!");
+                encenderLed(RobotLed.PART_ALL, RobotLed.MODE_GREEN);
+                tvRobot.setText(R.string.busca_fin_lento);
+                hablarOSimular(getString(R.string.busca_fin_lento));
             }
         }
 

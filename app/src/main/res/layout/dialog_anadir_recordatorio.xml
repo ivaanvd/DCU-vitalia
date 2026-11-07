@@ -17,7 +17,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="AÑADIR RECORDATORIO"
+            android:text="@string/ui_anadir_recordatorio_2"
             android:textSize="@dimen/text_size_large"
             android:textStyle="bold"
             android:textColor="#1C1C1E"

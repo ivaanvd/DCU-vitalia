@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Shared by the games -->
+    <string name="juego_correcto">Correct!</string>
+    <string name="juego_lastima">Shame, you were close</string>
+    <string name="juego_explicacion_titulo">How to play</string>
+
+    <!-- Explanations -->
+    <string name="explicacion_rosco">Let\'s play the Word Wheel! Choose the right answer for each clue. If you get it right it turns green, and if not it turns red. Good luck!</string>
+    <string name="explicacion_bingo">It\'s Bingo time! Tap the picture that matches what I say. If you get it wrong, you can try again until you have them all.</string>
+    <string name="explicacion_busca">In this game you need to memorise the icons before they are hidden. Then you will have to remember where the one I ask for was. Be quick!</string>
+    <string name="explicacion_refranes">Let\'s do some old sayings! I say the first part and you choose how it ends. I\'m sure you know them all.</string>
+
+    <!-- Word Wheel (questions in res/raw-en/juego_rosco.json) -->
+    <string name="juego_rosco_titulo">Word Wheel</string>
+    <string name="rosco_elegir_tematica_titulo">Choose a theme</string>
+    <string name="rosco_elegir_tematica">What shall we talk about today? Pick something you like.</string>
+    <string name="rosco_tematica">Theme: %1$s</string>
+    <string name="rosco_pista">STARTS WITH %1$s: %2$s</string>
+    <string name="rosco_fin_pleno">Full marks! A perfect word wheel.</string>
+    <string name="rosco_fin_esfuerzo">That word wheel was a bit tricky, but great effort!</string>
+    <string name="rosco_fin_bien">Mission accomplished! You\'re really good at this!</string>
+    <string name="rosco_fin_intento">Good try! I\'m sure you\'ll do even better next time.</string>
+    <string name="rosco_fin_contador">%1$d/%2$d words</string>
+
+    <!-- Sayings (questions in res/raw-en/juego_refranes.json) -->
+    <string name="juego_refranes_titulo">Finish the Saying</string>
+    <string name="refranes_contador">QUESTION %1$d OF %2$d</string>
+    <string name="refranes_correcto">Correct! Excellent answer</string>
+    <string name="refranes_fin_todos">Excellent! You know all the sayings perfectly.</string>
+    <string name="refranes_fin_casi">Very good! You remember almost all of them.</string>
+    <string name="refranes_fin_intento">Good try, I\'m sure you\'ll get more next time.</string>
+    <string name="refranes_fin_bien">Very good! You really know your sayings!</string>
+    <string name="refranes_fin_casi_lo_tienes">Nearly there! Keep practising and you\'ll see yourself improve.</string>
+    <string name="refranes_fin_contador">%1$d/%2$d sayings correct</string>
+
+    <!-- Bingo -->
+    <string name="juego_bingo_titulo">Bingo</string>
+    <string name="bingo_ronda_comida">\"It\'s time to feed the body!\"</string>
+    <string name="bingo_ronda_dormir">\"Night has fallen. Which card means it\'s time to rest?\"</string>
+    <string name="bingo_ronda_medicacion">\"The doctor prescribed something to help us.\"</string>
+    <string name="bingo_ronda_calendario">\"Mark the appointment card so we don\'t forget it.\"</string>
+    <string name="bingo_error">Oh no, that wasn\'t it. Read it carefully and try again.</string>
+    <string name="bingo_fin">Spectacular Bingo! You have completed the whole card.</string>
+    <string name="bingo_fin_defecto">Line and bingo! You\'re a star!</string>
+    <string name="bingo_fin_enhorabuena">Congratulations! You did a fantastic job.</string>
+    <string name="bingo_fin_animo">Never mind. Sometimes you win and sometimes you learn. Next time will be better!</string>
+
+    <!-- Seek and Find -->
+    <string name="busca_atento">Watch the icons! Look carefully where they are…</string>
+    <string name="busca_memoriza">MEMORISE WHERE THE ICONS ARE</string>
+    <string name="busca_consigna">Oops, silly tin head… I\'ve lost the settings wheel! Can you find it?</string>
+    <string name="busca_tiempo">Time: %1$ds</string>
+    <string name="busca_correcto">WELL DONE! THAT WAS THE RIGHT ICON</string>
+    <string name="busca_error">That\'s not the icon I\'m looking for. Keep looking.</string>
+    <string name="busca_fin_rapido">Amazing! You found it in the blink of an eye.</string>
+    <string name="busca_fin_medio">I found it with your help! You\'re amazing!</string>
+    <string name="busca_fin_lento">You did it! Memory is like a muscle, so keep training!</string>
+</resources>

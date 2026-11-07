@@ -154,7 +154,7 @@ public class RecordatorioDialogManager {
         View dv = LayoutInflater.from(activity).inflate(R.layout.dialog_detalle_recordatorio, null);
 
         ((TextView) dv.findViewById(R.id.tvTituloDetRec)).setText(
-                r.getTitulo() != null ? r.getTitulo().toUpperCase() : "SIN TÍTULO");
+                r.getTitulo() != null ? r.getTitulo().toUpperCase() : activity.getString(R.string.rec_sin_titulo).toUpperCase());
         ((TextView) dv.findViewById(R.id.tvHoraDetRec)).setText(r.getHoraFormateada());
         ((TextView) dv.findViewById(R.id.tvFechaDetRec)).setText(r.getFechaFormateada());
 
@@ -194,8 +194,8 @@ public class RecordatorioDialogManager {
     }
 
     private void actualizarDisplayAnticipacion(TextView tv, int min) {
-        if (min <= 0) tv.setText("Sin aviso previo");
-        else tv.setText(min + " minutos antes");
+        if (min <= 0) tv.setText(R.string.rec_sin_aviso_previo);
+        else tv.setText(tv.getResources().getQuantityString(R.plurals.minutos_antes, min, min));
     }
 
     public int getHoraSeleccionada() { return horaSeleccionada; }

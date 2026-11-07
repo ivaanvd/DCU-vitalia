@@ -46,7 +46,7 @@ public class RecordatorioAdapter {
         if (tvTitulo != null) {
             String titulo = (r.getTitulo() != null && !r.getTitulo().isEmpty())
                     ? r.getTitulo().toUpperCase()
-                    : "SIN TÍTULO";
+                    : context.getString(R.string.rec_sin_titulo).toUpperCase();
             tvTitulo.setText(titulo);
         }
 

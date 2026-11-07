@@ -72,10 +72,10 @@ public class PhotoHelper {
             try {
                 photoFile = crearArchivoFoto();
             } catch (IOException ex) {
-                Toast.makeText(activity, "Error creando archivo", Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, com.example.sanbotapp.R.string.foto_error_crear, Toast.LENGTH_SHORT).show();
             }
             if (photoFile != null) {
-                currentPhotoUri = FileProvider.getUriForFile(activity, "com.example.sanbotapp.fileprovider", photoFile);
+                currentPhotoUri = FileProvider.getUriForFile(activity, activity.getPackageName() + ".fileprovider", photoFile);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, currentPhotoUri);
                 activity.startActivityForResult(intent, AppConstants.REQUEST_CAMERA);
             }
@@ -104,7 +104,7 @@ public class PhotoHelper {
                     callback.onPhotoReady(ruta);
                     return ruta;
                 } catch (IOException e) {
-                    Toast.makeText(activity, "Error al copiar la imagen", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, com.example.sanbotapp.R.string.foto_error_copiar, Toast.LENGTH_SHORT).show();
                 }
             }
         }

@@ -1,0 +1,8 @@
+{
+  "preguntas": [
+    { "texto": "A quien madruga, Dios le...", "opciones": ["Ayuda", "Mira"], "correcta": 1 },
+    { "texto": "Más vale pájaro en mano que...", "opciones": ["Ciento volando", "Dos saltando"], "correcta": 1 },
+    { "texto": "En boca cerrada no entran...", "opciones": ["Sombras", "Moscas"], "correcta": 2 },
+    { "texto": "A caballo regalado no le mires el...", "opciones": ["Diente", "Pelo"], "correcta": 1 }
+  ]
+}

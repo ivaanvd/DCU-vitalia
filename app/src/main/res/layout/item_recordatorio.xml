@@ -54,7 +54,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="CITA MÉDICA"
+        android:text="@string/ui_cita_medica_2"
         android:textSize="30sp"
         android:textStyle="bold"
         android:textColor="#FFFFFF"
@@ -70,7 +70,7 @@
         android:layout_marginEnd="10dp"
         android:clickable="true"
         android:focusable="true"
-        android:contentDescription="Editar">
+        android:contentDescription="@string/ui_editar">
 
         <ImageView
             android:layout_width="28dp"
@@ -88,7 +88,7 @@
         android:background="@drawable/bg_btn_eliminar_circle"
         android:clickable="true"
         android:focusable="true"
-        android:contentDescription="Eliminar">
+        android:contentDescription="@string/ui_eliminar">
 
         <ImageView
             android:layout_width="28dp"

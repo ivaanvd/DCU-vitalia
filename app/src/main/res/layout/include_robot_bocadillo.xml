@@ -42,7 +42,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="¡Hola!"
+            android:text="@string/ui_hola"
             android:textColor="#1A1A1A"
             android:textSize="26sp"
             android:textStyle="bold" />
@@ -56,6 +56,6 @@
             android:src="@drawable/ic_volumen"
             android:scaleType="centerInside"
             android:padding="12dp"
-            android:contentDescription="Repetir mensaje"/>
+            android:contentDescription="@string/ui_repetir_mensaje"/>
     </LinearLayout>
 </LinearLayout>

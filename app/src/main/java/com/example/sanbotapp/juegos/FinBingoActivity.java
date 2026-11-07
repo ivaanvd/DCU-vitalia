@@ -12,20 +12,20 @@ public class FinBingoActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fin_bingo);
-        setupTopBackBanner("Juego de Bingo");
+        setupTopBackBanner(getString(R.string.juego_bingo_titulo));
 
         int aciertos = getIntent().getIntExtra("ACIERTOS", 0);
         int fallos = getIntent().getIntExtra("FALLOS", 0); // ← AÑADIR
         int total = getIntent().getIntExtra("TOTAL", 0);
         String mensaje = getIntent().getStringExtra("MENSAJE");
-        if (mensaje == null) mensaje = "¡Línea y bingo! ¡Es usted un hacha!";
+        if (mensaje == null) mensaje = getString(R.string.bingo_fin_defecto);
 
         if (aciertos >= total / 2) {
             gestionarFeedbackHardware("CELEBRACION");
-            hablarOSimular("¡Enhorabuena! Has hecho un trabajo fantástico.");
+            hablarOSimular(getString(R.string.bingo_fin_enhorabuena));
         } else {
             gestionarFeedbackHardware("MOURN");
-            hablarOSimular("No pasa nada, a veces se gana y otras se aprende. ¡La próxima será mejor!");
+            hablarOSimular(getString(R.string.bingo_fin_animo));
         }
 
 

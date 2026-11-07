@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Activity types -->
+    <string name="tipo_medicacion">MEDICATION</string>
+    <string name="tipo_beber_agua">DRINK WATER</string>
+    <string name="tipo_comer">MEAL</string>
+    <string name="tipo_paseo_ejercicio">WALK/EXERCISE</string>
+    <string name="tipo_juegos">GAMES</string>
+    <string name="tipo_aseo">PERSONAL CARE</string>
+    <string name="tipo_llamada_familiar">FAMILY CALL</string>
+    <string name="tipo_ir_dormir">BEDTIME</string>
+    <string name="tipo_otros">OTHER</string>
+
+    <!-- Guided steps per activity type -->
+    <string name="paso_medicacion_1">Wash your hands</string>
+    <string name="paso_medicacion_2">Go and get your medication</string>
+    <string name="paso_medicacion_3">Take your medication</string>
+    <string name="paso_agua_1">Go and get a glass of water</string>
+    <string name="paso_agua_2">Drink slowly, there is no rush</string>
+    <string name="paso_agua_3">Remember to have a drink every hour</string>
+    <string name="paso_comer_1">Set the table calmly</string>
+    <string name="paso_comer_2">Serve your food</string>
+    <string name="paso_comer_3">Eat slowly and chew well</string>
+    <string name="paso_comer_4">Drink some water with your meal</string>
+    <string name="paso_ejercicio_1">Sit down on a chair</string>
+    <string name="paso_ejercicio_2">Take a deep breath</string>
+    <string name="paso_ejercicio_3">Gently turn your neck</string>
+    <string name="paso_ejercicio_4">Move your elbows</string>
+    <string name="paso_ejercicio_5">Raise your arms</string>
+    <string name="paso_juegos_1">Find a quiet spot</string>
+    <string name="paso_juegos_2">Do the suggested exercise</string>
+    <string name="paso_juegos_3">Rest for a moment</string>
+    <string name="paso_aseo_1">Get ready what you need</string>
+    <string name="paso_aseo_2">Do your personal care</string>
+    <string name="paso_aseo_3">Tidy up and put everything away</string>
+    <string name="paso_llamada_1">Think of someone to call</string>
+    <string name="paso_llamada_2">Dial the number</string>
+    <string name="paso_llamada_3">Say hello and ask how they are</string>
+    <string name="paso_dormir_1">Turn off the lights in the house</string>
+    <string name="paso_dormir_2">Lay out your clothes for tomorrow</string>
+    <string name="paso_dormir_3">Get comfortable in bed</string>
+    <string name="paso_dormir_4">Breathe deeply and rest</string>
+    <string name="paso_otros_1">Do the activity calmly</string>
+
+    <!-- Common actions -->
+    <string name="accion_anadir">Add</string>
+    <string name="accion_guardar">Save</string>
+    <string name="accion_eliminar">Delete</string>
+    <string name="accion_cancelar">Cancel</string>
+    <string name="accion_si">Yes</string>
+    <string name="accion_no">No</string>
+
+    <!-- Common spoken replies -->
+    <string name="voz_entendido">Got it.</string>
+    <string name="voz_entendido_guardando">Got it, saving…</string>
+    <string name="voz_vale">Okay.</string>
+    <string name="voz_perfecto">Perfect.</string>
+    <string name="voz_perfecto_guardando">Perfect! Saving…</string>
+    <string name="voz_de_acuerdo">All right.</string>
+    <string name="voz_de_acuerdo_otra_vez">All right, tell me again.</string>
+    <string name="voz_de_acuerdo_que_cambiar">All right. What would you like to change?</string>
+    <string name="voz_lo_siento_otra_vez">Oh, I\'m sorry. Let\'s try again.</string>
+    <string name="voz_lo_siento_dimelo_otra_vez">Sorry, please tell me again.</string>
+    <string name="voz_que_quieres_cambiar">What would you like to change?</string>
+    <string name="voz_cambiamos_titulo">Let\'s change the title.</string>
+    <string name="voz_cambiamos_fecha">Let\'s change the date.</string>
+    <string name="voz_vale_la_hora">Okay, the time.</string>
+    <string name="voz_entendido_la_fecha">Got it, the date.</string>
+    <string name="voz_de_acuerdo_el_aviso">All right, the advance notice.</string>
+    <string name="voz_volvemos_resumen">Back to the summary.</string>
+    <string name="voz_no_puedo_escuchar_aqui">Sorry, I can\'t listen on this screen. Please use the buttons on the screen.</string>
+    <string name="mic_escuchando">I\'M LISTENING…</string>
+
+    <plurals name="minutos_n">
+        <item quantity="one">%d minute</item>
+        <item quantity="other">%d minutes</item>
+    </plurals>
+    <plurals name="minutos_antes">
+        <item quantity="one">%d minute before</item>
+        <item quantity="other">%d minutes before</item>
+    </plurals>
+
+    <!-- Reminders -->
+    <string name="titulo_recordatorios">Reminders</string>
+    <string name="rec_sin_aviso_previo">No advance notice</string>
+    <plurals name="rec_avisar_minutos_antes">
+        <item quantity="one">Warn me %d minute before</item>
+        <item quantity="other">Warn me %d minutes before</item>
+    </plurals>
+    <string name="rec_sin_titulo">Untitled</string>
+    <string name="rec_sin_titulo_paren">(Untitled)</string>
+    <string name="rec_instr_crear">Let\'s create a reminder. What should we call it? Touch my head.</string>
+    <string name="rec_instr_dinamica">The reminder is \'%1$s\'. Would you like to change anything else, or \'%2$s\' now? Touch my head.</string>
+    <string name="rec_hora_no_entendida">I didn\'t catch the time. Please try again.</string>
+    <string name="rec_fecha_no_entendida">I didn\'t catch the date. Say, for example: the twelfth of October.</string>
+    <string name="rec_numero_no_entendido">I didn\'t catch the number. Please try again.</string>
+    <string name="rec_campo_no_entendido">I didn\'t understand. Say, for example: title or time.</string>
+    <string name="rec_pide_titulo">Please tell me a title for the reminder.</string>
+    <string name="rec_introduce_titulo">Enter a title</string>
+    <string name="rec_por_favor_introduce_titulo">Please enter a title.</string>
+    <string name="rec_creado">Well done! You have created the reminder.</string>
+    <string name="rec_editado">Well done! You have updated the reminder.</string>
+    <string name="rec_este_recordatorio">this reminder</string>
+    <string name="rec_eliminar_titulo">Delete reminder</string>
+    <string name="rec_eliminar_mensaje">Are you sure you want to delete \"%1$s\"?</string>
+    <string name="rec_resumen_voz">Reminder: %1$s at %2$s</string>
+
+    <!-- Main screen -->
+    <string name="nombre_por_defecto">friend</string>
+    <string name="nombre_usuario_por_defecto">User</string>
+    <string name="main_bienvenida_nuevo">Welcome to Vitalia, %1$s. Here you can manage everything in the app.</string>
+    <string name="main_saludo_manana">Good morning, %1$s. I hope you slept well.</string>
+    <string name="main_saludo_tarde">Good afternoon, %1$s. I hope you are having a nice day.</string>
+    <string name="main_saludo_noche">Good evening, %1$s. It will be bedtime soon.</string>
+    <string name="main_hola_nombre">Hello, %1$s!</string>
+    <string name="main_fecha_hoy">%1$s, %2$s</string>
+    <string name="main_abriendo_actividades">Opening your activities.</string>
+    <string name="main_abriendo_recordatorios">Let\'s look at your reminders.</string>
+    <string name="main_abriendo_juegos">Time to play!</string>
+    <string name="main_abriendo_ajustes">Opening settings.</string>
+
+    <!-- Welcome / sign-up -->
+    <string name="welcome_foto_anadida">Photo added. Whenever you are ready, tap the start button to finish.</string>
+    <string name="welcome_como_anadir_foto">How would you like to add the photo?</string>
+    <string name="welcome_hola">Hello! I\'m Sanbot. Let\'s set up your profile.</string>
+    <string name="welcome_pide_nombre">Tap the microphone button and tell me your name.</string>
+    <string name="welcome_pide_foto">Perfect, %1$s. Now I need a photo of you. Tap the camera or gallery button.</string>
+    <string name="welcome_falta_nombre_toast">Please type or say your name</string>
+    <string name="welcome_falta_nombre">I don\'t have your name yet. Tap the microphone and tell me.</string>
+    <string name="welcome_falta_foto_toast">Please take or choose a photo</string>
+    <string name="welcome_falta_foto">I still need your photo. Tap the camera or gallery button.</string>
+    <string name="welcome_todo_listo">All set, %1$s! Welcome to the app.</string>
+    <string name="foto_usar_camara">Use camera</string>
+    <string name="foto_elegir_galeria">Choose from gallery</string>
+    <string name="foto_error_crear">Could not create the file</string>
+    <string name="foto_error_copiar">Could not copy the image</string>
+    <string name="permiso_denegado">Permission denied</string>
+
+    <!-- Settings -->
+    <string name="ajustes_idioma">Language / Idioma</string>
+    <string name="titulo_ajustes">Settings</string>
+    <string name="ajustes_foto_actualizada">I have updated your profile photo.</string>
+    <string name="ajustes_guardados_toast">Settings saved</string>
+    <string name="ajustes_guardados">I have saved all your changes.</string>
+    <string name="ajustes_permiso_titulo">Permission needed</string>
+    <string name="ajustes_permiso_brillo">To change the screen brightness we need permission to modify system settings.</string>
+    <string name="ajustes_conceder">Allow</string>
+    <string name="ajustes_borrar_cuenta_titulo">⚠️ Delete account</string>
+    <string name="ajustes_borrar_cuenta_mensaje">Are you sure you want to delete your account and all your data?\n\nThis cannot be undone.</string>
+    <string name="ajustes_borrar">Delete</string>
+
+    <!-- Alarms / pop-ups -->
+    <string name="canal_alarmas_nombre">Activity alerts</string>
+    <string name="canal_alarmas_descripcion">Channel for the robot\'s alarms</string>
+    <string name="popup_act_atencion">Attention! It\'s time for: %1$s</string>
+    <string name="popup_act_es_hora">Time for %1$s!</string>
+    <string name="popup_act_duracion">Estimated time: %1$d min</string>
+    <string name="popup_act_pospuesta_voz">All right, I\'ll remind you in 30 minutes.</string>
+    <string name="popup_act_pospuesta_toast">Activity snoozed for 30 minutes</string>
+    <string name="titulo_recordatorio">Reminder</string>
+    <string name="popup_rec_tienes">You have a reminder: %1$s</string>
+    <string name="popup_rec_sin_descripcion">No further details.</string>
+
+    <!-- Assistant (wizard) instructions -->
+    <string name="wiz_instr_tipo">What kind of activity is it? For example, medication or a walk.</string>
+    <string name="wiz_instr_descripcion">Can you give me more details?</string>
+    <string name="wiz_instr_titulo">What should we call the reminder?</string>
+    <string name="wiz_instr_hora">At what time?</string>
+    <string name="wiz_instr_fecha">For which date?</string>
+    <string name="wiz_instr_dias">Which days of the week?</string>
+    <string name="wiz_instr_anticipacion">How many minutes beforehand should I warn you?</string>
+    <string name="wiz_instr_confirmacion">I wrote down \'%1$s\'. Is that right? Tap CONFIRM to save, or REPEAT to try again.</string>
+    <string name="wiz_instr_resumen">All done. %1$s. Shall we save it, or would you like to change something?</string>
+    <string name="wiz_instr_eleccion">Which field would you like to change?</string>
+    <string name="wiz_instr_toca_cabeza">Touch my head when you are ready.</string>
+
+    <string name="wiz_btn_repetir">REPEAT</string>
+    <string name="wiz_btn_confirmar">CONFIRM</string>
+    <string name="wiz_btn_no_cambiar">no, change</string>
+    <string name="wiz_btn_si_guardar">yes, save</string>
+    <string name="wiz_btn_volver">BACK</string>
+    <string name="wiz_btn_cancelar">CANCEL</string>
+    <string name="wiz_btn_anterior">BACK</string>
+    <string name="wiz_btn_siguiente">NEXT</string>
+
+    <!-- Activities -->
+    <string name="titulo_actividades">Activities</string>
+    <string name="act_instr_desc_medicacion">Which medicine do you need to take? For example: \'Paracetamol\'.</string>
+    <string name="act_instr_desc_comer">What are you having today? For example: \'Vegetable soup\'.</string>
+    <string name="act_instr_desc_llamada">Who are you going to call? For example: \'My daughter Mary\'.</string>
+    <string name="act_instr_desc_paseo">Where are you going for your walk? For example: \'To the park\'.</string>
+    <string name="act_instr_desc_otros">What details would you like to add? Touch my head.</string>
+    <string name="act_instr_dinamica">The activity type is %1$s. Would you like to change anything, or \'%2$s\' now?</string>
+    <string name="act_tipo_no_entendido">I didn\'t catch the type. Try: medication or walk.</string>
+    <string name="act_hora_no_entendida">Tell me the time, for example: half past ten.</string>
+    <string name="act_dias_no_entendidos">Tell me the days, for example: Mondays and Thursdays.</string>
+    <string name="act_creada">Well done! You have created the activity.</string>
+    <string name="act_editada">Well done! You have updated the activity.</string>
+    <string name="act_selecciona_dia">Choose at least one day.</string>
+    <string name="act_solapamiento_titulo">Overlap</string>
+    <string name="act_solapamiento_mensaje">There is already another activity at that time. Save anyway?</string>
+    <string name="act_eliminar_mensaje">Delete this activity?</string>
+    <string name="act_resumen_voz">%1$s activity at %2$s</string>
+    <string name="act_resumen_voz_detalles">%1$s activity at %2$s, details: %3$s</string>
+    <string name="act_sin_detalles">(NO DETAILS)</string>
+    <string name="act_dialogo_editar">EDIT ACTIVITY</string>
+    <string name="act_label_info_adicional">Extra information</string>
+    <string name="act_label_medicamento">Which medicine is it?</string>
+    <string name="act_label_comer">What are you going to eat?</string>
+    <string name="act_label_llamar">Who are you going to call?</string>
+    <string name="act_label_paseo">Where are you going?</string>
+    <string name="act_det_medicamento">Medicine:</string>
+    <string name="act_det_comida">Meal:</string>
+    <string name="act_det_llamar_a">Call:</string>
+    <string name="act_det_lugar_paseo">Walk destination:</string>
+    <string name="act_det_detalles">Details:</string>
+    <string name="pasos_contador">STEP %1$d OF %2$d</string>
+    <string name="pasos_fin_actividad">FINISH ACTIVITY</string>
+    <string name="pasos_completada">Very good! You have completed the activity. Excellent work!</string>
+    <string name="dias_todos">EVERY DAY</string>
+    <string-array name="dias_abrev">
+        <item>MON</item>
+        <item>TUE</item>
+        <item>WED</item>
+        <item>THU</item>
+        <item>FRI</item>
+        <item>SAT</item>
+        <item>SUN</item>
+    </string-array>
+</resources>

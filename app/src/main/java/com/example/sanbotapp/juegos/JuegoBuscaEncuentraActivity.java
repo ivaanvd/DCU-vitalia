@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.example.sanbotapp.BaseActivity;
 import com.example.sanbotapp.R;
-import com.qihancloud.opensdk.function.beans.LED;
+import com.example.sanbotapp.util.RobotLed;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -68,8 +68,8 @@ public class JuegoBuscaEncuentraActivity extends BaseActivity {
 
     private void prepararTablero() {
         // Fase 1: memorización → el robot NO desvela qué buscar todavía
-        tvIndicacionRobot.setText("¡Atento a los iconos! Fíjate bien dónde están...");
-        tvMensajeAuxiliar.setText("MEMORIZA LA POSICIÓN DE LOS ICONOS");
+        tvIndicacionRobot.setText(R.string.busca_atento);
+        tvMensajeAuxiliar.setText(R.string.busca_memoriza);
         tvMensajeAuxiliar.setTextColor(Color.parseColor("#5A5A5A"));
 
         List<Integer> iconos = new ArrayList<>();
@@ -102,8 +102,8 @@ public class JuegoBuscaEncuentraActivity extends BaseActivity {
         juegoActivo = false;
         handler.postDelayed(() -> {
             ocultarIconos();
-            tvIndicacionRobot.setText("Uy, qué cabeza de hojalata... ¡He perdido la rueda de configuración! ¿La encuentras?");
-            hablarOSimular("Uy, qué cabeza de hojalata... ¡He perdido la rueda de configuración! ¿La encuentras?");
+            tvIndicacionRobot.setText(R.string.busca_consigna);
+            hablarOSimular(getString(R.string.busca_consigna));
 
             habilitarBotonesNoFallados();
 
@@ -121,7 +121,7 @@ public class JuegoBuscaEncuentraActivity extends BaseActivity {
             public void run() {
                 if (juegoActivo) {
                     long segundos = (System.currentTimeMillis() - tiempoInicioMs) / 1000;
-                    tvCronometro.setText("Tiempo: " + segundos + "s");
+                    tvCronometro.setText(getString(R.string.busca_tiempo, segundos));
                     cronoHandler.postDelayed(this, 1000); // Se ejecuta cada segundo
                 }
             }
@@ -177,12 +177,12 @@ public class JuegoBuscaEncuentraActivity extends BaseActivity {
                 botonPulsado.setForeground(null);
 
                 gestionarFeedbackHardware("ACIERTO");
-                tvMensajeAuxiliar.setText("¡MUY BIEN! ESTE ERA EL ICONO CORRECTO");
+                tvMensajeAuxiliar.setText(R.string.busca_correcto);
                 tvMensajeAuxiliar.setTextColor(Color.parseColor("#198754"));
                 mostrarTodosLosIconosReales();
 
                 handler.postDelayed(() -> {
-                    apagarLed(LED.PART_ALL);
+                    apagarLed(RobotLed.PART_ALL);
                     Intent intent = new Intent(this, FinBuscaEncuentraActivity.class);
                     intent.putExtra("SEGUNDOS", segundos);
                     startActivity(intent);
@@ -197,7 +197,7 @@ public class JuegoBuscaEncuentraActivity extends BaseActivity {
                 botonPulsado.setForeground(null);
 
                 gestionarFeedbackHardware("FALLO");
-                hablarOSimular("Ese no es el icono que busco. Sigue buscando.");
+                hablarOSimular(getString(R.string.busca_error));
             }
         };
 

@@ -1,0 +1,8 @@
+{
+  "preguntas": [
+    { "texto": "The early bird catches the...", "opciones": ["Worm", "Train"], "correcta": 1 },
+    { "texto": "A bird in the hand is worth two in the...", "opciones": ["Nest", "Bush"], "correcta": 2 },
+    { "texto": "Every cloud has a silver...", "opciones": ["Lining", "Spoon"], "correcta": 1 },
+    { "texto": "Don't look a gift horse in the...", "opciones": ["Eye", "Mouth"], "correcta": 2 }
+  ]
+}

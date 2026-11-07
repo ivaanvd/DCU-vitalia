@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.example.sanbotapp.actividad.ActividadUIUtils;
 import com.example.sanbotapp.util.AppConstants;
+import com.example.sanbotapp.util.DateTimeUtils;
 import com.example.sanbotapp.util.PhotoHelper;
 import com.example.sanbotapp.actividad.Actividad;
 import com.example.sanbotapp.actividad.ActividadRepository;
@@ -48,7 +49,7 @@ public class MainActivity extends BaseActivity {
     private TextView     tvNombreAvatar;
     // Nombre del usuario
     private SharedPreferences prefs;
-    private String nombreUsuario = "amigo/a";
+    private String nombreUsuario = "";
     // Comprobador de si hay actividades para activar
     private boolean yaHeSaludado = false;
 
@@ -114,7 +115,7 @@ public class MainActivity extends BaseActivity {
      */
     @Override
     protected void onRobotServiceReady() {
-        nombreUsuario = prefs.getString(AppConstants.KEY_NOMBRE, "amigo/a");
+        nombreUsuario = prefs.getString(AppConstants.KEY_NOMBRE, getString(R.string.nombre_por_defecto));
         
         // Saludo solo la primera vez que se entra en la app para no ser repetitivo
         if (!yaHeSaludado) {
@@ -123,7 +124,7 @@ public class MainActivity extends BaseActivity {
             
             if (isNewUser) {
                 // Mensaje específico tras registro
-                hablarOSimular("Bienvenido " + nombreUsuario + " a Vitalia, aquí puedes gestionar toda tu aplicación.");
+                hablarOSimular(getString(R.string.main_bienvenida_nuevo, nombreUsuario));
             } else {
                 // Saludo estándar contextual
                 gestionarFeedbackHardware("SALUDO");
@@ -143,11 +144,11 @@ public class MainActivity extends BaseActivity {
         int hora = java.util.Calendar.getInstance().get(java.util.Calendar.HOUR_OF_DAY);
 
         if (hora >= 6 && hora < 12) {
-            return "Buenos días, " + nombre + ". Espero que hayas descansado bien.";
+            return getString(R.string.main_saludo_manana, nombre);
         } else if (hora >= 12 && hora < 20) {
-            return "Buenas tardes, " + nombre + ". Espero que hayas tenido un buen dia";
+            return getString(R.string.main_saludo_tarde, nombre);
         } else {
-            return "Buenas noches, " + nombre + ". Pronto tocará ir a la cama.";
+            return getString(R.string.main_saludo_noche, nombre);
         }
     }
 
@@ -190,8 +191,8 @@ public class MainActivity extends BaseActivity {
      * Post: Se cargan los datos guardados (nombre y foto del usuario)
      */
     private void cargarDatosGuardados() {
-        nombreUsuario = prefs.getString(AppConstants.KEY_NOMBRE, "amigo/a");
-        tvSaludo.setText("¡Hola, " + nombreUsuario + "!");
+        nombreUsuario = prefs.getString(AppConstants.KEY_NOMBRE, getString(R.string.nombre_por_defecto));
+        tvSaludo.setText(getString(R.string.main_hola_nombre, nombreUsuario));
         tvNombreAvatar.setText(nombreUsuario);
 
         String fotoPa = prefs.getString(AppConstants.KEY_FOTO_PATH, null);
@@ -200,13 +201,12 @@ public class MainActivity extends BaseActivity {
 
     /*
      * Pre: Se ejecuta al crear la pantalla principal
-     * Post: Se muestra la fecha actual en el formato "EEEE, d 'de' MMMM 'de' yyyy" (ej. LUNES, 23 DE MARZO DE 2026)
+     * Post: Se muestra la fecha actual en el idioma de la app (ej. LUNES, 23 de marzo de 2026 / MONDAY, 23 March 2026)
      */
     private void mostrarFechaActual() {
-        SimpleDateFormat sdfDia   = new SimpleDateFormat("EEEE", new Locale("es", "ES"));
-        SimpleDateFormat sdfFecha = new SimpleDateFormat("d 'de' MMMM 'de' yyyy", new Locale("es", "ES"));
-        Date hoy = new Date();
-        tvFechaHoy.setText(sdfDia.format(hoy).toUpperCase() + ", " + sdfFecha.format(hoy));
+        long hoy = System.currentTimeMillis();
+        String dia = DateTimeUtils.formatear(this, "EEEE", hoy).toUpperCase(DateTimeUtils.localeApp(this));
+        tvFechaHoy.setText(getString(R.string.main_fecha_hoy, dia, DateTimeUtils.formatear(this, "dMMMMyyyy", hoy)));
     }
 
     /*
@@ -243,7 +243,7 @@ public class MainActivity extends BaseActivity {
         ((TextView) card.findViewById(R.id.tvHoraCard)).setText(a.getHoraFormateada());
         ((ImageView) card.findViewById(R.id.ivIconoCard))
                 .setImageResource(a.getIconoRes());
-        ((TextView) card.findViewById(R.id.tvLabelCard)).setText(a.getTipoLabel());
+        ((TextView) card.findViewById(R.id.tvLabelCard)).setText(a.getTipoLabel(this));
 
         GradientDrawable bg = new GradientDrawable();
         bg.setShape(GradientDrawable.RECTANGLE);
@@ -292,22 +292,22 @@ public class MainActivity extends BaseActivity {
     private void configurarBotones() {
 
         btnActividades.setOnClickListener(v -> {
-            hablarOSimular("Abriendo tus actividades.");
+            hablarOSimular(getString(R.string.main_abriendo_actividades));
             startActivity(new Intent(this, ActividadesActivity.class));
         });
 
         btnRecordatorios.setOnClickListener(v -> {
-            hablarOSimular("Vamos a ver tus recordatorios.");
+            hablarOSimular(getString(R.string.main_abriendo_recordatorios));
             startActivity(new Intent(this, RecordatoriosActivity.class));
         });
 
         btnJuegos.setOnClickListener(v -> {
-            hablarOSimular("¡Hora de jugar!");
+            hablarOSimular(getString(R.string.main_abriendo_juegos));
             startActivity(new Intent(this, com.example.sanbotapp.juegos.JuegosActivity.class));
         });
 
         btnAjustes.setOnClickListener(v -> {
-            hablarOSimular("Abriendo ajustes.");
+            hablarOSimular(getString(R.string.main_abriendo_ajustes));
             startActivity(new Intent(this, com.example.sanbotapp.ajustes.AjustesActivity.class));
         });
     }

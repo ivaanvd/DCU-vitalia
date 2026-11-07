@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tipos de actividad -->
+    <string name="tipo_medicacion">MEDICACIÓN</string>
+    <string name="tipo_beber_agua">BEBER AGUA</string>
+    <string name="tipo_comer">COMER</string>
+    <string name="tipo_paseo_ejercicio">PASEO/EJERCICIO</string>
+    <string name="tipo_juegos">JUEGOS</string>
+    <string name="tipo_aseo">ASEO</string>
+    <string name="tipo_llamada_familiar">LLAMADA FAMILIAR</string>
+    <string name="tipo_ir_dormir">IR A DORMIR</string>
+    <string name="tipo_otros">OTRO</string>
+
+    <!-- Pasos guiados por tipo de actividad -->
+    <string name="paso_medicacion_1">Lávate las manos</string>
+    <string name="paso_medicacion_2">Ve a por la medicación</string>
+    <string name="paso_medicacion_3">Toma tu medicación</string>
+    <string name="paso_agua_1">Ve a por un vaso de agua</string>
+    <string name="paso_agua_2">Bebe despacio, sin prisa</string>
+    <string name="paso_agua_3">Recuerda hidratarte cada hora</string>
+    <string name="paso_comer_1">Prepara la mesa con calma</string>
+    <string name="paso_comer_2">Sirve tu comida</string>
+    <string name="paso_comer_3">Come despacio y mastica bien</string>
+    <string name="paso_comer_4">Bebe agua durante la comida</string>
+    <string name="paso_ejercicio_1">Siéntate en una silla</string>
+    <string name="paso_ejercicio_2">Respira profundo</string>
+    <string name="paso_ejercicio_3">Gira el cuello suavemente</string>
+    <string name="paso_ejercicio_4">Mueve los codos</string>
+    <string name="paso_ejercicio_5">Levanta los brazos</string>
+    <string name="paso_juegos_1">Busca un lugar tranquilo</string>
+    <string name="paso_juegos_2">Realiza el ejercicio propuesto</string>
+    <string name="paso_juegos_3">Descansa un momento</string>
+    <string name="paso_aseo_1">Prepara lo que necesitas</string>
+    <string name="paso_aseo_2">Realiza tu higiene personal</string>
+    <string name="paso_aseo_3">Recoge y deja todo ordenado</string>
+    <string name="paso_llamada_1">Piensa en alguien a quien llamar</string>
+    <string name="paso_llamada_2">Marca el número</string>
+    <string name="paso_llamada_3">Saluda y pregunta cómo están</string>
+    <string name="paso_dormir_1">Apaga las luces de la casa</string>
+    <string name="paso_dormir_2">Prepara tu ropa para mañana</string>
+    <string name="paso_dormir_3">Ponte cómodo en la cama</string>
+    <string name="paso_dormir_4">Respira profundo y descansa</string>
+    <string name="paso_otros_1">Realiza la actividad con calma</string>
+
+    <!-- Acciones comunes -->
+    <string name="accion_anadir">Añadir</string>
+    <string name="accion_guardar">Guardar</string>
+    <string name="accion_eliminar">Eliminar</string>
+    <string name="accion_cancelar">Cancelar</string>
+    <string name="accion_si">Sí</string>
+    <string name="accion_no">No</string>
+
+    <!-- Respuestas habladas comunes del asistente -->
+    <string name="voz_entendido">Entendido.</string>
+    <string name="voz_entendido_guardando">Entendido, guardando…</string>
+    <string name="voz_vale">Vale.</string>
+    <string name="voz_perfecto">Perfecto.</string>
+    <string name="voz_perfecto_guardando">¡Perfecto! Guardando…</string>
+    <string name="voz_de_acuerdo">De acuerdo.</string>
+    <string name="voz_de_acuerdo_otra_vez">De acuerdo, dímelo otra vez.</string>
+    <string name="voz_de_acuerdo_que_cambiar">De acuerdo. ¿Qué quieres cambiar?</string>
+    <string name="voz_lo_siento_otra_vez">Vaya, lo siento. Intentémoslo de nuevo.</string>
+    <string name="voz_lo_siento_dimelo_otra_vez">Lo siento, dímelo otra vez.</string>
+    <string name="voz_que_quieres_cambiar">¿Qué quieres cambiar?</string>
+    <string name="voz_cambiamos_titulo">Cambiamos el título.</string>
+    <string name="voz_cambiamos_fecha">Cambiamos la fecha.</string>
+    <string name="voz_vale_la_hora">Vale, la hora.</string>
+    <string name="voz_entendido_la_fecha">Entendido, la fecha.</string>
+    <string name="voz_de_acuerdo_el_aviso">De acuerdo, el aviso.</string>
+    <string name="voz_volvemos_resumen">Volvemos al resumen.</string>
+    <string name="voz_no_puedo_escuchar_aqui">Lo siento, en esta pantalla no puedo escucharte. Por favor, usa los botones de la pantalla.</string>
+    <string name="mic_escuchando">TE ESTOY ESCUCHANDO…</string>
+
+    <plurals name="minutos_n">
+        <item quantity="one">%d minuto</item>
+        <item quantity="other">%d minutos</item>
+    </plurals>
+    <plurals name="minutos_antes">
+        <item quantity="one">%d minuto antes</item>
+        <item quantity="other">%d minutos antes</item>
+    </plurals>
+
+    <!-- Recordatorios -->
+    <string name="titulo_recordatorios">Recordatorios</string>
+    <string name="rec_sin_aviso_previo">Sin aviso previo</string>
+    <plurals name="rec_avisar_minutos_antes">
+        <item quantity="one">Avisar %d minuto antes</item>
+        <item quantity="other">Avisar %d minutos antes</item>
+    </plurals>
+    <string name="rec_sin_titulo">Sin título</string>
+    <string name="rec_sin_titulo_paren">(Sin título)</string>
+    <string name="rec_instr_crear">Vamos a crear un recordatorio. ¿Qué título le ponemos? Toca mi cabeza.</string>
+    <string name="rec_instr_dinamica">El recordatorio es \'%1$s\'. ¿Quieres cambiar algo más o prefieres \'%2$s\' ya? Toca mi cabeza.</string>
+    <string name="rec_hora_no_entendida">No te entendí bien la hora. Inténtalo de nuevo.</string>
+    <string name="rec_fecha_no_entendida">No entendí la fecha. Dime por ejemplo: doce de octubre.</string>
+    <string name="rec_numero_no_entendido">No entendí el número. Intenta de nuevo.</string>
+    <string name="rec_campo_no_entendido">No te entendí. Di por ejemplo: título o hora.</string>
+    <string name="rec_pide_titulo">Por favor, dime un título para el recordatorio.</string>
+    <string name="rec_introduce_titulo">Introduce un título</string>
+    <string name="rec_por_favor_introduce_titulo">Por favor, introduce un título.</string>
+    <string name="rec_creado">¡Enhorabuena! Has creado el recordatorio correctamente.</string>
+    <string name="rec_editado">¡Enhorabuena! Has editado el recordatorio correctamente.</string>
+    <string name="rec_este_recordatorio">este recordatorio</string>
+    <string name="rec_eliminar_titulo">Eliminar recordatorio</string>
+    <string name="rec_eliminar_mensaje">¿Seguro que quieres eliminar \"%1$s\"?</string>
+    <string name="rec_resumen_voz">Recordatorio: %1$s a las %2$s</string>
+
+    <!-- Pantalla principal -->
+    <string name="nombre_por_defecto">amigo/a</string>
+    <string name="nombre_usuario_por_defecto">Usuario</string>
+    <string name="main_bienvenida_nuevo">Bienvenido %1$s a Vitalia, aquí puedes gestionar toda tu aplicación.</string>
+    <string name="main_saludo_manana">Buenos días, %1$s. Espero que hayas descansado bien.</string>
+    <string name="main_saludo_tarde">Buenas tardes, %1$s. Espero que hayas tenido un buen día.</string>
+    <string name="main_saludo_noche">Buenas noches, %1$s. Pronto tocará ir a la cama.</string>
+    <string name="main_hola_nombre">¡Hola, %1$s!</string>
+    <string name="main_fecha_hoy">%1$s, %2$s</string>
+    <string name="main_abriendo_actividades">Abriendo tus actividades.</string>
+    <string name="main_abriendo_recordatorios">Vamos a ver tus recordatorios.</string>
+    <string name="main_abriendo_juegos">¡Hora de jugar!</string>
+    <string name="main_abriendo_ajustes">Abriendo ajustes.</string>
+
+    <!-- Bienvenida / registro -->
+    <string name="welcome_foto_anadida">Foto añadida. Cuando quieras, toca el botón comenzar para terminar.</string>
+    <string name="welcome_como_anadir_foto">¿Cómo quieres añadir la foto?</string>
+    <string name="welcome_hola">¡Hola! Soy Sanbot. Vamos a configurar tu perfil.</string>
+    <string name="welcome_pide_nombre">Pulsa el botón del micrófono y dime tu nombre.</string>
+    <string name="welcome_pide_foto">Perfecto, %1$s. Ahora necesito una foto tuya. Toca el botón de cámara o galería.</string>
+    <string name="welcome_falta_nombre_toast">Por favor, ingresa o captura tu nombre</string>
+    <string name="welcome_falta_nombre">Aún no tengo tu nombre. Pulsa el micrófono y dímelo.</string>
+    <string name="welcome_falta_foto_toast">Por favor, captura o selecciona una foto</string>
+    <string name="welcome_falta_foto">Todavía necesito tu foto. Toca el botón de cámara o galería.</string>
+    <string name="welcome_todo_listo">¡Todo listo, %1$s! Bienvenido a la aplicación.</string>
+    <string name="foto_usar_camara">Usar Cámara</string>
+    <string name="foto_elegir_galeria">Elegir de Galería</string>
+    <string name="foto_error_crear">Error creando archivo</string>
+    <string name="foto_error_copiar">Error al copiar la imagen</string>
+    <string name="permiso_denegado">Permiso denegado</string>
+
+    <!-- Ajustes -->
+    <string name="ajustes_idioma">Idioma / Language</string>
+    <string name="idioma_es" translatable="false">Español</string>
+    <string name="idioma_en" translatable="false">English</string>
+    <string name="titulo_ajustes">Ajustes</string>
+    <string name="ajustes_foto_actualizada">He actualizado tu foto de perfil.</string>
+    <string name="ajustes_guardados_toast">Ajustes guardados correctamente</string>
+    <string name="ajustes_guardados">He guardado todos tus cambios.</string>
+    <string name="ajustes_permiso_titulo">Permiso necesario</string>
+    <string name="ajustes_permiso_brillo">Para cambiar el brillo de la pantalla necesitamos permiso de modificar ajustes del sistema.</string>
+    <string name="ajustes_conceder">Conceder</string>
+    <string name="ajustes_borrar_cuenta_titulo">⚠️ Borrar Cuenta</string>
+    <string name="ajustes_borrar_cuenta_mensaje">¿Estás seguro de que quieres borrar tu cuenta y todos tus datos?\n\nEsta acción no se puede deshacer.</string>
+    <string name="ajustes_borrar">Borrar</string>
+
+    <!-- Alarmas / avisos emergentes -->
+    <string name="canal_alarmas_nombre">Alertas de Actividades</string>
+    <string name="canal_alarmas_descripcion">Canal para las alarmas del robot</string>
+    <string name="popup_act_atencion">¡Atención! Es hora de %1$s</string>
+    <string name="popup_act_es_hora">¡Es hora de %1$s!</string>
+    <string name="popup_act_duracion">Duración estimada: %1$d min</string>
+    <string name="popup_act_pospuesta_voz">De acuerdo, te recuerdo en 30 minutos.</string>
+    <string name="popup_act_pospuesta_toast">Actividad pospuesta 30 minutos</string>
+    <string name="titulo_recordatorio">Recordatorio</string>
+    <string name="popup_rec_tienes">Tienes un recordatorio: %1$s</string>
+    <string name="popup_rec_sin_descripcion">Sin descripción adicional.</string>
+
+    <!-- Instrucciones del asistente (wizard) -->
+    <string name="wiz_instr_tipo">¿Qué tipo de actividad es? Por ejemplo, medicación o paseo.</string>
+    <string name="wiz_instr_descripcion">¿Puedes darme más detalles?</string>
+    <string name="wiz_instr_titulo">¿Qué título le ponemos al recordatorio?</string>
+    <string name="wiz_instr_hora">¿A qué hora?</string>
+    <string name="wiz_instr_fecha">¿Para qué fecha?</string>
+    <string name="wiz_instr_dias">¿Qué días de la semana?</string>
+    <string name="wiz_instr_anticipacion">¿Con cuántos minutos de antelación quieres que te avise?</string>
+    <string name="wiz_instr_confirmacion">He anotado \'%1$s\'. ¿Es correcto? Pulsa el botón CONFIRMAR para guardar o REPETIR para volver a intentarlo.</string>
+    <string name="wiz_instr_resumen">He terminado. %1$s. ¿Guardamos o quieres cambiar algo?</string>
+    <string name="wiz_instr_eleccion">¿Qué campo quieres cambiar?</string>
+    <string name="wiz_instr_toca_cabeza">Toca mi cabeza cuando estés listo.</string>
+
+    <string name="wiz_btn_repetir">REPETIR</string>
+    <string name="wiz_btn_confirmar">CONFIRMAR</string>
+    <string name="wiz_btn_no_cambiar">no, cambiar</string>
+    <string name="wiz_btn_si_guardar">sí, guardar</string>
+    <string name="wiz_btn_volver">VOLVER</string>
+    <string name="wiz_btn_cancelar">CANCELAR</string>
+    <string name="wiz_btn_anterior">ANTERIOR</string>
+    <string name="wiz_btn_siguiente">SIGUIENTE</string>
+
+    <!-- Actividades -->
+    <string name="titulo_actividades">Actividades</string>
+    <string name="act_instr_desc_medicacion">¿Qué medicina te toca tomar? Por ejemplo: \'Paracetamol\'.</string>
+    <string name="act_instr_desc_comer">¿Qué vas a comer hoy? Por ejemplo: \'Sopa de verduras\'.</string>
+    <string name="act_instr_desc_llamada">¿A quién vas a llamar? Por ejemplo: \'A mi hija María\'.</string>
+    <string name="act_instr_desc_paseo">¿A dónde vas a ir a caminar? Por ejemplo: \'Al parque\'.</string>
+    <string name="act_instr_desc_otros">¿Qué detalles quieres añadir? Toca mi cabeza.</string>
+    <string name="act_instr_dinamica">La actividad es de tipo %1$s. ¿Quieres cambiar algo o \'%2$s\' ya?</string>
+    <string name="act_tipo_no_entendido">No te entendí el tipo. Prueba con: Medicación o Paseo.</string>
+    <string name="act_hora_no_entendida">Dime la hora, por ejemplo: a las diez y media.</string>
+    <string name="act_dias_no_entendidos">Dime los días, por ejemplo: los lunes y jueves.</string>
+    <string name="act_creada">¡Enhorabuena! Has creado la actividad correctamente.</string>
+    <string name="act_editada">¡Enhorabuena! Has editado la actividad correctamente.</string>
+    <string name="act_selecciona_dia">Selecciona al menos un día.</string>
+    <string name="act_solapamiento_titulo">Solapamiento</string>
+    <string name="act_solapamiento_mensaje">Ya hay otra actividad. ¿Guardar?</string>
+    <string name="act_eliminar_mensaje">¿Borrar esta actividad?</string>
+    <string name="act_resumen_voz">Actividad de %1$s a las %2$s</string>
+    <string name="act_resumen_voz_detalles">Actividad de %1$s a las %2$s, con detalles: %3$s</string>
+    <string name="act_sin_detalles">(SIN DETALLES)</string>
+    <string name="act_dialogo_editar">EDITAR ACTIVIDAD</string>
+    <string name="act_label_info_adicional">Información adicional</string>
+    <string name="act_label_medicamento">¿Qué medicamento es?</string>
+    <string name="act_label_comer">¿Qué vas a comer?</string>
+    <string name="act_label_llamar">¿A quién vas a llamar?</string>
+    <string name="act_label_paseo">¿A dónde vas?</string>
+    <string name="act_det_medicamento">Medicamento:</string>
+    <string name="act_det_comida">Comida:</string>
+    <string name="act_det_llamar_a">Llamar a:</string>
+    <string name="act_det_lugar_paseo">Lugar del paseo:</string>
+    <string name="act_det_detalles">Detalles:</string>
+    <string name="pasos_contador">PASO %1$d DE %2$d</string>
+    <string name="pasos_fin_actividad">FIN ACTIVIDAD</string>
+    <string name="pasos_completada">¡Muy bien! Has completado la actividad. ¡Excelente trabajo!</string>
+    <string name="dias_todos">TODOS LOS DÍAS</string>
+    <string-array name="dias_abrev">
+        <item>LUN</item>
+        <item>MAR</item>
+        <item>MIÉ</item>
+        <item>JUE</item>
+        <item>VIE</item>
+        <item>SÁB</item>
+        <item>DOM</item>
+    </string-array>
+</resources>

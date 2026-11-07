@@ -48,6 +48,7 @@ public class ActividadDialogManager {
 
     public void mostrarDialogoAnadir(final Actividad existente) {
         horaSeleccionada = (existente != null) ? existente.getHoraMinutos() : (9 * 60);
+        activity.setHoraSeleccionada(horaSeleccionada);
         diasSeleccionados = activity.getDiasSeleccionados();
         diasSeleccionados.clear();
         if (existente != null && existente.getDiasSemana() != null) {
@@ -60,7 +61,7 @@ public class ActividadDialogManager {
         final EditText etDesc = dv.findViewById(R.id.etDescripcionActividad);
         final TextView tvTitulo = dv.findViewById(R.id.tvTituloDialogActividad);
 
-        tvTitulo.setText(existente != null ? "EDITAR ACTIVIDAD" : "AÑADIR ACTIVIDAD");
+        tvTitulo.setText(existente != null ? R.string.act_dialogo_editar : R.string.ui_anadir_actividad);
         if (existente != null) etDesc.setText(existente.getDescripcion());
         actualizarDisplayHora(tvHora, horaSeleccionada);
 
@@ -193,11 +194,11 @@ public class ActividadDialogManager {
     private void actualizarCampoDinamico(View dv, String tipoInterno) {
         TextView tvLabel = dv.findViewById(R.id.tvLabelDetalleDinamico);
         if (tvLabel == null) return;
-        String nuevoLabel = "Información adicional";
-        if (Actividad.TIPO_MEDICACION.equals(tipoInterno)) nuevoLabel = "¿Qué medicamento es?";
-        else if (Actividad.TIPO_COMER.equals(tipoInterno)) nuevoLabel = "¿Qué vas a comer?";
-        else if (Actividad.TIPO_LLAMADA_FAMILIAR.equals(tipoInterno)) nuevoLabel = "¿A quién vas a llamar?";
-        else if (Actividad.TIPO_PASEO_EJERCICIO.equals(tipoInterno)) nuevoLabel = "¿A dónde vas?";
+        String nuevoLabel = activity.getString(R.string.act_label_info_adicional);
+        if (Actividad.TIPO_MEDICACION.equals(tipoInterno)) nuevoLabel = activity.getString(R.string.act_label_medicamento);
+        else if (Actividad.TIPO_COMER.equals(tipoInterno)) nuevoLabel = activity.getString(R.string.act_label_comer);
+        else if (Actividad.TIPO_LLAMADA_FAMILIAR.equals(tipoInterno)) nuevoLabel = activity.getString(R.string.act_label_llamar);
+        else if (Actividad.TIPO_PASEO_EJERCICIO.equals(tipoInterno)) nuevoLabel = activity.getString(R.string.act_label_paseo);
         tvLabel.setText(nuevoLabel);
     }
 

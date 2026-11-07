@@ -95,8 +95,8 @@ public class Actividad {
     }
 
     /** Devuelve la etiqueta visible para el usuario correspondiente al tipo. */
-    public String getTipoLabel() {
-        return TipoActividad.fromString(tipo).getLabel();
+    public String getTipoLabel(android.content.Context context) {
+        return TipoActividad.fromString(tipo).getLabel(context);
     }
 
     /**

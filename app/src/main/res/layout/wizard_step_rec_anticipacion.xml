@@ -10,7 +10,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="PASO 4: Avisar antes"
+        android:text="@string/ui_paso_4_avisar_antes"
         android:textSize="22sp"
         android:textStyle="bold"
         android:textColor="#1C1C1E"
@@ -40,7 +40,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="10 min"
+            android:text="@string/ui_10_min"
             android:textSize="28sp"
             android:textColor="#1C1C1E"
             android:textStyle="bold"

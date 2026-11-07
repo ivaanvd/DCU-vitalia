@@ -32,17 +32,17 @@ public class ActividadUIUtils {
         
         // Hora y Tipo
         ((TextView) dv.findViewById(R.id.tvHoraDetAct)).setText(a.getHoraFormateada());
-        ((TextView) dv.findViewById(R.id.tvTipoDetAct)).setText(a.getTipoLabel());
+        ((TextView) dv.findViewById(R.id.tvTipoDetAct)).setText(a.getTipoLabel(dv.getContext()));
         
         // Etiqueta dinámica de descripción
         TextView tvLabelDesc = dv.findViewById(R.id.tvLabelDescDetAct);
         if (tvLabelDesc != null) {
             String tipo = a.getTipo();
-            if (Actividad.TIPO_MEDICACION.equals(tipo)) tvLabelDesc.setText("Medicamento:");
-            else if (Actividad.TIPO_COMER.equals(tipo)) tvLabelDesc.setText("Comida:");
-            else if (Actividad.TIPO_LLAMADA_FAMILIAR.equals(tipo)) tvLabelDesc.setText("Llamar a:");
-            else if (Actividad.TIPO_PASEO_EJERCICIO.equals(tipo)) tvLabelDesc.setText("Lugar del paseo:");
-            else tvLabelDesc.setText("Detalles:");
+            if (Actividad.TIPO_MEDICACION.equals(tipo)) tvLabelDesc.setText(R.string.act_det_medicamento);
+            else if (Actividad.TIPO_COMER.equals(tipo)) tvLabelDesc.setText(R.string.act_det_comida);
+            else if (Actividad.TIPO_LLAMADA_FAMILIAR.equals(tipo)) tvLabelDesc.setText(R.string.act_det_llamar_a);
+            else if (Actividad.TIPO_PASEO_EJERCICIO.equals(tipo)) tvLabelDesc.setText(R.string.act_det_lugar_paseo);
+            else tvLabelDesc.setText(R.string.act_det_detalles);
         }
 
         // Descripción
@@ -56,11 +56,11 @@ public class ActividadUIUtils {
             containerDias.setOrientation(LinearLayout.HORIZONTAL);
             containerDias.setGravity(android.view.Gravity.CENTER);
             List<Integer> dias = a.getDiasSemana();
-            String[] nombresDias = {"LUN", "MAR", "MIÉ", "JUE", "VIE", "SÁB", "DOM"};
+            String[] nombresDias = activity.getResources().getStringArray(R.array.dias_abrev);
             final int[] VALORES_DIA = {2, 3, 4, 5, 6, 7, 1};
 
             if (dias == null || dias.isEmpty() || dias.size() == 7) {
-                agregarPillDia(activity, containerDias, "TODOS LOS DÍAS");
+                agregarPillDia(activity, containerDias, activity.getString(R.string.dias_todos));
             } else {
                 for (int i = 0; i < VALORES_DIA.length; i++) {
                     if (dias.contains(VALORES_DIA[i])) {

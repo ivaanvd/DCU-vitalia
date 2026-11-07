@@ -40,7 +40,7 @@ public class RecordatorioPopupActivity extends BaseActivity {
             return;
         }
 
-        setupTopBackBanner("Recordatorio");
+        setupTopBackBanner(getString(R.string.titulo_recordatorio));
         renderizar();
         iniciarAlarma();
     }
@@ -69,7 +69,7 @@ public class RecordatorioPopupActivity extends BaseActivity {
     protected void onMainServiceConnected() {
         super.onMainServiceConnected();
         if (recordatorio != null) {
-            hablarOSimular("Tienes un recordatorio: " + recordatorio.getTitulo());
+            hablarOSimular(getString(R.string.popup_rec_tienes, recordatorio.getTitulo()));
         }
     }
 
@@ -79,7 +79,7 @@ public class RecordatorioPopupActivity extends BaseActivity {
         if (recordatorio.getDescripcion() != null && !recordatorio.getDescripcion().isEmpty()) {
             tvDesc.setText(recordatorio.getDescripcion());
         } else {
-            tvDesc.setText("Sin descripción adicional.");
+            tvDesc.setText(R.string.popup_rec_sin_descripcion);
         }
 
         Button btnCerrar = findViewById(R.id.btnPopupCerrarRec);

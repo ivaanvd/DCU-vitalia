@@ -28,7 +28,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="BUSCA Y ENCUENTRA"
+                android:text="@string/ui_busca_y_encuentra"
                 android:textSize="28sp"
                 android:textStyle="bold"
                 android:textColor="#555555" />
@@ -36,7 +36,7 @@
                 android:id="@+id/tvCronometro"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Tiempo: 0s"
+                android:text="@string/ui_tiempo_0s"
                 android:textSize="36sp"
                 android:paddingRight="48dp"
                 android:textStyle="bold"
@@ -46,7 +46,7 @@
                 android:id="@+id/tvEstadoBusca"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="1 DE 1"
+                android:text="@string/ui_1_de_1"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:textColor="#777777" />
@@ -61,7 +61,7 @@
             android:id="@+id/tvMensajeAuxiliarBusca"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="AHORA RECUERDA DÓNDE ESTABA EL ICONO"
+            android:text="@string/ui_ahora_recuerda_donde_estaba_el_icono"
             android:textSize="26sp"
             android:textStyle="bold"
             android:gravity="start"
@@ -86,7 +86,7 @@
                 android:layout_column="0"
                 android:layout_margin="12dp"
                 android:background="@drawable/bg_tipo_normal"
-                android:contentDescription="Tarjeta 1"
+                android:contentDescription="@string/ui_tarjeta_1"
                 android:padding="28dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_otros" />
@@ -100,7 +100,7 @@
                 android:src="@drawable/ic_otros"
                 android:padding="28dp"
                 android:scaleType="fitCenter"
-                android:contentDescription="Tarjeta 2" />
+                android:contentDescription="@string/ui_tarjeta_2" />
 
             <ImageButton
                 android:id="@+id/btnBuscaAjustes"
@@ -111,7 +111,7 @@
                 android:src="@drawable/ic_otros"
                 android:padding="28dp"
                 android:scaleType="fitCenter"
-                android:contentDescription="Tarjeta 3" />
+                android:contentDescription="@string/ui_tarjeta_3" />
 
             <ImageButton
                 android:id="@+id/btnBuscaCalendario"
@@ -122,7 +122,7 @@
                 android:src="@drawable/ic_otros"
                 android:padding="28dp"
                 android:scaleType="fitCenter"
-                android:contentDescription="Tarjeta 4" />
+                android:contentDescription="@string/ui_tarjeta_4" />
 
             <ImageButton
                 android:id="@+id/btnBuscaDormir"
@@ -133,7 +133,7 @@
                 android:src="@drawable/ic_otros"
                 android:padding="28dp"
                 android:scaleType="fitCenter"
-                android:contentDescription="Tarjeta 5" />
+                android:contentDescription="@string/ui_tarjeta_5" />
 
             <ImageButton
                 android:id="@+id/btnBuscaOtros"
@@ -144,7 +144,7 @@
                 android:src="@drawable/ic_otros"
                 android:padding="28dp"
                 android:scaleType="fitCenter"
-                android:contentDescription="Tarjeta 6" />
+                android:contentDescription="@string/ui_tarjeta_6" />
         </GridLayout>
 
         <Space

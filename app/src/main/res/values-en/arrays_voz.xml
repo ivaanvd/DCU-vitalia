@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Voice command keywords (see util/VozComandos).
+    Matched as whole words, case- and accent-insensitive.
+-->
+<resources>
+    <string-array name="voz_si">
+        <item>yes</item>
+        <item>yeah</item>
+        <item>yep</item>
+        <item>correct</item>
+        <item>right</item>
+        <item>okay</item>
+        <item>ok</item>
+        <item>sure</item>
+        <item>that\'s it</item>
+    </string-array>
+    <string-array name="voz_no">
+        <item>no</item>
+        <item>nope</item>
+        <item>change</item>
+        <item>wrong</item>
+        <item>mistake</item>
+        <item>repeat</item>
+    </string-array>
+    <string-array name="voz_guardar">
+        <item>save</item>
+        <item>save it</item>
+    </string-array>
+    <string-array name="voz_confirmar">
+        <item>confirm</item>
+        <item>accept</item>
+        <item>save</item>
+        <item>next</item>
+        <item>add</item>
+    </string-array>
+    <string-array name="voz_cancelar">
+        <item>cancel</item>
+        <item>back</item>
+        <item>go back</item>
+        <item>close</item>
+    </string-array>
+    <string-array name="voz_campo_titulo">
+        <item>title</item>
+        <item>name</item>
+    </string-array>
+    <string-array name="voz_campo_tipo">
+        <item>type</item>
+        <item>kind</item>
+    </string-array>
+    <string-array name="voz_campo_descripcion">
+        <item>description</item>
+        <item>detail</item>
+        <item>details</item>
+    </string-array>
+    <string-array name="voz_campo_hora">
+        <item>time</item>
+        <item>hour</item>
+        <item>when</item>
+    </string-array>
+    <string-array name="voz_campo_fecha">
+        <item>date</item>
+        <item>day</item>
+    </string-array>
+    <string-array name="voz_campo_dias">
+        <item>day</item>
+        <item>days</item>
+    </string-array>
+    <string-array name="voz_campo_aviso">
+        <item>warning</item>
+        <item>notice</item>
+        <item>alert</item>
+        <item>advance</item>
+    </string-array>
+    <string-array name="voz_volver_resumen">
+        <item>summary</item>
+        <item>back</item>
+    </string-array>
+</resources>

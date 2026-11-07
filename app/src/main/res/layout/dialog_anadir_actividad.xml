@@ -18,7 +18,7 @@
             android:id="@+id/tvTituloDialogActividad"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="AÑADIR ACTIVIDAD"
+            android:text="@string/ui_anadir_actividad"
             android:textSize="@dimen/text_size_large"
             android:textStyle="bold"
             android:textColor="#1C1C1E"

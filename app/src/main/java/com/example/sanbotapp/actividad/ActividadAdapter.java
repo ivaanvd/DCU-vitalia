@@ -30,7 +30,7 @@ public class ActividadAdapter {
         View item = LayoutInflater.from(context).inflate(R.layout.item_actividad, parent, false);
         
         ((TextView) item.findViewById(R.id.tvHoraItem)).setText(a.getHoraFormateada());
-        ((TextView) item.findViewById(R.id.tvTipoItem)).setText(a.getTipoLabel());
+        ((TextView) item.findViewById(R.id.tvTipoItem)).setText(a.getTipoLabel(item.getContext()));
         
         ImageView ivIcono = item.findViewById(R.id.ivIconoItem);
         if (ivIcono != null) {

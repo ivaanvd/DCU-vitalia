@@ -10,7 +10,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="PASO 3: ¿Qué día?"
+        android:text="@string/ui_paso_3_que_dia"
         android:textSize="22sp"
         android:textStyle="bold"
         android:textColor="#1C1C1E"
@@ -20,7 +20,7 @@
         android:id="@+id/tvFechaDialogRec"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:text="dd/MM/yyyy"
+        android:text="@string/ui_dd_mm_yyyy"
         android:textSize="36sp"
         android:textStyle="bold"
         android:textColor="#1C1C1E"

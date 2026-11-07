@@ -45,7 +45,7 @@ public class ActividadPasosActivity extends BaseActivity {
         actividadId = getIntent().getIntExtra(EXTRA_ACTIVIDAD_ID, -1);
         tipoEnum = TipoActividad.fromString(tipoStr);
 
-        setupTopBackBanner(tipoEnum.getLabel());
+        setupTopBackBanner(tipoEnum.getLabel(this));
 
         tvContador  = findViewById(R.id.tvPasoContador);
         tvTextoPaso = findViewById(R.id.tvPasoTexto);
@@ -53,7 +53,7 @@ public class ActividadPasosActivity extends BaseActivity {
         btnAccion   = findViewById(R.id.btnPasoAccion);
         cardPaso    = findViewById(R.id.cardPaso);
 
-        pasos = tipoEnum.getPasos();
+        pasos = tipoEnum.getPasos(this);
 
         aplicarColorFondo();
         mostrarPasoSinVoz(); // pinta la UI inmediatamente
@@ -90,12 +90,12 @@ public class ActividadPasosActivity extends BaseActivity {
         TipoActividad.Paso paso = pasos.get(indicePasoActual);
         int           total = pasos.size();
 
-        tvContador.setText("PASO " + (indicePasoActual + 1) + " DE " + total);
+        tvContador.setText(getString(R.string.pasos_contador, indicePasoActual + 1, total));
         tvTextoPaso.setText((indicePasoActual + 1) + ". " + paso.texto.toUpperCase());
         ivIconoPaso.setImageResource(paso.iconoRes);
 
         boolean esUltimo = (indicePasoActual == total - 1);
-        btnAccion.setText(esUltimo ? "FIN ACTIVIDAD" : "SIGUIENTE PASO");
+        btnAccion.setText(esUltimo ? R.string.pasos_fin_actividad : R.string.ui_siguiente_paso);
     }
 
     // avanzarPaso() ya usa mostrarPaso() que incluye voz, sin cambios
@@ -129,7 +129,7 @@ public class ActividadPasosActivity extends BaseActivity {
         
         // Emotional feedback — MEJORA ÁREA 5: Celebración
         gestionarFeedbackHardware(EstadoFeedback.CELEBRACION);
-        hablarOSimular("¡Muy bien! Has completado la actividad. ¡Excelente trabajo!");
+        hablarOSimular(getString(R.string.pasos_completada));
         
         // Wait 3 seconds before finishing to let the robot celebrate
         handler.postDelayed(() -> {

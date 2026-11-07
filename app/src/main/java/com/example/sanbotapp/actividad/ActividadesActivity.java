@@ -21,6 +21,7 @@ import com.example.sanbotapp.BaseActivity;
 import com.example.sanbotapp.CampoVozEspera;
 import com.example.sanbotapp.R;
 import com.example.sanbotapp.util.DateTimeUtils;
+import com.example.sanbotapp.util.VozComandos;
 import com.example.sanbotapp.util.VozParser;
 import com.example.sanbotapp.util.WizardFlowController;
 
@@ -64,7 +65,7 @@ public class ActividadesActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_actividades);
-        setupTopBackBanner("Actividades");
+        setupTopBackBanner(getString(R.string.titulo_actividades));
 
         containerActividades = findViewById(R.id.containerActividades);
         tvVacio = findViewById(R.id.tvVacioActividades);
@@ -144,7 +145,7 @@ public class ActividadesActivity extends BaseActivity {
             context = generarResumenVozAct();
         }
 
-        String instruccion = WizardFlowController.getInstruccionCampo(campo, context);
+        String instruccion = WizardFlowController.getInstruccionCampo(this, campo, context);
         if (isAssistantActive) {
             hablarEnMain(instruccion);
         }
@@ -161,20 +162,20 @@ public class ActividadesActivity extends BaseActivity {
 
     private String obtenerInstruccionDescripcionAct() {
         String t = tipoSeleccionado;
-        if (Actividad.TIPO_MEDICACION.equals(t)) return "¿Qué medicina te toca tomar? Por ejemplo: 'Paracetamol'.";
-        if (Actividad.TIPO_COMER.equals(t)) return "¿Qué vas a comer hoy? Por ejemplo: 'Sopa de verduras'.";
-        if (Actividad.TIPO_LLAMADA_FAMILIAR.equals(t)) return "¿A quién vas a llamar? Por ejemplo: 'A mi hija María'.";
-        if (Actividad.TIPO_PASEO_EJERCICIO.equals(t)) return "¿A dónde vas a ir a caminar? Por ejemplo: 'Al parque'.";
-        return "¿Qué detalles quieres añadir? Toca mi cabeza.";
+        if (Actividad.TIPO_MEDICACION.equals(t)) return getString(R.string.act_instr_desc_medicacion);
+        if (Actividad.TIPO_COMER.equals(t)) return getString(R.string.act_instr_desc_comer);
+        if (Actividad.TIPO_LLAMADA_FAMILIAR.equals(t)) return getString(R.string.act_instr_desc_llamada);
+        if (Actividad.TIPO_PASEO_EJERCICIO.equals(t)) return getString(R.string.act_instr_desc_paseo);
+        return getString(R.string.act_instr_desc_otros);
     }
 
     private String obtenerInstruccionDinamicaAct() {
-        String btnAction = "GUARDAR";
+        String btnAction = getString(R.string.accion_guardar).toUpperCase();
         AlertDialog dlg = dialogRef != null ? dialogRef.get() : null;
         if (dlg != null && dlg.findViewById(R.id.btnWizardSiguiente) instanceof Button) {
             btnAction = ((Button) dlg.findViewById(R.id.btnWizardSiguiente)).getText().toString();
         }
-        return "La actividad es de tipo " + (tipoSeleccionado != null ? tipoSeleccionado : "seleccionado") + ". ¿Quieres cambiar algo o '" + btnAction + "' ya?";
+        return getString(R.string.act_instr_dinamica, TipoActividad.fromString(tipoSeleccionado).getLabel(this), btnAction);
     }
 
     @Override
@@ -184,45 +185,45 @@ public class ActividadesActivity extends BaseActivity {
         if (dlg == null || !dlg.isShowing()) return;
 
         String tGlobal = texto.toLowerCase().trim();
-        String btnText = "guardar";
+        String btnText = getString(R.string.accion_guardar).toLowerCase();
         if (dlg.findViewById(R.id.btnWizardSiguiente) instanceof Button) {
             btnText = ((Button) dlg.findViewById(R.id.btnWizardSiguiente)).getText().toString().toLowerCase();
         }
 
-        if (tGlobal.contains("confirmar") || tGlobal.contains("aceptar") || tGlobal.contains("guardar") || tGlobal.contains("siguiente") || tGlobal.contains(btnText)) {
-            hablarEnMain("Entendido.");
+        if (VozComandos.coincide(this, tGlobal, R.array.voz_confirmar) || VozComandos.contieneAlguna(tGlobal, btnText)) {
+            hablarEnMain(getString(R.string.voz_entendido));
             runOnUiThread(() -> { if (dlg.findViewById(R.id.btnWizardSiguiente) != null) dlg.findViewById(R.id.btnWizardSiguiente).performClick(); });
             return;
         }
 
-        if (tGlobal.contains("cancelar") || tGlobal.contains("atrás") || tGlobal.contains("cerrar")) {
-            hablarEnMain("Vale.");
+        if (VozComandos.coincide(this, tGlobal, R.array.voz_cancelar)) {
+            hablarEnMain(getString(R.string.voz_vale));
             runOnUiThread(() -> { if (dlg.findViewById(R.id.btnWizardAnterior) != null) dlg.findViewById(R.id.btnWizardAnterior).performClick(); });
             return;
         }
 
         if (campoEspera == CampoVozEspera.RESUMEN_FINAL) {
-            if (tGlobal.contains("sí") || tGlobal.contains("si") || tGlobal.contains("correcto")) {
-                hablarEnMain("¡Perfecto! Guardando...");
+            if (VozComandos.coincide(this, tGlobal, R.array.voz_si)) {
+                hablarEnMain(getString(R.string.voz_perfecto_guardando));
                 runOnUiThread(() -> { if (dlg.findViewById(R.id.btnWizardSiguiente) != null) dlg.findViewById(R.id.btnWizardSiguiente).performClick(); });
             } else {
-                hablarEnMain("De acuerdo. ¿Qué quieres cambiar?");
+                hablarEnMain(getString(R.string.voz_de_acuerdo_que_cambiar));
                 anunciarCampoYEsperarToque(CampoVozEspera.ELECCION_EDICION);
             }
             return;
         }
 
         if (campoEspera == CampoVozEspera.ELECCION_EDICION) {
-            if (tGlobal.contains("tipo")) anunciarCampoYEsperarToque(CampoVozEspera.TIPO);
-            else if (tGlobal.contains("descripción") || tGlobal.contains("detalle")) anunciarCampoYEsperarToque(CampoVozEspera.DESCRIPCION);
-            else if (tGlobal.contains("hora")) anunciarCampoYEsperarToque(CampoVozEspera.HORA);
-            else if (tGlobal.contains("día")) anunciarCampoYEsperarToque(CampoVozEspera.DIA_SEMANA);
+            if (VozComandos.coincide(this, tGlobal, R.array.voz_campo_tipo)) anunciarCampoYEsperarToque(CampoVozEspera.TIPO);
+            else if (VozComandos.coincide(this, tGlobal, R.array.voz_campo_descripcion)) anunciarCampoYEsperarToque(CampoVozEspera.DESCRIPCION);
+            else if (VozComandos.coincide(this, tGlobal, R.array.voz_campo_hora)) anunciarCampoYEsperarToque(CampoVozEspera.HORA);
+            else if (VozComandos.coincide(this, tGlobal, R.array.voz_campo_dias)) anunciarCampoYEsperarToque(CampoVozEspera.DIA_SEMANA);
             return;
         }
 
         if (campoEspera == CampoVozEspera.CONFIRMACION_CAMPO) {
-            if (tGlobal.contains("sí") || tGlobal.contains("si") || tGlobal.contains("correcto") || tGlobal.contains("así es")) aplicarValorConfirmadoAct();
-            else { hablarEnMain("Lo siento, dímelo otra vez."); anunciarCampoYEsperarToque(campoAConfirmar); }
+            if (VozComandos.coincide(this, tGlobal, R.array.voz_si)) aplicarValorConfirmadoAct();
+            else { hablarEnMain(getString(R.string.voz_lo_siento_dimelo_otra_vez)); anunciarCampoYEsperarToque(campoAConfirmar); }
             return;
         }
 
@@ -230,9 +231,10 @@ public class ActividadesActivity extends BaseActivity {
     }
 
     private void procesarEntradaCampo(String tGlobal) {
+        VozParser parser = VozParser.para(this);
         switch (campoEspera) {
             case TIPO:
-                String tipo = VozParser.parsearTipoVoz(tGlobal);
+                String tipo = parser.parsearTipoVoz(tGlobal);
                 if (tipo != null) {
                     valorPendienteConfirmar = tipo;
                     campoAConfirmar = CampoVozEspera.TIPO;
@@ -240,7 +242,7 @@ public class ActividadesActivity extends BaseActivity {
                         dialogManager.seleccionarTipoUI(tipo);
                     });
                     anunciarCampoYEsperarToque(CampoVozEspera.CONFIRMACION_CAMPO);
-                } else hablarEnMain("No te entendí el tipo. Prueba con: Medicación o Paseo.");
+                } else hablarEnMain(getString(R.string.act_tipo_no_entendido));
                 break;
 
             case DESCRIPCION:
@@ -250,17 +252,17 @@ public class ActividadesActivity extends BaseActivity {
                 anunciarCampoYEsperarToque(CampoVozEspera.CONFIRMACION_CAMPO);
                 break;
             case HORA:
-                int h = VozParser.parsearHoraVoz(tGlobal);
+                int h = parser.parsearHoraVoz(tGlobal);
                 if (h != -1) {
                     valorPendienteConfirmar = tGlobal;
                     campoAConfirmar = CampoVozEspera.HORA;
                     int finalH = h;
                     runOnUiThread(() -> { if (dialogTvHoraRef.get() != null) dialogTvHoraRef.get().setText(DateTimeUtils.formatearHora(finalH)); });
                     anunciarCampoYEsperarToque(CampoVozEspera.CONFIRMACION_CAMPO);
-                } else hablarEnMain("Dime la hora, por ejemplo: a las diez y media.");
+                } else hablarEnMain(getString(R.string.act_hora_no_entendida));
                 break;
             case DIA_SEMANA:
-                List<Integer> dias = VozParser.parsearDiasVoz(tGlobal);
+                List<Integer> dias = parser.parsearDiasVoz(tGlobal);
                 if (!dias.isEmpty()) {
                     valorPendienteConfirmar = tGlobal;
                     campoAConfirmar = CampoVozEspera.DIA_SEMANA;
@@ -270,23 +272,24 @@ public class ActividadesActivity extends BaseActivity {
                         }
                     });
                     anunciarCampoYEsperarToque(CampoVozEspera.CONFIRMACION_CAMPO);
-                } else hablarEnMain("Dime los días, por ejemplo: los lunes y jueves.");
+                } else hablarEnMain(getString(R.string.act_dias_no_entendidos));
                 break;
 
         }
     }
 
     private void aplicarValorConfirmadoAct() {
+        VozParser parser = VozParser.para(this);
         runOnUiThread(() -> {
             switch (campoAConfirmar) {
                 case DESCRIPCION: if (dialogEtDescRef.get() != null) dialogEtDescRef.get().setText(valorPendienteConfirmar); break;
-                case TIPO: dialogManager.seleccionarTipoUI(VozParser.parsearTipoVoz(valorPendienteConfirmar)); break;
+                case TIPO: dialogManager.seleccionarTipoUI(parser.parsearTipoVoz(valorPendienteConfirmar)); break;
                 case HORA: 
-                    horaSeleccionada = VozParser.parsearHoraVoz(valorPendienteConfirmar);
+                    horaSeleccionada = parser.parsearHoraVoz(valorPendienteConfirmar);
                     if (dialogTvHoraRef.get() != null) dialogTvHoraRef.get().setText(DateTimeUtils.formatearHora(horaSeleccionada));
                     break;
                 case DIA_SEMANA:
-                    List<Integer> dias = VozParser.parsearDiasVoz(valorPendienteConfirmar);
+                    List<Integer> dias = parser.parsearDiasVoz(valorPendienteConfirmar);
                     diasSeleccionados.clear(); diasSeleccionados.addAll(dias);
                     if (dialogBtnsDiaRef.get() != null) new ActividadWizardHelper(null, null).actualizarBotonesDia(dialogBtnsDiaRef.get(), diasSeleccionados);
                     break;
@@ -345,12 +348,12 @@ public class ActividadesActivity extends BaseActivity {
         gestionarFeedbackHardware("CELEBRACION");
         dbExecutor.execute(() -> {
             if (existente == null) {
-                hablarEnMain("¡Enhorabuena! Has creado la actividad correctamente.");
+                hablarEnMain(getString(R.string.act_creada));
                 Actividad nueva = new Actividad(0, tipo, horaSeleccionada, desc);
                 nueva.setDiasSemana(new ArrayList<>(diasSeleccionados));
                 repo.add(nueva);
             } else {
-                hablarEnMain("¡Enhorabuena! Has editado la actividad correctamente.");
+                hablarEnMain(getString(R.string.act_editada));
                 existente.setTipo(tipo); existente.setHoraMinutos(horaSeleccionada);
                 existente.setDescripcion(desc); existente.setDiasSemana(new ArrayList<>(diasSeleccionados));
                 repo.update(existente);
@@ -362,39 +365,42 @@ public class ActividadesActivity extends BaseActivity {
     private void validarYGuardarActividad(Actividad existente, EditText etDesc, AlertDialog dialog) {
         final String desc = etDesc.getText().toString().trim();
         final String tipo = tipoSeleccionado;
-        if (diasSeleccionados.isEmpty()) { hablarEnMain("Selecciona al menos un día."); return; }
+        if (diasSeleccionados.isEmpty()) { hablarEnMain(getString(R.string.act_selecciona_dia)); return; }
         final int duracion = new Actividad(0, tipo, horaSeleccionada, "").getDuracionMinutos();
         dbExecutor.execute(() -> {
             final boolean solapa = repo.haySolapamiento(diasSeleccionados, horaSeleccionada, duracion, (existente != null ? existente.getId() : ID_NUEVO));
             runOnUiThread(() -> {
                 if (solapa) {
-                    new AlertDialog.Builder(this).setTitle("Solapamiento").setMessage("Ya hay otra actividad. ¿Guardar?")
-                        .setPositiveButton("Sí", (d, w) -> { guardarActividad(existente, tipo, desc); dialog.dismiss(); })
-                        .setNegativeButton("No", null).show();
+                    new AlertDialog.Builder(this).setTitle(R.string.act_solapamiento_titulo).setMessage(R.string.act_solapamiento_mensaje)
+                        .setPositiveButton(R.string.accion_si, (d, w) -> { guardarActividad(existente, tipo, desc); dialog.dismiss(); })
+                        .setNegativeButton(R.string.accion_no, null).show();
                 } else { guardarActividad(existente, tipo, desc); dialog.dismiss(); }
             });
         });
     }
 
     private void confirmarEliminar(Actividad a) {
-        new AlertDialog.Builder(this).setTitle("Eliminar").setMessage("¿Borrar esta actividad?")
-            .setPositiveButton("Sí", (d, w) -> { dbExecutor.execute(() -> { repo.delete(a.getId()); runOnUiThread(this::renderizarLista); }); })
-            .setNegativeButton("No", null).show();
+        new AlertDialog.Builder(this).setTitle(R.string.accion_eliminar).setMessage(R.string.act_eliminar_mensaje)
+            .setPositiveButton(R.string.accion_si, (d, w) -> { dbExecutor.execute(() -> { repo.delete(a.getId()); runOnUiThread(this::renderizarLista); }); })
+            .setNegativeButton(R.string.accion_no, null).show();
     }
 
     private String generarResumenVozAct() {
         String desc = (dialogEtDescRef != null && dialogEtDescRef.get() != null) ? dialogEtDescRef.get().getText().toString().trim() : "";
-        String tLabel = TipoActividad.fromString(tipoSeleccionado).getLabel();
-        return "Actividad de " + tLabel + " a las " + DateTimeUtils.formatearHora(horaSeleccionada) + (desc.isEmpty() ? "" : ", con detalles: " + desc);
+        String tLabel = TipoActividad.fromString(tipoSeleccionado).getLabel(this);
+        String hora = DateTimeUtils.formatearHora(horaSeleccionada);
+        return desc.isEmpty()
+                ? getString(R.string.act_resumen_voz, tLabel, hora)
+                : getString(R.string.act_resumen_voz_detalles, tLabel, hora, desc);
     }
 
     private void actualizarTextoResumen(AlertDialog dlg) {
         String desc = (dialogEtDescRef != null && dialogEtDescRef.get() != null) ? dialogEtDescRef.get().getText().toString().trim() : "";
         TipoActividad tipo = TipoActividad.fromString(tipoSeleccionado);
-        String tLabel = tipo.getLabel();
+        String tLabel = tipo.getLabel(this);
 
         ((TextView) dlg.findViewById(R.id.tvSummaryTipoAct)).setText(tLabel);
-        ((TextView) dlg.findViewById(R.id.tvSummaryDescAct)).setText(desc.isEmpty() ? "(SIN DETALLES)" : desc.toUpperCase());
+        ((TextView) dlg.findViewById(R.id.tvSummaryDescAct)).setText(desc.isEmpty() ? getString(R.string.act_sin_detalles) : desc.toUpperCase());
         ((TextView) dlg.findViewById(R.id.tvSummaryHoraAct)).setText(DateTimeUtils.formatearHora(horaSeleccionada));
 
         // Icono y Color
@@ -413,9 +419,9 @@ public class ActividadesActivity extends BaseActivity {
         if (container != null) {
             container.removeAllViews();
             if (diasSeleccionados.size() == 7) {
-                ActividadUIUtils.agregarPillDia(this, container, "TODOS LOS DÍAS");
+                ActividadUIUtils.agregarPillDia(this, container, getString(R.string.dias_todos));
             } else {
-                String[] n = {"LUN", "MAR", "MIÉ", "JUE", "VIE", "SÁB", "DOM"};
+                String[] n = getResources().getStringArray(R.array.dias_abrev);
                 for (int i = 0; i < VALORES_DIA.length; i++) {
                     if (diasSeleccionados.contains(VALORES_DIA[i])) {
                         ActividadUIUtils.agregarPillDia(this, container, n[i]);

@@ -34,7 +34,7 @@
                 android:id="@+id/tvFeedbackBingo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="MARCA LA TARJETA CORRECTA"
+                android:text="@string/ui_marca_la_tarjeta_correcta"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:gravity="start"
@@ -79,7 +79,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Pastillas"
+                            android:text="@string/ui_pastillas"
                             android:textColor="#000000"
                             android:textSize="28sp"
                             android:textStyle="bold" />
@@ -106,7 +106,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Comida"
+                            android:text="@string/ui_comida"
                             android:textColor="#000000"
                             android:textSize="28sp"
                             android:textStyle="bold" />
@@ -142,7 +142,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Calendario"
+                            android:text="@string/ui_calendario"
                             android:textColor="#000000"
                             android:textSize="28sp"
                             android:textStyle="bold" />
@@ -169,7 +169,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Descanso"
+                            android:text="@string/ui_descanso"
                             android:textColor="#000000"
                             android:textSize="28sp"
                             android:textStyle="bold" />

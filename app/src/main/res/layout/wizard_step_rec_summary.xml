@@ -38,7 +38,7 @@
         android:id="@+id/tvSummaryTituloRec"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TÍTULO"
+        android:text="@string/ui_titulo"
         android:textSize="36sp"
         android:textStyle="bold"
         android:textColor="#1C1C1E"
@@ -56,7 +56,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="FECHA PROGRAMADA:"
+            android:text="@string/ui_fecha_programada"
             android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="#8E8E93"
@@ -75,7 +75,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="AVISO PREVIO:"
+            android:text="@string/ui_aviso_previo"
             android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="#8E8E93"

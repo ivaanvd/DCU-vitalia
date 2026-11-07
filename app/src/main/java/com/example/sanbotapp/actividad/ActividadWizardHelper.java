@@ -166,27 +166,27 @@ public class ActividadWizardHelper {
         if (micContainer != null) micContainer.setVisibility(mostrarMic ? View.VISIBLE : View.GONE);
 
         if (campo == CampoVozEspera.CONFIRMACION_CAMPO) {
-            btnAnt.setText("REPETIR");
+            btnAnt.setText(R.string.wiz_btn_repetir);
             btnAnt.setBackgroundResource(R.drawable.bg_btn_wizard_nav);
-            btnSig.setText("CONFIRMAR");
+            btnSig.setText(R.string.wiz_btn_confirmar);
             btnSig.setBackgroundResource(R.drawable.bg_btn_guardar);
         } else if (campo == CampoVozEspera.RESUMEN_FINAL) {
-            btnAnt.setText("no, cambiar");
+            btnAnt.setText(R.string.wiz_btn_no_cambiar);
             btnAnt.setBackgroundResource(R.drawable.bg_btn_cancelar);
-            btnSig.setText("sí, guardar");
+            btnSig.setText(R.string.wiz_btn_si_guardar);
             btnSig.setBackgroundResource(R.drawable.bg_btn_guardar);
         } else if (campo == CampoVozEspera.ELECCION_EDICION) {
-            btnAnt.setText("VOLVER");
+            btnAnt.setText(R.string.wiz_btn_volver);
             btnAnt.setBackgroundResource(R.drawable.bg_btn_wizard_nav);
             btnSig.setVisibility(View.GONE);
         } else if (isEditingFromSummary) {
-            btnAnt.setText("VOLVER");
-            btnSig.setText("CONFIRMAR");
+            btnAnt.setText(R.string.wiz_btn_volver);
+            btnSig.setText(R.string.wiz_btn_confirmar);
             btnSig.setBackgroundResource(R.drawable.bg_btn_guardar);
         } else {
-            btnAnt.setText(step <= 1 ? "CANCELAR" : "ANTERIOR");
+            btnAnt.setText(step <= 1 ? R.string.wiz_btn_cancelar : R.string.wiz_btn_anterior);
             btnAnt.setBackgroundResource(step <= 1 ? R.drawable.bg_btn_cancelar : R.drawable.bg_btn_wizard_nav);
-            btnSig.setText("SIGUIENTE");
+            btnSig.setText(R.string.wiz_btn_siguiente);
             btnSig.setBackgroundResource(R.drawable.bg_btn_wizard_nav);
         }
     }

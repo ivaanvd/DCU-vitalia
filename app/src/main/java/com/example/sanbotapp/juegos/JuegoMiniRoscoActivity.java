@@ -11,7 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.example.sanbotapp.BaseActivity;
 import com.example.sanbotapp.R;
-import com.qihancloud.opensdk.function.beans.LED;
+import com.example.sanbotapp.util.RobotLed;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,15 +36,18 @@ public class JuegoMiniRoscoActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_juego_mini_rosco);
-        setupTopBackBanner("Mini-Rosco");
+        setupTopBackBanner(getString(R.string.juego_rosco_titulo));
         setVoiceEnabled(false); // Deshabilitar escucha en el rosco
 
         temaSeleccionado = getIntent().getStringExtra("TEMA");
-        if (temaSeleccionado == null) temaSeleccionado = "Varios";
+        if (temaSeleccionado == null) {
+            List<String> temas = ContenidoJuegos.temasRosco(this);
+            temaSeleccionado = temas.isEmpty() ? "" : temas.get(0);
+        }
 
         TextView tvCabecera = findViewById(R.id.tvTemaRosco);
         if (tvCabecera != null) {
-            tvCabecera.setText("TEMÁTICA: " + temaSeleccionado.toUpperCase());
+            tvCabecera.setText(getString(R.string.rosco_tematica, temaSeleccionado).toUpperCase());
         }
 
         tvLetra = findViewById(R.id.tvProgresoLetra);
@@ -66,7 +69,7 @@ public class JuegoMiniRoscoActivity extends BaseActivity {
         }
 
         if (preguntasDelTema.isEmpty()) {
-            preguntasDelTema.add(new PreguntaRosco(temaSeleccionado, "A", "Empieza por A: Opción falsa por defecto", "Amarillo", "Azul", 1));
+            preguntasDelTema.addAll(todasLasPreguntas);
         }
 
         inicializarFilaLetras();
@@ -101,19 +104,7 @@ public class JuegoMiniRoscoActivity extends BaseActivity {
     }
 
     private void cargarBBDDPreguntas() {
-        todasLasPreguntas = new ArrayList<>();
-        // Flora y Plantas
-        todasLasPreguntas.add(new PreguntaRosco("Flora y Plantas", "A", "Árbol caducifolio muy común que da de fruto la bellota.", "Arce", "Alcornoque", 2));
-        todasLasPreguntas.add(new PreguntaRosco("Flora y Plantas", "C", "Flor espinosa de muchos colores.", "Clavel", "Cactus", 1));
-        todasLasPreguntas.add(new PreguntaRosco("Flora y Plantas", "O", "Árbol que da pequeñas frutas para extraer aceite.", "Olmo", "Olivo", 2));
-        // Frutas
-        todasLasPreguntas.add(new PreguntaRosco("Frutas", "M", "Fruta jugosa y dulce, puede ser roja o verde.", "Manzana", "Mora", 1));
-        todasLasPreguntas.add(new PreguntaRosco("Frutas", "P", "Fruta amarilla de Canarias.", "Pera", "Plátano", 2));
-        todasLasPreguntas.add(new PreguntaRosco("Frutas", "K", "Fruta ovalada de carne verde.", "Kiwi", "Kaki", 1));
-        // Animales
-        todasLasPreguntas.add(new PreguntaRosco("Animales", "P", "Animal doméstico considerado el mejor amigo del hombre.", "Perro", "Pato", 1));
-        todasLasPreguntas.add(new PreguntaRosco("Animales", "G", "Felino que hace miau.", "Gato", "Gorila", 1));
-        todasLasPreguntas.add(new PreguntaRosco("Animales", "L", "El llamado 'rey de la selva'.", "León", "Lince", 1));
+        todasLasPreguntas = ContenidoJuegos.preguntasRosco(this);
     }
 
     private void mostrarPregunta() {
@@ -123,7 +114,7 @@ public class JuegoMiniRoscoActivity extends BaseActivity {
             PreguntaRosco p = preguntasDelTema.get(indiceActual);
             if (tvLetra != null) tvLetra.setVisibility(TextView.GONE);
             if (tvPistaRobot != null) {
-                String textoCompleto = "CON LA " + p.getLetra() + ": " + p.getPista();
+                String textoCompleto = getString(R.string.rosco_pista, p.getLetra(), p.getPista());
                 tvPistaRobot.setText(textoCompleto);
                 hablarOSimular(textoCompleto);
             }
@@ -159,10 +150,10 @@ public class JuegoMiniRoscoActivity extends BaseActivity {
 
         // Feedback robot
         gestionarFeedbackHardware("ACIERTO");
-        hablarOSimular("¡Correcto!");
+        hablarOSimular(getString(R.string.juego_correcto));
 
         handler.postDelayed(() -> {
-            apagarLed(LED.PART_ALL);
+            apagarLed(RobotLed.PART_ALL);
             restaurarBotones();
             indiceActual++;
             mostrarPregunta();
@@ -185,10 +176,10 @@ public class JuegoMiniRoscoActivity extends BaseActivity {
 
         // Feedback robot
         gestionarFeedbackHardware("FALLO");
-        hablarOSimular("Lástima, te acercabas");
+        hablarOSimular(getString(R.string.juego_lastima));
 
         handler.postDelayed(() -> {
-            apagarLed(LED.PART_ALL);
+            apagarLed(RobotLed.PART_ALL);
             restaurarBotones();
             indiceActual++;
             mostrarPregunta();
@@ -214,8 +205,8 @@ public class JuegoMiniRoscoActivity extends BaseActivity {
         intent.putExtra("TEMA", temaSeleccionado);
 
         String sms = (aciertos == preguntasDelTema.size())
-                ? "¡Pleno! Un rosco impoluto."
-                : "Ese rosco se nos ha resistido un poco, ¡pero muy buen esfuerzo!";
+                ? getString(R.string.rosco_fin_pleno)
+                : getString(R.string.rosco_fin_esfuerzo);
         intent.putExtra("MENSAJE", sms);
 
         gestionarFeedbackHardware("CELEBRACION");

@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.example.sanbotapp.BaseActivity;
 import com.example.sanbotapp.R;
-import com.qihancloud.opensdk.function.beans.LED;
+import com.example.sanbotapp.util.RobotLed;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +32,7 @@ public class JuegoBingoActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_juego_bingo);
-        setupTopBackBanner("Bingo");
+        setupTopBackBanner(getString(R.string.ui_bingo));
         setVoiceEnabled(false); // Deshabilitar escucha en el bingo
 
         tvRobot = findViewById(R.id.tvBocadilloTexto);
@@ -46,19 +46,19 @@ public class JuegoBingoActivity extends BaseActivity {
     private void cargarBolasDeBingo() {
         rondasFuturas = new ArrayList<>();
         rondasFuturas.add(new RondaBingo(
-                "¡\"Llegó la hora de nutrir el cuerpo!\"",
+                getString(R.string.bingo_ronda_comida),
                 R.id.btnBingoComida
         ));
         rondasFuturas.add(new RondaBingo(
-                "\"Ha caído la noche. ¿Qué tarjeta corresponde a descansar?\"",
+                getString(R.string.bingo_ronda_dormir),
                 R.id.btnBingoDormir
         ));
         rondasFuturas.add(new RondaBingo(
-                "\"El médico nos recetó una ayuda.\"",
+                getString(R.string.bingo_ronda_medicacion),
                 R.id.btnBingoMedicacion
         ));
         rondasFuturas.add(new RondaBingo(
-                "\"Marca la tarjeta de la cita para no olvidarla.\"",
+                getString(R.string.bingo_ronda_calendario),
                 R.id.btnBingoCalendario
         ));
     }
@@ -71,7 +71,7 @@ public class JuegoBingoActivity extends BaseActivity {
                 hablarOSimular(r.getConsigna());
             }
             if (tvFeedback != null) {
-                tvFeedback.setText("MARCA LA TARJETA CORRECTA");
+                tvFeedback.setText(R.string.ui_marca_la_tarjeta_correcta);
                 tvFeedback.setTextColor(Color.parseColor("#5A5A5A"));
             }
         }
@@ -125,7 +125,7 @@ public class JuegoBingoActivity extends BaseActivity {
         final String consignaOriginal = rondasFuturas.get(indiceRonda).getConsigna();
         
         gestionarFeedbackHardware("FALLO");
-        hablarOSimular("Oh no, esa no era. Léelo bien e inténtalo de nuevo.");
+        hablarOSimular(getString(R.string.bingo_error));
         
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             juegoBloqueado = false;
@@ -141,7 +141,7 @@ public class JuegoBingoActivity extends BaseActivity {
         intent.putExtra("ACIERTOS", aciertos);
         intent.putExtra("FALLOS", fallos);
         intent.putExtra("TOTAL", rondasFuturas.size());
-        intent.putExtra("MENSAJE", "¡Espectacular Bingo! Has completado toda la tarjeta.");
+        intent.putExtra("MENSAJE", getString(R.string.bingo_fin));
         gestionarFeedbackHardware("CELEBRACION");
         startActivity(intent);
         finish();

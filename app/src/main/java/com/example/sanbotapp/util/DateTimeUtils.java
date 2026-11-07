@@ -4,7 +4,12 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.widget.TextView;
+import androidx.core.os.ConfigurationCompat;
+
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class DateTimeUtils {
 
@@ -53,7 +58,29 @@ public class DateTimeUtils {
      * Formatea minutos a HH:mm
      */
     public static String formatearHora(int minutos) {
-        return String.format("%02d:%02d", minutos / 60, minutos % 60);
+        return String.format(Locale.ROOT, "%02d:%02d", minutos / 60, minutos % 60);
+    }
+
+    /**
+     * Idioma activo de la app (el de sus recursos), que puede diferir del idioma del sistema.
+     */
+    public static Locale localeApp(Context context) {
+        Locale locale = ConfigurationCompat.getLocales(context.getResources().getConfiguration()).get(0);
+        return locale != null ? locale : Locale.getDefault();
+    }
+
+    /**
+     * Formatea una fecha con un esqueleto de campos (ej. "dMMMM") en el idioma de la app.
+     */
+    public static String formatear(Context context, String esqueleto, long ms) {
+        Locale locale = localeApp(context);
+        String patron = android.text.format.DateFormat.getBestDateTimePattern(locale, esqueleto);
+        return new SimpleDateFormat(patron, locale).format(new Date(ms));
+    }
+
+    /** Ej. "12 de octubre" / "October 12". */
+    public static String formatearDiaMes(Context context, long ms) {
+        return formatear(context, "dMMMM", ms);
     }
 
     /**

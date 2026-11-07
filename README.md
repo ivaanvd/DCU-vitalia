@@ -2,9 +2,42 @@
 
 Vitalia es una solución integral para el robot **Sanbot (Qihan)** diseñada para mejorar la calidad de vida de personas mayores en entornos asistenciales o domésticos.
 
+> 🇬🇧 **English summary** — see [below](#-english-summary).
+
 ## 📂 Contenido del repositorio
 * `/app`: Código fuente de la aplicación móvil y del sistema robótico.
 * `/docs/documento_diseno_vitalia.pdf`: Memoria completa con la investigación de usuarios, arquitectura de la información y validación del sistema.
+* `/docs/design_document_vitalia_en.md` y `/docs/design_document_vitalia_en.pdf`: Traducción al inglés de la memoria.
+
+---
+
+## 🇬🇧 English summary
+
+**Vitalia** is an assistant app for the **Sanbot (Qihan)** robot that helps older adults who live independently, at home or in care settings, to keep a daily routine and stay mentally active. The robot talks, listens and reacts with its screen face, LEDs, head and arms.
+
+**Features**
+* **Activities**: a weekly routine (medication, meals, water, walks, personal care, family calls, bedtime…) with guided step-by-step instructions.
+* **Reminders**: one-off reminders with a date, time and advance notice.
+* **Alarms**: when an activity or reminder is due, the robot wakes up, announces it out loud and shows a full-screen pop-up (do it now / snooze 30 minutes).
+* **Cognitive games**: Bingo, Mini-Rosco (word wheel), Sayings and Seek and Find.
+* **Voice assistant**: a step-by-step wizard fills in activities and reminders by voice. Touch the robot's head (or the microphone button) to speak; the robot confirms each answer before saving.
+* **Settings**: profile name and photo, robot volume, screen brightness and **language (Español / English)**.
+
+**Languages**: Spanish is the default; English is included. The app follows the device language, or you can choose it in **Settings → Idioma / Language**. See [Idiomas](#-idiomas-español--english) for how translations, voice keywords and game content are organised.
+
+**Build flavours**
+* `robot`: production build for the Sanbot robot, using the Qihan OpenSDK (sensors, motors, voice).
+* `tablet`: development build that simulates the robot on a normal Android device.
+
+```bash
+./gradlew :app:assembleRobotDebug    # Sanbot robot
+./gradlew :app:assembleTabletDebug   # Android tablet / emulator
+./gradlew :app:testTabletDebugUnitTest
+```
+
+**Design documentation**: the full user-centred design report (user research, Personas, User Journey Map, requirements, navigation, prototypes, accessibility and planning) is in [`docs/documento_diseno_vitalia.pdf`](docs/documento_diseno_vitalia.pdf) (Spanish, authoritative), with an English translation in [`docs/design_document_vitalia_en.md`](docs/design_document_vitalia_en.md) ([PDF](docs/design_document_vitalia_en.pdf)).
+
+**Authors**: Iván Vayad Díaz, Lucía Vázquez Martín and Luna Zhou Chen, Universidad de Zaragoza (User-centred design, 2025/26).
 
 ---
 
@@ -13,6 +46,16 @@ Vitalia es una solución integral para el robot **Sanbot (Qihan)** diseñada par
 El proyecto implementa un sistema multi-flavor para facilitar el desarrollo:
 *   **`robot`**: Versión productiva. Utiliza el SDK de Qihan para controlar el hardware real (sensores, motores, voz).
 *   **`tablet`**: Versión de desarrollo. Simula el comportamiento del robot en dispositivos estándar para pruebas de interfaz y flujo.
+
+## 🌐 Idiomas (Español / English)
+
+La app está disponible en español (por defecto) e inglés. El idioma sigue al del sistema o se elige en **Ajustes → Idioma / Language**.
+*   **Textos de interfaz y voz**: `res/values/strings*.xml` (español) y `res/values-en/` (inglés).
+*   **Comandos de voz** ("sí", "guardar", "hora"…): listas de palabras clave en `res/values*/arrays_voz.xml`, comparadas con `util/VozComandos`.
+*   **Interpretación de horas, fechas y días dictados**: `util/VozParser` con una implementación por idioma (`VozParserEs`, `VozParserEn`) y tests en `app/src/test`.
+*   **Contenido de los juegos** (Mini-Rosco y Refranes): `res/raw/juego_*.json` y `res/raw-en/juego_*.json`.
+
+Para añadir otro idioma basta con crear las carpetas `values-xx/` y `raw-xx/` y, si hace falta, un `VozParser` nuevo.
 
 ## 📂 Organización de Módulos
 
@@ -155,7 +198,7 @@ sequenceDiagram
 ## 🛠️ Especificaciones Técnicas
 *   **Android SDK**: API 21+ (Optimizado para Android 6.0/7.1 en Sanbot).
 *   **SDK Robótico**: Qihan Sanbot Open SDK.
-*   **Localización**: Totalmente en español (ES-es).
+*   **Localización**: Español (por defecto) e inglés.
 *   **Patrones**: Repository Pattern, Delegation (Helpers), State Machine (Wizard).
 
 > **Nota**: Algunos paquetes de bajo nivel (control de motores) pueden encontrarse bajo el path `sandbotapp` debido a herencia de versiones previas del SDK.

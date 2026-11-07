@@ -11,7 +11,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="¿Qué quieres cambiar?"
+        android:text="@string/ui_que_quieres_cambiar"
         android:textSize="14sp"
         android:textStyle="bold"
         android:textColor="#1C1C1E"
@@ -24,9 +24,9 @@
         android:columnCount="2"
         android:rowCount="2"
         android:alignmentMode="alignMargins">
-        <Button android:id="@+id/btnEditTipo" android:layout_width="0dp" android:layout_height="64dp" android:layout_columnWeight="1" android:text="Tipo" android:background="@drawable/bg_tipo_normal" android:layout_margin="4dp"/>
-        <Button android:id="@+id/btnEditDesc" android:layout_width="0dp" android:layout_height="64dp" android:layout_columnWeight="1" android:text="Detalle" android:background="@drawable/bg_tipo_normal" android:layout_margin="4dp"/>
-        <Button android:id="@+id/btnEditHora" android:layout_width="0dp" android:layout_height="64dp" android:layout_columnWeight="1" android:text="Hora" android:background="@drawable/bg_tipo_normal" android:layout_margin="4dp"/>
-        <Button android:id="@+id/btnEditDias" android:layout_width="0dp" android:layout_height="64dp" android:layout_columnWeight="1" android:text="Días" android:background="@drawable/bg_tipo_normal" android:layout_margin="4dp"/>
+        <Button android:id="@+id/btnEditTipo" android:layout_width="0dp" android:layout_height="64dp" android:layout_columnWeight="1" android:text="@string/ui_tipo" android:background="@drawable/bg_tipo_normal" android:layout_margin="4dp"/>
+        <Button android:id="@+id/btnEditDesc" android:layout_width="0dp" android:layout_height="64dp" android:layout_columnWeight="1" android:text="@string/ui_detalle" android:background="@drawable/bg_tipo_normal" android:layout_margin="4dp"/>
+        <Button android:id="@+id/btnEditHora" android:layout_width="0dp" android:layout_height="64dp" android:layout_columnWeight="1" android:text="@string/ui_hora" android:background="@drawable/bg_tipo_normal" android:layout_margin="4dp"/>
+        <Button android:id="@+id/btnEditDias" android:layout_width="0dp" android:layout_height="64dp" android:layout_columnWeight="1" android:text="@string/ui_dias" android:background="@drawable/bg_tipo_normal" android:layout_margin="4dp"/>
     </GridLayout>
 </LinearLayout>
