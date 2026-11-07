@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.sanbotapp.BaseActivity;
 import com.example.sanbotapp.CampoVozEspera;
@@ -533,6 +534,15 @@ public class RecordatoriosActivity extends BaseActivity {
             etTitulo.setError("Introduce un título");
             hablarEnMain("Por favor, introduce un título.");
             anunciarCampoYEsperarToque(CampoVozEspera.TITULO);
+            return;
+        }
+        // Con la hora ya pasada la alarma nunca sonaría.
+        Recordatorio cuando = new Recordatorio(0, titulo, horaSeleccionada, fechaSeleccionadaMs, "", anticipacionSeleccionada);
+        if (cuando.yaHaPasado(System.currentTimeMillis())) {
+            String aviso = "Esa hora ya ha pasado. Elige una hora más tarde u otro día.";
+            Toast.makeText(this, aviso, Toast.LENGTH_LONG).show();
+            hablarEnMain(aviso);
+            anunciarCampoYEsperarToque(CampoVozEspera.HORA);
             return;
         }
         guardarRecordatorio(existente, titulo, "");

@@ -44,8 +44,9 @@ public class RecordatorioDialogManager {
         boolean esEdicion = (existente != null);
         
         // Inicializar estado local
-        horaSeleccionada = esEdicion ? existente.getHoraMinutos() : 9 * 60;
-        fechaSeleccionadaMs = esEdicion ? existente.getFechaMs() : System.currentTimeMillis();
+        Recordatorio base = esEdicion ? existente : Recordatorio.nuevoPorDefecto(System.currentTimeMillis());
+        horaSeleccionada = base.getHoraMinutos();
+        fechaSeleccionadaMs = base.getFechaMs();
         anticipacionSeleccionada = esEdicion ? existente.getAnticipacionMinutos() : 10;
 
         // Sincronizar estado con la Activity (para que el asistente de voz lo vea)

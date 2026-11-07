@@ -78,13 +78,39 @@ public class Recordatorio {
      * Post: Devuelve True si la fecha del recordatorio es hoy o en el futuro (comparando solo por día, ignorando la hora).
      */
     public boolean esFuturoOHoy() {
+        return inicioDelDia(fechaMs) >= inicioDelDia(System.currentTimeMillis());
+    }
+
+    /** True si el día y la hora del recordatorio ya han pasado (su alarma no sonaría). */
+    public boolean yaHaPasado(long ahoraMs) {
         java.util.Calendar c = java.util.Calendar.getInstance();
-        c.setTimeInMillis(fechaMs);
+        c.setTimeInMillis(inicioDelDia(fechaMs));
         c.set(java.util.Calendar.HOUR_OF_DAY, horaMinutos / 60);
         c.set(java.util.Calendar.MINUTE, horaMinutos % 60);
+        return c.getTimeInMillis() <= ahoraMs;
+    }
+
+    /**
+     * Valores iniciales de un recordatorio nuevo: la próxima hora en punto
+     * (pasada la medianoche cae en el día siguiente), para que nunca nazca en el pasado.
+     */
+    public static Recordatorio nuevoPorDefecto(long ahoraMs) {
+        java.util.Calendar c = java.util.Calendar.getInstance();
+        c.setTimeInMillis(ahoraMs);
+        c.add(java.util.Calendar.HOUR_OF_DAY, 1);
+        Recordatorio r = new Recordatorio();
+        r.setHoraMinutos(c.get(java.util.Calendar.HOUR_OF_DAY) * 60);
+        r.setFechaMs(inicioDelDia(c.getTimeInMillis()));
+        return r;
+    }
+
+    private static long inicioDelDia(long ms) {
+        java.util.Calendar c = java.util.Calendar.getInstance();
+        c.setTimeInMillis(ms);
+        c.set(java.util.Calendar.HOUR_OF_DAY, 0);
+        c.set(java.util.Calendar.MINUTE, 0);
         c.set(java.util.Calendar.SECOND, 0);
         c.set(java.util.Calendar.MILLISECOND, 0);
-
-        return c.getTimeInMillis() > System.currentTimeMillis();
+        return c.getTimeInMillis();
     }
 }

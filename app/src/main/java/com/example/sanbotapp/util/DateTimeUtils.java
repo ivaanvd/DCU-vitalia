@@ -39,14 +39,17 @@ public class DateTimeUtils {
             cal.setTimeInMillis(fechaInicialMs);
         }
         
-        new DatePickerDialog(context, (view, year, month, day) -> {
+        DatePickerDialog dialogo = new DatePickerDialog(context, (view, year, month, day) -> {
             Calendar c = Calendar.getInstance();
             c.set(year, month, day, 0, 0, 0);
             c.set(Calendar.MILLISECOND, 0);
             if (listener != null) {
                 listener.onDateSelected(c.getTimeInMillis());
             }
-        }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH)).show();
+        }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+        // Los recordatorios solo pueden ser de hoy en adelante.
+        dialogo.getDatePicker().setMinDate(fechaHoyInicio());
+        dialogo.show();
     }
 
     /**
