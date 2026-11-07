@@ -2,6 +2,7 @@ package com.example.sanbotapp.util;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -82,9 +83,19 @@ public class PhotoHelper {
         }
     }
 
+    /** El Sanbot Nano no trae app de Galería: si nadie atiende ACTION_PICK se usa el selector de documentos. */
     private void lanzarSelectorGaleria() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        activity.startActivityForResult(intent, AppConstants.REQUEST_GALLERY);
+        if (intent.resolveActivity(activity.getPackageManager()) == null) {
+            intent = new Intent(Intent.ACTION_GET_CONTENT)
+                    .setType("image/*")
+                    .addCategory(Intent.CATEGORY_OPENABLE);
+        }
+        try {
+            activity.startActivityForResult(intent, AppConstants.REQUEST_GALLERY);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(activity, "No hay ninguna app para elegir fotos. Usa la cámara.", Toast.LENGTH_LONG).show();
+        }
     }
 
     public String handleActivityResult(int requestCode, int resultCode, Intent data) {
