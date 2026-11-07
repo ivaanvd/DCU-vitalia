@@ -3,7 +3,12 @@ package com.example.sanbotapp;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -100,8 +105,30 @@ public class WelcomeActivity extends BaseActivity {
         android.widget.TextView tvEstadoMic = findViewById(R.id.tvEstadoMicWelcome);
         if (btnMic != null && tvEstadoMic != null) {
             setMicUI(btnMic, tvEstadoMic);
-            btnMic.setOnClickListener(v -> onCabezaTocada());
+            btnMic.setOnClickListener(v -> empezarEscuchaNombre());
         }
+
+        // Si el usuario escribe mientras el robot escucha, manda lo escrito.
+        etNombre.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (esperandoNombre) cancelarEscuchaNombre();
+            }
+        });
+        etNombre.setOnEditorActionListener((v, actionId, event) -> {
+            String nombre = etNombre.getText().toString().trim();
+            boolean intro = event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER
+                    && event.getAction() == KeyEvent.ACTION_DOWN;
+            if ((actionId != EditorInfo.IME_ACTION_DONE && !intro) || TextUtils.isEmpty(nombre)) return false;
+            InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            if (imm != null) imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+            v.clearFocus();
+            hablarOSimular("Perfecto, " + nombre
+                    + ". Ahora necesito una foto tuya. Toca el botón de cámara o galería.");
+            return true;
+        });
 
         // Botón repetir saludo
         findViewById(R.id.btnRepetirBocadillo).setOnClickListener(v -> {
@@ -139,12 +166,26 @@ public class WelcomeActivity extends BaseActivity {
      */
     @Override
     protected void onCabezaTocada() {
+        // Con un nombre ya escrito, un toque en la cabeza no vuelve a abrir el micrófono.
+        runOnUiThread(() -> {
+            if (etNombre.length() > 0) return;
+            empezarEscuchaNombre();
+        });
+    }
+
+    private void empezarEscuchaNombre() {
         if (esperandoNombre) return;
         esperandoNombre = true;
 
         // No hablamos, solo escuchamos directamente (ya se dieron instrucciones antes)
-        runOnUiThread(() -> etNombre.setBackgroundResource(R.drawable.bg_field_active));
+        etNombre.setBackgroundResource(R.drawable.bg_field_active);
         new Thread(this::escuchar).start();
+    }
+
+    private void cancelarEscuchaNombre() {
+        esperandoNombre = false;
+        etNombre.setBackgroundResource(R.drawable.bg_campo_descripcion);
+        cancelarEscucha();
     }
 
     // =========================================================================
@@ -153,9 +194,20 @@ public class WelcomeActivity extends BaseActivity {
 
     @Override
     protected void onTextoEscuchado(String texto) {
-        if (!esperandoNombre || TextUtils.isEmpty(texto)) return;
+        if (!esperandoNombre) return;
 
         esperandoNombre = false;
+
+        if (TextUtils.isEmpty(texto)) {
+            runOnUiThread(() -> {
+                etNombre.setBackgroundResource(R.drawable.bg_campo_descripcion);
+                // Si ya hay un nombre escrito, no se pide otra vez.
+                if (etNombre.length() == 0) {
+                    hablarOSimular("No te he oído. Pulsa el micrófono y dime tu nombre otra vez.");
+                }
+            });
+            return;
+        }
 
         runOnUiThread(() -> {
             etNombre.setText(texto);

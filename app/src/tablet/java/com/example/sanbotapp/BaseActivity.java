@@ -57,6 +57,9 @@ public abstract class BaseActivity extends AppCompatActivity {
     public void escuchar() {
         Log.d("BaseActivity[Tablet]", "escuchar() sin efecto");
     }
+    protected void cancelarEscucha() {
+        Log.d("BaseActivity[Tablet]", "cancelarEscucha() sin efecto");
+    }
 
     protected void onTextoEscuchado(String texto) {}
 

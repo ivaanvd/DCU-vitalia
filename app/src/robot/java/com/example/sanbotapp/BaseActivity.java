@@ -331,6 +331,12 @@ public abstract class BaseActivity extends TopBaseActivity {
         }
     }
 
+    /** Deja de mostrar la escucha; el resultado que llegue después lo ignora la subclase. */
+    protected void cancelarEscucha() {
+        updateMicUI(false);
+        gestionarFeedbackHardware(EstadoFeedback.IDLE);
+    }
+
     /** @deprecated Usar gestionarFeedbackHardware(EstadoFeedback) */
     @Deprecated
     public void gestionarFeedbackHardware(String estado) {

@@ -29,6 +29,7 @@
             android:textColor="#1C1C1E"
             android:textColorHint="#A0A0A0"
             android:inputType="textPersonName|textCapWords"
+            android:imeOptions="actionDone"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:background="@drawable/bg_input_welcome"
