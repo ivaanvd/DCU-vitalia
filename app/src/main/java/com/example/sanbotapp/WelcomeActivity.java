@@ -153,9 +153,15 @@ public class WelcomeActivity extends BaseActivity {
 
     @Override
     protected void onTextoEscuchado(String texto) {
-        if (!esperandoNombre || TextUtils.isEmpty(texto)) return;
+        if (!esperandoNombre) return;
 
         esperandoNombre = false;
+
+        if (TextUtils.isEmpty(texto)) {
+            runOnUiThread(() -> etNombre.setBackgroundResource(R.drawable.bg_campo_descripcion));
+            hablarOSimular("No te he oído. Pulsa el micrófono y dime tu nombre otra vez.");
+            return;
+        }
 
         runOnUiThread(() -> {
             etNombre.setText(texto);
