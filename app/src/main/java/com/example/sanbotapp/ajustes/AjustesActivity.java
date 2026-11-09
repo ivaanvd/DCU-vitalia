@@ -26,6 +26,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import com.example.sanbotapp.util.AppConstants;
+import com.example.sanbotapp.util.DateTimeUtils;
 import com.example.sanbotapp.util.PhotoHelper;
 
 public class AjustesActivity extends BaseActivity {
@@ -124,8 +125,40 @@ public class AjustesActivity extends BaseActivity {
         Button btnGuardar = findViewById(R.id.btnGuardarAjustes);
         btnGuardar.setOnClickListener(v -> consolidarGuardarAjustes());
 
+        configurarFormatoHora();
+
         // Verificar permiso de escritura de ajustes del sistema al entrar
         verificarPermisosBrillo();
+    }
+
+    // ── Formato de hora ───────────────────────────────────────────────────────
+
+    private static final int HORA_EJEMPLO = 15 * 60 + 30;
+
+    private void configurarFormatoHora() {
+        Button btn12 = findViewById(R.id.btnFormato12h);
+        Button btn24 = findViewById(R.id.btnFormato24h);
+        btn12.setText(DateTimeUtils.formatearHora(HORA_EJEMPLO, false));
+        btn24.setText(DateTimeUtils.formatearHora(HORA_EJEMPLO, true));
+        marcarFormatoHora(btn12, btn24, DateTimeUtils.usar24Horas(this));
+        btn12.setOnClickListener(v -> cambiarFormatoHora(btn12, btn24, false));
+        btn24.setOnClickListener(v -> cambiarFormatoHora(btn12, btn24, true));
+    }
+
+    private void cambiarFormatoHora(Button btn12, Button btn24, boolean formato24h) {
+        prefs.edit().putBoolean(AppConstants.KEY_FORMATO_24H, formato24h).apply();
+        marcarFormatoHora(btn12, btn24, formato24h);
+    }
+
+    private void marcarFormatoHora(Button btn12, Button btn24, boolean formato24h) {
+        marcarBoton(btn12, !formato24h);
+        marcarBoton(btn24, formato24h);
+    }
+
+    private void marcarBoton(Button boton, boolean seleccionado) {
+        boton.setSelected(seleccionado);
+        boton.setBackgroundResource(seleccionado ? R.drawable.bg_tipo_selected : R.drawable.bg_tipo_normal);
+        boton.setTextColor(seleccionado ? 0xFFFFFFFF : 0xFF1A1A1A);
     }
 
     @Override
@@ -335,6 +368,7 @@ public class AjustesActivity extends BaseActivity {
                 .remove(AppConstants.KEY_FOTO_PATH)
                 .remove(AppConstants.KEY_VOLUMEN)
                 .remove(AppConstants.KEY_BRILLO)
+                .remove(AppConstants.KEY_FORMATO_24H)
                 .putBoolean(AppConstants.KEY_FIRST_RUN, true)
                 .apply();
 

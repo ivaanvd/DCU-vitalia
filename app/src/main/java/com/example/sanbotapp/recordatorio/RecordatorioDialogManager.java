@@ -155,7 +155,7 @@ public class RecordatorioDialogManager {
 
         ((TextView) dv.findViewById(R.id.tvTituloDetRec)).setText(
                 r.getTitulo() != null ? r.getTitulo().toUpperCase() : "SIN TÍTULO");
-        ((TextView) dv.findViewById(R.id.tvHoraDetRec)).setText(r.getHoraFormateada());
+        ((TextView) dv.findViewById(R.id.tvHoraDetRec)).setText(r.getHoraFormateada(activity));
         ((TextView) dv.findViewById(R.id.tvFechaDetRec)).setText(r.getFechaFormateada());
 
         AlertDialog dialog = new AlertDialog.Builder(activity).setView(dv).setCancelable(true).create();
@@ -184,7 +184,7 @@ public class RecordatorioDialogManager {
     }
 
     private void actualizarDisplayHora(TextView tv, int minutos) {
-        tv.setText(DateTimeUtils.formatearHora(minutos));
+        tv.setText(DateTimeUtils.formatearHora(activity, minutos));
     }
 
     private void actualizarDisplayFecha(TextView tv, long ms) {

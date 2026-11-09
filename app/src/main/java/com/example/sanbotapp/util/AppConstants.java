@@ -13,6 +13,8 @@ public class AppConstants {
     public static final String KEY_FIRST_RUN = "first_run";
     public static final String KEY_VOLUMEN   = "ajuste_volumen";
     public static final String KEY_BRILLO    = "ajuste_brillo";
+    /** Ausente = se sigue el formato 12/24 h del sistema. */
+    public static final String KEY_FORMATO_24H = "ajuste_formato_24h";
 
     // ── Request Codes (Cámara, Galería, Permisos) ─────────────────────────────
     public static final int REQUEST_CAMERA             = 100;

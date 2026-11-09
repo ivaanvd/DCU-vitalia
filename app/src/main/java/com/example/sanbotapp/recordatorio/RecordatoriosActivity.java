@@ -38,6 +38,7 @@ public class RecordatoriosActivity extends BaseActivity {
     // ── Estado de voz ─────────────────────────────────────────────────────────
     private CampoVozEspera campoEspera = CampoVozEspera.NINGUNO;
     private String valorPendienteConfirmar = "";
+    private int horaPendienteConfirmar = -1;
     private CampoVozEspera campoAConfirmar = CampoVozEspera.NINGUNO;
     private boolean isAssistantActive = false;
     private boolean isEditingFromSummary = false;
@@ -66,6 +67,7 @@ public class RecordatoriosActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recordatorios);
         setupTopBackBanner("Recordatorios");
+        DateTimeUtils.mostrarReloj(this, findViewById(R.id.tcBannerReloj));
 
         containerRecordatorios = findViewById(R.id.containerRecordatorios);
         tvVacio = findViewById(R.id.tvVacioRecordatorios);
@@ -209,7 +211,7 @@ public class RecordatoriosActivity extends BaseActivity {
 
         EditText etTitulo = etTituloRef != null ? etTituloRef.get() : null;
         if (tvTitulo != null && etTitulo != null) tvTitulo.setText(etTitulo.getText().toString().toUpperCase());
-        if (tvHora != null) tvHora.setText(com.example.sanbotapp.util.DateTimeUtils.formatearHora(horaSeleccionada));
+        if (tvHora != null) tvHora.setText(com.example.sanbotapp.util.DateTimeUtils.formatearHora(this, horaSeleccionada));
         if (tvFecha != null) {
             Recordatorio tmp = new Recordatorio();
             tmp.setFechaMs(fechaSeleccionadaMs);
@@ -353,9 +355,8 @@ public class RecordatoriosActivity extends BaseActivity {
             case HORA: {
                 int minutos = VozParser.parsearHoraVoz(texto);
                 if (minutos != -1) {
-                    int h = minutos / 60;
-                    int m = minutos % 60;
-                    valorPendienteConfirmar = String.format("%02d:%02d", h, m);
+                    horaPendienteConfirmar = minutos;
+                    valorPendienteConfirmar = DateTimeUtils.formatearHora(this, minutos);
                     campoAConfirmar = CampoVozEspera.HORA;
                     runOnUiThread(() -> { if (tvHoraRef != null && tvHoraRef.get() != null) tvHoraRef.get().setText(valorPendienteConfirmar); });
                     anunciarCampoYEsperarToque(CampoVozEspera.CONFIRMACION_CAMPO);
@@ -437,9 +438,9 @@ public class RecordatoriosActivity extends BaseActivity {
                         etTituloRef.get().setText(valorPendienteConfirmar);
                     break;
                 case HORA:
-                    horaSeleccionada = VozParser.parsearHoraVoz(valorPendienteConfirmar);
+                    horaSeleccionada = horaPendienteConfirmar;
                     if (tvHoraRef != null && tvHoraRef.get() != null)
-                        tvHoraRef.get().setText(DateTimeUtils.formatearHora(horaSeleccionada));
+                        tvHoraRef.get().setText(DateTimeUtils.formatearHora(this, horaSeleccionada));
                     break;
                 case FECHA:
                     fechaSeleccionadaMs = VozParser.parsearFechaVoz(valorPendienteConfirmar);
@@ -582,7 +583,7 @@ public class RecordatoriosActivity extends BaseActivity {
     private String generarResumenVozRec() {
         EditText etTitulo = etTituloRef != null ? etTituloRef.get() : null;
         String titulo = (etTitulo != null) ? etTitulo.getText().toString().trim() : "(Sin título)";
-        String hora = String.format("%02d:%02d", horaSeleccionada / 60, horaSeleccionada % 60);
+        String hora = DateTimeUtils.formatearHora(this, horaSeleccionada);
         return "Recordatorio: " + titulo + " a las " + hora;
     }
 

@@ -35,6 +35,17 @@
             android:textColor="#241B35"
             android:textSize="30sp"
             android:textStyle="bold" />
+
+        <!-- Hora actual; solo la muestran las pantallas que llaman a DateTimeUtils.mostrarReloj -->
+        <TextClock
+            android:id="@+id/tcBannerReloj"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:textColor="#241B35"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
     </LinearLayout>
 
     <View

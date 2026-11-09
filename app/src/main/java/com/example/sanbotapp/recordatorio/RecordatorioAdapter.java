@@ -41,7 +41,7 @@ public class RecordatorioAdapter {
         TextView tvFecha = item.findViewById(R.id.tvFechaItemRec);
         TextView tvTitulo = item.findViewById(R.id.tvTituloItemRec);
 
-        if (tvHora != null) tvHora.setText(r.getHoraFormateada());
+        if (tvHora != null) tvHora.setText(r.getHoraFormateada(context));
         if (tvFecha != null) tvFecha.setText(r.getFechaFormateada());
         if (tvTitulo != null) {
             String titulo = (r.getTitulo() != null && !r.getTitulo().isEmpty())

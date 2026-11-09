@@ -3,10 +3,20 @@ package com.example.sanbotapp.util;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.text.format.DateFormat;
+import android.view.View;
+import android.widget.TextClock;
 import android.widget.TextView;
+
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 public class DateTimeUtils {
+
+    private static final String PATRON_24H = "HH:mm";
+    private static final String PATRON_12H = "h:mm a";
 
     public interface OnTimeSelectedListener {
         void onTimeSelected(int hourOfDay, int minute, int totalMinutes);
@@ -27,7 +37,7 @@ public class DateTimeUtils {
             if (listener != null) {
                 listener.onTimeSelected(hourOfDay, minute, hourOfDay * 60 + minute);
             }
-        }, h, m, true).show();
+        }, h, m, usar24Horas(context)).show();
     }
 
     /**
@@ -50,10 +60,39 @@ public class DateTimeUtils {
     }
 
     /**
-     * Formatea minutos a HH:mm
+     * Formato de hora elegido en Ajustes; si el usuario aún no ha elegido, el del sistema.
      */
-    public static String formatearHora(int minutos) {
-        return String.format("%02d:%02d", minutos / 60, minutos % 60);
+    public static boolean usar24Horas(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(AppConstants.PREFS_NAME, Context.MODE_PRIVATE);
+        return prefs.contains(AppConstants.KEY_FORMATO_24H)
+                ? prefs.getBoolean(AppConstants.KEY_FORMATO_24H, true)
+                : DateFormat.is24HourFormat(context);
+    }
+
+    /**
+     * Formatea minutos desde medianoche según el formato de hora de la app (15:30 o 3:30 PM).
+     */
+    public static String formatearHora(Context context, int minutos) {
+        return formatearHora(minutos, usar24Horas(context));
+    }
+
+    public static String formatearHora(int minutos, boolean formato24h) {
+        if (formato24h) {
+            return String.format(Locale.ROOT, "%02d:%02d", minutos / 60, minutos % 60);
+        }
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, minutos / 60);
+        c.set(Calendar.MINUTE, minutos % 60);
+        return new SimpleDateFormat(PATRON_12H, Locale.getDefault()).format(c.getTime());
+    }
+
+    /** Reloj en vivo con el formato de hora de la app (TextClock solo sigue el del sistema). */
+    public static void mostrarReloj(Context context, TextClock reloj) {
+        if (reloj == null) return;
+        String patron = usar24Horas(context) ? PATRON_24H : PATRON_12H;
+        reloj.setFormat12Hour(patron);
+        reloj.setFormat24Hour(patron);
+        reloj.setVisibility(View.VISIBLE);
     }
 
     /**

@@ -65,6 +65,7 @@ public class ActividadesActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_actividades);
         setupTopBackBanner("Actividades");
+        DateTimeUtils.mostrarReloj(this, findViewById(R.id.tcBannerReloj));
 
         containerActividades = findViewById(R.id.containerActividades);
         tvVacio = findViewById(R.id.tvVacioActividades);
@@ -255,7 +256,7 @@ public class ActividadesActivity extends BaseActivity {
                     valorPendienteConfirmar = tGlobal;
                     campoAConfirmar = CampoVozEspera.HORA;
                     int finalH = h;
-                    runOnUiThread(() -> { if (dialogTvHoraRef.get() != null) dialogTvHoraRef.get().setText(DateTimeUtils.formatearHora(finalH)); });
+                    runOnUiThread(() -> { if (dialogTvHoraRef.get() != null) dialogTvHoraRef.get().setText(DateTimeUtils.formatearHora(this, finalH)); });
                     anunciarCampoYEsperarToque(CampoVozEspera.CONFIRMACION_CAMPO);
                 } else hablarEnMain("Dime la hora, por ejemplo: a las diez y media.");
                 break;
@@ -283,7 +284,7 @@ public class ActividadesActivity extends BaseActivity {
                 case TIPO: dialogManager.seleccionarTipoUI(VozParser.parsearTipoVoz(valorPendienteConfirmar)); break;
                 case HORA: 
                     horaSeleccionada = VozParser.parsearHoraVoz(valorPendienteConfirmar);
-                    if (dialogTvHoraRef.get() != null) dialogTvHoraRef.get().setText(DateTimeUtils.formatearHora(horaSeleccionada));
+                    if (dialogTvHoraRef.get() != null) dialogTvHoraRef.get().setText(DateTimeUtils.formatearHora(this, horaSeleccionada));
                     break;
                 case DIA_SEMANA:
                     List<Integer> dias = VozParser.parsearDiasVoz(valorPendienteConfirmar);
@@ -385,7 +386,7 @@ public class ActividadesActivity extends BaseActivity {
     private String generarResumenVozAct() {
         String desc = (dialogEtDescRef != null && dialogEtDescRef.get() != null) ? dialogEtDescRef.get().getText().toString().trim() : "";
         String tLabel = TipoActividad.fromString(tipoSeleccionado).getLabel();
-        return "Actividad de " + tLabel + " a las " + DateTimeUtils.formatearHora(horaSeleccionada) + (desc.isEmpty() ? "" : ", con detalles: " + desc);
+        return "Actividad de " + tLabel + " a las " + DateTimeUtils.formatearHora(this, horaSeleccionada) + (desc.isEmpty() ? "" : ", con detalles: " + desc);
     }
 
     private void actualizarTextoResumen(AlertDialog dlg) {
@@ -395,7 +396,7 @@ public class ActividadesActivity extends BaseActivity {
 
         ((TextView) dlg.findViewById(R.id.tvSummaryTipoAct)).setText(tLabel);
         ((TextView) dlg.findViewById(R.id.tvSummaryDescAct)).setText(desc.isEmpty() ? "(SIN DETALLES)" : desc.toUpperCase());
-        ((TextView) dlg.findViewById(R.id.tvSummaryHoraAct)).setText(DateTimeUtils.formatearHora(horaSeleccionada));
+        ((TextView) dlg.findViewById(R.id.tvSummaryHoraAct)).setText(DateTimeUtils.formatearHora(this, horaSeleccionada));
 
         // Icono y Color
         View frame = dlg.findViewById(R.id.frameEmojiSummaryAct);

@@ -210,7 +210,7 @@ public class ActividadDialogManager {
     }
 
     private void actualizarDisplayHora(TextView tv, int m) {
-        tv.setText(DateTimeUtils.formatearHora(m));
+        tv.setText(DateTimeUtils.formatearHora(activity, m));
     }
 
     public String getTipoSeleccionado() { return tipoSeleccionado; }

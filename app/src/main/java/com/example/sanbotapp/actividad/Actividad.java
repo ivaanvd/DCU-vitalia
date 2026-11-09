@@ -1,6 +1,9 @@
 package com.example.sanbotapp.actividad;
 
+import android.content.Context;
+
 import com.example.sanbotapp.R;
+import com.example.sanbotapp.util.DateTimeUtils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -74,9 +77,9 @@ public class Actividad {
     public void setCreadaPorSistema(boolean creadaPorSistema) { this.creadaPorSistema = creadaPorSistema; }
 
     // ── Helpers ───────────────────────────────────────────────────────────────
-    /** Devuelve la hora en formato HH:mm. */
-    public String getHoraFormateada() {
-        return String.format("%02d:%02d", horaMinutos / 60, horaMinutos % 60);
+    /** Devuelve la hora con el formato 12/24 h de la app. */
+    public String getHoraFormateada(Context context) {
+        return DateTimeUtils.formatearHora(context, horaMinutos);
     }
 
     /**

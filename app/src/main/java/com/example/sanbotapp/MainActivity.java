@@ -240,7 +240,7 @@ public class MainActivity extends BaseActivity {
         View card = LayoutInflater.from(this)
                 .inflate(R.layout.item_actividad_card, containerRutinasHoy, false);
 
-        ((TextView) card.findViewById(R.id.tvHoraCard)).setText(a.getHoraFormateada());
+        ((TextView) card.findViewById(R.id.tvHoraCard)).setText(a.getHoraFormateada(this));
         ((ImageView) card.findViewById(R.id.ivIconoCard))
                 .setImageResource(a.getIconoRes());
         ((TextView) card.findViewById(R.id.tvLabelCard)).setText(a.getTipoLabel());

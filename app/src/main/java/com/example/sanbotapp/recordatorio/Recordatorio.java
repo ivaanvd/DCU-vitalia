@@ -1,5 +1,9 @@
 package com.example.sanbotapp.recordatorio;
 
+import android.content.Context;
+
+import com.example.sanbotapp.util.DateTimeUtils;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -58,10 +62,10 @@ public class Recordatorio {
 
     /*
      * Pre: Horario cargado desde la BD u originado manual
-     * Post: Genera cadena simple legible humana HH:mm en interfaz usuario nativa de Java
+     * Post: Hora legible con el formato 12/24 h de la app (15:30 o 3:30 PM)
      */
-    public String getHoraFormateada() {
-        return String.format("%02d:%02d", horaMinutos / 60, horaMinutos % 60);
+    public String getHoraFormateada(Context context) {
+        return DateTimeUtils.formatearHora(context, horaMinutos);
     }
 
     /*

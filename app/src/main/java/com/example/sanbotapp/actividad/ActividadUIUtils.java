@@ -31,7 +31,7 @@ public class ActividadUIUtils {
         ((ImageView) dv.findViewById(R.id.tvEmojiDetAct)).setImageResource(a.getIconoRes());
         
         // Hora y Tipo
-        ((TextView) dv.findViewById(R.id.tvHoraDetAct)).setText(a.getHoraFormateada());
+        ((TextView) dv.findViewById(R.id.tvHoraDetAct)).setText(a.getHoraFormateada(activity));
         ((TextView) dv.findViewById(R.id.tvTipoDetAct)).setText(a.getTipoLabel());
         
         // Etiqueta dinámica de descripción
